@@ -1,0 +1,35 @@
+{
+  "name": "front-end",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve --port 4000",
+    "build": "vue-cli-service build --port 4000",
+    "lint": "vue-cli-service lint --port 4000"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "camelcase-keys": "^5.0.0",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
+    "qs": "^6.6.0",
+    "snakecase-keys": "^2.1.0",
+    "vue": "^2.6.6",
+    "vue-i18n": "^8.8.2",
+    "vue-router": "^3.0.1",
+    "vue2-filters": "^0.5.0",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.4.0",
+    "@vue/cli-plugin-eslint": "^3.4.0",
+    "@vue/cli-service": "^3.4.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.8.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.1.0",
+    "vue-template-compiler": "^2.5.21"
+  }
+}

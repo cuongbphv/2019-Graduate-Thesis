@@ -1,2 +1,9 @@
 /front-end/node_modules
 /front-end/.idea
+/back-end/.idea
+/back-end/.mvn
+/back-end/back-end.iml
+/back-end/HELP.md
+/back-end/mvnw
+/back-end/mvnw.cmd
+/back-end/target

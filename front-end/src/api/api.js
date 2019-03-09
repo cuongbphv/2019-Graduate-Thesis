@@ -13,5 +13,8 @@ const Api =
 
 interceptors.setup(Api)
 interceptors.checkToken(Api)
+interceptors.showSpinner(Api)
+interceptors.hideSpinner(Api)
+interceptors.checkError(Api)
 
 export default Api

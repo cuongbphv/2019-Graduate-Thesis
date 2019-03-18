@@ -1,6 +1,6 @@
 package com.graduate.thesis.backend.controller;
 
-import com.graduate.thesis.backend.entity.SessionUser;
+import com.graduate.thesis.backend.entity.User;
 import com.graduate.thesis.backend.repository.SessionUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,7 +26,7 @@ public class TestController {
 
 
     @PostMapping("/users/sign-up")
-    public void signUp(@RequestBody SessionUser user) {
+    public void signUp(@RequestBody User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         sessionUserRepository.save(user);
     }

@@ -1,14 +1,14 @@
 package com.graduate.thesis.backend.repository;
 
-import com.graduate.thesis.backend.entity.SessionUser;
+import com.graduate.thesis.backend.entity.User;
 import org.springframework.data.repository.CrudRepository;
 
 /**
  * @author Huy Pham
  */
 
-public interface SessionUserRepository extends CrudRepository<SessionUser, String> {
+public interface SessionUserRepository extends CrudRepository<User, String> {
 
-    SessionUser findByUsername(String username);
+    User findByUsername(String username);
 
 }

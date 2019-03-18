@@ -1,8 +1,7 @@
 package com.graduate.thesis.backend.service;
 
-import com.graduate.thesis.backend.entity.SessionUser;
+import com.graduate.thesis.backend.entity.User;
 import com.graduate.thesis.backend.repository.SessionUserRepository;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,10 +20,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        SessionUser sessionUser = sessionUserRepository.findByUsername(username);
-        if (sessionUser == null) {
+        User user = sessionUserRepository.findByUsername(username);
+        if (user == null) {
             throw new UsernameNotFoundException(username);
         }
-        return new User(sessionUser.getUsername(), sessionUser.getPassword(), emptyList());
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), emptyList());
     }
 }

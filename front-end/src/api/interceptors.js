@@ -42,11 +42,11 @@ function checkToken(instance) {
 function showSpinner (instance) {
   instance.interceptors.request.use(
     request => {
-      store.dispatch('layout/showSpinner')
+      store.dispatch('Layout/showSpinner')
       return request
     },
     error => {
-      store.dispatch('layout/showSpinner')
+      store.dispatch('Layout/showSpinner')
       return Promise.reject(error)
     }
   )
@@ -56,13 +56,13 @@ function hideSpinner(instance) {
   instance.interceptors.response.use(
     response => {
       setTimeout(() => {
-        store.dispatch('layout/hideSpinner')
+        store.dispatch('Layout/hideSpinner')
       }, 500)
       return response
     },
     error => {
       setTimeout(() => {
-        store.dispatch('layout/hideSpinner')
+        store.dispatch('Layout/hideSpinner')
       }, 500)
       return Promise.reject(error)
     }

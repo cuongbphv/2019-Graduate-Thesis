@@ -1,0 +1,66 @@
+#MongoDB Config
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      uri: mongodb://localhost:27017/graduate_thesis_v1
+
+    security:
+      oauth2:
+        client:
+          registration:
+            google:
+              client-id: 1010672071642-fdlsc42jcl51btmi8jlvlm18kpa9i6ll.apps.googleusercontent.com
+              client-secret: a69oFdUKQ8S-j6WANi3_SNW_
+#              client-name: Google user
+#              provider: google
+#              redirect-uri-template: "{baseUrl}/oauth2/callback/{registrationId}"
+#              scope:
+#                - email
+#                - profile
+            facebook:
+              client-id: 2289113141355403
+              client-secret: 1681ffb65581998034aa24005c38af36
+#              client-name: Facebook user
+#              provider: facebook
+#              redirect-uri-template: "{baseUrl}/oauth2/callback/{registrationId}"
+#              scope:
+#                - email
+#                - public_profile
+#          provider:
+#            facebook:
+#              authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
+#              tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
+#              userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified,picture.width(250).height(250)
+    app:
+      auth:
+        tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
+        tokenExpirationMsec: 864000000
+#      oauth2:
+#        # After successfully authenticating with the OAuth2 Provider,
+#        # we'll be generating an auth token for the user and sending the token to the
+#        # redirectUri mentioned by the client in the /oauth2/authorize request.
+#        # We're not using cookies because they won't work well in mobile clients.
+#        authorizedRedirectUris:
+#          - http://localhost:3000/oauth2/redirect
+#          - myandroidapp://oauth2/redirect
+#          - myiosapp://oauth2/redirect
+
+##Spring Security Config
+### Map path to auth service
+#zuul:routes.auth-service.path=/api/v1/auth/**
+### Exclude authorization from sensitive headers
+#zuul.routes.auth-service.sensitive-headers=Cookie,Set-Cookie
+#
+###Google Credentials
+#api.google.client-id=1010672071642-fdlsc42jcl51btmi8jlvlm18kpa9i6ll.apps.googleusercontent.com
+#api.google.secret=a69oFdUKQ8S-j6WANi3_SNW_
+#
+###Facebook Credentials
+#spring.social.facebook.appId=2289113141355403
+#spring.social.facebook.appSecret=1681ffb65581998034aa24005c38af36
+#
+auth0:
+  issuer: https://smartmarket.com
+  apiAudience: https://smartmarket.com

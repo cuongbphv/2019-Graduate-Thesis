@@ -18,6 +18,10 @@ public interface Constant {
 
     // auth APIs
     public static final String AUTH_API = API_PREFIX + "/auth";
+    public static final String REGISTRY_API =  "/register";
+    public static final String LOGIN_API =  "/login";
+
+
     public static final String ADMIN_LOGIN_API = "/admin/login";
     public static final String ADMIN_GRANT_API = "/admin/grant/{code}";
     public static final String AUTH_ADMIN_INFO = "/admin";

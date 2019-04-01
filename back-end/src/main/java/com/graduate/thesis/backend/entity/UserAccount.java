@@ -1,9 +1,8 @@
 package com.graduate.thesis.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.graduate.thesis.backend.security.AuthProvider;
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -25,7 +24,13 @@ public class UserAccount implements Serializable {
 
     private String username;
 
+    private String email;
+
     private String password;
+
+    private AuthProvider provider;
+
+    private String providerId;
 
     private String roleId;
 

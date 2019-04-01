@@ -1,49 +1,66 @@
-@mixin flex($direction, $justify, $align) {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-
-  @if $direction {
-      -webkit-box-orient: vertical;
-      -webkit-box-direction: normal;
-      -ms-flex-direction: $direction;
-      flex-direction: $direction;
-  }
-
-  @if $justify {
-      -webkit-box-pack: $justify;
-      -ms-flex-pack: $justify;
-      justify-content: $justify;
-  }
-
-  @if $align {
-      -webkit-box-align: $align;
-      -ms-flex-align: $align;
-      align-items: $align;
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
   }
 }
 
-@mixin inline-flex($direction, $justify, $align) {
-    display: -webkit-inline-box;
-    display: -ms-inline-flexbox;
-    display: inline-flex;
+@mixin scrollBar {
+  &::-webkit-scrollbar-track-piece {
+    background: #d3dce6;
+  }
 
-    @if $direction {
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-        -ms-flex-direction: $direction;
-        flex-direction: $direction;
-    }
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
 
-    @if $justify {
-        -webkit-box-pack: $justify;
-        -ms-flex-pack: $justify;
-        justify-content: $justify;
-    }
+  &::-webkit-scrollbar-thumb {
+    background: #99a9bf;
+    border-radius: 20px;
+  }
+}
 
-    @if $align {
-        -webkit-box-align: $align;
-        -ms-flex-align: $align;
-        align-items: $align;
-    }
+@mixin relative {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+@mixin pct($pct) {
+  width: #{$pct};
+  position: relative;
+  margin: 0 auto;
+}
+
+@mixin triangle($width, $height, $color, $direction) {
+  $width: $width/2;
+  $color-border-style: $height solid $color;
+  $transparent-border-style: $width solid transparent;
+  height: 0;
+  width: 0;
+
+  @if $direction==up {
+    border-bottom: $color-border-style;
+    border-left: $transparent-border-style;
+    border-right: $transparent-border-style;
+  }
+
+  @else if $direction==right {
+    border-left: $color-border-style;
+    border-top: $transparent-border-style;
+    border-bottom: $transparent-border-style;
+  }
+
+  @else if $direction==down {
+    border-top: $color-border-style;
+    border-left: $transparent-border-style;
+    border-right: $transparent-border-style;
+  }
+
+  @else if $direction==left {
+    border-right: $color-border-style;
+    border-top: $transparent-border-style;
+    border-bottom: $transparent-border-style;
+  }
 }

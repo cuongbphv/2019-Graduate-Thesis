@@ -54,6 +54,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.context.annotation.Bean;
 
+import javax.crypto.spec.SecretKeySpec;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -212,39 +213,35 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     private ClientRegistration getRegistration(String client) {
 
-        String clientId = "";
+        String clientId = null;
 
         if (client.equals("facebook")) {
-            clientId = "2289113141355403";
-        } else {
-            clientId = "1010672071642-fdlsc42jcl51btmi8jlvlm18kpa9i6ll.apps.googleusercontent.com";
+            clientId = SecurityConstants.FACEBOOK_CLIENT_ID;
         }
-
-        // String clientId = env.getProperty(CLIENT_PROPERTY_KEY + client + ".client-id");
+        else if (client.equals("google")) {
+            clientId =  SecurityConstants.GOOGLE_CLIENT_ID;
+        }
 
         if (clientId == null) {
             return null;
         }
 
-
-        //String clientSecret = env.getProperty(CLIENT_PROPERTY_KEY + client + ".client-secret");
-
         String clientSecret;
 
-        if (client.equals("google")) {
+        if (client.equals("facebook")) {
 
-            clientSecret = "a69oFdUKQ8S-j6WANi3_SNW_";
+            clientSecret = SecurityConstants.FACEBOOK_CLIENT_SECRET;
 
-            return CommonOAuth2Provider.GOOGLE.getBuilder(client)
+            return CommonOAuth2Provider.FACEBOOK.getBuilder(client)
                     .clientId(clientId)
                     .clientSecret(clientSecret)
                     .build();
         }
-        if (client.equals("facebook")) {
+        else if (client.equals("google")) {
 
-            clientSecret = "1681ffb65581998034aa24005c38af36";
+            clientSecret = SecurityConstants.GOOGLE_CLIENT_SECRET;
 
-            return CommonOAuth2Provider.FACEBOOK.getBuilder(client)
+            return CommonOAuth2Provider.GOOGLE.getBuilder(client)
                     .clientId(clientId)
                     .clientSecret(clientSecret)
                     .build();

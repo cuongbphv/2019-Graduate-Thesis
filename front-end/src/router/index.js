@@ -5,6 +5,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/views/layout/Layout'
+import HomeLayout from '@/views/layout/HomeLayout'
 
 /* Router Modules */
 import componentsRouter from './modules/components'
@@ -66,17 +67,21 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '',
+    path: '/admin',
     component: Layout,
     redirect: 'dashboard',
     children: [
       {
-        path: 'dashboard',
+        path: '/dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
         meta: { title: 'dashboard', icon: 'dashboard', noCache: true, affix: true }
       }
     ]
+  },
+  {
+    path: '',
+    component: HomeLayout
   }
   // {
   //   path: '/documentation',

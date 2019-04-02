@@ -1,0 +1,6 @@
+export { default as About } from './About'
+export { default as Category } from './Category'
+export { default as ContactBar } from './ContactBar'
+export { default as HomeFooter } from './Footer'
+export { default as HomePost } from './HomePost'
+export { default as NavBar } from './NavBar'

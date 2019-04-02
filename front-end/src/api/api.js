@@ -8,13 +8,14 @@ const Api =
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
-    }
+    },
+    timeout: 5000 // request timeout
   })
 
 interceptors.setup(Api)
 interceptors.checkToken(Api)
-interceptors.showSpinner(Api)
-interceptors.hideSpinner(Api)
-interceptors.checkError(Api)
+// interceptors.showSpinner(Api)
+// interceptors.hideSpinner(Api)
+// interceptors.checkError(Api)
 
 export default Api

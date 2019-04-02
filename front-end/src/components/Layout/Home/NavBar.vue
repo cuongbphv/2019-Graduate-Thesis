@@ -1,29 +1,22 @@
 <template>
   <div class="navbar">
-    <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container" />
+    <hamburger
+      v-if="device === 'mobile'"
+      :toggle-click="toggleSideBar"
+      :is-active="sidebar.opened"
+      class="hamburger-container"
+    />
 
-    <breadcrumb class="breadcrumb-container" />
-
-    <div class="right-menu">
+    <div class="menu menu_left">
       <template v-if="device!=='mobile'">
-        <search class="right-menu-item" />
-
-        <error-log class="errLog-container right-menu-item hover-effect" />
-
-        <screenfull class="right-menu-item hover-effect" />
-
-        <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
-          <size-select class="right-menu-item hover-effect" />
-        </el-tooltip>
-
-        <lang-select class="right-menu-item hover-effect" />
-
-        <el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom">
-          <theme-picker class="right-menu-item hover-effect" />
-        </el-tooltip>
+        <search class="menu-item" :show="true" />
       </template>
+    </div>
 
-      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+    <div class="menu menu_right">
+      <el-button class="button el-button--primary" @click="handleLoginModal">Đăng nhập</el-button>
+      <Login :visible="isVisible" @closeLoginModal="handleLoginModal" />
+      <el-dropdown class="avatar-container menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
           <i class="el-icon-caret-bottom" />
@@ -34,11 +27,6 @@
               {{ $t('navbar.dashboard') }}
             </el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">
-            <el-dropdown-item>
-              {{ $t('navbar.github') }}
-            </el-dropdown-item>
-          </a>
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">{{ $t('navbar.logOut') }}</span>
           </el-dropdown-item>
@@ -50,25 +38,21 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import ErrorLog from '@/components/ErrorLog'
-import Screenfull from '@/components/Screenfull'
-import SizeSelect from '@/components/SizeSelect'
-import LangSelect from '@/components/LangSelect'
-import ThemePicker from '@/components/ThemePicker'
 import Search from '@/components/HeaderSearch'
+import Login from '@/components/Auth/Login/LoginModal'
 
 export default {
+  name: 'NavBar',
   components: {
-    Breadcrumb,
     Hamburger,
-    ErrorLog,
-    Screenfull,
-    SizeSelect,
-    LangSelect,
-    ThemePicker,
-    Search
+    Search,
+    Login
+  },
+  data() {
+    return {
+      isVisible: false
+    }
   },
   computed: {
     ...mapGetters([
@@ -86,15 +70,19 @@ export default {
       this.$store.dispatch('LogOut').then(() => {
         location.reload()// In order to re-instantiate the vue-router object to avoid bugs
       })
+    },
+    handleLoginModal() {
+      this.isVisible = !this.isVisible
     }
   }
 }
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
+<style lang="scss" scoped>
 .navbar {
   height: 50px;
   overflow: hidden;
+  position: relative;
 
   .hamburger-container {
     line-height: 46px;
@@ -117,8 +105,14 @@ export default {
     vertical-align: top;
   }
 
-  .right-menu {
-    float: right;
+  .menu {
+    &_right {
+      float: right;
+    }
+    &_left {
+      left: 30%;
+      position: absolute;
+    }
     height: 100%;
     line-height: 50px;
 
@@ -126,7 +120,16 @@ export default {
       outline: none;
     }
 
-    .right-menu-item {
+    .button {
+      display: inline-block;
+      padding: 0 8px;
+      height: 80%;
+      vertical-align: text-bottom;
+      margin-bottom: 5px;
+      color: #DBE8E6;
+    }
+
+    .menu-item {
       display: inline-block;
       padding: 0 8px;
       height: 100%;
@@ -142,6 +145,10 @@ export default {
           background: rgba(0, 0, 0, .025)
         }
       }
+    }
+
+    .padding-top {
+      padding-top: 12px;
     }
 
     .avatar-container {
@@ -162,7 +169,7 @@ export default {
           cursor: pointer;
           position: absolute;
           right: -20px;
-          top: 25px;
+          top: 15px;
           font-size: 12px;
         }
       }

@@ -1,8 +1,8 @@
 {
-  "name": "vue-element-admin",
-  "version": "3.11.0",
-  "description": "A magical vue admin. Typical templates for enterprise applications. Newest development stack of vue. Lots of awesome features",
-  "author": "Pan <panfree23@gmail.com>",
+  "name": "classified-advertising-front-end",
+  "version": "1.0.0",
+  "description": "Front-end for Classified Advertising",
+  "author": "itworld720@gmail.com",
   "license": "MIT",
   "scripts": {
     "dev": "cross-env BABEL_ENV=development webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
@@ -19,35 +19,31 @@
       "git add"
     ]
   },
-  "keywords": [
-    "vue",
-    "element-ui",
-    "admin",
-    "management-system",
-    "admin-template"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PanJiaChen/vue-element-admin.git"
-  },
-  "bugs": {
-    "url": "https://github.com/PanJiaChen/vue-element-admin/issues"
-  },
+  "keywords": [],
+  "repository": {},
+  "bugs": {},
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.17",
+    "@fortawesome/free-brands-svg-icons": "^5.8.1",
+    "@fortawesome/free-solid-svg-icons": "^5.8.1",
+    "@fortawesome/vue-fontawesome": "^0.1.6",
     "axios": "^0.18.0",
+    "camelcase-keys": "^5.0.0",
     "clipboard": "1.7.1",
     "codemirror": "5.39.2",
     "driver.js": "0.8.1",
     "dropzone": "5.2.0",
     "echarts": "4.1.0",
     "element-ui": "^2.7.0",
-    "file-saver": "1.3.8",
+    "file-saver": "^2.0.1",
     "fuse.js": "3.4.2",
     "js-cookie": "^2.2.0",
     "jsonlint": "1.6.3",
     "jszip": "3.1.5",
     "mockjs": "1.0.1-beta3",
+    "moment": "^2.24.0",
     "nprogress": "^0.2.0",
+    "qs": "^6.7.0",
     "screenfull": "4.0.0",
     "showdown": "1.8.6",
     "sortablejs": "1.7.0",

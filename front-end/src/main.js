@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Cookies from 'js-cookie'
 import Element from 'element-ui'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/index.scss' // global css
@@ -16,6 +19,10 @@ import './permission' // permission control
 import './mock' // simulation data
 
 import * as filters from './filters' // global filters
+
+library.add(faFacebook, faGoogle)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size

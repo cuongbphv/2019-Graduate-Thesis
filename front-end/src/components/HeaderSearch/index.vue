@@ -24,12 +24,17 @@ import i18n from '@/lang'
 
 export default {
   name: 'HeaderSearch',
+  props: {
+    show: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       search: '',
       options: [],
       searchPool: [],
-      show: false,
       fuse: undefined
     }
   },

@@ -28,7 +28,7 @@
 }
 
 @mixin pct($pct) {
-  width: #{$pct};
+  width: $pct;
   position: relative;
   margin: 0 auto;
 }

@@ -1,29 +1,32 @@
 <template>
   <div :class="classObj" class="app-wrapper">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
-    <side-bar class="sidebar-container" />
+    <contact-bar />
+    <nav-bar />
+    <about />
     <div class="main-container">
-      <nav-bar />
-      <tags-view />
-      <app-main />
+      <category />
+      <h3>Tìm kiếm hàng đầu</h3>
+      <home-post />
+      <h3>Tin mới nhất</h3>
+      <home-post />
+      <home-footer />
     </div>
   </div>
 </template>
 
 <script>
-import NavBar from '@/components/Layout/NavBar/NavBar'
-import SideBar from '@/components/Layout/SideBar/SideBar'
-import AppMain from '@/components/Layout/AppMain/AppMain'
-import TagsView from '@/components/Layout/TagsView/TagsView'
-import ResizeMixin from '@/mixins/ResizeHandler'
-
+import { About, Category, ContactBar, HomeFooter, HomePost, NavBar } from '../../components/Layout/Home/index'
+import ResizeMixin from '../../mixins/ResizeHandler'
 export default {
-  name: 'Layout',
+  name: 'HomeLayout',
   components: {
-    NavBar,
-    SideBar,
-    AppMain,
-    TagsView
+    About,
+    Category,
+    ContactBar,
+    HomeFooter,
+    HomePost,
+    NavBar
   },
   mixins: [ResizeMixin],
   computed: {
@@ -50,8 +53,8 @@ export default {
 }
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
-  @import "~@/styles/mixin.scss";
+<style scoped>
+  @import "../../styles/mixin.scss";
   .app-wrapper {
     @include clearfix;
     position: relative;

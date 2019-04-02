@@ -39,7 +39,7 @@ function checkToken(instance) {
   )
 }
 
-function showSpinner (instance) {
+function showSpinner(instance) {
   instance.interceptors.request.use(
     request => {
       store.dispatch('Layout/showSpinner')
@@ -73,7 +73,7 @@ function checkError(instance) {
   instance.interceptors.response.use(
     response => {
       if (response.data.status === 'error') {
-        const { data: { errorMessage: { errorCode } = {} } = {} } = response.data
+        const { data: { errorMessage: { errorCode } = {}} = {}} = response.data
         if (errorCode && [22, 71, 73].includes(errorCode) &&
           !window.location.pathname.includes('login')
         ) {

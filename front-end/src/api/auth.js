@@ -1,10 +1,10 @@
 import Api from '../api/api'
 
 export default {
-  signin (params) {
+  signin(params) {
     return Api.post('/sign_in', params).then(res => res.data)
   },
-  signup (params) {
+  signup(params) {
     return Api.post('/sign_up', params)
   }
 }

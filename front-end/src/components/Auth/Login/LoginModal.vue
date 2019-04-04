@@ -6,7 +6,7 @@
   >
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
-      <p>Connect with</p>
+      <p>{{ $t('login.connectWith') }}</p>
       <div class="social">
         <el-button class="el-button--primary">
           <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'facebook' }" size="2x" />
@@ -18,7 +18,7 @@
         </el-button>
       </div>
 
-      <hr class="hr-text" data-content="or">
+      <hr class="hr-text" :data-content="$t('login.or')">
 
       <el-form-item prop="username">
         <span class="svg-container">
@@ -58,7 +58,7 @@
           <el-input
             v-model="loginForm.confirmPassword"
             :type="passwordType"
-            :placeholder="$t('login.password')"
+            :placeholder="$t('login.confirmPassword')"
             name="confirmPassword"
             auto-complete="on"
             @keyup.enter.native="handleLogin"
@@ -70,30 +70,30 @@
       </transition>
 
       <div class="additional">
-        <el-checkbox>Remember me</el-checkbox>
-        <a href="#">Forgot Password?</a>
+        <el-checkbox>{{ $t('login.rememberMe') }}</el-checkbox>
+        <a href="#">{{ $t('login.forgotPassword') }}</a>
       </div>
 
       <div class="button_group">
         <el-button v-if="checkMode('login')" :loading="loading" type="primary" @click.native.prevent="handleLogin">
-          {{ $t('login.logIn') }}
+          {{ $t('button.logIn') }}
         </el-button>
         <el-button v-if="checkMode('register')" :loading="loading" type="primary" @click.native.prevent="handleLogin">
-          Sign up
+          {{ $t('button.signUp') }}
         </el-button>
       </div>
 
       <h5 v-if="checkMode('login')">
-        Don't have an account?&nbsp;
+        {{ $t('login.dontHaveAccount') }}&nbsp;
         <strong>
-          <a href="#" @click="switchMode('register')">Sign up</a>
+          <a href="#" @click="switchMode('register')">{{ $t('button.signUp') }}</a>
         </strong>
       </h5>
 
       <h5 v-if="checkMode('register')">
-        Already have an account?&nbsp;
+        {{ $t('login.haveAccount') }}&nbsp;
         <strong>
-          <a href="#" @click="switchMode('login')">Log in</a>
+          <a href="#" @click="switchMode('login')">{{ $t('button.logIn') }}</a>
         </strong>
       </h5>
 
@@ -128,9 +128,9 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '1111111',
-        confirmPassword: '1111111'
+        username: '',
+        password: '',
+        confirmPassword: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -175,172 +175,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$bg:#283443;
-$light_gray:#eee;
-$cursor: #fff;
-$dark_gray: #889aa4;
-
-@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-  .login-container .el-input input{
-    color: $cursor;
-    &::first-line {
-      color: $light_gray;
-    }
-  }
-}
-/deep/ .el-dialog {
-  border-radius: .625rem;
-  box-shadow: inset 0 4px 0 0 #007bff;
-  background: #384955;
-  width: 35%;
-  overflow: hidden;
-  color: #fff;
-  .el-dialog__header {
-    padding: 5px 20px 0;
-  }
-  .el-dialog__body {
-    padding: 0 20px 5px 20px;
-  }
-  margin-top: 10vh !important;
-}
-@media screen and (max-width: 503px) {
-  /deep/ .el-dialog {
-    width: 95%;
-  }
-}
-@media screen and (min-width: 504px) and (max-width: 600px) {
-  /deep/ .el-dialog {
-    width: 90%;
-  }
-}
-@media screen and (min-width: 601px) and (max-width: 950px) {
-  /deep/ .el-dialog {
-    width: 80%;
-  }
-}
-@media screen and (min-width: 951px) and (max-width: 1365px) {
-  /deep/ .el-dialog {
-    width: 50%;
-  }
-}
-@media screen and (min-width: 1366px) {
-  /deep/ .el-dialog {
-    width: 35%;
-  }
-}
-
-.login-form {
-  a {
-    &:hover {
-      color: #409EFF;
-    }
-  }
-  h5 {
-    line-height: 0;
-    margin-top: 50px;
-    color: #fff;
-    text-align: center;
-    a {
-      font-size: 1.2em;
-    }
-  }
-  p {
-    margin: 0;
-    text-align: center;
-    color: #fff;
-  }
-  .el-input {
-    display: inline-block;
-    width: 85%;
-    input {
-      background: transparent;
-      border: 0;
-      -webkit-appearance: none;
-      border-radius: 0;
-      padding: 12px 5px 12px 15px;
-      color: $light_gray;
-      caret-color: $cursor;
-      &:-webkit-autofill {
-        box-shadow: 0 0 0 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
-      }
-    }
-    /deep/ .el-input__inner {
-      margin-top: 7px;
-    }
-  }
-  .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    color: #454545;
-  }
-  .svg-container {
-    padding: 6px 0 6px 10px;
-    color: $dark_gray;
-    vertical-align: middle;
-    width: 30px;
-    display: inline-block;
-  }
-  .show-pwd {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    font-size: 16px;
-    color: $dark_gray;
-    cursor: pointer;
-    user-select: none;
-  }
-  .social {
-    text-align: center;
-    span {
-      margin-left: -2px;
-    }
-  }
-  .hr-text {
-    line-height: 1em;
-    position: relative;
-    outline: 0;
-    border: 0;
-    text-align: center;
-    height: 1.5em;
-    &:before {
-      content: '';
-      background: linear-gradient(to right, transparent, #818078, transparent);
-      position: absolute;
-      left: 0;
-      top: 50%;
-      width: 100%;
-      height: 1px;
-    }
-    &:after {
-      content: attr(data-content);
-      position: relative;
-      display: inline-block;
-      padding: 0 .5em;
-      line-height: 1.5em;
-      color: #fff;
-      background-color: #384955;
-    }
-  }
-  .button_group {
-    margin-top: 5px;
-    text-align: center;
-    /deep/ .el-button {
-      width: 40%;
-    }
-  }
-  .additional {
-    line-height: 20px;
-    color: #fff;
-    a {
-      float: right;
-      margin-right: 12px;
-    }
-    /deep/ .el-checkbox {
-      margin-left: 12px;
-      color: #fff;
-    }
-  }
-}
+@import "~@/styles/components/login";
 </style>

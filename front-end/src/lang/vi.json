@@ -1,14 +1,19 @@
 {
   "route": {
     "dashboard": "Bảng điều khiển",
+    "permission": "Phân quyền",
+    "management": "Quản lý",
+    "location": "Địa điểm",
+    "category": "Danh mục",
+    "user": "Người dùng",
+    "store": "Cửa hàng",
+    "icons": "Biểu tượng",
     "introduction": "Giới thiệu",
     "documentation": "Tài liệu",
     "guide": "Hướng dẫn",
-    "permission": "Vai trò",
     "pagePermission": "Page Permission",
     "rolePermission": "Role Permission",
     "directivePermission": "Directive Permission",
-    "icons": "Biểu tượng",
     "components": "Đối tượng",
     "componentIndex": "Introduction",
     "tinymce": "Tinymce",
@@ -68,7 +73,8 @@
     "externalLink": "External Link"
   },
   "navbar": {
-    "logOut": "Log Out",
+    "logOut": "Đăng xuất",
+    "profile": "Trang cá nhân",
     "dashboard": "Dashboard",
     "github": "Github",
     "theme": "Theme",
@@ -79,9 +85,20 @@
     "logIn": "Đăng nhập",
     "username": "Tài khoản",
     "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "connectWith": "Kết nối với",
+    "or": "hoặc",
+    "rememberMe": "Nhớ tài khoản",
+    "forgotPassword": "Quên mật khẩu?",
+    "dontHaveAccount": "Chưa có tài khoản?",
+    "haveAccount": "Đã có tài khoản?",
     "any": "any",
     "thirdparty": "Đăng nhập với",
     "thirdpartyTips": "Can not be simulated on local, so please combine you own business simulation! ! !"
+  },
+  "button": {
+    "logIn": "Đăng nhập",
+    "signUp": "Đăng ký"
   },
   "documentation": {
     "documentation": "Documentation",

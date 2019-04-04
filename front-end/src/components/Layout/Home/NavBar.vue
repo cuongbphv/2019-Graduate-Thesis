@@ -22,9 +22,9 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
-          <router-link to="/">
+          <router-link to="/profile/123">
             <el-dropdown-item>
-              {{ $t('navbar.dashboard') }}
+              {{ $t('navbar.profile') }}
             </el-dropdown-item>
           </router-link>
           <el-dropdown-item divided>

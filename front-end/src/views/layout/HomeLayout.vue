@@ -3,30 +3,22 @@
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <contact-bar />
     <nav-bar />
-    <about />
-    <div class="main-container">
-      <category />
-      <h3>Tìm kiếm hàng đầu</h3>
-      <home-post />
-      <h3>Tin mới nhất</h3>
-      <home-post />
-      <home-footer />
-    </div>
+    <app-main />
+    <home-footer />
   </div>
 </template>
 
 <script>
-import { About, Category, ContactBar, HomeFooter, HomePost, NavBar } from '../../components/Layout/Home/index'
-import ResizeMixin from '../../mixins/ResizeHandler'
+import { ContactBar, NavBar, HomeFooter } from '@/components/Layout/Home/index'
+import AppMain from '@/components/Layout/AppMain/AppMain'
+import ResizeMixin from '@/mixins/ResizeHandler'
 export default {
   name: 'HomeLayout',
   components: {
-    About,
-    Category,
     ContactBar,
-    HomeFooter,
-    HomePost,
-    NavBar
+    NavBar,
+    AppMain,
+    HomeFooter
   },
   mixins: [ResizeMixin],
   computed: {

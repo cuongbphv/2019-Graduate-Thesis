@@ -1,14 +1,19 @@
 {
   "route": {
     "dashboard": "Dashboard",
+    "permission": "Permission",
+    "management": "Management",
+    "location": "Location",
+    "category": "Category",
+    "user": "User",
+    "store": "Store",
+    "icons": "Icons",
     "introduction": "Introduction",
     "documentation": "Documentation",
     "guide": "Guide",
-    "permission": "Permission",
     "pagePermission": "Page Permission",
     "rolePermission": "Role Permission",
     "directivePermission": "Directive Permission",
-    "icons": "Icons",
     "components": "Components",
     "componentIndex": "Introduction",
     "tinymce": "Tinymce",
@@ -69,6 +74,7 @@
   },
   "navbar": {
     "logOut": "Log Out",
+    "profile": "Profile",
     "dashboard": "Dashboard",
     "github": "Github",
     "theme": "Theme",
@@ -79,9 +85,20 @@
     "logIn": "Log in",
     "username": "Username",
     "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "connectWith": "Connect with",
+    "or": "or",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "dontHaveAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
     "any": "any",
     "thirdparty": "Or connect with",
     "thirdpartyTips": "Can not be simulated on local, so please combine you own business simulation! ! !"
+  },
+  "button": {
+    "logIn": "Login",
+    "signUp": "Sign up"
   },
   "documentation": {
     "documentation": "Documentation",

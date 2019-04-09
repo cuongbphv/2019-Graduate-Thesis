@@ -1,10 +1,11 @@
 import Api from '../api/api'
+import { API } from '../utils/constants'
 
 export default {
-  signin(params) {
-    return Api.post('/sign_in', params).then(res => res.data)
+  register(params) {
+    return Api.post(API.REGISTER, params).then(res => res)
   },
-  signup(params) {
-    return Api.post('/sign_up', params)
+  loginLocal(params) {
+    return Api.post(API.LOGIN, params).then(res => res)
   }
 }

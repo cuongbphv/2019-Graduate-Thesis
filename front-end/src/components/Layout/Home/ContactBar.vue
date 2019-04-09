@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import SizeSelect from '@/components/SizeSelect'
 import LangSelect from '@/components/LangSelect'
 import ThemePicker from '@/components/ThemePicker'
+import { mapGetters } from 'vuex'
 export default {
   name: 'ContactBar',
   components: {
@@ -30,7 +30,7 @@ export default {
     ThemePicker
   },
   computed: {
-    ...mapGetters(['device'])
+    ...mapGetters('layout', ['device'])
   },
   methods: {}
 }

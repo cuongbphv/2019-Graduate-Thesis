@@ -15,16 +15,16 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
-    language() {
-      return this.$store.getters.language
-    }
+    ...mapGetters('layout', ['language'])
   },
   methods: {
+    ...mapActions('layout', ['setLanguage']),
     handleSetLanguage(lang) {
       this.$i18n.locale = lang
-      this.$store.dispatch('setLanguage', lang)
+      this.setLanguage(lang)
       this.$message({
         message: 'Switch Language Success',
         type: 'success'

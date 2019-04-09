@@ -8,11 +8,12 @@ import Layout from '@/views/layout/Layout'
 import HomeLayout from '@/views/layout/HomeLayout'
 
 /* Router Modules */
-import componentsRouter from './modules/components'
-import chartsRouter from './modules/charts'
-import tableRouter from './modules/table'
-import treeTableRouter from './modules/tree-table'
-import nestedRouter from './modules/nested'
+import profileRouter from './modules/profile'
+// import componentsRouter from './modules/components'
+// import chartsRouter from './modules/charts'
+// import tableRouter from './modules/table'
+// import treeTableRouter from './modules/tree-table'
+// import nestedRouter from './modules/nested'
 
 /** note: sub-menu only appear when children.length>=1
  *  detail see  https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -81,7 +82,17 @@ export const constantRoutes = [
   },
   {
     path: '',
-    component: HomeLayout
+    component: HomeLayout,
+    redirect: 'home',
+    children: [
+      {
+        path: '/home',
+        component: () => import('@/views/home/Home'),
+        name: 'Home',
+        meta: { title: 'home' }
+      },
+      profileRouter
+    ]
   }
   // {
   //   path: '/documentation',
@@ -158,95 +169,134 @@ export const asyncRoutes = [
     ]
   },
 
+  {
+    path: '/manage',
+    component: Layout,
+    alwaysShow: true,
+    meta: {
+      title: 'management',
+      icon: 'component'
+    },
+    children: [
+      {
+        path: 'location',
+        component: () => import('@/views/tab/index'),
+        name: 'Location',
+        meta: {
+          title: 'location',
+          icon: 'location'
+        }
+      },
+      {
+        path: 'category',
+        component: () => import('@/views/tab/index'),
+        name: 'Category',
+        meta: { title: 'category', icon: 'list-category' }
+      },
+      {
+        path: 'user',
+        component: () => import('@/views/tab/index'),
+        name: 'User Management',
+        meta: { title: 'user', icon: 'peoples' }
+      },
+      {
+        path: 'store',
+        component: () => import('@/views/tab/index'),
+        name: 'Store',
+        meta: { title: 'store', icon: 'store' }
+      }
+    ]
+  },
+
+  {
+    path: '/icon',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/svg-icons/index'),
+        name: 'Icons',
+        meta: { title: 'icons', icon: 'icon', noCache: true }
+      }
+    ]
+  },
+
+  /** When your routing table is too long, you can split it into small modules**/
+  // componentsRouter,
+  // chartsRouter,
+  // nestedRouter,
+  // tableRouter,
+  // treeTableRouter,
+
   // {
-  //   path: '/icon',
+  //   path: '/example',
   //   component: Layout,
+  //   redirect: '/example/list',
+  //   name: 'Example',
+  //   meta: {
+  //     title: 'example',
+  //     icon: 'example'
+  //   },
   //   children: [
   //     {
-  //       path: 'index',
-  //       component: () => import('@/views/svg-icons/index'),
-  //       name: 'Icons',
-  //       meta: { title: 'icons', icon: 'icon', noCache: true }
+  //       path: 'create',
+  //       component: () => import('@/views/example/create'),
+  //       name: 'CreateArticle',
+  //       meta: { title: 'createArticle', icon: 'edit' }
+  //     },
+  //     {
+  //       path: 'edit/:id(\\d+)',
+  //       component: () => import('@/views/example/edit'),
+  //       name: 'EditArticle',
+  //       meta: { title: 'editArticle', noCache: true },
+  //       hidden: true
+  //     },
+  //     {
+  //       path: 'list',
+  //       component: () => import('@/views/example/list'),
+  //       name: 'ArticleList',
+  //       meta: { title: 'articleList', icon: 'list' }
   //     }
   //   ]
   // },
 
-  /** When your routing table is too long, you can split it into small modules**/
-  componentsRouter,
-  chartsRouter,
-  nestedRouter,
-  tableRouter,
-  treeTableRouter,
+  // {
+  //   path: '/tab',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/tab/index'),
+  //       name: 'Tab',
+  //       meta: { title: 'tab', icon: 'tab' }
+  //     }
+  //   ]
+  // },
 
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/list',
-    name: 'Example',
-    meta: {
-      title: 'example',
-      icon: 'example'
-    },
-    children: [
-      {
-        path: 'create',
-        component: () => import('@/views/example/create'),
-        name: 'CreateArticle',
-        meta: { title: 'createArticle', icon: 'edit' }
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/example/edit'),
-        name: 'EditArticle',
-        meta: { title: 'editArticle', noCache: true },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/example/list'),
-        name: 'ArticleList',
-        meta: { title: 'articleList', icon: 'list' }
-      }
-    ]
-  },
-
-  {
-    path: '/tab',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/tab/index'),
-        name: 'Tab',
-        meta: { title: 'tab', icon: 'tab' }
-      }
-    ]
-  },
-
-  {
-    path: '/error',
-    component: Layout,
-    redirect: 'noredirect',
-    name: 'ErrorPages',
-    meta: {
-      title: 'errorPages',
-      icon: '404'
-    },
-    children: [
-      {
-        path: '401',
-        component: () => import('@/views/errorPage/401'),
-        name: 'Page401',
-        meta: { title: 'page401', noCache: true }
-      },
-      {
-        path: '404',
-        component: () => import('@/views/errorPage/404'),
-        name: 'Page404',
-        meta: { title: 'page404', noCache: true }
-      }
-    ]
-  },
+  // {
+  //   path: '/error',
+  //   component: Layout,
+  //   redirect: 'noredirect',
+  //   name: 'ErrorPages',
+  //   meta: {
+  //     title: 'errorPages',
+  //     icon: '404'
+  //   },
+  //   children: [
+  //     {
+  //       path: '401',
+  //       component: () => import('@/views/errorPage/401'),
+  //       name: 'Page401',
+  //       meta: { title: 'page401', noCache: true }
+  //     },
+  //     {
+  //       path: '404',
+  //       component: () => import('@/views/errorPage/404'),
+  //       name: 'Page404',
+  //       meta: { title: 'page404', noCache: true }
+  //     }
+  //   ]
+  // },
 
   // {
   //   path: '/error-log',
@@ -362,18 +412,18 @@ export const asyncRoutes = [
   //   ]
   // },
 
-  {
-    path: '/i18n',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/i18n-demo/index'),
-        name: 'I18n',
-        meta: { title: 'i18n', icon: 'international' }
-      }
-    ]
-  },
+  // {
+  //   path: '/i18n',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/i18n-demo/index'),
+  //       name: 'I18n',
+  //       meta: { title: 'i18n', icon: 'international' }
+  //     }
+  //   ]
+  // },
 
   // {
   //   path: 'external-link',

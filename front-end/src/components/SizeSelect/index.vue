@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data() {
     return {
@@ -24,9 +26,7 @@ export default {
     }
   },
   computed: {
-    size() {
-      return this.$store.getters.size
-    }
+    ...mapGetters('layout', ['size'])
   },
   methods: {
     handleSetSize(size) {

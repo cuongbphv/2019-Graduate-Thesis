@@ -21,6 +21,7 @@
 import Fuse from 'fuse.js'
 import path from 'path'
 import i18n from '@/lang'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'HeaderSearch',
@@ -39,11 +40,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('layout', ['language']),
     routes() {
       return this.$store.getters.permission_routes
-    },
-    lang() {
-      return this.$store.getters.language
     }
   },
   watch: {

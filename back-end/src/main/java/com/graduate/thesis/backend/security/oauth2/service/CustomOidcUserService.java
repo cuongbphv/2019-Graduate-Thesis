@@ -1,7 +1,11 @@
 package com.graduate.thesis.backend.security.oauth2.service;
 
+import com.graduate.thesis.backend.entity.Permission;
+import com.graduate.thesis.backend.entity.Role;
 import com.graduate.thesis.backend.entity.UserAccount;
 import com.graduate.thesis.backend.exception.OAuth2AuthenticationProcessingException;
+import com.graduate.thesis.backend.repository.PermissionRepository;
+import com.graduate.thesis.backend.repository.RoleRepository;
 import com.graduate.thesis.backend.security.AuthProvider;
 import com.graduate.thesis.backend.repository.UserAccountRepository;
 import com.graduate.thesis.backend.security.oauth2.user.UserPrincipal;
@@ -10,6 +14,8 @@ import com.graduate.thesis.backend.security.oauth2.user.OAuth2UserInfoFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -19,6 +25,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -30,6 +38,12 @@ public class CustomOidcUserService extends OidcUserService {
 
     @Autowired
     private UserAccountRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private PermissionRepository permissionRepository;
 
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
@@ -67,7 +81,27 @@ public class CustomOidcUserService extends OidcUserService {
             user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
         }
 
-        return UserPrincipal.create(user, oAuth2User.getAttributes());
+//        return UserPrincipal.create(user, oAuth2User.getAttributes());
+
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        Role role = roleRepository.findByRoleId(user.getRoleId());
+
+        List<String> permissionIds = new ArrayList<>();
+        permissionIds.addAll(role.getPermissions());
+
+        if(user.getPersonalPermissions() != null) {
+            permissionIds.addAll(user.getPersonalPermissions());
+        }
+
+        List<Permission> permissions = permissionRepository.findByListId(permissionIds);
+
+        for (Permission permission : permissions) {
+            authorities.add(new SimpleGrantedAuthority(permission.getName()));
+        }
+
+        return UserPrincipal.create(user, authorities);
+
     }
 
     private UserAccount registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {

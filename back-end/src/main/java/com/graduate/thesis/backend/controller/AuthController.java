@@ -45,7 +45,8 @@ public class AuthController {
     private TokenProvider tokenProvider;
 
     @PostMapping(Constant.LOGIN_API)
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@RequestBody UserAccount loginRequest) {
+
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -84,6 +85,7 @@ public class AuthController {
         return ResponseEntity.created(location)
                 .body(new ApiResponse(true, "User registered successfully@"));
     }
+
 
 
 }

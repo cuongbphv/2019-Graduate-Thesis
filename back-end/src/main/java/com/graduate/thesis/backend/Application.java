@@ -1,5 +1,6 @@
 package com.graduate.thesis.backend;
 
+import com.graduate.thesis.backend.validator.UserAccountValidator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -16,4 +17,5 @@ public class Application {
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

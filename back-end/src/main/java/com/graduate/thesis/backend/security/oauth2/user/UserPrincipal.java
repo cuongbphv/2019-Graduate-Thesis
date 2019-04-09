@@ -32,6 +32,16 @@ public class UserPrincipal implements OAuth2User, OidcUser, UserDetails {
         this.authorities = authorities;
     }
 
+    public static UserPrincipal create(UserAccount user, List<GrantedAuthority> authorities) {
+
+        return new UserPrincipal(
+                user.getId(),
+                user.getEmail(),
+                user.getPassword(),
+                authorities
+        );
+    }
+
     public static UserPrincipal create(UserAccount user) {
         List<GrantedAuthority> authorities = Collections.
                 singletonList(new SimpleGrantedAuthority("ROLE_USER"));
@@ -43,6 +53,7 @@ public class UserPrincipal implements OAuth2User, OidcUser, UserDetails {
                 authorities
         );
     }
+
 
     public static UserPrincipal create(UserAccount user, Map<String, Object> attributes) {
         UserPrincipal userPrincipal = UserPrincipal.create(user);
@@ -91,6 +102,25 @@ public class UserPrincipal implements OAuth2User, OidcUser, UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
+
+
+//
+//        this.authorities = new ArrayList<>();
+//
+//        Role role = roleService.findByRoleId("5c9bbbe605f5f129bd02cc83");
+//
+//        List<String> permissionIds = new ArrayList<>();
+//        permissionIds.addAll(role.getPermissions());
+//        permissionIds.addAll(userAccount.getPersonalPermissions());
+//
+//        List<Permission> permissions = permissionService.findByListId(permissionIds);
+//
+//        for (Permission permission : permissions) {
+//            authorities.add(new SimpleGrantedAuthority(permission.getName()));
+//        }
+//
+//        return authorities;
+
     }
 
     @Override

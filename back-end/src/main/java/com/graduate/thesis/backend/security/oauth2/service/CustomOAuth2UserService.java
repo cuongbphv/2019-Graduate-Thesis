@@ -1,7 +1,11 @@
 package com.graduate.thesis.backend.security.oauth2.service;
 
+import com.graduate.thesis.backend.entity.Permission;
+import com.graduate.thesis.backend.entity.Role;
 import com.graduate.thesis.backend.entity.UserAccount;
 import com.graduate.thesis.backend.exception.OAuth2AuthenticationProcessingException;
+import com.graduate.thesis.backend.repository.PermissionRepository;
+import com.graduate.thesis.backend.repository.RoleRepository;
 import com.graduate.thesis.backend.security.AuthProvider;
 import com.graduate.thesis.backend.repository.UserAccountRepository;
 import com.graduate.thesis.backend.security.oauth2.user.UserPrincipal;
@@ -14,6 +18,8 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.http.OAuth2ErrorResponseErrorHandler;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -32,6 +38,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
     private UserAccountRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private PermissionRepository permissionRepository;
 
     public CustomOAuth2UserService(){
 
@@ -78,7 +90,26 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
         }
 
-        return UserPrincipal.create(user, oAuth2User.getAttributes());
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        Role role = roleRepository.findByRoleId(user.getRoleId());
+
+        List<String> permissionIds = new ArrayList<>();
+        permissionIds.addAll(role.getPermissions());
+
+        if(user.getPersonalPermissions() != null) {
+            permissionIds.addAll(user.getPersonalPermissions());
+        }
+
+        List<Permission> permissions = permissionRepository.findByListId(permissionIds);
+
+        for (Permission permission : permissions) {
+            authorities.add(new SimpleGrantedAuthority(permission.getName()));
+        }
+
+        return UserPrincipal.create(user, authorities);
+
+//        return UserPrincipal.create(user, oAuth2User.getAttributes());
     }
 
     private UserAccount registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {

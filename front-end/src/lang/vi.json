@@ -83,7 +83,7 @@
   "login": {
     "title": "Đăng nhập",
     "logIn": "Đăng nhập",
-    "username": "Tài khoản",
+    "email": "Email",
     "password": "Mật khẩu",
     "confirmPassword": "Xác nhận mật khẩu",
     "connectWith": "Kết nối với",
@@ -180,5 +180,11 @@
     "close": "Close",
     "closeOthers": "Close Others",
     "closeAll": "Close All"
+  },
+  "validator": {
+    "password": {
+      "max_length": "Mật khẩu không ngắn hơn {max_length} kí tự",
+      "not_match": "Mật khẩu xác nhận không đúng"
+    }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
+    <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <contact-bar />
     <nav-bar />
     <app-main />
@@ -12,6 +12,7 @@
 import { ContactBar, NavBar, HomeFooter } from '@/components/Layout/Home/index'
 import AppMain from '@/components/Layout/AppMain/AppMain'
 import ResizeMixin from '@/mixins/ResizeHandler'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'HomeLayout',
   components: {
@@ -22,12 +23,7 @@ export default {
   },
   mixins: [ResizeMixin],
   computed: {
-    sidebar() {
-      return this.$store.state.app.sidebar
-    },
-    device() {
-      return this.$store.state.app.device
-    },
+    ...mapGetters('layout', ['sidebar', 'device']),
     classObj() {
       return {
         hideSidebar: !this.sidebar.opened,
@@ -37,9 +33,15 @@ export default {
       }
     }
   },
+  created() {
+    if (this.$route.query.token) {
+      console.log(this.$route.query.token)
+    }
+  },
   methods: {
+    ...mapActions('layout', ['closeSideBar']),
     handleClickOutside() {
-      this.$store.dispatch('closeSideBar', { withoutAnimation: false })
+      this.closeSideBar({ withoutAnimation: false })
     }
   }
 }

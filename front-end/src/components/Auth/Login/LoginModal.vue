@@ -8,11 +8,11 @@
 
       <p>{{ $t('login.connectWith') }}</p>
       <div class="social">
-        <el-button class="el-button--primary">
+        <el-button class="el-button--primary" @click="handleLoginOAuth2('facebook')">
           <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'facebook' }" size="2x" />
           <span>acebook</span>
         </el-button>
-        <el-button class="el-button--danger">
+        <el-button class="el-button--danger" @click="handleLoginOAuth2('google')">
           <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'google' }" size="2x" />
           <span>oogle</span>
         </el-button>
@@ -20,14 +20,14 @@
 
       <hr class="hr-text" :data-content="$t('login.or')">
 
-      <el-form-item prop="username">
+      <el-form-item prop="email">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          v-model="loginForm.username"
-          :placeholder="$t('login.username')"
-          name="username"
+          v-model="loginForm.email"
+          :placeholder="$t('login.email')"
+          name="email"
           type="text"
           auto-complete="on"
         />
@@ -43,7 +43,7 @@
           :placeholder="$t('login.password')"
           name="password"
           auto-complete="on"
-          @keyup.enter.native="handleLogin"
+          @keyup.enter.native="handleLoginLocal"
         />
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
@@ -61,7 +61,7 @@
             :placeholder="$t('login.confirmPassword')"
             name="confirmPassword"
             auto-complete="on"
-            @keyup.enter.native="handleLogin"
+            @keyup.enter.native="handleLoginLocal"
           />
           <span class="show-pwd" @click="showPwd">
             <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
@@ -75,10 +75,10 @@
       </div>
 
       <div class="button_group">
-        <el-button v-if="checkMode('login')" :loading="loading" type="primary" @click.native.prevent="handleLogin">
+        <el-button v-if="checkMode('login')" :loading="loading" type="primary" @click.native.prevent="handleLoginLocal">
           {{ $t('button.logIn') }}
         </el-button>
-        <el-button v-if="checkMode('register')" :loading="loading" type="primary" @click.native.prevent="handleLogin">
+        <el-button v-if="checkMode('register')" :loading="loading" type="primary" @click.native.prevent="handleRegister">
           {{ $t('button.signUp') }}
         </el-button>
       </div>
@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+import { mapActions } from 'vuex'
 export default {
   name: 'Login',
   props: {
@@ -112,29 +112,31 @@ export default {
     }
   },
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
-    }
     return {
       loginForm: {
-        username: '',
+        email: '',
         password: '',
         confirmPassword: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        email: [{ required: true, message: 'Please input email address', trigger: 'blur' },
+          { type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change'] }
+        ],
+        password: [{ required: true, trigger: 'blur', validator: (rule, value, callback) => {
+          if (value.length < 6) {
+            callback(new Error(this.$t('validator.password.max_length', { 'max_length': 6 })))
+          }
+          callback()
+        } }],
+        confirmPassword: [{ required: true, trigger: 'blur', validator: (rule, value, callback) => {
+          if (value.length < 6) {
+            callback(new Error(this.$t('validator.password.max_length', { 'max_length': 6 })))
+          }
+          if (this.loginForm.password !== this.loginForm.confirmPassword) {
+            callback(new Error(this.$t('validator.password.not_match')))
+          }
+          callback()
+        } }]
       },
       passwordType: 'password',
       loading: false,
@@ -149,6 +151,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('auth', ['register', 'loginLocal', 'loginOAuth2']),
     handleDrag() {
     },
     handleClose() {
@@ -161,8 +164,31 @@ export default {
         this.passwordType = 'password'
       }
     },
-    handleLogin() {
+    handleLoginLocal() {
       this.$refs.loginForm.validate(valid => {})
+    },
+    handleLoginOAuth2(type) {
+      window.open('http://localhost:8080/oauth2/authorize/' + type + '?redirect_uri=http://localhost:4040/#/home', '_blank')
+    },
+    handleRegister() {
+      this.$refs.loginForm.validate(valid => {
+        this.loading = true
+        if (valid) {
+          const params = {
+            email: this.loginForm.email,
+            password: this.loginForm.password
+          }
+          this.register(params).then((response) => {
+            this.loading = false
+            if (response) {
+              this.loginLocal(params).then(() => {
+                this.isVisible = false
+                this.$emit('closeLoginModal', '')
+              })
+            }
+          })
+        }
+      })
     },
     switchMode(mode) {
       this.mode = mode

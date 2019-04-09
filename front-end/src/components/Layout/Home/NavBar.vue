@@ -8,7 +8,7 @@
     />
 
     <div class="menu menu_left">
-      <template v-if="device!=='mobile'">
+      <template v-if="device !== 'mobile'">
         <search class="menu-item" :show="true" />
       </template>
     </div>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Hamburger from '@/components/Hamburger'
 import Search from '@/components/HeaderSearch'
 import Login from '@/components/Auth/Login/LoginModal'
@@ -55,16 +55,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'sidebar',
-      'name',
-      'avatar',
-      'device'
-    ])
+    ...mapGetters('layout', ['sidebar', 'device']),
+    ...mapGetters(['name', 'avatar'])
   },
   methods: {
+    ...mapActions('layout', ['toggleSideBar']),
     toggleSideBar() {
-      this.$store.dispatch('toggleSideBar')
+      this.toggleSideBar()
     },
     logout() {
       this.$store.dispatch('LogOut').then(() => {

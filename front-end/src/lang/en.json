@@ -83,7 +83,7 @@
   "login": {
     "title": "Login Form",
     "logIn": "Log in",
-    "username": "Username",
+    "email": "Email",
     "password": "Password",
     "confirmPassword": "Confirm Password",
     "connectWith": "Connect with",
@@ -180,5 +180,11 @@
     "close": "Close",
     "closeOthers": "Close Others",
     "closeAll": "Close All"
+  },
+  "validator": {
+    "password": {
+      "max_length": "The password can not be less than {max_length} characters",
+      "not_match": "Confirm password is not matching"
+    }
   }
 }

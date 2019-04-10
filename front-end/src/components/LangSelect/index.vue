@@ -26,7 +26,7 @@ export default {
       this.$i18n.locale = lang
       this.setLanguage(lang)
       this.$message({
-        message: 'Switch Language Success',
+        message: this.$t('message.change_language'),
         type: 'success'
       })
     }

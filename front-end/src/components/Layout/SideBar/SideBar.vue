@@ -22,10 +22,8 @@ import variables from '@/styles/variables.scss'
 export default {
   components: { SidebarItem },
   computed: {
-    ...mapGetters([
-      'permission_routes',
-      'sidebar'
-    ]),
+    ...mapGetters('layout', ['sidebar']),
+    ...mapGetters(['permission_routes']),
     variables() {
       return variables
     },

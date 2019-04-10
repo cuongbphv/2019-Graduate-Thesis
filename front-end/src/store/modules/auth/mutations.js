@@ -11,8 +11,7 @@ const LOGIN_LOCAL = (state, payload) => {
 
 const LOG_OUT = (state) => {
   state.auth = {
-    token: '',
-    user: {}
+    token: ''
   }
 }
 

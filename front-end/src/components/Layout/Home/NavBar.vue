@@ -9,7 +9,7 @@
 
     <div class="menu menu_left">
       <template v-if="device !== 'mobile'">
-        <search class="menu-item" :show="true" />
+        <search-bar />
       </template>
     </div>
 
@@ -39,14 +39,14 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Hamburger from '@/components/Hamburger'
-import Search from '@/components/HeaderSearch'
+import SearchBar from '@/components/Layout/Home/SearchBar'
 import Login from '@/components/Auth/Login/LoginModal'
 
 export default {
   name: 'NavBar',
   components: {
     Hamburger,
-    Search,
+    SearchBar,
     Login
   },
   data() {
@@ -60,9 +60,6 @@ export default {
   },
   methods: {
     ...mapActions('layout', ['toggleSideBar']),
-    toggleSideBar() {
-      this.toggleSideBar()
-    },
     logout() {
       this.$store.dispatch('LogOut').then(() => {
         location.reload()// In order to re-instantiate the vue-router object to avoid bugs

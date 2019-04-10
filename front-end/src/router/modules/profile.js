@@ -6,9 +6,17 @@ const profileRouter = {
   children: [
     {
       path: ':id',
-      component: () => import('@/views/profile/ProfileDetail'),
+      redirect: '/profile/:id/history',
       name: 'ProfileDetail',
-      meta: { title: 'profileDetail' }
+      component: () => import('@/views/profile/ProfileDetail'),
+      meta: { title: 'profileDetail' },
+      children: [
+        {
+          path: 'history',
+          name: 'ProfileHistory',
+          component: () => import('@/views/profile/profile-detail/History')
+        }
+      ]
     }
   ]
 }

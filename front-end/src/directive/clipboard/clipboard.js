@@ -1,4 +1,3 @@
-// Inspired by https://github.com/Inndy/vue-clipboard2
 const Clipboard = require('clipboard')
 if (!Clipboard) {
   throw new Error('you should npm install `clipboard` --save at first ')

@@ -5,7 +5,7 @@
     <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
-      <template v-if="device!=='mobile'">
+      <template v-if="device !== 'mobile'">
         <search class="right-menu-item" />
 
         <error-log class="errLog-container right-menu-item hover-effect" />
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import ErrorLog from '@/components/ErrorLog'
@@ -71,17 +71,11 @@ export default {
     Search
   },
   computed: {
-    ...mapGetters([
-      'sidebar',
-      'name',
-      'avatar',
-      'device'
-    ])
+    ...mapGetters('layout', ['sidebar', 'device']),
+    ...mapGetters(['name', 'avatar'])
   },
   methods: {
-    toggleSideBar() {
-      this.$store.dispatch('toggleSideBar')
-    },
+    ...mapActions('layout', ['toggleSideBar']),
     logout() {
       this.$store.dispatch('LogOut').then(() => {
         location.reload()// In order to re-instantiate the vue-router object to avoid bugs

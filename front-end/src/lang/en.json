@@ -84,6 +84,7 @@
     "title": "Login Form",
     "logIn": "Log in",
     "email": "Email",
+    "username": "Username",
     "password": "Password",
     "confirmPassword": "Confirm Password",
     "connectWith": "Connect with",
@@ -186,5 +187,8 @@
       "max_length": "The password can not be less than {max_length} characters",
       "not_match": "Confirm password is not matching"
     }
+  },
+  "message": {
+    "change_language": "Switch language success"
   }
 }

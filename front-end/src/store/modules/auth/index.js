@@ -4,8 +4,7 @@ import mutations from './mutations'
 
 const state = {
   auth: {
-    token: '',
-    user: undefined
+    token: ''
   }
 }
 export default {

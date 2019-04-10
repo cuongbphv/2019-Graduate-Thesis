@@ -9,6 +9,7 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 // permission judge function
 function hasPermission(roles, permissionRoles) {
+  console.log(roles, permissionRoles)
   if (roles.includes('admin')) return true // admin permission passed directly
   if (!permissionRoles) return true
   return roles.some(role => permissionRoles.indexOf(role) >= 0)
@@ -17,15 +18,17 @@ function hasPermission(roles, permissionRoles) {
 const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
 
 router.beforeEach((to, from, next) => {
-  NProgress.start() // start progress bar
-  if (getToken()) {
-    // determine if there has token
-
-    /* has token*/
+  // start progress bar
+  NProgress.start()
+  if (getToken()) { /* has token*/
+    // if has logged in and go to /login page
     if (to.path === '/login') {
+      // redirect to home page
       next({ path: '/' })
-      NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
-    } else {
+      // if current page is dashboard will not trigger	afterEach hook, so manually handle it
+      NProgress.done()
+    } else { // go to other page
+      // check role of user who logged in and hasn't had role yet
       if (store.getters.roles.length === 0) {
         store
           .dispatch('GetUserInfo')
@@ -34,7 +37,8 @@ router.beforeEach((to, from, next) => {
             const roles = res.data.roles
             store.dispatch('GenerateRoutes', { roles }).then(accessRoutes => {
               router.addRoutes(accessRoutes)
-              next({ ...to, replace: true }) // set the replace: true so the navigation will not leave a history record
+              // set the replace: true so the navigation will not leave a history record
+              next({ ...to, replace: true })
             })
           })
           .catch(err => {
@@ -43,21 +47,26 @@ router.beforeEach((to, from, next) => {
               next({ path: '/' })
             })
           })
-      } else {
+      } else { // otherwise user had role after logged in
+        // validate user has permission to access to page
         if (hasPermission(store.getters.roles, to.meta.roles)) {
+          // if ok go to page
           next()
         } else {
+          // else redirect to error 401 page unauthorized
           next({ path: '/401', replace: true, query: { noGoBack: true }})
         }
       }
     }
-  } else {
-    /* has no token*/
+  } else { /* has no token*/
+    // check page user access in white list can access without permission
     if (whiteList.indexOf(to.path) !== -1) {
+      // ok go to page
       next()
-    } else {
+    } else { // else go to login and keep url to redirect after login
       next(`/login?redirect=${to.path}`)
-      NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
+      // if current page is login will not trigger afterEach hook, so manually handle it
+      NProgress.done()
     }
   }
 })

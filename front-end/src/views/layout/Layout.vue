@@ -16,6 +16,7 @@ import SideBar from '@/components/Layout/SideBar/SideBar'
 import AppMain from '@/components/Layout/AppMain/AppMain'
 import TagsView from '@/components/Layout/TagsView/TagsView'
 import ResizeMixin from '@/mixins/ResizeHandler'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'Layout',
@@ -27,12 +28,7 @@ export default {
   },
   mixins: [ResizeMixin],
   computed: {
-    sidebar() {
-      return this.$store.state.app.sidebar
-    },
-    device() {
-      return this.$store.state.app.device
-    },
+    ...mapGetters('layout', ['sidebar', 'device']),
     classObj() {
       return {
         hideSidebar: !this.sidebar.opened,
@@ -43,8 +39,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions('layout', ['closeSideBar']),
     handleClickOutside() {
-      this.$store.dispatch('closeSideBar', { withoutAnimation: false })
+      this.closeSideBar({ withoutAnimation: false })
     }
   }
 }

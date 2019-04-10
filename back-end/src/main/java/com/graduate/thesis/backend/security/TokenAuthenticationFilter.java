@@ -22,10 +22,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private TokenProvider tokenProvider;
 
-//    @Autowired
-//    private UserDetailsService userDetailsService;
-
-
     @Autowired
     private CustomUserDetailsService userDetailsService;
 

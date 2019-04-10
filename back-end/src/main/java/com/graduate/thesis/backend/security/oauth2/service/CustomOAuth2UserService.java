@@ -95,7 +95,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Role role = roleRepository.findByRoleId(user.getRoleId());
 
         List<String> permissionIds = new ArrayList<>();
-        permissionIds.addAll(role.getPermissions());
+
+        if(role.getPermissions() != null) {
+            permissionIds.addAll(role.getPermissions());
+        }
 
         if(user.getPersonalPermissions() != null) {
             permissionIds.addAll(user.getPersonalPermissions());

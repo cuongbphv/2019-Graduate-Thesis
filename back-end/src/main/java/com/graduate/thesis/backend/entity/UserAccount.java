@@ -1,5 +1,6 @@
 package com.graduate.thesis.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.graduate.thesis.backend.security.AuthProvider;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -23,7 +24,7 @@ public class UserAccount implements Serializable {
     @Id
     private String id;
 
-    private String username;
+    private String phone;
 
     private String email;
 

@@ -30,7 +30,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping(Constant.AUTH_API)
-public class AuthController {
+public class AuthController extends AbstractBasedAPI{
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -44,13 +44,15 @@ public class AuthController {
     @Autowired
     private TokenProvider tokenProvider;
 
+    private static final String USER_ROLE_ID = "5c9bbbe605f5f129bd02cc83";
+
     @PostMapping(Constant.LOGIN_API)
-    public ResponseEntity<?> authenticateUser(@RequestBody UserAccount loginRequest) {
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
+                        loginRequest.getPhone(),
                         loginRequest.getPassword()
                 )
         );
@@ -58,32 +60,29 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = tokenProvider.createToken(authentication);
-        return ResponseEntity.ok(new AuthResponse(token));
+
+        return responseUtil.successResponse(token);
     }
 
     @PostMapping(Constant.REGISTRY_API)
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserAccount signUpRequest) {
 
-        if(userAccountRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new BadRequestException("Email address already in use.");
+        if(userAccountRepository.existsByPhone(signUpRequest.getPhone())) {
+            throw new BadRequestException("Phone already in use.");
         }
 
         // Creating user's account
         UserAccount user = new UserAccount();
-        user.setEmail(signUpRequest.getEmail());
+        user.setPhone(signUpRequest.getPhone());
         user.setPassword(signUpRequest.getPassword());
         user.setProvider(AuthProvider.local);
+        user.setRoleId(USER_ROLE_ID);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         UserAccount result = userAccountRepository.save(user);
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/user/me")
-                .buildAndExpand(result.getId()).toUri();
-
-        return ResponseEntity.created(location)
-                .body(new ApiResponse(true, "User registered successfully@"));
+        return responseUtil.successResponse(result);
     }
 
 

@@ -38,11 +38,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String email)
+    public UserDetails loadUserByUsername(String phone)
             throws UsernameNotFoundException {
-        UserAccount user = userRepository.findByEmail(email)
+        UserAccount user = userRepository.findByPhone(phone)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with email : " + email)
+                        new UsernameNotFoundException("User not found with phone : " + phone)
                 );
 
 //        return UserPrincipal.create(user);
@@ -51,7 +51,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         Role role = roleRepository.findByRoleId(user.getRoleId());
 
         List<String> permissionIds = new ArrayList<>();
-        permissionIds.addAll(role.getPermissions());
+
+        if(role.getPermissions() != null) {
+            permissionIds.addAll(role.getPermissions());
+        }
 
         if(user.getPersonalPermissions() != null) {
             permissionIds.addAll(user.getPersonalPermissions());
@@ -80,7 +83,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         Role role = roleRepository.findByRoleId(user.getRoleId());
 
         List<String> permissionIds = new ArrayList<>();
-        permissionIds.addAll(role.getPermissions());
+
+        if(role.getPermissions() != null) {
+            permissionIds.addAll(role.getPermissions());
+        }
 
         if(user.getPersonalPermissions() != null) {
             permissionIds.addAll(user.getPersonalPermissions());

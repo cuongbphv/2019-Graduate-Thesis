@@ -200,3 +200,7 @@ code {
 .multiselect--active {
   z-index: 1000 !important;
 }
+
+.v-modal {
+  z-index: 0 !important;
+}

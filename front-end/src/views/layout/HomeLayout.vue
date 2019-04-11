@@ -1,8 +1,10 @@
 <template>
   <div :class="classObj" class="app-wrapper">
     <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
-    <contact-bar />
-    <nav-bar />
+    <div class="sticky-nav">
+      <contact-bar />
+      <nav-bar />
+    </div>
     <app-main />
     <home-footer />
   </div>
@@ -49,6 +51,11 @@ export default {
 
 <style scoped>
   @import "../../styles/mixin.scss";
+  .sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
   .app-wrapper {
     @include clearfix;
     position: relative;

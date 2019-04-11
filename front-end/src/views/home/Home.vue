@@ -1,6 +1,6 @@
 <template>
   <div class="home-container">
-    <about />
+    <about class="about" />
     <div class="main-container">
       <category />
       <h3>Tìm kiếm hàng đầu</h3>
@@ -23,6 +23,16 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+  .home-container {
+    position: relative;
+    .about {
+      position: absolute;
+    }
+    .main-container {
+      position: absolute;
+      margin: 0 100px !important;
+      padding-top: 320px;
+    }
+  }
 </style>

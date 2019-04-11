@@ -16,6 +16,7 @@ $dark_gray: #889aa4;
   box-shadow: inset 0 4px 0 0 #007bff;
   background: #384955;
   width: 35%;
+  z-index: 10;
   overflow: hidden;
   color: #fff;
   .el-dialog__header {

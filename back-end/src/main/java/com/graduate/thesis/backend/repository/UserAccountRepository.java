@@ -26,4 +26,7 @@ public interface UserAccountRepository extends MongoRepository<UserAccount, Stri
     @Query("{ '_id': ?0 }")
     UserAccount findByUserId(String userId);
 
+    @Query("{ '_id': ?0, 'status': ?1 }")
+    UserAccount findByUserIdAndStatus(String userId, int status);
+
 }

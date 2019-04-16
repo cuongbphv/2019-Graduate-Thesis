@@ -64,3 +64,7 @@ spring:
 auth0:
   issuer: https://smartmarket.com
   apiAudience: https://smartmarket.com
+
+
+file:
+  upload-dir: ./target/uploads/

@@ -7,20 +7,23 @@ package com.graduate.thesis.backend.util;
 
 public interface Constant {
 
-
-
     /**
      * ****************************
      * define AIPs path
      */
-    public static final String API_PREFIX = "/api/v1";
-    public static final String WITHIN_ID = "/{id}";
+    String API_PREFIX = "/api/v1";
+    String WITHIN_ID = "/{id}";
 
-    // auth APIs
+    // Common APIs
+    String GET_LIST = "/list";
+
+    // Auth APIs
     public static final String AUTH_API = API_PREFIX + "/auth";
     public static final String REGISTRY_API =  "/register";
     public static final String LOGIN_API =  "/login";
 
+    // Category APIs
+    String CATEGORY_API = "/category";
 
     public static final String ADMIN_LOGIN_API = "/admin/login";
     public static final String ADMIN_GRANT_API = "/admin/grant/{code}";

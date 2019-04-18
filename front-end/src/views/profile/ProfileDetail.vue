@@ -5,16 +5,16 @@
       <el-row>
         <el-col class="left" :md="8" :lg="8">
           <div class="photo-left">
-            <pan-thumb :image="image">
+            <pan-thumb :image="profile.avatarUrl">
               <slot>
                 <a href="javascript:void(0)" @click="imagecropperShow = true">Change Avatar</a>
               </slot>
             </pan-thumb>
             <!--            <div class="active"></div>-->
           </div>
-          <h4 class="name">Jane Doe</h4>
+          <h4 class="name"> {{ profile.firstName + ' ' + profile.lastName }}</h4>
           <p class="info">UI/UX Designer</p>
-          <p class="info">jane.doe@gmail.com</p>
+          <p class="info">{{ profile.email }}</p>
           <el-row class="stats">
             <el-col class="stat" :md="8">
               <p class="number-stat">3,619</p>
@@ -29,7 +29,7 @@
               <p class="desc-stat">Uploads</p>
             </el-col>
           </el-row>
-          <p class="desc">Hi ! My name is Jane Doe. I'm a UI/UX Designer from Paris, in France. I really enjoy photography and mountains.</p>
+          <p class="desc"> {{ profile.description }} </p>
           <!--          <div class="social">-->
           <!--            <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'facebook' }" />-->
           <!--            <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'google' }" />-->
@@ -71,6 +71,7 @@
 <script>
 import ImageCropper from '@/components/ImageCropper'
 import PanThumb from '@/components/PanThumb'
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'ProfileDetail',
   components: {
@@ -81,10 +82,18 @@ export default {
     return {
       imagecropperShow: false,
       imagecropperKey: 0,
-      image: 'https://image.noelshack.com/fichiers/2017/38/2/1505775062-1505606859-portrait-1961529-960-720.jpg'
+      image: 'https://image.noelshack.com/fichiers/2017/38/2/1505775062-1505606859-portrait-1961529-960-720.jpg',
+      profileId: this.$route.params.id
     }
   },
+  computed: {
+    ...mapState('profile', ['profile'])
+  },
+  created: function() {
+    this.handleGetProfile()
+  },
   methods: {
+    ...mapActions('profile', ['createProfile', 'updateProfile', 'getProfile']),
     cropSuccess(resData) {
       this.imagecropperShow = false
       this.imagecropperKey = this.imagecropperKey + 1
@@ -92,6 +101,13 @@ export default {
     },
     close() {
       this.imagecropperShow = false
+    },
+    handleGetProfile() {
+      this.getProfile(this.profileId).then(response => {
+        if (response) {
+          console.log('troi du')
+        }
+      })
     }
   }
 }

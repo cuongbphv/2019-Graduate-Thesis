@@ -1,6 +1,7 @@
 const API = {
   LOGIN: '/auth/login',
-  REGISTER: '/auth/register'
+  REGISTER: '/auth/register',
+  PROFILE: '/profile'
 }
 
 const Status = {

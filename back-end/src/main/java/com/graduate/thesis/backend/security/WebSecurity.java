@@ -42,7 +42,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.context.annotation.Bean;
 
-import javax.crypto.spec.SecretKeySpec;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -57,11 +56,19 @@ import java.util.stream.Collectors;
 )
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
+
+//    @Bean
+//    CorsFilter corsFilter() {
+//        return new CorsFilter();
+//    }
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .cors()
                 .and()
+//                .addFilterAfter(corsFilter(), SessionManagementFilter.class)
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -83,7 +90,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
-                .antMatchers("/api/v1/auth/register/**", "/api/v1/auth/login/**","/auth/**", "/oauth2/**", "/login/**")
+                .antMatchers("/api/v1/auth/register/**", "/api/v1/auth/login/**",
+                        "/auth/**", "/oauth2/**", "/login/**","/api/v1/files/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -162,10 +170,20 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+//        return source;
+//    }
+
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4040"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTION"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 

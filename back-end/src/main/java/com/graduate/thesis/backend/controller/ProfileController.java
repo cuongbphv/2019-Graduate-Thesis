@@ -5,6 +5,8 @@ import com.graduate.thesis.backend.entity.UserProfile;
 import com.graduate.thesis.backend.exception.ApplicationException;
 import com.graduate.thesis.backend.model.request.ProfileRequest;
 import com.graduate.thesis.backend.model.response.RestAPIResponse;
+import com.graduate.thesis.backend.security.CurrentUser;
+import com.graduate.thesis.backend.security.oauth2.user.UserPrincipal;
 import com.graduate.thesis.backend.service.FileStorageService;
 import com.graduate.thesis.backend.service.UserAccountService;
 import com.graduate.thesis.backend.service.UserProfileService;
@@ -85,14 +87,14 @@ public class ProfileController extends AbstractBasedAPI {
 
     }
 
-    @RequestMapping(value = Constant.WITHIN_ID, method = RequestMethod.PUT)
+    @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<RestAPIResponse> updateUserProfile(
-            @PathVariable("id") String userId,
+            @CurrentUser UserPrincipal userPrincipal,
             @RequestPart(value = "avatarImg", required = false) MultipartFile avatarImg,
             @RequestPart(value = "profileRequest") ProfileRequest profileRequest
     ) {
 
-        UserProfile profile = userProfileService.findByUserId(userId)
+        UserProfile profile = userProfileService.findByUserId(userPrincipal.getId())
                 .orElseThrow(() -> new ApplicationException(APIStatus.ERR_USER_PROFILE_NOT_FOUND));
 
 
@@ -140,6 +142,39 @@ public class ProfileController extends AbstractBasedAPI {
 
         return responseUtil.successResponse(profile);
     }
+
+
+    @RequestMapping(value = "/avatar", method = RequestMethod.PUT)
+    public ResponseEntity<RestAPIResponse> updateUserAvatar(
+            @CurrentUser UserPrincipal userPrincipal,
+            @RequestPart(value = "avatar") MultipartFile avatarImg
+    ) {
+
+        UserProfile profile = userProfileService.findByUserId(userPrincipal.getId())
+                .orElseThrow(() -> new ApplicationException(APIStatus.ERR_USER_PROFILE_NOT_FOUND));
+
+
+        if (avatarImg != null) {
+
+            String fileName = "user_avatar_" + userPrincipal.getId() +
+                    CommonUtil.getFileExtension(avatarImg);
+
+            String url = fileUploadService.storeFile(avatarImg, fileName);
+
+            String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/api/v1/files/")
+                    .path(fileName)
+                    .toUriString();
+
+            profile.setAvatarUrl(fileDownloadUri);
+
+        }
+
+        userProfileService.save(profile);
+
+        return responseUtil.successResponse(profile);
+    }
+
 
 
     @RequestMapping(value = Constant.WITHIN_ID, method = RequestMethod.GET)

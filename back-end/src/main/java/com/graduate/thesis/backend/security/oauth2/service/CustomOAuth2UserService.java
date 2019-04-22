@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.graduate.thesis.backend.security.SecurityConstants.USER_ROLE_ID;
+
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
@@ -123,6 +125,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         user.setProviderId(oAuth2UserInfo.getId());
        // user.setName(oAuth2UserInfo.getName());
         user.setEmail(oAuth2UserInfo.getEmail());
+        user.setRoleId(USER_ROLE_ID);
        // user.setImageUrl(oAuth2UserInfo.getImageUrl());
         return userRepository.save(user);
     }

@@ -4,7 +4,9 @@ import mutations from './mutations'
 
 const state = {
   profile: {
-
+    avatarUrl: '',
+    following: 0,
+    followedBy: 0
   }
 }
 export default {

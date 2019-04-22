@@ -826,11 +826,11 @@ export default {
       that.setStep(3)
       request({
         url,
-        method: 'post',
+        method: 'put',
         data: fmData
       }).then(resData => {
         that.loading = 2
-        that.$emit('crop-upload-success', resData.data)
+        that.$emit('crop-upload-success', createImgUrl)
       }).catch(err => {
         if (that.value) {
           that.loading = 3

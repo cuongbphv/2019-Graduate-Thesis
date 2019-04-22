@@ -15,13 +15,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
+
+import static com.graduate.thesis.backend.security.SecurityConstants.USER_ROLE_ID;
 
 
 /**
@@ -44,7 +43,6 @@ public class AuthController extends AbstractBasedAPI{
     @Autowired
     private TokenProvider tokenProvider;
 
-    private static final String USER_ROLE_ID = "5c9bbbe605f5f129bd02cc83";
 
     @PostMapping(Constant.LOGIN_API)
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {

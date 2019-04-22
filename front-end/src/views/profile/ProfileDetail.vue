@@ -5,7 +5,7 @@
       <el-row>
         <el-col class="left" :md="8" :lg="8">
           <div class="photo-left">
-            <pan-thumb :image="profile.avatarUrl">
+            <pan-thumb :image="image">
               <slot>
                 <a href="javascript:void(0)" @click="imagecropperShow = true">Change Avatar</a>
               </slot>
@@ -13,15 +13,15 @@
             <!--            <div class="active"></div>-->
           </div>
           <h4 class="name"> {{ profile.firstName + ' ' + profile.lastName }}</h4>
-          <p class="info">UI/UX Designer</p>
+          <p class="info"> Personal User </p>
           <p class="info">{{ profile.email }}</p>
           <el-row class="stats">
             <el-col class="stat" :md="8">
-              <p class="number-stat">3,619</p>
+              <p class="number-stat">{{ profile.followedBy.length || 0 }}</p>
               <p class="desc-stat">Followers</p>
             </el-col>
             <el-col class="stat" :md="8">
-              <p class="number-stat">42</p>
+              <p class="number-stat">{{ profile.following.length || 0 }}</p>
               <p class="desc-stat">Following</p>
             </el-col>
             <el-col class="stat" :md="8">
@@ -59,8 +59,8 @@
       :key="imagecropperKey"
       :width="300"
       :height="300"
-      url="https://httpbin.org/post"
-      lang-type="en"
+      url="/profile/avatar"
+      lang-type="vi"
       @close="close"
       @crop-upload-success="cropSuccess"
     />
@@ -97,7 +97,7 @@ export default {
     cropSuccess(resData) {
       this.imagecropperShow = false
       this.imagecropperKey = this.imagecropperKey + 1
-      this.image = resData.files.avatar
+      this.image = resData
     },
     close() {
       this.imagecropperShow = false
@@ -105,7 +105,7 @@ export default {
     handleGetProfile() {
       this.getProfile(this.profileId).then(response => {
         if (response) {
-          console.log('troi du')
+          this.image = response.data.avatarUrl
         }
       })
     }

@@ -18,4 +18,6 @@ public class SecurityConstants {
     public static final String GOOGLE_CLIENT_ID = "1010672071642-fdlsc42jcl51btmi8jlvlm18kpa9i6ll.apps.googleusercontent.com";
     public static final String GOOGLE_CLIENT_SECRET = "a69oFdUKQ8S-j6WANi3_SNW_";
 
+    public static final String USER_ROLE_ID = "5c9bbbe605f5f129bd02cc83";
+
 }

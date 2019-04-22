@@ -25,6 +25,11 @@ const loginLocal = ({ commit }, user) => {
   })
 }
 
+const loginOAuth2 = ({ commit }, token) => {
+  setToken(token)
+  commit('LOGIN_OAUTH2', token)
+}
+
 const initData = ({ commit }) => {
   return auth.initData().then(res => {
     if (res.status === Status.SUCCESS) {
@@ -33,14 +38,6 @@ const initData = ({ commit }) => {
   })
 }
 
-// const loginOAuth2 = ({ commit }, type) => {
-//   return auth.loginOAuth2(type).then((res) => {
-//     console.log(res)
-//   }).catch(error => {
-//     throw error
-//   })
-// }
-
 const clear = ({ commit }) => {
   removeToken()
   commit('CLEAR')
@@ -48,6 +45,7 @@ const clear = ({ commit }) => {
 export default {
   register,
   loginLocal,
+  loginOAuth2,
   initData,
   clear
 }

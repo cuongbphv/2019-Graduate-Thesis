@@ -52,7 +52,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         List<String> permissionIds = new ArrayList<>();
 
-        if(role != null && role.getPermissions() != null) {
+        if(role.getPermissions() != null) {
             permissionIds.addAll(role.getPermissions());
         }
 

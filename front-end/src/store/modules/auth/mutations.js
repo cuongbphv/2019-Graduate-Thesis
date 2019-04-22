@@ -9,6 +9,10 @@ const LOGIN_LOCAL = (state, token) => {
   state.auth.token = token
 }
 
+const LOGIN_OAUTH2 = (state, token) => {
+  state.auth.token = token
+}
+
 const INIT_DATA = (state, data) => {
   state.auth = Object.assign({}, state.auth, data)
 }
@@ -20,6 +24,7 @@ const CLEAR = (state) => {
 export default {
   REGISTER,
   LOGIN_LOCAL,
+  LOGIN_OAUTH2,
   INIT_DATA,
   CLEAR
 }

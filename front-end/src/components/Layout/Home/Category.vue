@@ -8,157 +8,95 @@
         <div class="home-feature-block__benefit-panel-wrap">
           <div class="home-feature-block__benefit-panel-wrap__col">
             <div class="home-feature-block__benefit-panel">
-              <div class="home-feature-block__benefit-panel__title">Yên tâm mua sắm</div>
+              <div class="home-feature-block__benefit-panel__title">Nhà đất</div>
               <div class="home-feature-block__benefit-panel__desc">
-                Fado đảm bảo giao dịch, hỗ trợ khiếu nại, đổi trả xuyên biên giới dễ dàng, bảo vệ người mua
+                Nhà đất, nhà ở, nhà trọ,...
               </div>
-              <a class="home-feature-block__benefit-panel__view-more-btn" href="#" target="_blank">
-                <svg-icon icon-class="message" />
-              </a>
-              <svg-icon icon-class="message" />
+              <svg-icon class="home-feature-block__benefit-panel__icon" icon-class="message" />
             </div>
           </div>
 
           <div class="home-feature-block__benefit-panel-wrap__col">
             <div class="home-feature-block__benefit-panel">
-              <div class="home-feature-block__benefit-panel__title">Không lo thủ tục</div>
+              <div class="home-feature-block__benefit-panel__title">Xe cộ</div>
               <div class="home-feature-block__benefit-panel__desc">
-                Người bán chuyển hàng, hoàn tất thủ tục nhập khẩu, giao hàng tận tay
+                Ô tô, xe máy, xe đạp, xe đạp điện,...
               </div>
-              <a class="home-feature-block__benefit-panel__view-more-btn" href="#" target="_blank">
-                <svg-icon icon-class="message" />
-              </a>
-              <svg-icon icon-class="message" />
+              <svg-icon class="home-feature-block__benefit-panel__icon" icon-class="message" />
             </div>
           </div>
 
           <div class="home-feature-block__benefit-panel-wrap__col">
             <div class="home-feature-block__benefit-panel">
-              <div class="home-feature-block__benefit-panel__title">Tận hưởng giá shock toàn cầu</div>
-              <div class="home-feature-block__benefit-panel__desc">Liên tục cập nhật khuyến mãi trên toàn thế giới, tham gia sự kiện Black Friday, Cyber Monday,... ngay tại Việt Nam</div>
-              <a class="home-feature-block__benefit-panel__view-more-btn" href="#" target="_blank">
-                <svg-icon icon-class="message" />
-              </a>
-              <svg-icon icon-class="message" />
-            </div>
-          </div>
-
-          <div class="home-feature-block__benefit-panel-wrap__col">
-            <div class="home-feature-block__benefit-panel">
-              <div class="home-feature-block__benefit-panel__title">Thêm tiết kiệm, thêm ưu đãi</div>
-              <div class="home-feature-block__benefit-panel__desc">Tích lũy điểm thưởng, mã giảm giá. Miễn phí giao hàng toàn quốc</div>
-              <a class="home-feature-block__benefit-panel__view-more-btn" href="#" target="_blank">
-                <svg-icon icon-class="message" />
-              </a>
-              <svg-icon icon-class="message" />
-            </div>
-          </div>
-
-          <div class="home-feature-block__benefit-panel-wrap__col">
-            <div class="home-feature-block__benefit-panel">
-              <div class="home-feature-block__benefit-panel__title">Không giới hạn lựa chọn</div>
+              <div class="home-feature-block__benefit-panel__title">Xe cộ</div>
               <div class="home-feature-block__benefit-panel__desc">
-                Hơn 4 tỷ sản phẩm chất lượng từ khắp thế giới được cập nhật liên tục, giúp quý khách bắt kịp xu hướng
+                Ô tô, xe máy, xe đạp, xe đạp điện,...
               </div>
-              <a class="home-feature-block__benefit-panel__view-more-btn" href="#" target="_blank">
-                <svg-icon icon-class="message" />
-              </a>
-              <svg-icon icon-class="message" />
+              <svg-icon class="home-feature-block__benefit-panel__icon" icon-class="message" />
             </div>
           </div>
-        </div><!-- .home-feature-block__benefit-panel-wrap -->
 
-        <div class="home-feature-block__link-panel-wrap">
-          <div class="home-feature-block__link-panel">
-            <a href="#">
-              <div class="home-feature-block__link-panel__icon-field">
-                <svg-icon icon-class="message" />
+          <div class="home-feature-block__benefit-panel-wrap__col">
+            <div class="home-feature-block__benefit-panel">
+              <div class="home-feature-block__benefit-panel__title">Xe cộ</div>
+              <div class="home-feature-block__benefit-panel__desc">
+                Ô tô, xe máy, xe đạp, xe đạp điện,...
               </div>
-              <div class="home-feature-block__link-panel__title">Tổng hợp giảm giá<br>khắp thế giới</div>
-            </a>
+              <svg-icon class="home-feature-block__benefit-panel__icon" icon-class="message" />
+            </div>
           </div>
 
-          <div class="home-feature-block__link-panel">
-            <a href="#">
-              <div class="home-feature-block__link-panel__icon-field">
-                <svg-icon icon-class="message" />
+          <div class="home-feature-block__benefit-panel-wrap__col">
+            <div class="home-feature-block__benefit-panel">
+              <div class="home-feature-block__benefit-panel__title">Xe cộ</div>
+              <div class="home-feature-block__benefit-panel__desc">
+                Ô tô, xe máy, xe đạp, xe đạp điện,...
               </div>
-              <div class="home-feature-block__link-panel__title">Thực phẩm hỗ trợ sức khỏe</div>
-            </a>
+              <svg-icon class="home-feature-block__benefit-panel__icon" icon-class="message" />
+            </div>
           </div>
 
-          <div class="home-feature-block__link-panel">
-            <a href="#">
-              <div class="home-feature-block__link-panel__icon-field">
-                <svg-icon icon-class="message" />
+          <div class="home-feature-block__benefit-panel-wrap__col">
+            <div class="home-feature-block__benefit-panel">
+              <div class="home-feature-block__benefit-panel__title">Xe cộ</div>
+              <div class="home-feature-block__benefit-panel__desc">
+                Ô tô, xe máy, xe đạp, xe đạp điện,...
               </div>
-              <div class="home-feature-block__link-panel__title">Nước hoa chính hãng</div>
-            </a>
+              <svg-icon class="home-feature-block__benefit-panel__icon" icon-class="message" />
+            </div>
           </div>
 
-          <div class="home-feature-block__link-panel">
-            <a href="#">
-              <div class="home-feature-block__link-panel__icon-field">
-                <svg-icon icon-class="message" />
+          <div class="home-feature-block__benefit-panel-wrap__col">
+            <div class="home-feature-block__benefit-panel">
+              <div class="home-feature-block__benefit-panel__title">Xe cộ</div>
+              <div class="home-feature-block__benefit-panel__desc">
+                Ô tô, xe máy, xe đạp, xe đạp điện,...
               </div>
-              <div class="home-feature-block__link-panel__title">Hàng like new<br>giảm giá đến 90%</div>
-            </a>
+              <svg-icon class="home-feature-block__benefit-panel__icon" icon-class="message" />
+            </div>
           </div>
 
-          <div class="home-feature-block__link-panel">
-            <a href="#">
-              <div class="home-feature-block__link-panel__icon-field">
-                <svg-icon icon-class="message" />
+          <div class="home-feature-block__benefit-panel-wrap__col">
+            <div class="home-feature-block__benefit-panel">
+              <div class="home-feature-block__benefit-panel__title">Xe cộ</div>
+              <div class="home-feature-block__benefit-panel__desc">
+                Ô tô, xe máy, xe đạp, xe đạp điện,...
               </div>
-              <div class="home-feature-block__link-panel__title">Hàng chất giá rẻ</div>
-            </a>
+              <svg-icon class="home-feature-block__benefit-panel__icon" icon-class="message" />
+            </div>
           </div>
 
-          <div class="home-feature-block__link-panel">
-            <a href="#">
-              <div class="home-feature-block__link-panel__icon-field">
-                <svg-icon icon-class="message" />
+          <div class="home-feature-block__benefit-panel-wrap__col">
+            <div class="home-feature-block__benefit-panel">
+              <div class="home-feature-block__benefit-panel__title">Xe cộ</div>
+              <div class="home-feature-block__benefit-panel__desc">
+                Ô tô, xe máy, xe đạp, xe đạp điện,...
               </div>
-              <div class="home-feature-block__link-panel__title">Túi xách</div>
-            </a>
+              <svg-icon class="home-feature-block__benefit-panel__icon" icon-class="message" />
+            </div>
           </div>
 
-          <div class="home-feature-block__link-panel">
-            <a href="#">
-              <div class="home-feature-block__link-panel__icon-field">
-                <svg-icon icon-class="message" />
-              </div>
-              <div class="home-feature-block__link-panel__title">Đồng hồ</div>
-            </a>
-          </div>
-
-          <div class="home-feature-block__link-panel">
-            <a href="#">
-              <div class="home-feature-block__link-panel__icon-field">
-                <svg-icon icon-class="message" />
-              </div>
-              <div class="home-feature-block__link-panel__title">Thời trang đẳng cấp</div>
-            </a>
-          </div>
-
-          <div class="home-feature-block__link-panel">
-            <a href="#">
-              <div class="home-feature-block__link-panel__icon-field">
-                <svg-icon icon-class="message" />
-              </div>
-              <div class="home-feature-block__link-panel__title">Thiết bị nhà bếp chuẩn<br>từ Đức</div>
-            </a>
-          </div>
-
-          <div class="home-feature-block__link-panel">
-            <a href="#">
-              <div class="home-feature-block__link-panel__icon-field">
-                <svg-icon icon-class="message" />
-              </div>
-              <div class="home-feature-block__link-panel__title">Giày hiệu sành điệu</div>
-            </a>
-          </div>
-        </div><!-- .home-feature-block__link-panel-wrap -->
+        </div>
       </div>
     </section>
   </el-container>
@@ -173,7 +111,6 @@ export default {
 <style scoped>
   .home-feature-block {
     position: relative;
-    z-index: 2;
     margin-bottom: 40px
   }
 
@@ -201,18 +138,17 @@ export default {
   }
 
   .home-feature-block__benefit-panel-wrap {
-    display: -webkit-flex;
-    display: -ms-flexbox;
     display: flex;
-    margin: 0 -10px
+    flex-flow: row wrap;
+    flex-direction: row;
+    padding: 0;
   }
 
   .home-feature-block__benefit-panel-wrap__col {
-    -webkit-flex: 1 1;
-    -ms-flex: 1 1;
-    flex: 1 1;
-    min-width: 1px;
-    padding: 0 10px
+    width: 20%;
+    padding: 0 10px;
+    margin-bottom: 20px;
+    height: 100px;
   }
 
   .home-feature-block__benefit-panel {
@@ -222,16 +158,6 @@ export default {
     border-radius: 4px;
     position: relative;
     overflow: hidden
-  }
-
-  .home-feature-block__benefit-panel__icon {
-    position: absolute;
-    right: -2px;
-    bottom: -5px;
-    height: 46px;
-    width: 46px;
-    -webkit-transform: rotate(-35deg);
-    transform: rotate(-35deg)
   }
 
   .home-feature-block__benefit-panel__title {
@@ -249,32 +175,20 @@ export default {
     z-index: 2
   }
 
+  .home-feature-block__benefit-panel__icon {
+    position: absolute;
+    right: -2px;
+    bottom: -5px;
+    height: 50px !important;
+    width: 50px !important;
+    -webkit-transform: rotate(-35deg);
+    transform: rotate(-35deg);
+   color: #8c939d;
+  }
+
   .home-feature-block__benefit-panel__view-more-btn {
     font-size: 16px;
     line-height: 22px
-  }
-
-  .home-feature-block__link-panel-wrap {
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    margin: 20px -10px -20px;
-    -webkit-justify-content: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-flex-wrap: wrap;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap
-  }
-
-  .home-feature-block__link-panel {
-    padding: 0 10px;
-    text-align: center;
-    -webkit-flex: 0 0 20%;
-    -ms-flex: 0 0 20%;
-    flex: 0 0 20%;
-    min-width: 1px;
-    margin-bottom: 20px
   }
 
   .home-feature-block__link-panel a {
@@ -285,11 +199,7 @@ export default {
     color: #2b9af3
   }
 
-  .home-feature-block__link-panel a:hover .home-feature-block__link-panel__icon-field {
+  .home-feature-block__link-panel a:hover {
     opacity: .8
-  }
-
-  .home-feature-block__link-panel__icon-field {
-    margin-bottom: 10px
   }
 </style>

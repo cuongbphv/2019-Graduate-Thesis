@@ -13,12 +13,24 @@
 
 <script>
 import { About, Category, HomePost } from '@/components/Layout/Home/index'
+import { mapActions } from 'vuex'
 export default {
   name: 'Home',
   components: {
     About,
     Category,
     HomePost
+  },
+  beforeCreate() {
+    const token = new URL(window.location.href).searchParams.get('token')
+    if (token) {
+      this.loginOAuth2(token).then(() => {
+        this.initData()
+      })
+    }
+  },
+  methods: {
+    ...mapActions('auth', ['loginOAuth2', 'initData'])
   }
 }
 </script>

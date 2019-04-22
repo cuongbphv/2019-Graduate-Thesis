@@ -1,9 +1,11 @@
 import auth from '../../../api/auth'
+import { setToken, removeToken } from '../../../utils/auth'
 import { Status } from '../../../utils/constants'
+
 const register = ({ commit }, params) => {
   return auth.register(params).then(res => {
-    if (res.status === Status.CREATED) {
-      commit('REGISTER', params)
+    if (res.status === Status.SUCCESS) {
+      commit('REGISTER', res.data)
       return res.data
     }
     // this.$message.error(this.$t('status.' + res.status))
@@ -13,8 +15,9 @@ const register = ({ commit }, params) => {
 }
 
 const loginLocal = ({ commit }, user) => {
-  return auth.loginLocal(user).then((res) => {
+  return auth.loginLocal(user).then(res => {
     if (res.status === Status.SUCCESS) {
+      setToken(res.data)
       commit('LOGIN_LOCAL', res.data)
     }
   }).catch(error => {
@@ -22,25 +25,27 @@ const loginLocal = ({ commit }, user) => {
   })
 }
 
-// const loginOAuth2 = ({ commit }, type) => {
-//   return auth.loginOAuth2(type).then((res) => {
-//     console.log(res)
-//   }).catch(error => {
-//     throw error
-//   })
-// }
+const loginOAuth2 = ({ commit }, token) => {
+  setToken(token)
+  commit('LOGIN_OAUTH2', token)
+}
+
+const initData = ({ commit }) => {
+  return auth.initData().then(res => {
+    if (res.status === Status.SUCCESS) {
+      commit('INIT_DATA', res.data)
+    }
+  })
+}
 
 const clear = ({ commit }) => {
-  return auth.logout().then(() => {
-    localStorage.clear()
-    sessionStorage.clear()
-    commit('CLEAR')
-  }).catch(error => {
-    throw error
-  })
+  removeToken()
+  commit('CLEAR')
 }
 export default {
   register,
   loginLocal,
+  loginOAuth2,
+  initData,
   clear
 }

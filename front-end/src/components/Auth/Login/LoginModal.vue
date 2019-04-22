@@ -20,14 +20,14 @@
 
       <hr class="hr-text" :data-content="$t('login.or')">
 
-      <el-form-item prop="email">
+      <el-form-item prop="phone">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          v-model="loginForm.email"
-          :placeholder="$t('login.email')"
-          name="email"
+          v-model="loginForm.phone"
+          :placeholder="$t('login.phoneNumber')"
+          name="phone"
           type="text"
           auto-complete="on"
         />
@@ -103,6 +103,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { showSuccess } from '../../../utils/message'
 export default {
   name: 'Login',
   props: {
@@ -114,13 +115,13 @@ export default {
   data() {
     return {
       loginForm: {
-        email: '',
+        phone: '',
         password: '',
         confirmPassword: ''
       },
       loginRules: {
-        email: [{ required: true, message: 'Please input email address', trigger: 'blur' },
-          { type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change'] }
+        phone: [{ required: true, message: 'Please input phone number', trigger: 'blur' }
+          // { type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change']}
         ],
         password: [{ required: true, trigger: 'blur', validator: (rule, value, callback) => {
           if (value.length < 6) {
@@ -151,7 +152,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('auth', ['register', 'loginLocal', 'loginOAuth2']),
+    ...mapActions('auth', ['register', 'loginLocal', 'loginOAuth2', 'initData']),
     handleDrag() {
     },
     handleClose() {
@@ -165,7 +166,21 @@ export default {
       }
     },
     handleLoginLocal() {
-      this.$refs.loginForm.validate(valid => {})
+      this.$refs.loginForm.validate(valid => {
+        this.loading = true
+        if (valid) {
+          const params = {
+            phone: this.loginForm.phone,
+            password: this.loginForm.password
+          }
+          this.loginLocal(params).then(() => {
+            this.loading = false
+            this.isVisible = false
+            showSuccess('message.login_success')
+            this.initData()
+          })
+        }
+      })
     },
     handleLoginOAuth2(type) {
       window.open('http://localhost:8080/oauth2/authorize/' + type + '?redirect_uri=http://localhost:4040/#/home', '_blank')
@@ -175,12 +190,12 @@ export default {
         this.loading = true
         if (valid) {
           const params = {
-            email: this.loginForm.email,
+            phone: this.loginForm.phone,
             password: this.loginForm.password
           }
-          this.register(params).then((response) => {
+          this.register(params).then((data) => {
             this.loading = false
-            if (response) {
+            if (data) {
               this.loginLocal(params).then(() => {
                 this.isVisible = false
                 this.$emit('closeLoginModal', '')

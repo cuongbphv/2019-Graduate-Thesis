@@ -40,32 +40,32 @@ const data = [
 
             children: [
               {
-                id: 7,
+                id: 61,
                 event: 'Event-7',
                 timeLine: 50,
 
                 children: [
                   {
-                    id: 71,
+                    id: 611,
                     event: 'Event-7-1',
                     timeLine: 25
 
                   },
                   {
-                    id: 72,
+                    id: 612,
                     event: 'Event-7-2',
                     timeLine: 5
 
                   },
                   {
-                    id: 73,
+                    id: 613,
                     event: 'Event-7-3',
                     timeLine: 20
                   }
                 ]
               },
               {
-                id: 8,
+                id: 62,
                 event: 'Event-8',
                 timeLine: 25
               }

@@ -1,6 +1,7 @@
 const API = {
   LOGIN: '/auth/login',
   REGISTER: '/auth/register',
+  INIT_DATA: '/user/me',
   PROFILE: '/profile'
 }
 

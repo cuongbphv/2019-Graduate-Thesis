@@ -85,6 +85,7 @@
     "logIn": "Đăng nhập",
     "email": "Email",
     "username": "Tài khoản",
+    "phoneNumber": "Số điện thoại",
     "password": "Mật khẩu",
     "confirmPassword": "Xác nhận mật khẩu",
     "connectWith": "Kết nối với",
@@ -189,6 +190,7 @@
     }
   },
   "message": {
-    "change_language": "Thay đổi ngôn ngữ thành công"
+    "change_language": "Thay đổi ngôn ngữ thành công",
+    "login_success": "Đăng nhập thành công! Chào mừng quay trở lại SmartMarket!"
   }
 }

@@ -1,22 +1,30 @@
+import CommonModelMap from '../../models/CommonModelMap'
+
 const REGISTER = (state, payload) => {
-  const user = {
-    email: payload.email
-  }
-  state.user = Object.assign({}, user)
+  const auth = new CommonModelMap(payload)
+  state.auth = Object.assign({}, auth)
 }
 
-const LOGIN_LOCAL = (state, payload) => {
-  state.auth = Object.assign({}, payload)
+const LOGIN_LOCAL = (state, token) => {
+  state.auth.token = token
 }
 
-const LOG_OUT = (state) => {
-  state.auth = {
-    token: ''
-  }
+const LOGIN_OAUTH2 = (state, token) => {
+  state.auth.token = token
+}
+
+const INIT_DATA = (state, data) => {
+  state.auth = Object.assign({}, state.auth, data)
+}
+
+const CLEAR = (state) => {
+  state.auth = {}
 }
 
 export default {
   REGISTER,
   LOGIN_LOCAL,
-  LOG_OUT
+  LOGIN_OAUTH2,
+  INIT_DATA,
+  CLEAR
 }

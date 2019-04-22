@@ -14,15 +14,15 @@
     </div>
 
     <div class="menu menu_right">
-      <el-button class="button el-button--primary" @click="handleLoginModal">Đăng nhập</el-button>
       <Login :visible="isVisible" @closeLoginModal="handleLoginModal" />
-      <el-dropdown class="avatar-container menu-item hover-effect" trigger="click">
+      <el-button v-if="!auth.userId" class="button el-button--primary" @click="handleLoginModal">Đăng nhập</el-button>
+      <el-dropdown v-else class="avatar-container menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <img :src="(auth.avatarUrl ? 'src/assets/default-avatar.gif' : auth.avatarUrl) + '?imageView2/1/w/80/h/80'" class="user-avatar">
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
-          <router-link to="/profile/123">
+          <router-link :to="'/profile/' + auth.userId">
             <el-dropdown-item>
               {{ $t('navbar.profile') }}
             </el-dropdown-item>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import Hamburger from '@/components/Hamburger'
 import SearchBar from '@/components/Layout/Home/SearchBar'
 import Login from '@/components/Auth/Login/LoginModal'
@@ -55,14 +55,16 @@ export default {
     }
   },
   computed: {
+    ...mapState('auth', ['auth']),
     ...mapGetters('layout', ['sidebar', 'device']),
-    ...mapGetters(['name', 'avatar'])
+    ...mapGetters(['name'])
   },
   methods: {
     ...mapActions('layout', ['toggleSideBar']),
+    ...mapActions('auth', ['clear']),
     logout() {
-      this.$store.dispatch('LogOut').then(() => {
-        location.reload()// In order to re-instantiate the vue-router object to avoid bugs
+      this.clear().then(() => {
+        // location.reload()// In order to re-instantiate the vue-router object to avoid bugs
       })
     },
     handleLoginModal() {
@@ -120,7 +122,7 @@ export default {
       padding: 0 8px;
       height: 80%;
       vertical-align: text-bottom;
-      margin-bottom: 5px;
+      margin: 5px;
       color: #DBE8E6;
     }
 

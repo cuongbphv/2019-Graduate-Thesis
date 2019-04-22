@@ -85,6 +85,7 @@
     "logIn": "Log in",
     "email": "Email",
     "username": "Username",
+    "phoneNumber": "Phone Number",
     "password": "Password",
     "confirmPassword": "Confirm Password",
     "connectWith": "Connect with",
@@ -189,6 +190,7 @@
     }
   },
   "message": {
-    "change_language": "Switch language success"
+    "change_language": "Switch language success",
+    "login_success": "Login successfully! Welcome back to SmartMarket!"
   }
 }

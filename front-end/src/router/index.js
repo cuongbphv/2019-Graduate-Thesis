@@ -11,8 +11,8 @@ import HomeLayout from '@/views/layout/HomeLayout'
 import profileRouter from './modules/profile'
 import componentsRouter from './modules/components'
 // import chartsRouter from './modules/charts'
-// import tableRouter from './modules/table'
-// import treeTableRouter from './modules/tree-table'
+import tableRouter from './modules/table'
+import treeTableRouter from './modules/tree-table'
 // import nestedRouter from './modules/nested'
 
 export const constantRoutes = [
@@ -169,7 +169,7 @@ export const asyncRoutes = [
       },
       {
         path: 'category',
-        component: () => import('@/views/tab/index'),
+        component: () => import('@/views/management/Category'),
         name: 'Category',
         meta: { title: 'category', icon: 'list-category' }
       },
@@ -205,8 +205,8 @@ export const asyncRoutes = [
   componentsRouter,
   // chartsRouter,
   // nestedRouter,
-  // tableRouter,
-  // treeTableRouter,
+  tableRouter,
+  treeTableRouter,
 
   // {
   //   path: '/example',

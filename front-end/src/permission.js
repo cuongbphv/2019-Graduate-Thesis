@@ -15,7 +15,7 @@ function hasPermission(roles, permissionRoles) {
   return roles.some(role => permissionRoles.indexOf(role) >= 0)
 }
 
-const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
+const whiteList = ['/login', '/auth-redirect', '/home'] // no redirect whitelist
 
 router.beforeEach((to, from, next) => {
   // start progress bar
@@ -29,6 +29,14 @@ router.beforeEach((to, from, next) => {
       NProgress.done()
     } else { // go to other page
       // check role of user who logged in and hasn't had role yet
+
+      store.dispatch('GenerateRoutes', ['admin']).then(accessRoutes => { // every page
+        console.log(accessRoutes)
+        router.addRoutes(accessRoutes)
+        // set the replace: true so the navigation will not leave a history record
+        next({ ...to, replace: true })
+      })
+
       if (store.getters.roles.length === 0) {
         store
           .dispatch('GetUserInfo')

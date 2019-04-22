@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="tableData" :row-style="showRow" v-bind="$attrs" v-on="$listeners">
+  <el-table :data="tableData" row-key="id" :row-style="showRow" v-bind="$attrs" v-on="$listeners">
     <slot name="selection" />
     <slot name="pre-column" />
     <el-table-column

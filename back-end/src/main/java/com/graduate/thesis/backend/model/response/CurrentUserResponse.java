@@ -35,6 +35,8 @@ public class CurrentUserResponse {
 
     private Role role;
 
+    private String avatarUrl;
+
     private List<Permission> permission;
 
     private Collection<? extends GrantedAuthority> authorities;
@@ -48,6 +50,7 @@ public class CurrentUserResponse {
         this.userId = userAccount.getId();
         this.phone = userAccount.getPhone();
         this.email = userAccount.getEmail();
+        this.avatarUrl = userProfile.getAvatarUrl();
         this.firstName = userProfile.getFirstName();
         this.lastName = userProfile.getLastName();
         this.role = role;

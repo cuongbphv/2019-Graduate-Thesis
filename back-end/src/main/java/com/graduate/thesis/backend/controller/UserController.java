@@ -51,7 +51,7 @@ public class UserController extends AbstractBasedAPI{
 
         Optional<UserProfile> userProfile = userProfileService.findActiveByUserId(userPrincipal.getId());
         if(!userProfile.isPresent()){
-            throw new ApplicationException(APIStatus.ERR_USER_NOT_FOUND);
+            throw new ApplicationException(APIStatus.ERR_USER_PROFILE_NOT_FOUND);
         }
 
         Role role = roleService.findByRoleId(userAccount.getRoleId());

@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'Access-Token'
+// eslint-disable-next-line
+const TokenKey = 'TOKEN'
 
 export function getToken() {
   return Cookies.get(TokenKey)

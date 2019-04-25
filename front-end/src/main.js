@@ -5,6 +5,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
+import 'element-ui/lib/theme-chalk/reset.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/index.scss' // global css
 

@@ -38,9 +38,13 @@
         <el-col class="right" :md="16" :lg="16">
           <el-row>
             <ul class="nav">
-              <li>Lịch sử</li>
+              <li>
+                <router-link :to="{path: 'history'}">Lịch sử</router-link>
+              </li>
               <li>Cài đặt</li>
-              <li>Thông tin</li>
+              <li>
+                <router-link :to="{path: 'info'}">Thông tin</router-link>
+              </li>
               <li>Cửa hàng</li>
               <li>Tin nhắn</li>
               <li>Trợ giúp</li>
@@ -93,7 +97,7 @@ export default {
     this.handleGetProfile()
   },
   methods: {
-    ...mapActions('profile', ['createProfile', 'updateProfile', 'getProfile']),
+    ...mapActions('profile', ['getProfile']),
     cropSuccess(resData) {
       this.imagecropperShow = false
       this.imagecropperKey = this.imagecropperKey + 1
@@ -265,7 +269,11 @@ export default {
         color: #999;
         border-bottom: 2px solid #999;
       }
-      &:nth-child(1) {
+      /*&:nth-child(1) {*/
+        /*color: #999;*/
+        /*border-bottom: 2px solid #999;*/
+      /*}*/
+      .router-link-active {
         color: #999;
         border-bottom: 2px solid #999;
       }

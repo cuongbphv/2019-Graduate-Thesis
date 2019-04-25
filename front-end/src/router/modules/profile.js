@@ -15,6 +15,11 @@ const profileRouter = {
           path: 'history',
           name: 'ProfileHistory',
           component: () => import('@/views/profile/profile-detail/History')
+        },
+        {
+          path: 'info',
+          name: 'ProfileInformation',
+          component: () => import('@/views/profile/profile-detail/Information')
         }
       ]
     }

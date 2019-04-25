@@ -71,7 +71,7 @@ public class ProfileController extends AbstractBasedAPI {
         if(profileRequest.getDob() != null && !profileRequest.getDob().trim().isEmpty()) {
             try {
 
-                Date dob = new SimpleDateFormat("MM/dd/yyyy", new Locale("vi", "VN"))
+                Date dob = new SimpleDateFormat("yyyy-MM-dd", new Locale("vi", "VN"))
                         .parse(profileRequest.getDob());
 
                 profile.setDob(plus1Day(dob));
@@ -90,8 +90,9 @@ public class ProfileController extends AbstractBasedAPI {
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<RestAPIResponse> updateUserProfile(
             @CurrentUser UserPrincipal userPrincipal,
-            @RequestPart(value = "avatarImg", required = false) MultipartFile avatarImg,
-            @RequestPart(value = "profileRequest") ProfileRequest profileRequest
+//            @RequestPart(value = "avatarImg", required = false) MultipartFile avatarImg,
+//            @RequestPart(value = "profileRequest") ProfileRequest profileRequest
+            @RequestBody ProfileRequest profileRequest
     ) {
 
         UserProfile profile = userProfileService.findByUserId(userPrincipal.getId())
@@ -108,7 +109,7 @@ public class ProfileController extends AbstractBasedAPI {
 
         if(profileRequest.getDob() != null && !profileRequest.getDob().trim().isEmpty()) {
             try {
-                Date dob = new SimpleDateFormat("MM/dd/yyyy", new Locale("vi", "VN"))
+                Date dob = new SimpleDateFormat("yyyy-MM-dd", new Locale("vi", "VN"))
                         .parse(profileRequest.getDob());
 
                 profile.setDob(plus1Day(dob));
@@ -116,26 +117,6 @@ public class ProfileController extends AbstractBasedAPI {
             } catch (ParseException e) {
                 LOGGER.error("Could not parse DoB", e.getMessage());
             }
-        }
-
-
-        if (avatarImg != null) {
-
-            String fileName = "user_avatar_" + profileRequest.getUserId() +
-                    CommonUtil.getFileExtension(avatarImg);
-
-            String url = fileUploadService.storeFile(avatarImg, fileName);
-
-            String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/api/v1/files/")
-                    .path(fileName)
-                    .toUriString();
-
-            profile.setAvatarUrl(fileDownloadUri);
-
-        } else if (profileRequest.getAvatarUrl() != null) {
-
-            profile.setAvatarUrl(profileRequest.getAvatarUrl());
         }
 
         userProfileService.save(profile);

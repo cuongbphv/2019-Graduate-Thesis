@@ -23,7 +23,11 @@ public interface Constant {
     public static final String LOGIN_API =  "/login";
 
     // Category APIs
-    String CATEGORY_API = "/category";
+    String CATEGORY_API = API_PREFIX + "/category";
+
+    // Location APIs
+    String LOCATION_API = API_PREFIX + "/location";
+    String IMPORT_LOCATION_DATA = "/import";
 
     //USER
     public static final String USER_API = API_PREFIX + "/user";

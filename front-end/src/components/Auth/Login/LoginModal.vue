@@ -152,7 +152,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('auth', ['register', 'loginLocal', 'loginOAuth2', 'initData']),
+    ...mapActions('auth', ['register', 'loginLocal', 'loginOAuth2']),
+    ...mapActions('profile', ['initData']),
     handleDrag() {
     },
     handleClose() {

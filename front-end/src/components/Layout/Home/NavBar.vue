@@ -15,14 +15,14 @@
 
     <div class="menu menu_right">
       <Login :visible="isVisible" @closeLoginModal="handleLoginModal" />
-      <el-button v-if="!auth.userId" class="button el-button--primary" @click="handleLoginModal">Đăng nhập</el-button>
+      <el-button v-if="!profile.userId" class="button el-button--primary" @click="handleLoginModal">Đăng nhập</el-button>
       <el-dropdown v-else class="avatar-container menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="(auth.avatarUrl ? 'src/assets/default-avatar.gif' : auth.avatarUrl) + '?imageView2/1/w/80/h/80'" class="user-avatar">
+          <img :src="(profile.avatarUrl ? 'src/assets/default-avatar.gif' : profile.avatarUrl) + '?imageView2/1/w/80/h/80'" class="user-avatar">
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
-          <router-link :to="'/profile/' + auth.userId">
+          <router-link :to="'/profile/' + profile.userId">
             <el-dropdown-item>
               {{ $t('navbar.profile') }}
             </el-dropdown-item>
@@ -55,7 +55,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('auth', ['auth']),
+    ...mapState('profile', ['profile']),
     ...mapGetters('layout', ['sidebar', 'device']),
     ...mapGetters(['name'])
   },

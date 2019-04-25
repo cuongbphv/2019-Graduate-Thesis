@@ -1,6 +1,6 @@
-import auth from '../../../api/auth'
-import { setToken, removeToken } from '../../../utils/auth'
-import { Status } from '../../../utils/constants'
+import auth from '@/api/auth'
+import { setToken, removeToken } from '@/utils/auth'
+import { Status } from '@/utils/constants'
 
 const register = ({ commit }, params) => {
   return auth.register(params).then(res => {
@@ -30,14 +30,6 @@ const loginOAuth2 = ({ commit }, token) => {
   commit('LOGIN_OAUTH2', token)
 }
 
-const initData = ({ commit }) => {
-  return auth.initData().then(res => {
-    if (res.status === Status.SUCCESS) {
-      commit('INIT_DATA', res.data)
-    }
-  })
-}
-
 const clear = ({ commit }) => {
   removeToken()
   commit('CLEAR')
@@ -46,6 +38,5 @@ export default {
   register,
   loginLocal,
   loginOAuth2,
-  initData,
   clear
 }

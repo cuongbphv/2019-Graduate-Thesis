@@ -30,7 +30,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('auth', ['loginOAuth2', 'initData'])
+    ...mapActions('auth', ['loginOAuth2']),
+    ...mapActions('profile', ['initData'])
   }
 }
 </script>

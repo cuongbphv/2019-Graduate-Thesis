@@ -1,5 +1,13 @@
-import profile from '../../../api/profile'
-import { Status } from '../../../utils/constants'
+import profile from '@/api/profile'
+import { Status } from '@/utils/constants'
+
+const initData = ({ commit }) => {
+  return profile.initData().then(res => {
+    if (res.status === Status.SUCCESS) {
+      commit('INIT_DATA', res.data)
+    }
+  })
+}
 
 const createProfile = ({ commit }, params) => {
   return profile.createProfile(params).then(res => {
@@ -36,6 +44,7 @@ const getProfile = ({ commit }, profileId) => {
 }
 
 export default {
+  initData,
   createProfile,
   updateProfile,
   getProfile

@@ -47,6 +47,11 @@ spring:
 #          - myandroidapp://oauth2/redirect
 #          - myiosapp://oauth2/redirect
 
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 100MB
+
 ##Spring Security Config
 ### Map path to auth service
 #zuul:routes.auth-service.path=/api/v1/auth/**
@@ -68,3 +73,11 @@ auth0:
 
 file:
   upload-dir: ./target/uploads/
+  data-dir: ./target/data/
+
+logging:
+  level:
+    web: trace
+    org:
+      springframework:
+        web: trace

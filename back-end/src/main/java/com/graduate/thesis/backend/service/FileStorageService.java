@@ -8,7 +8,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
+
+import java.io.*;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,6 +23,8 @@ import java.nio.file.StandardCopyOption;
 
 @Service
 public class FileStorageService {
+
+    private static final int BUFFER_SIZE = 100 * 1024;
 
     private final Path fileStorageLocation;
 
@@ -68,6 +71,43 @@ public class FileStorageService {
 
         } catch (MalformedURLException ex) {
             throw new ApplicationException(APIStatus.ERR_FILE_NOT_FOUND);
+        }
+    }
+
+    /**
+     * Append new input stream into specific file
+     *
+     * @param in
+     * @param destFile
+     */
+    public void appendFile(InputStream in, File destFile) {
+        OutputStream out = null;
+        try {
+            if (destFile.exists()) {
+                out = new BufferedOutputStream(new FileOutputStream(destFile, true), BUFFER_SIZE);
+            } else {
+                out = new BufferedOutputStream(new FileOutputStream(destFile), BUFFER_SIZE);
+            }
+            in = new BufferedInputStream(in, BUFFER_SIZE);
+
+            int len = 0;
+            byte[] buffer = new byte[BUFFER_SIZE];
+            while ((len = in.read(buffer)) > 0) {
+                out.write(buffer, 0, len);
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                if (null != in) {
+                    in.close();
+                }
+                if (null != out) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 

@@ -169,7 +169,7 @@ export const asyncRoutes = [
       },
       {
         path: 'category',
-        component: () => import('@/views/management/Category'),
+        component: () => import('@/views/management/category/Category'),
         name: 'Category',
         meta: { title: 'category', icon: 'list-category' }
       },

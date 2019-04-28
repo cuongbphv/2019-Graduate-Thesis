@@ -2,6 +2,7 @@ const profileRouter = {
   path: '/profile',
   redirect: '/profile/:id',
   name: 'Profile',
+  hidden: true,
   component: () => import('@/views/profile/Profile'),
   children: [
     {
@@ -9,17 +10,25 @@ const profileRouter = {
       redirect: '/profile/:id/history',
       name: 'ProfileDetail',
       component: () => import('@/views/profile/ProfileDetail'),
-      meta: { title: 'profileDetail' },
+      meta: {
+        title: 'profileDetail'
+      },
       children: [
         {
           path: 'history',
           name: 'ProfileHistory',
-          component: () => import('@/views/profile/profile-detail/History')
+          component: () => import('@/views/profile/profile-detail/History'),
+          meta: {
+            permission: 'VIEW_PROFILE_HISTORY'
+          }
         },
         {
           path: 'info',
           name: 'ProfileInformation',
-          component: () => import('@/views/profile/profile-detail/Information')
+          component: () => import('@/views/profile/profile-detail/Information'),
+          meta: {
+            permission: 'MANAGE_PROFILE_INFORMATION'
+          }
         }
       ]
     }

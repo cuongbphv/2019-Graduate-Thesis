@@ -11,7 +11,7 @@ const UPDATE_PROFILE = (state, payload) => {
 }
 
 const GET_PROFILE = (state, payload) => {
-  state.profile = Object.assign({}, payload)
+  state.profile = Object.assign({}, state.profile, payload)
 }
 
 export default {

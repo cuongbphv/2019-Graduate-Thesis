@@ -40,10 +40,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('layout', ['language']),
-    routes() {
-      return this.$store.getters.permission_routes
-    }
+    ...mapGetters('layout', ['language'])
   },
   watch: {
     lang() {

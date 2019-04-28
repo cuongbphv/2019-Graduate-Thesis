@@ -25,7 +25,7 @@
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <img :src="(profile.avatarUrl ? 'src/assets/default-avatar.gif' : profile.avatarUrl) + '?imageView2/1/w/80/h/80'" class="user-avatar">
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import ErrorLog from '@/components/ErrorLog'
@@ -72,7 +72,7 @@ export default {
   },
   computed: {
     ...mapGetters('layout', ['sidebar', 'device']),
-    ...mapGetters(['name', 'avatar'])
+    ...mapState('profile', ['profile'])
   },
   methods: {
     ...mapActions('layout', ['toggleSideBar']),

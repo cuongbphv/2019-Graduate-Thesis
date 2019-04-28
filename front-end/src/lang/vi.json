@@ -148,12 +148,13 @@
     "readings": "Readings",
     "status": "Status",
     "actions": "Actions",
-    "edit": "Edit",
+    "edit": "Chỉnh sửa",
     "publish": "Publish",
-    "draft": "Draft",
-    "delete": "Delete",
-    "cancel": "Cancel",
-    "confirm": "Confirm"
+    "draft": "Lưu nháp",
+    "delete": "Xóa",
+    "cancel": "Hủy bỏ",
+    "confirm": "Xác nhận",
+    "import": "Nhập dữ liệu"
   },
   "errorLog": {
     "tips": "Please click the bug icon in the upper right corner",

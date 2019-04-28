@@ -4,7 +4,11 @@ import { Status } from '@/utils/constants'
 const initData = ({ commit }) => {
   return profile.initData().then(res => {
     if (res.status === Status.SUCCESS) {
+      if (res.data.authorities) {
+        res.data.authorities = res.data.authorities.map(permission => permission.authority)
+      }
       commit('INIT_DATA', res.data)
+      return res.data.authorities
     }
   })
 }

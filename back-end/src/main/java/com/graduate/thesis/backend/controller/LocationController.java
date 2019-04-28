@@ -10,7 +10,6 @@ import com.graduate.thesis.backend.service.LocationService;
 import com.graduate.thesis.backend.util.APIStatus;
 import com.graduate.thesis.backend.util.Constant;
 import com.graduate.thesis.backend.util.UniqueID;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -50,7 +49,7 @@ public class LocationController extends AbstractBasedAPI {
      */
     @PostMapping(Constant.IMPORT_LOCATION_DATA)
     public ResponseEntity<RestAPIResponse> importLocationData (
-            @RequestPart("location_data") @Valid @NotNull MultipartFile jsonFile
+            @RequestPart("file") @Valid @NotNull MultipartFile jsonFile
     ) {
         try
         {

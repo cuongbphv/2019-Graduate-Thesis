@@ -154,6 +154,7 @@ export default {
   methods: {
     ...mapActions('auth', ['register', 'loginLocal', 'loginOAuth2']),
     ...mapActions('profile', ['initData']),
+    ...mapActions('permission', ['loadRoutesByAuthorities']),
     handleDrag() {
     },
     handleClose() {
@@ -178,7 +179,9 @@ export default {
             this.loading = false
             this.isVisible = false
             showSuccess('message.login_success')
-            this.initData()
+            this.initData().then((authorities) => {
+              this.loadRoutesByAuthorities(authorities)
+            })
           })
         }
       })
@@ -200,6 +203,9 @@ export default {
               this.loginLocal(params).then(() => {
                 this.isVisible = false
                 this.$emit('closeLoginModal', '')
+                this.initData().then((authorities) => {
+                  this.loadRoutesByAuthorities(authorities)
+                })
               })
             }
           })

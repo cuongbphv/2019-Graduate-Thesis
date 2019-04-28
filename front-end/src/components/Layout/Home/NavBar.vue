@@ -27,6 +27,11 @@
               {{ $t('navbar.profile') }}
             </el-dropdown-item>
           </router-link>
+          <router-link v-if="profile.role.name === 'ADMIN'" to="dashboard">
+            <el-dropdown-item>
+              Dashboard
+            </el-dropdown-item>
+          </router-link>
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">{{ $t('navbar.logOut') }}</span>
           </el-dropdown-item>
@@ -56,15 +61,14 @@ export default {
   },
   computed: {
     ...mapState('profile', ['profile']),
-    ...mapGetters('layout', ['sidebar', 'device']),
-    ...mapGetters(['name'])
+    ...mapGetters('layout', ['sidebar', 'device'])
   },
   methods: {
     ...mapActions('layout', ['toggleSideBar']),
     ...mapActions('auth', ['clear']),
     logout() {
       this.clear().then(() => {
-        // location.reload()// In order to re-instantiate the vue-router object to avoid bugs
+        location.reload()// In order to re-instantiate the vue-router object to avoid bugs
       })
     },
     handleLoginModal() {

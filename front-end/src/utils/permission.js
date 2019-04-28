@@ -1,11 +1,34 @@
 import store from '@/store'
 
-/**
- * @param {Array} value
- * @returns {Boolean}
- * @example see @/views/permission/directive.vue
- */
-export default function checkPermission(value) {
+function checkChildren(tmp, res, authorities) {
+  if (tmp.children) {
+    tmp.children = filterAsyncRoutes(tmp.children, authorities)
+    if (tmp.children.length > 0) {
+      return res.push(tmp)
+    }
+  }
+}
+
+export function filterAsyncRoutes(routes, authorities) {
+  const res = []
+  routes.forEach((route) => {
+    const tmp = { ...route }
+    if (!tmp.hidden) {
+      if (tmp.meta) {
+        if (tmp.meta.permission && authorities.includes(tmp.meta.permission)) {
+          res.push(tmp)
+        } else {
+          checkChildren(tmp, res, authorities)
+        }
+      } else {
+        checkChildren(tmp, res, authorities)
+      }
+    }
+  })
+  return res
+}
+
+export function checkPermission(value) {
   if (value && value instanceof Array && value.length > 0) {
     const roles = store.getters && store.getters.roles
     const permissionRoles = value

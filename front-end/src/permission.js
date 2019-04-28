@@ -1,21 +1,13 @@
 import router from './router'
 import store from './store'
-import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-// permission judge function
-function hasPermission(roles, permissionRoles) {
-  console.log(roles, permissionRoles)
-  if (roles.includes('admin')) return true // admin permission passed directly
-  if (!permissionRoles) return true
-  return roles.some(role => permissionRoles.indexOf(role) >= 0)
-}
-
-const whiteList = ['/login', '/auth-redirect', '/home'] // no redirect whitelist
+const whiteListNoToken = ['/login', '/auth-redirect', '/home'] // no redirect whitelist
+const whiteListToken = ['/login', '/auth-redirect', '/home', '/404', '/401']
 
 router.beforeEach((to, from, next) => {
   // start progress bar
@@ -27,50 +19,23 @@ router.beforeEach((to, from, next) => {
       next({ path: '/' })
       // if current page is dashboard will not trigger	afterEach hook, so manually handle it
       NProgress.done()
+    } else if (whiteListToken.indexOf(to.path) !== -1) {
+      next() // ok go to page
     } else { // go to other page
       // check role of user who logged in and hasn't had role yet
-
-      store.dispatch('GenerateRoutes', ['admin']).then(accessRoutes => { // every page
-        console.log(accessRoutes)
-        router.addRoutes(accessRoutes)
-        // set the replace: true so the navigation will not leave a history record
-        next({ ...to, replace: true })
-      })
-
-      if (store.getters.roles.length === 0) {
-        store
-          .dispatch('GetUserInfo')
-          .then(res => {
-            // note: roles must be a object array! such as: [{id: '1', name: 'editor'}, {id: '2', name: 'developer'}]
-            const roles = res.data.roles
-            store.dispatch('GenerateRoutes', { roles }).then(accessRoutes => {
-              router.addRoutes(accessRoutes)
-              // set the replace: true so the navigation will not leave a history record
-              next({ ...to, replace: true })
-            })
-          })
-          .catch(err => {
-            store.dispatch('FedLogOut').then(() => {
-              Message.error(err)
-              next({ path: '/' })
-            })
-          })
-      } else { // otherwise user had role after logged in
-        // validate user has permission to access to page
-        if (hasPermission(store.getters.roles, to.meta.roles)) {
-          // if ok go to page
-          next()
-        } else {
-          // else redirect to error 401 page unauthorized
-          next({ path: '/401', replace: true, query: { noGoBack: true }})
-        }
+      const permissions = store.getters['profile/authorities'] // get all permission of logged in
+      // check list permission of who logged in with permission of router to
+      if (permissions.includes(to.meta.permission)) { // has permission
+        // next({ ...to, replace: true }) // next to route
+        next()
+      } else { // otherwise user has no permission
+        next({ path: '/401', replace: true, query: { noGoBack: true }}) // return page unauthorized
       }
     }
   } else { /* has no token*/
     // check page user access in white list can access without permission
-    if (whiteList.indexOf(to.path) !== -1) {
-      // ok go to page
-      next()
+    if (whiteListNoToken.indexOf(to.path) !== -1) {
+      next() // ok go to page
     } else { // else go to login and keep url to redirect after login
       next(`/login?redirect=${to.path}`)
       // if current page is login will not trigger afterEach hook, so manually handle it

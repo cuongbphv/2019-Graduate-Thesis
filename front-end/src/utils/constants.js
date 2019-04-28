@@ -2,7 +2,10 @@ const API = {
   LOGIN: '/auth/login',
   REGISTER: '/auth/register',
   INIT_DATA: '/user/me',
-  PROFILE: '/profile'
+  PROFILE: '/profile',
+  // Location APIs
+  LOCATION: '/location',
+  IMPORT_LOCATION: '/location/import'
 }
 
 const Status = {

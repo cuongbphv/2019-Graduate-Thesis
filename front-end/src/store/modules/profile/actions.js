@@ -47,9 +47,21 @@ const getProfile = ({ commit }, profileId) => {
   })
 }
 
+const updateSettings = ({ commit }, params) => {
+  return profile.updateSettings(params).then((res) => {
+    if (res.status === Status.SUCCESS) {
+      commit('UPDATE_SETTINGS', res.data)
+      return res.data
+    }
+  }).catch(error => {
+    throw error
+  })
+}
+
 export default {
   initData,
   createProfile,
   updateProfile,
-  getProfile
+  getProfile,
+  updateSettings
 }

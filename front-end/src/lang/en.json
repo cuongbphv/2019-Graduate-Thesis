@@ -100,7 +100,10 @@
   },
   "button": {
     "logIn": "Login",
-    "signUp": "Sign up"
+    "signUp": "Sign up",
+    "save": "Save",
+    "reset": "Reset",
+    "cancel": "Cancel"
   },
   "documentation": {
     "documentation": "Documentation",
@@ -192,6 +195,37 @@
   },
   "message": {
     "change_language": "Switch language success",
-    "login_success": "Login successfully! Welcome back to SmartMarket!"
+    "login_success": "Login successfully! Welcome back to SmartMarket!",
+    "change_pass_success": "Change password successfully!"
+  },
+  "userProfile": {
+    "firstName": "First name",
+    "lastName": "Last name",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "otherGender": "Other",
+    "dob": "Date of birth",
+    "description": "Description",
+    "descriptionPlaceholder": "Type little info about yourself",
+    "createdDate": "Participation date",
+    "message": {
+      "updateSuccess": "Update Information successfully!"
+    }
+  },
+  "userSetting": {
+    "changePassword": "Change password",
+    "currentPassword": "Current",
+    "newPassword": "New",
+    "retypePassword": "Re-type new",
+    "enable": "Notification",
+    "notificationFor": "Notification for",
+    "account": "Account information",
+    "user": "User interactions",
+    "post": "Post interactions",
+    "message": {
+      "updateSettingSuccess": "Update settings successfully",
+      "updatePasswordSuccess": "Update password successfully"
+    }
   }
 }

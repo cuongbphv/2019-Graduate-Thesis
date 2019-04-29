@@ -26,6 +26,7 @@ public enum APIStatus {
     ERR_USER_PROFILE_NOT_FOUND(404, "User Profile Not Found"),
     ERR_USER_PROFILE_EXISTED(409, "User Profile Have Existed"),
     ERR_USER_ROLE_NOT_FOUND(404, "User Role Not Found"),
+    ERR_USER_INCORRECT_PASSWORD(401, "Password is incorrect"),
 
     //FILE
     ERR_FILE_NOT_FOUND(888, "File not found"),

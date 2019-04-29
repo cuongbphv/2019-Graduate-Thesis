@@ -2,6 +2,7 @@ const API = {
   LOGIN: '/auth/login',
   REGISTER: '/auth/register',
   INIT_DATA: '/user/me',
+  CHANGE_PASSWORD: '/user/password',
   PROFILE: '/profile',
   // Location APIs
   LOCATION: '/location',

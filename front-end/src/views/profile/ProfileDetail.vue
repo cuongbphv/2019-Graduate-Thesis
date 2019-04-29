@@ -41,9 +41,11 @@
               <li>
                 <router-link :to="{path: 'history'}">Lịch sử</router-link>
               </li>
-              <li>Cài đặt</li>
               <li>
                 <router-link :to="{path: 'info'}">Thông tin</router-link>
+              </li>
+              <li>
+                <router-link :to="{path: 'settings'}">Cài đặt</router-link>
               </li>
               <li>Cửa hàng</li>
               <li>Tin nhắn</li>
@@ -109,7 +111,7 @@ export default {
     handleGetProfile() {
       this.getProfile(this.profileId).then(response => {
         if (response) {
-          this.image = response.data.avatarUrl
+          this.image = response.avatarUrl
         }
       })
     }
@@ -265,10 +267,10 @@ export default {
       text-transform: uppercase;
       font-weight: 500;
       color: #888;
-      &:hover {
-        color: #999;
-        border-bottom: 2px solid #999;
-      }
+      /*&:hover {*/
+        /*color: #999;*/
+        /*border-bottom: 2px solid #999;*/
+      /*}*/
       /*&:nth-child(1) {*/
         /*color: #999;*/
         /*border-bottom: 2px solid #999;*/

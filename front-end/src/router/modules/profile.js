@@ -29,6 +29,14 @@ const profileRouter = {
           meta: {
             permission: 'MANAGE_PROFILE_INFORMATION'
           }
+        },
+        {
+          path: 'settings',
+          name: 'AccountSetting',
+          component: () => import('@/views/profile/profile-detail/Setting'),
+          meta: {
+            permission: 'MANAGE_PROFILE_INFORMATION'
+          }
         }
       ]
     }

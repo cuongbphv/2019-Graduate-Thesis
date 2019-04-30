@@ -81,3 +81,7 @@ logging:
     org:
       springframework:
         web: trace
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG

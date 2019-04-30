@@ -100,7 +100,10 @@
   },
   "button": {
     "logIn": "Login",
-    "signUp": "Sign up"
+    "signUp": "Sign up",
+    "delete": "Delete",
+    "edit": "Edit",
+    "detail": "Detail"
   },
   "documentation": {
     "documentation": "Documentation",
@@ -154,7 +157,15 @@
     "delete": "Delete",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "import": "Import"
+    "import": "Import",
+    "header": {
+      "id": "ID",
+      "city": "City/Province",
+      "type": "Type"
+    }
+  },
+  "label": {
+    "search": "Type Search Input"
   },
   "errorLog": {
     "tips": "Please click the bug icon in the upper right corner",

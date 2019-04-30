@@ -27,6 +27,9 @@ public interface Constant {
 
     // Location APIs
     String LOCATION_API = API_PREFIX + "/location";
+    String PROVINCE_API = "/province";
+    String DISTRICT_API = "/district";
+    String WARD_API = LOCATION_API + "/ward";
     String IMPORT_LOCATION_DATA = "/import";
 
     //USER

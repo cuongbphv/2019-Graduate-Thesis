@@ -1,8 +1,7 @@
 import router from './router'
-import store from './store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import { getToken } from '@/utils/auth' // get token from cookie
+import { getToken, getPermission } from '@/utils/auth' // get token from cookie and permission
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
@@ -23,9 +22,8 @@ router.beforeEach((to, from, next) => {
       next() // ok go to page
     } else { // go to other page
       // check role of user who logged in and hasn't had role yet
-      const permissions = store.getters['profile/authorities'] // get all permission of logged in
       // check list permission of who logged in with permission of router to
-      if (permissions.includes(to.meta.permission)) { // has permission
+      if (getPermission().includes(to.meta.permission)) { // has permission
         // next({ ...to, replace: true }) // next to route
         next()
       } else { // otherwise user has no permission

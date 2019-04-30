@@ -1,5 +1,5 @@
 import auth from '@/api/auth'
-import { setToken, removeToken } from '@/utils/auth'
+import { setToken, removeToken, removePermission } from '@/utils/auth'
 import { Status } from '@/utils/constants'
 
 const register = ({ commit }, params) => {
@@ -32,6 +32,7 @@ const loginOAuth2 = ({ commit }, token) => {
 
 const clear = ({ commit }) => {
   removeToken()
+  removePermission()
   commit('CLEAR')
 }
 export default {

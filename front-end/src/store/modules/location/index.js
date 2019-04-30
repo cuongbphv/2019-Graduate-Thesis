@@ -5,7 +5,8 @@ import mutations from './mutations'
 const state = {
   ids: [],
   entities: {},
-  total: 0
+  totalElements: 0,
+  totalPages: 0
 }
 
 export default {

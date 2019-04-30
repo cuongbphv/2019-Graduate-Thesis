@@ -100,7 +100,10 @@
   },
   "button": {
     "logIn": "Đăng nhập",
-    "signUp": "Đăng ký"
+    "signUp": "Đăng ký",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "detail": "Chi tiết"
   },
   "documentation": {
     "documentation": "Documentation",
@@ -154,7 +157,15 @@
     "delete": "Xóa",
     "cancel": "Hủy bỏ",
     "confirm": "Xác nhận",
-    "import": "Nhập dữ liệu"
+    "import": "Nhập dữ liệu",
+    "header": {
+      "id": "Mã",
+      "city": "Thành phố / Tỉnh",
+      "type": "Loại"
+    }
+  },
+  "label": {
+    "search": "Nhập nội dung tìm kiếm"
   },
   "errorLog": {
     "tips": "Please click the bug icon in the upper right corner",

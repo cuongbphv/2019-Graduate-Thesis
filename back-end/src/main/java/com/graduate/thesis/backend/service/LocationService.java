@@ -1,6 +1,7 @@
 package com.graduate.thesis.backend.service;
 
 import com.graduate.thesis.backend.entity.Location;
+import com.graduate.thesis.backend.entity.model.District;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -14,6 +15,9 @@ public interface LocationService {
 
     void saveListLocation(List<Location> locations);
 
-//    Page<Location> getPagingLocation(String searchKey, int sortKey, boolean ascSort, int pageNumber, int pageSize);
+    Page<Location> getPagingLocation(String searchKey, int sortKey, boolean ascSort, int pageSize, int pageNumber);
+
+    List<District> getPagingDistrictsByProvinceId(
+            String provinceId, String searchKey, int sortKey, boolean ascSort, int pageSize, int pageNumber);
 
 }

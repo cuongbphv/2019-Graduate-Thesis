@@ -1,14 +1,16 @@
 import profile from '@/api/profile'
 import { Status } from '@/utils/constants'
+import { setPermission } from '../../../utils/auth'
 
 const initData = ({ commit }) => {
   return profile.initData().then(res => {
     if (res.status === Status.SUCCESS) {
       if (res.data.authorities) {
         res.data.authorities = res.data.authorities.map(permission => permission.authority)
+        setPermission(res.data.authorities)
+        commit('INIT_DATA', res.data)
+        return res.data.authorities
       }
-      commit('INIT_DATA', res.data)
-      return res.data.authorities
     }
   })
 }

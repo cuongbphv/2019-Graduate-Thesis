@@ -2,8 +2,8 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input
-        v-model="listQuery.title"
-        :placeholder="$t('table.title')"
+        v-model="listQuery.searchKey"
+        :placeholder="$t('label.search')"
         style="width: 400px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
@@ -42,116 +42,102 @@
       </el-upload>
     </div>
 
-    <!--    <el-table-->
-    <!--      :key="tableKey"-->
-    <!--      v-loading="listLoading"-->
-    <!--      :data="list"-->
-    <!--      border-->
-    <!--      fit-->
-    <!--      highlight-current-row-->
-    <!--      style="width: 100%;"-->
-    <!--      @sort-change="sortChange"-->
-    <!--    >-->
-    <!--      <el-table-column :label="$t('table.id')" prop="id" sortable="custom" align="center" width="65">-->
-    <!--        <template slot-scope="scope">-->
-    <!--          <span>{{ scope.row.id }}</span>-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-    <!--      <el-table-column :label="$t('table.date')" width="150px" align="center">-->
-    <!--        <template slot-scope="scope">-->
-    <!--          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-    <!--      <el-table-column :label="$t('table.title')" min-width="150px">-->
-    <!--        <template slot-scope="scope">-->
-    <!--          <span class="link-type" @click="handleUpdate(scope.row)">{{ scope.row.title }}</span>-->
-    <!--          <el-tag>{{ scope.row.type | typeFilter }}</el-tag>-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-    <!--      <el-table-column :label="$t('table.author')" width="110px" align="center">-->
-    <!--        <template slot-scope="scope">-->
-    <!--          <span>{{ scope.row.author }}</span>-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-    <!--      <el-table-column v-if="showReviewer" :label="$t('table.reviewer')" width="110px" align="center">-->
-    <!--        <template slot-scope="scope">-->
-    <!--          <span style="color:red;">{{ scope.row.reviewer }}</span>-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-    <!--      <el-table-column :label="$t('table.importance')" width="80px">-->
-    <!--        <template slot-scope="scope">-->
-    <!--          <svg-icon v-for="n in +scope.row.importance" :key="n" icon-class="star" class="meta-item__icon" />-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-    <!--      <el-table-column :label="$t('table.readings')" align="center" width="95">-->
-    <!--        <template slot-scope="scope">-->
-    <!--          <span v-if="scope.row.pageviews" class="link-type" @click="handleFetchPv(scope.row.pageviews)">{{ scope.row.pageviews }}</span>-->
-    <!--          <span v-else>0</span>-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-    <!--      <el-table-column :label="$t('table.status')" class-name="status-col" width="100">-->
-    <!--        <template slot-scope="scope">-->
-    <!--          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-    <!--      <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">-->
-    <!--        <template slot-scope="scope">-->
-    <!--          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>-->
-    <!--          <el-button v-if="scope.row.status!='published'" size="mini" type="success" @click="handleModifyStatus(scope.row,'published')">-->
-    <!--            {{ $t('table.publish') }}-->
-    <!--          </el-button>-->
-    <!--          <el-button v-if="scope.row.status!='draft'" size="mini" @click="handleModifyStatus(scope.row,'draft')">-->
-    <!--            {{ $t('table.draft') }}-->
-    <!--          </el-button>-->
-    <!--          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleModifyStatus(scope.row,'deleted')">-->
-    <!--            {{ $t('table.delete') }}-->
-    <!--          </el-button>-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-    <!--    </el-table>-->
+    <el-table
+      :key="tableKey"
+      v-loading="listLoading"
+      :data="listPagingLocation"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;"
+      @sort-change="sortChange"
+    >
+      <el-table-column :label="$t('table.header.id')" align="center" prop="1" sortable="custom">
+        <template slot-scope="scope">
+          <span>{{ scope.row.id }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.header.city')" align="center" prop="2" sortable="custom">
+        <template slot-scope="scope">
+          <template v-if="scope.row.edit">
+            <el-input v-model="scope.row.name" class="edit-input" size="small" />
+            <el-button
+              class="cancel-btn"
+              size="small"
+              icon="el-icon-refresh"
+              type="warning"
+              @click="cancelEdit(scope.row)"
+            />
+          </template>
+          <span v-else>{{ scope.row.name }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.header.type')" align="center" prop="3" sortable="custom">
+        <template slot-scope="scope">
+          <el-tag>{{ scope.row.type }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button type="info" size="mini">{{ $t('button.detail') }}</el-button>
+          <el-button
+            type="primary"
+            size="mini"
+            @click="scope.row.edit = !scope.row.edit"
+          >{{ $t('button.edit') }}</el-button>
+          <el-button type="danger" size="mini">{{ $t('button.delete') }}</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination
+      v-show="totalPages > 0"
+      :total="totalElements"
+      :page.sync="listQuery.pageNumber"
+      :limit.sync="listQuery.pageSize"
+      @pagination="getList"
+    />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item :label="$t('table.type')" prop="type">
-          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('table.date')" prop="timestamp">
-          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
-        </el-form-item>
-        <el-form-item :label="$t('table.title')" prop="title">
-          <el-input v-model="temp.title" />
-        </el-form-item>
-        <el-form-item :label="$t('table.status')">
-          <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('table.importance')">
-          <el-rate v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max="3" style="margin-top:8px;" />
-        </el-form-item>
-        <el-form-item :label="$t('table.remark')">
-          <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">{{ $t('table.cancel') }}</el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">{{ $t('table.confirm') }}</el-button>
-      </div>
-    </el-dialog>
+    <!--    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">-->
+    <!--      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">-->
+    <!--        <el-form-item :label="$t('table.type')" prop="type">-->
+    <!--          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">-->
+    <!--            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />-->
+    <!--          </el-select>-->
+    <!--        </el-form-item>-->
+    <!--        <el-form-item :label="$t('table.date')" prop="timestamp">-->
+    <!--          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />-->
+    <!--        </el-form-item>-->
+    <!--        <el-form-item :label="$t('table.title')" prop="title">-->
+    <!--          <el-input v-model="temp.title" />-->
+    <!--        </el-form-item>-->
+    <!--        <el-form-item :label="$t('table.status')">-->
+    <!--          <el-select v-model="temp.status" class="filter-item" placeholder="Please select">-->
+    <!--            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />-->
+    <!--          </el-select>-->
+    <!--        </el-form-item>-->
+    <!--        <el-form-item :label="$t('table.importance')">-->
+    <!--          <el-rate v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max="3" style="margin-top:8px;" />-->
+    <!--        </el-form-item>-->
+    <!--        <el-form-item :label="$t('table.remark')">-->
+    <!--          <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />-->
+    <!--        </el-form-item>-->
+    <!--      </el-form>-->
+    <!--      <div slot="footer" class="dialog-footer">-->
+    <!--        <el-button @click="dialogFormVisible = false">{{ $t('table.cancel') }}</el-button>-->
+    <!--        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">{{ $t('table.confirm') }}</el-button>-->
+    <!--      </div>-->
+    <!--    </el-dialog>-->
 
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">{{ $t('table.confirm') }}</el-button>
-      </span>
-    </el-dialog>
+    <!--    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">-->
+    <!--      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">-->
+    <!--        <el-table-column prop="key" label="Channel" />-->
+    <!--        <el-table-column prop="pv" label="Pv" />-->
+    <!--      </el-table>-->
+    <!--      <span slot="footer" class="dialog-footer">-->
+    <!--        <el-button type="primary" @click="dialogPvVisible = false">{{ $t('table.confirm') }}</el-button>-->
+    <!--      </span>-->
+    <!--    </el-dialog>-->
 
   </div>
 </template>
@@ -162,6 +148,7 @@ import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import { API } from '@/utils/constants'
 import { getToken } from '../../../utils/auth'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'ComplexTable',
@@ -181,31 +168,16 @@ export default {
   },
   data() {
     return {
+      fileList: [],
       isVisible: false,
       tableKey: 0,
-      list: null,
-      total: 0,
       listLoading: true,
       listQuery: {
-        page: 1,
-        limit: 20,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: '+id'
-      },
-      importanceOptions: [1, 2, 3],
-      sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-      statusOptions: ['published', 'draft', 'deleted'],
-      showReviewer: false,
-      temp: {
-        id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        type: '',
-        status: 'published'
+        pageNumber: 1,
+        pageSize: 10,
+        searchKey: '',
+        ascSort: true,
+        sortKey: 1
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -229,57 +201,67 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters('location', ['listPagingLocation']),
+    ...mapState('location', ['totalElements', 'totalPages'])
+  },
   created() {
     this.getList()
   },
   methods: {
+    ...mapActions('location', ['loadListPagingLocation']),
+    /*
+    Handle fo import database
+     */
+    handleOnSuccess(res, file, fileList) {
+      console.log(res)
+    },
+    handleOnExceed(file, fileList) {
+      this.$message({
+        message: 'Remove uploaded file to upload new file',
+        type: 'error'
+      })
+    },
+    handleRemove(file, fileList) {
+    },
+    /*
+    Handle Search Sort
+    */
     getList() {
       this.listLoading = true
-      // fetchList(this.listQuery).then(response => {
-      //   this.list = response.data.items
-      //   this.total = response.data.total
-      //
-      //   // Just to simulate the time of the request
-      //   setTimeout(() => {
-      //     this.listLoading = false
-      //   }, 1.5 * 1000)
-      // })
+      this.loadListPagingLocation(this.listQuery).then(() => {
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1000)
+      })
     },
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
     },
-    handleModifyStatus(row, status) {
+    sortChange({ prop, order }) {
+      this.listQuery.ascSort = order === 'descending'
+      this.listQuery.sortKey = parseInt(prop)
+      this.getList()
+    },
+    /*
+    Handle action with table
+     */
+    cancelEdit(row) {
+      row.title = row.originalTitle
+      row.edit = false
       this.$message({
-        message: '操作成功',
+        message: 'The title has been restored to the original value',
+        type: 'warning'
+      })
+    },
+    confirmEdit(row) {
+      row.edit = false
+      row.originalTitle = row.title
+      this.$message({
+        message: 'The title has been edited',
         type: 'success'
       })
-      row.status = status
-    },
-    sortChange(data) {
-      const { prop, order } = data
-      if (prop === 'id') {
-        this.sortByID(order)
-      }
-    },
-    sortByID(order) {
-      if (order === 'ascending') {
-        this.listQuery.sort = '+id'
-      } else {
-        this.listQuery.sort = '-id'
-      }
-      this.handleFilter()
-    },
-    resetTemp() {
-      this.temp = {
-        id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        status: 'published',
-        type: ''
-      }
     },
     handleCreate() {
       this.resetTemp()
@@ -356,20 +338,6 @@ export default {
       //   this.dialogPvVisible = true
       // })
     },
-    /*
-    Handle fo import database
-     */
-    handleOnSuccess(res, file, fileList) {
-      console.log(res)
-    },
-    handleOnExceed(file, fileList) {
-      this.$message({
-        message: 'Remove uploaded file to upload new file',
-        type: 'error'
-      })
-    },
-    handleRemove(file, fileList) {
-    },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {
@@ -382,3 +350,14 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.edit-input {
+  padding-right: 100px;
+}
+.cancel-btn {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+}
+</style>

@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 
-// eslint-disable-next-line
 const TokenKey = 'TOKEN'
+const Permission = 'PERMISSION'
 
 export function getToken() {
   return Cookies.get(TokenKey)
@@ -13,4 +13,16 @@ export function setToken(token) {
 
 export function removeToken() {
   return Cookies.remove(TokenKey)
+}
+
+export function getPermission() {
+  return Cookies.get(Permission)
+}
+
+export function setPermission(permissions) {
+  return Cookies.set(Permission, permissions)
+}
+
+export function removePermission() {
+  return Cookies.remove(Permission)
 }

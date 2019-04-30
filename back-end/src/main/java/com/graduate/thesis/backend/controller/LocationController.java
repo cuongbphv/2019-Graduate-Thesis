@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -90,14 +91,33 @@ public class LocationController extends AbstractBasedAPI {
     }
 
     @GetMapping
-    public ResponseEntity<RestAPIResponse> getListLocation (
+    public ResponseEntity<RestAPIResponse> getListPagingLocation (
+            @RequestParam("search_key") String searchKey,
             @RequestParam("sort_key") int sortKey,
             @RequestParam("asc_sort") boolean ascSort,
             @RequestParam("page_size") int pageSize,
             @RequestParam("page_number") int pageNumber
     ) {
 
-        return responseUtil.successResponse("OK");
+        Page<Location> locations = locationService.getPagingLocation(searchKey, sortKey, ascSort, pageSize, pageNumber);
+
+        return responseUtil.successResponse(locations);
+    }
+
+    @GetMapping(Constant.PROVINCE_API + Constant.WITHIN_ID)
+    public ResponseEntity<RestAPIResponse> getListPagingDistrictByProvinceId (
+            @PathVariable("id") String provinceId,
+            @RequestParam("search_key") String searchKey,
+            @RequestParam("sort_key") int sortKey,
+            @RequestParam("asc_sort") boolean ascSort,
+            @RequestParam("page_size") int pageSize,
+            @RequestParam("page_number") int pageNumber
+    ) {
+
+        List<District> locations = locationService.getPagingDistrictsByProvinceId(
+                provinceId, searchKey, sortKey, ascSort, pageSize, pageNumber);
+
+        return responseUtil.successResponse(locations);
     }
 
     private List<Location> handleJsonProvinceData(JSONObject jsonData) {

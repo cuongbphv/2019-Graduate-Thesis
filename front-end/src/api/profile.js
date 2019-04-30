@@ -13,5 +13,8 @@ export default {
   },
   getProfile(profileId) {
     return Api.get(API.PROFILE + '/' + profileId).then(res => res.data)
+  },
+  updateSettings(params) {
+    return Api.put(API.PROFILE + '/settings', params).then(res => res.data)
   }
 }

@@ -4,6 +4,7 @@ import com.graduate.thesis.backend.entity.Permission;
 import com.graduate.thesis.backend.entity.Role;
 import com.graduate.thesis.backend.entity.UserAccount;
 import com.graduate.thesis.backend.entity.UserProfile;
+import com.graduate.thesis.backend.entity.model.UserSetting;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,7 +42,7 @@ public class CurrentUserResponse {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    private String setting;
+    private UserSetting setting;
 
 
     public CurrentUserResponse(UserAccount userAccount, UserProfile userProfile,

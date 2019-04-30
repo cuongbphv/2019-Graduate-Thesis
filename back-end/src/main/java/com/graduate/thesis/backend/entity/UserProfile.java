@@ -1,6 +1,7 @@
 package com.graduate.thesis.backend.entity;
 
-import com.graduate.thesis.backend.model.SocialDetail;
+import com.graduate.thesis.backend.entity.model.SocialDetail;
+import com.graduate.thesis.backend.entity.model.UserSetting;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,7 +46,7 @@ public class UserProfile {
 
     private List<Address> address;
 
-    private String setting;
+    private UserSetting setting;
 
     private int type;
 

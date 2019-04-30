@@ -2,6 +2,7 @@ package com.graduate.thesis.backend.controller;
 
 import com.auth0.exception.APIException;
 import com.graduate.thesis.backend.entity.UserProfile;
+import com.graduate.thesis.backend.entity.model.UserSetting;
 import com.graduate.thesis.backend.exception.ApplicationException;
 import com.graduate.thesis.backend.model.request.ProfileRequest;
 import com.graduate.thesis.backend.model.response.RestAPIResponse;
@@ -104,7 +105,6 @@ public class ProfileController extends AbstractBasedAPI {
         profile.setDescription(profileRequest.getDescription());
         profile.setGender(profileRequest.getGender());
         profile.setSocialLink(profileRequest.getSocialLink());
-        profile.setSetting(profileRequest.getSetting());
         profile.setModifiedDate(plus1Day(new Date()));
 
         if(profileRequest.getDob() != null && !profileRequest.getDob().trim().isEmpty()) {
@@ -125,7 +125,7 @@ public class ProfileController extends AbstractBasedAPI {
     }
 
 
-    @RequestMapping(value = "/avatar", method = RequestMethod.PUT)
+    @RequestMapping(value = Constant.AVATAR, method = RequestMethod.PUT)
     public ResponseEntity<RestAPIResponse> updateUserAvatar(
             @CurrentUser UserPrincipal userPrincipal,
             @RequestPart(value = "avatar") MultipartFile avatarImg
@@ -156,6 +156,21 @@ public class ProfileController extends AbstractBasedAPI {
         return responseUtil.successResponse(profile);
     }
 
+
+    @RequestMapping(value = Constant.SETTINGS, method = RequestMethod.PUT)
+    public ResponseEntity<RestAPIResponse> updateUserSetting(
+            @CurrentUser UserPrincipal userPrincipal,
+            @RequestBody UserSetting userSettingReq
+    ) {
+
+        UserProfile profile = userProfileService.findByUserId(userPrincipal.getId())
+                .orElseThrow(() -> new ApplicationException(APIStatus.ERR_USER_PROFILE_NOT_FOUND));
+
+        profile.setSetting(userSettingReq);
+        userProfileService.save(profile);
+
+        return responseUtil.successResponse(profile);
+    }
 
 
     @RequestMapping(value = Constant.WITHIN_ID, method = RequestMethod.GET)

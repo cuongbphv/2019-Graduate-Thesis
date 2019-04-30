@@ -103,7 +103,10 @@
     "signUp": "Đăng ký",
     "delete": "Xóa",
     "edit": "Chỉnh sửa",
-    "detail": "Chi tiết"
+    "detail": "Chi tiết",
+	"save": "Lưu lại",
+    "reset": "Đặt lại",
+    "cancel": "Hủy bỏ"
   },
   "documentation": {
     "documentation": "Documentation",
@@ -203,6 +206,37 @@
   },
   "message": {
     "change_language": "Thay đổi ngôn ngữ thành công",
-    "login_success": "Đăng nhập thành công! Chào mừng quay trở lại SmartMarket!"
+    "login_success": "Đăng nhập thành công! Chào mừng quay trở lại SmartMarket!",
+    "change_pass_success": "Thay đổi mật khẩu thành công!"
+  },
+  "userProfile": {
+    "firstName": "Tên",
+    "lastName": "Họ",
+    "gender": "Giới tính",
+    "male": "Nam",
+    "female": "Nữ",
+    "otherGender": "Khác",
+    "dob": "Ngày sinh",
+    "description": "Mô tả",
+    "descriptionPlaceholder": "Mô tả sơ lược về bản thân bạn",
+    "createdDate": "Ngày tham gia",
+    "message": {
+      "updateSuccess": "Cập nhật thông tin thành công"
+    }
+  },
+  "userSetting": {
+    "changePassword": "Đổi mật khẩu",
+    "currentPassword": "Mật khẩu",
+    "newPassword": "Mật khẩu mới",
+    "retypePassword": "Nhập lại",
+    "enable": "Bật thông báo",
+    "notificationFor": "Thông báo về",
+    "account": "Thông tin tài khoản",
+    "user": "Tương tác người dùng",
+    "post": "Tương tác bài viết",
+    "message": {
+      "updateSettingSuccess": "Cập nhật cài đặt thành công",
+      "updatePasswordSuccess": "Thay đổi mật khẩu thành công"
+    }
   }
 }

@@ -1,6 +1,7 @@
 package com.graduate.thesis.backend.controller;
 
 import com.graduate.thesis.backend.entity.UserAccount;
+import com.graduate.thesis.backend.exception.ApplicationException;
 import com.graduate.thesis.backend.exception.BadRequestException;
 import com.graduate.thesis.backend.model.request.LoginRequest;
 import com.graduate.thesis.backend.model.response.ApiResponse;
@@ -8,10 +9,12 @@ import com.graduate.thesis.backend.model.response.AuthResponse;
 import com.graduate.thesis.backend.repository.UserAccountRepository;
 import com.graduate.thesis.backend.security.AuthProvider;
 import com.graduate.thesis.backend.security.TokenProvider;
+import com.graduate.thesis.backend.util.APIStatus;
 import com.graduate.thesis.backend.util.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,19 +50,24 @@ public class AuthController extends AbstractBasedAPI{
     @PostMapping(Constant.LOGIN_API)
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
+        try {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getPhone(),
-                        loginRequest.getPassword()
-                )
-        );
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getPhone(),
+                            loginRequest.getPassword()
+                    )
+            );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String token = tokenProvider.createToken(authentication);
+            String token = tokenProvider.createToken(authentication);
 
-        return responseUtil.successResponse(token);
+            return responseUtil.successResponse(token);
+        }
+        catch (BadCredentialsException ex){
+            throw new ApplicationException(APIStatus.ERR_USER_INCORRECT_PASSWORD);
+        }
     }
 
     @PostMapping(Constant.REGISTRY_API)
@@ -72,10 +80,9 @@ public class AuthController extends AbstractBasedAPI{
         // Creating user's account
         UserAccount user = new UserAccount();
         user.setPhone(signUpRequest.getPhone());
-        user.setPassword(signUpRequest.getPassword());
         user.setProvider(AuthProvider.local);
         user.setRoleId(USER_ROLE_ID);
-
+        user.setStatus(1);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         UserAccount result = userAccountRepository.save(user);

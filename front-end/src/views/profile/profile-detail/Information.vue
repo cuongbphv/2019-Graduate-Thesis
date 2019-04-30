@@ -1,29 +1,29 @@
 <template>
-  <el-form ref="formProfile" :model="profileForm" label-width="150px">
+  <el-form ref="formProfile" style="padding-left: 50px" :model="profileForm" label-position="left" label-width="150px">
     <el-row>
-      <el-col :md="12" :lg="12">
-        <el-form-item label="First Name">
+      <el-col :md="11" :lg="11">
+        <el-form-item :label="$t('userProfile.firstName')">
           <el-input v-model="profileForm.firstName" />
         </el-form-item>
       </el-col>
-      <el-col :md="12" :lg="12">
-        <el-form-item label="Last Name">
+      <el-col :md="{span: 11, offset: 2}" :lg="{span: 11, offset: 2}">
+        <el-form-item :label="$t('userProfile.lastName')">
           <el-input v-model="profileForm.lastName" />
         </el-form-item>
       </el-col>
     </el-row>
     <el-row>
-      <el-col :md="12" :lg="12">
-        <el-form-item label="Gender">
+      <el-col :sm="11" :md="11" :lg="11">
+        <el-form-item :label="$t('userProfile.gender')">
           <el-select v-model="profileForm.gender" placeholder="Select gender">
-            <el-option label="Nữ" :value="0" />
-            <el-option label="Nam" :value="1" />
-            <el-option label="Khác" :value="2" />
+            <el-option :label="$t('userProfile.male')" :value="1" />
+            <el-option :label="$t('userProfile.female')" :value="2" />
+            <el-option :label="$t('userProfile.otherGender')" :value="3" />
           </el-select>
         </el-form-item>
       </el-col>
-      <el-col :md="12" :lg="12">
-        <el-form-item label="Date of birth">
+      <el-col :sm="{span: 11, offset: 2}" :md="{span: 11, offset: 2}" :lg="{span: 11, offset: 2}">
+        <el-form-item :label="$t('userProfile.dob')">
           <el-date-picker
             v-model="profileForm.dob"
             type="date"
@@ -37,19 +37,19 @@
     </el-row>
     <el-row>
       <el-col :span="24">
-        <el-form-item label="Description">
+        <el-form-item :label="$t('userProfile.description')">
           <el-input
             v-model="profileForm.description"
             type="textarea"
             :rows="3"
-            placeholder="Type little info about yourself"
+            :placeholder="$t('userProfile.descriptionPlaceholder')"
           />
         </el-form-item>
       </el-col>
     </el-row>
     <el-row>
-      <el-col :md="12" :lg="12">
-        <el-form-item label="Created Date">
+      <el-col :md="11" :lg="11">
+        <el-form-item :label="$t('userProfile.createdDate')">
           <el-date-picker
             :disabled="true"
             :value="profileForm.createdDate"
@@ -61,15 +61,28 @@
       </el-col>
     </el-row>
     <el-form-item>
-      <el-button type="success" :disabled="!formUpdated" icon="el-icon-circle-check-outline" @click="handleUpdateProfile">Save</el-button>
-      <el-button :disabled="!formUpdated" icon="el-icon-refresh" @click="handleResetButton">Reset</el-button>
+      <el-button
+        type="success"
+        :disabled="!formUpdated"
+        icon="el-icon-circle-check-outline"
+        @click="handleUpdateProfile"
+      >
+        {{ $t('button.save') }}
+      </el-button>
+      <el-button
+        :disabled="!formUpdated"
+        icon="el-icon-refresh"
+        @click="handleResetButton"
+      >
+        {{ $t('button.reset') }}
+      </el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
-
+import { showSuccess } from '../../../utils/message'
 export default {
   name: 'Information',
   data() {
@@ -96,10 +109,9 @@ export default {
   methods: {
     ...mapActions('profile', ['updateProfile', 'getProfile']),
     handleUpdateProfile() {
-      this.updateProfile(this.profileForm).then(response => {
-        if (response && response.status === 200) {
-          this.handleResetButton()
-        }
+      this.updateProfile(this.profileForm).then(() => {
+        showSuccess('userProfile.message.updateSuccess')
+        this.handleResetButton()
       })
     },
     handleResetButton() {

@@ -1,10 +1,12 @@
 package com.graduate.thesis.backend.controller;
 
+import com.graduate.thesis.backend.Application;
 import com.graduate.thesis.backend.entity.Permission;
 import com.graduate.thesis.backend.entity.Role;
 import com.graduate.thesis.backend.entity.UserAccount;
 import com.graduate.thesis.backend.entity.UserProfile;
 import com.graduate.thesis.backend.exception.ApplicationException;
+import com.graduate.thesis.backend.model.request.ChangePasswordRequest;
 import com.graduate.thesis.backend.model.response.CurrentUserResponse;
 import com.graduate.thesis.backend.model.response.RestAPIResponse;
 import com.graduate.thesis.backend.security.CurrentUser;
@@ -17,10 +19,17 @@ import com.graduate.thesis.backend.util.APIStatus;
 import com.graduate.thesis.backend.util.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +37,13 @@ import java.util.Optional;
 @RestController
 @RequestMapping(Constant.USER_API)
 public class UserController extends AbstractBasedAPI{
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
 
     @Autowired
     private UserAccountService userAccountService;
@@ -68,5 +84,34 @@ public class UserController extends AbstractBasedAPI{
                 role , permissionList, userPrincipal.getAuthorities());
 
         return responseUtil.successResponse(currentUserResponse);
+    }
+
+    @RequestMapping(value = Constant.CHANGE_PASSWORD, method = RequestMethod.PUT)
+    public ResponseEntity<RestAPIResponse> changeUserPassword(
+            @CurrentUser UserPrincipal userPrincipal,
+            @RequestBody @Valid ChangePasswordRequest passwordRequest
+            ) {
+
+        UserAccount userAccount = userAccountService.findActiveUserById(userPrincipal.getId());
+        if (userAccount == null) {
+            throw new ApplicationException(APIStatus.ERR_USER_NOT_FOUND);
+        }
+
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            userAccount.getPhone(),
+                            passwordRequest.getCurrentPassword()
+                    )
+            );
+        } catch (BadCredentialsException ex) {
+            throw new ApplicationException(APIStatus.ERR_USER_INCORRECT_PASSWORD);
+        }
+
+        userAccount.setPassword(passwordEncoder.encode(passwordRequest.getNewPassword()));
+
+        userAccountService.save(userAccount);
+
+        return responseUtil.successResponse("Change Password Successfully");
     }
 }

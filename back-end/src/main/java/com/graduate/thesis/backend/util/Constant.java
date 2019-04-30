@@ -35,9 +35,12 @@ public interface Constant {
     //USER
     public static final String USER_API = API_PREFIX + "/user";
     public static final String CURRENT_USER =  "/me";
+    public static final String CHANGE_PASSWORD =  "/password";
 
     //Profile management
     public static final String PROFILE_API = API_PREFIX + "/profile";
+    public static final String AVATAR =  "/avatar";
+    public static final String SETTINGS =  "/settings";
 
 
 

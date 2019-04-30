@@ -1,4 +1,4 @@
-package com.graduate.thesis.backend.model;
+package com.graduate.thesis.backend.entity.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

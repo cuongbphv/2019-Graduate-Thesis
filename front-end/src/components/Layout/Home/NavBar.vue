@@ -18,7 +18,7 @@
       <el-button v-if="!profile.userId" class="button el-button--primary" @click="handleLoginModal">Đăng nhập</el-button>
       <el-dropdown v-else class="avatar-container menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="(profile.avatarUrl ? 'src/assets/default-avatar.gif' : profile.avatarUrl) + '?imageView2/1/w/80/h/80'" class="user-avatar">
+          <img :src="(profile.avatarUrl ? profile.avatarUrl : 'src/assets/default-avatar.gif') + '?imageView2/1/w/80/h/80'" class="user-avatar">
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -27,7 +27,7 @@
               {{ $t('navbar.profile') }}
             </el-dropdown-item>
           </router-link>
-          <router-link v-if="profile.role.name === 'ADMIN'" to="dashboard">
+          <router-link v-if="profile.role.name === 'ADMIN'" to="/dashboard">
             <el-dropdown-item>
               Dashboard
             </el-dropdown-item>

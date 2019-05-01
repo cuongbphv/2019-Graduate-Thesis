@@ -15,6 +15,10 @@ public interface LocationService {
 
     void saveListLocation(List<Location> locations);
 
+    void deleteProvince(Location location);
+
+    Location findByLocationId(String locationId);
+
     Page<Location> getPagingLocation(String searchKey, int sortKey, boolean ascSort, int pageSize, int pageNumber);
 
     List<District> getPagingDistrictsByProvinceId(

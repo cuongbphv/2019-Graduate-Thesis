@@ -82,7 +82,7 @@ public class LocationController extends AbstractBasedAPI {
             locationService.saveListLocation(locations);
             //delete file
 //            FileUtils.forceDelete(destFile);
-            return responseUtil.successResponse(locations);
+            return responseUtil.successResponse("Upload successfully!");
         } catch (IOException e) {
             e.printStackTrace();
             throw new ApplicationException(APIStatus.ERR_FILE_TYPE);
@@ -118,6 +118,50 @@ public class LocationController extends AbstractBasedAPI {
                 provinceId, searchKey, sortKey, ascSort, pageSize, pageNumber);
 
         return responseUtil.successResponse(locations);
+    }
+
+    @DeleteMapping(Constant.PROVINCE_API)
+    public ResponseEntity<RestAPIResponse> deleteProvinceByIds (
+            @RequestParam("province_ids") String provinceIds
+    ) {
+
+        String[] listProvinceIds = provinceIds.split(",");
+
+        for(String provinceId : listProvinceIds) {
+
+            Location location = locationService.findByLocationId(provinceId);
+
+            if (location == null) {
+                throw new ApplicationException(APIStatus.ERR_LOCATION_NOT_FOUND);
+            }
+
+            locationService.deleteProvince(location);
+        }
+
+        return responseUtil.successResponse("OK");
+    }
+
+    @DeleteMapping(Constant.DISTRICT_API)
+    public ResponseEntity<RestAPIResponse> deleteDistrictByIds (
+            @RequestParam("district_ids") String districtIds,
+            @RequestParam("province_id") String provinceId
+    ) {
+
+        Location location = locationService.findByLocationId(provinceId);
+
+        List<District> districts = location.getDistricts();
+        List<District> newDistricts = new ArrayList<>();
+
+        for(District district : districts) {
+            if (!district.getId().equals(districtIds)) {
+                newDistricts.add(district);
+            }
+        }
+
+        location.setDistricts(newDistricts);
+        locationService.saveLocation(location);
+
+        return responseUtil.successResponse("OK");
     }
 
     private List<Location> handleJsonProvinceData(JSONObject jsonData) {

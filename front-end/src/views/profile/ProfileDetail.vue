@@ -54,7 +54,11 @@
           </el-row>
           <!--<span class="follow">Follow</span>-->
           <el-container>
-            <router-view />
+            <transition name="fade-transform" mode="out-in">
+              <keep-alive :include="cachedViews">
+                <router-view :key="key" />
+              </keep-alive>
+            </transition>
           </el-container>
         </el-col>
       </el-row>
@@ -93,7 +97,13 @@ export default {
     }
   },
   computed: {
-    ...mapState('profile', ['profile'])
+    ...mapState('profile', ['profile']),
+    cachedViews() {
+      return this.$store.state.tagsView.cachedViews
+    },
+    key() {
+      return this.$route.fullPath
+    }
   },
   created: function() {
     this.handleGetProfile()

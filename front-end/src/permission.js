@@ -1,5 +1,6 @@
 import router from './router'
 import NProgress from 'nprogress' // progress bar
+import store from './store'
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken, getPermission } from '@/utils/auth' // get token from cookie and permission
 
@@ -18,16 +19,17 @@ router.beforeEach((to, from, next) => {
       next({ path: '/' })
       // if current page is dashboard will not trigger	afterEach hook, so manually handle it
       NProgress.done()
-    } else if (whiteListToken.indexOf(to.path) !== -1) {
-      next() // ok go to page
-    } else { // go to other page
-      // check role of user who logged in and hasn't had role yet
-      // check list permission of who logged in with permission of router to
-      if (getPermission().includes(to.meta.permission)) { // has permission
-        // next({ ...to, replace: true }) // next to route
-        next()
-      } else { // otherwise user has no permission
-        next({ path: '/401', replace: true, query: { noGoBack: true }}) // return page unauthorized
+    } else {
+      // make sure has token get user info when refresh page
+      if (store.getters['permission/routes'].length === 0) {
+        store.dispatch('profile/initData').then(authorities => {
+          store.dispatch('permission/loadRoutesByAuthorities', authorities).then(() => {
+            handleNextRoute(to, next)
+          })
+        })
+      } else {
+        // continue route function
+        handleNextRoute(to, next)
       }
     }
   } else { /* has no token*/
@@ -41,6 +43,22 @@ router.beforeEach((to, from, next) => {
     }
   }
 })
+
+function handleNextRoute(to, next) {
+  // continue route function
+  if (whiteListToken.indexOf(to.path) !== -1) {
+    next() // ok go to page
+  } else { // go to other page
+    // check role of user who logged in and hasn't had role yet
+    // check list permission of who logged in with permission of router to
+    if (getPermission().includes(to.meta.permission)) { // has permission
+      // next({ ...to, replace: true }) // next to route
+      next()
+    } else { // otherwise user has no permission
+      next({ path: '/401', replace: true, query: { noGoBack: true }}) // return page unauthorized
+    }
+  }
+}
 
 router.afterEach(() => {
   NProgress.done() // finish progress bar

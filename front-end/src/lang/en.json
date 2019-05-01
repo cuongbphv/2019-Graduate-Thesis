@@ -104,7 +104,7 @@
     "delete": "Delete",
     "edit": "Edit",
     "detail": "Detail",
-	"save": "Save",
+	  "save": "Save",
     "reset": "Reset",
     "cancel": "Cancel"
   },
@@ -164,6 +164,8 @@
     "header": {
       "id": "ID",
       "city": "City/Province",
+      "district": "District",
+      "ward": "Ward",
       "type": "Type"
     }
   },

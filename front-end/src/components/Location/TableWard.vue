@@ -9,7 +9,12 @@
       highlight-current-row
       style="width: 100%;"
       @sort-change="sortChange"
+      @selection-change="handleSelectionChange"
     >
+      <el-table-column
+        type="selection"
+        width="35"
+      />
       <el-table-column :label="$t('table.header.id')" align="center" prop="id" sortable="custom">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
@@ -123,6 +128,18 @@ export default {
     this.getList()
   },
   methods: {
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
+      } else {
+        this.$refs.multipleTable.clearSelection()
+      }
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
     handlePagination({ page, limit }) {
       this.listQuery.pageNumber = page
       this.listQuery.pageSize = limit

@@ -9,7 +9,12 @@
       highlight-current-row
       style="width: 100%;"
       @sort-change="sortChange"
+      @selection-change="handleSelectionChange"
     >
+      <el-table-column
+        type="selection"
+        width="35"
+      />
       <el-table-column :label="$t('table.header.id')" align="center" prop="id" sortable="custom">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
@@ -41,7 +46,7 @@
             type="info"
             icon="el-icon-info"
             circle
-            @click="handleLoadListWards(scope.row.id)"
+            @click="handleLoadListWards(scope.row)"
           />
           <el-button
             type="primary"
@@ -126,8 +131,20 @@ export default {
     this.getList()
   },
   methods: {
-    handleLoadListWards(districtId) {
-      this.$emit('handleLoadListWards', districtId)
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
+      } else {
+        this.$refs.multipleTable.clearSelection()
+      }
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
+    handleLoadListWards(row) {
+      this.$emit('handleLoadListWards', { id: row.id, name: row.name })
       this.$emit('keepDistrictPaging', this.listQuery)
     },
     handlePagination({ page, limit }) {

@@ -9,7 +9,12 @@
       highlight-current-row
       style="width: 100%;"
       @sort-change="sortChange"
+      @selection-change="handleSelectionChange"
     >
+      <el-table-column
+        type="selection"
+        width="35"
+      />
       <el-table-column :label="$t('table.header.id')" align="center" prop="1" sortable="custom">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
@@ -19,37 +24,51 @@
         <template slot-scope="scope">
           <template v-if="scope.row.edit">
             <el-input v-model="scope.row.name" class="edit-input" size="small" />
-            <el-button
-              class="cancel-btn"
-              size="small"
-              icon="el-icon-refresh"
-              type="warning"
-              @click="cancelEdit(scope.row)"
-            />
           </template>
           <span v-else>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.header.type')" align="center" prop="3" sortable="custom" min-width="100px">
         <template slot-scope="scope">
-          <el-tag>{{ scope.row.type }}</el-tag>
+          <template v-if="scope.row.edit">
+            <el-input v-model="scope.row.type" class="edit-input" size="small" />
+          </template>
+          <el-tag v-else>{{ scope.row.type }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
+            v-if="!scope.row.edit"
             type="info"
             icon="el-icon-info"
             circle
-            @click="handleLoadListDistricts(scope.row.id)"
+            @click="handleLoadListDistricts(scope.row)"
           />
           <el-button
+            v-if="!scope.row.edit"
             type="primary"
             icon="el-icon-edit"
             circle
             @click="scope.row.edit = !scope.row.edit"
           />
           <el-button
+            v-if="scope.row.edit"
+            type="primary"
+            icon="el-icon-check"
+            circle
+            @click="scope.row.edit = !scope.row.edit"
+          />
+          <el-button
+            v-if="scope.row.edit"
+            class="cancel-btn"
+            size="small"
+            icon="el-icon-refresh"
+            type="warning"
+            @click="cancelEdit(scope.row)"
+          />
+          <el-button
+            v-if="!scope.row.edit"
             type="danger"
             icon="el-icon-delete"
             circle
@@ -125,7 +144,7 @@ export default {
       this.loadListPagingLocation(this.listQuery).then(() => {
         setTimeout(() => {
           this.listLoading = false
-        }, 1000)
+        }, 500)
       })
     },
     handleFilter() {
@@ -137,9 +156,21 @@ export default {
       this.listQuery.sortKey = parseInt(prop)
       this.getList()
     },
-    handleLoadListDistricts(provinceId) {
-      this.$emit('handleLoadListDistricts', provinceId)
+    handleLoadListDistricts(row) {
+      this.$emit('handleLoadListDistricts', { id: row.id, name: row.name })
       this.$emit('keepProvincePaging', this.listQuery)
+    },
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
+      } else {
+        this.$refs.multipleTable.clearSelection()
+      }
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val
     }
   }
 }

@@ -4,7 +4,7 @@
       :background="background"
       :current-page.sync="currentPage"
       :page-size.sync="pageSize"
-      :layout="layout"
+      :layout="customLayout"
       :page-sizes="pageSizes"
       :total="total"
       v-bind="$attrs"
@@ -55,6 +55,12 @@ export default {
       default: false
     }
   },
+  data() {
+    return {
+      customLayout: '',
+      windowWidth: 0
+    }
+  },
   computed: {
     currentPage: {
       get() {
@@ -72,6 +78,27 @@ export default {
         this.$emit('update:limit', val)
       }
     }
+  },
+  watch: {
+    windowWidth: function(newWidth) {
+      if (newWidth <= 500) {
+        this.customLayout = 'total,prev,next,jumper'
+      } else if (newWidth > 500 && newWidth < 750) {
+        this.customLayout = 'prev,pager,next,jumper'
+      } else {
+        this.customLayout = this.layout
+      }
+    }
+  },
+  created() {
+    this.customLayout = this.layout
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener('resize', () => {
+        this.windowWidth = window.innerWidth
+      })
+    })
   },
   methods: {
     handleSizeChange(val) {
@@ -94,6 +121,8 @@ export default {
 .pagination-container {
   background: #fff;
   padding: 32px 16px;
+  cursor: pointer;
+  text-align: center;
 }
 .pagination-container.hidden {
   display: none;

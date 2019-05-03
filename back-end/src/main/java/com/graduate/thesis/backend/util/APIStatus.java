@@ -33,7 +33,9 @@ public enum APIStatus {
     ERR_CANT_STORE(889, "Could not store file"),
     ERR_FILE_TYPE(890, "Could not determine file type"),
 
-
+    //CATEGORY
+    ERR_CATEGORY_EXISTED(409, "Category is existed"),
+    ERR_CATEGORY_NOT_FOUND(404, "Category not found")
 
     ;
 

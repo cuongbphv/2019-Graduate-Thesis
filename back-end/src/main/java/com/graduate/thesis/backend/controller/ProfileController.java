@@ -184,18 +184,5 @@ public class ProfileController extends AbstractBasedAPI {
         return responseUtil.successResponse(profile);
     }
 
-
-    /*
-     *For fixing mongodb Date
-     */
-    Date plus1Day(Date date){
-
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        c.add(Calendar.DATE, 1);
-
-        return c.getTime();
-    }
-
 }
 

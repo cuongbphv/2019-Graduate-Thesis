@@ -1,34 +1,30 @@
-package com.graduate.thesis.backend.entity;
+package com.graduate.thesis.backend.model.response;
 
+import com.graduate.thesis.backend.entity.Category;
 import com.graduate.thesis.backend.entity.model.Metadata;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 import java.util.List;
 
 /**
- * @author cuongbphv created on 16/04/2019
+ * @author Huy Pham
  */
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("category")
-public class Category {
+public class CategoryResponse {
 
-    @Id
     private String id;
 
     private String name;
 
-    @Indexed
     private String slug;
 
     private String description;
@@ -41,9 +37,11 @@ public class Category {
 
     private List<Metadata> filter;
 
-    private List<String> postType; //sell, buy, rent,...
+    private List<String> postType;
 
     private Date createdDate;
 
     private int status;
+
+    private List<Category> subs;
 }

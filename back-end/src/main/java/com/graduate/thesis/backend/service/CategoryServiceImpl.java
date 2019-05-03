@@ -6,6 +6,8 @@ import com.graduate.thesis.backend.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * @author cuongbphv created on 16/04/2019
  */
@@ -17,8 +19,18 @@ public class CategoryServiceImpl implements CategoryService {
     CategoryRepository categoryRepository;
 
     @Override
-    public void saveCategory(Category category) {
-        categoryRepository.save(category);
+    public Category save(Category category) {
+        return categoryRepository.save(category);
+    }
+
+    @Override
+    public Optional<Category> findBySlugAndStatus(String slug, int status) {
+        return categoryRepository.findBySlugAndStatus(slug, status);
+    }
+
+    @Override
+    public Category findCategoryByIdAndStatus(String id, int status) {
+        return categoryRepository.findCategoryByIdAndStatus(id,status);
     }
 
 //    @Override

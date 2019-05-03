@@ -1,10 +1,11 @@
 <template>
   <section class="app-main">
-    <transition name="fade-transform" mode="out-in">
+    <transition v-if="!noTransition" name="fade-transform" mode="out-in">
       <keep-alive :include="cachedViews">
         <router-view :key="key" />
       </keep-alive>
     </transition>
+    <router-view v-else />
   </section>
 </template>
 
@@ -17,6 +18,10 @@ export default {
     },
     key() {
       return this.$route.fullPath
+    },
+    noTransition() {
+      const exception = ['ProfileHistory', 'ProfileInformation', 'AccountSetting']
+      return exception.includes(this.$route.name) && !this.$route.redirectedFrom
     }
   }
 }

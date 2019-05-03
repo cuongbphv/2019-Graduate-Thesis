@@ -78,7 +78,8 @@
     "dashboard": "Dashboard",
     "github": "Github",
     "theme": "Theme",
-    "size": "Global Size"
+    "size": "Global Size",
+    "home": "Home"
   },
   "login": {
     "title": "Login Form",
@@ -101,12 +102,16 @@
   "button": {
     "logIn": "Login",
     "signUp": "Sign up",
+    "add": "Add",
     "delete": "Delete",
     "edit": "Edit",
     "detail": "Detail",
-	"save": "Save",
+	  "save": "Save",
     "reset": "Reset",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "import": "Import",
+    "choose_file": "Choose data file",
+    "back": "Back"
   },
   "documentation": {
     "documentation": "Documentation",
@@ -160,15 +165,18 @@
     "delete": "Delete",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "import": "Import",
     "header": {
       "id": "ID",
       "city": "City/Province",
+      "district": "District",
+      "ward": "Ward",
       "type": "Type"
     }
   },
   "label": {
-    "search": "Type Search Input"
+    "search": "Type Search Input",
+    "upload_modal": "Upload Data",
+    "list_province": "List Province"
   },
   "errorLog": {
     "tips": "Please click the bug icon in the upper right corner",

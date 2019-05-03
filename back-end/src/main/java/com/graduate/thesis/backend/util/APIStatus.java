@@ -28,6 +28,9 @@ public enum APIStatus {
     ERR_USER_ROLE_NOT_FOUND(404, "User Role Not Found"),
     ERR_USER_INCORRECT_PASSWORD(401, "Password is incorrect"),
 
+    // LOCATION
+    ERR_LOCATION_NOT_FOUND(504, "Location not found"),
+
     //FILE
     ERR_FILE_NOT_FOUND(888, "File not found"),
     ERR_CANT_STORE(889, "Could not store file"),

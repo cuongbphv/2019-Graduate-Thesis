@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Cookies from 'js-cookie'
 import Element from 'element-ui'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons'
+import { faFacebook, faGoogle, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import 'element-ui/lib/theme-chalk/reset.css'
@@ -18,7 +18,7 @@ import './errorLog' // error log
 import './permission' // permission control
 import * as filters from './filters' // global filters
 
-library.add(faFacebook, faGoogle)
+library.add(faFacebook, faGoogle, faLinkedin, faGithub)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

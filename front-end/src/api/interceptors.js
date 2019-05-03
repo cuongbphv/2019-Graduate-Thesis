@@ -1,10 +1,11 @@
-import store from '../store'
 import camelcaseKeys from 'camelcase-keys'
+import store from '../store'
+import { getToken } from '../utils/auth'
 
 function setup(instance) {
   instance.interceptors.request.use(
     function(config) {
-      const token = store.getters['auth/token']
+      const token = getToken()
       if (token) {
         config.headers.Authorization = `Bearer ${token}`
       }

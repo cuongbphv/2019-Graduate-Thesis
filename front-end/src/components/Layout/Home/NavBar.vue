@@ -1,42 +1,47 @@
 <template>
   <div class="navbar">
-    <hamburger
-      v-if="device === 'mobile'"
-      :toggle-click="toggleSideBar"
-      :is-active="sidebar.opened"
-      class="hamburger-container"
-    />
-
-    <div class="menu menu_left">
-      <template v-if="device !== 'mobile'">
-        <search-bar />
-      </template>
-    </div>
-
-    <div class="menu menu_right">
-      <Login :visible="isVisible" @closeLoginModal="handleLoginModal" />
-      <el-button v-if="!profile.userId" class="button el-button--primary" @click="handleLoginModal">Đăng nhập</el-button>
-      <el-dropdown v-else class="avatar-container menu-item hover-effect" trigger="click">
-        <div class="avatar-wrapper">
-          <img :src="(profile.avatarUrl ? 'src/assets/default-avatar.gif' : profile.avatarUrl) + '?imageView2/1/w/80/h/80'" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
+    <div class="row menu">
+      <div class="column-left">
+        <hamburger
+          v-if="device === 'mobile'"
+          :toggle-click="toggleSideBar"
+          :is-active="sidebar.opened"
+          class="hamburger-container"
+        />
+        <router-link to="/"><h3>Smart<span>Market</span></h3></router-link>
+      </div>
+      <div class="column-center">
+        <template v-if="device !== 'mobile'">
+          <search-bar />
+        </template>
+      </div>
+      <div class="column-right">
+        <div class="menu_right">
+          <Login :visible="isVisible" @closeLoginModal="handleLoginModal" />
+          <el-button v-if="!profile.userId" class="button el-button--primary" @click="handleLoginModal">Đăng nhập</el-button>
+          <el-dropdown v-else class="avatar-container menu-item hover-effect" trigger="click">
+            <div class="avatar-wrapper">
+              <img :src="(profile.avatarUrl ? profile.avatarUrl : 'src/assets/default-avatar.gif') + '?imageView2/1/w/80/h/80'" class="user-avatar">
+              <i class="el-icon-caret-bottom" />
+            </div>
+            <el-dropdown-menu slot="dropdown">
+              <router-link :to="'/profile/' + profile.userId">
+                <el-dropdown-item>
+                  {{ $t('navbar.profile') }}
+                </el-dropdown-item>
+              </router-link>
+              <router-link v-if="profile.role.name === 'ADMIN'" to="/dashboard">
+                <el-dropdown-item>
+                  Dashboard
+                </el-dropdown-item>
+              </router-link>
+              <el-dropdown-item divided>
+                <span style="display:block;" @click="logout">{{ $t('navbar.logOut') }}</span>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
-        <el-dropdown-menu slot="dropdown">
-          <router-link :to="'/profile/' + profile.userId">
-            <el-dropdown-item>
-              {{ $t('navbar.profile') }}
-            </el-dropdown-item>
-          </router-link>
-          <router-link v-if="profile.role.name === 'ADMIN'" to="dashboard">
-            <el-dropdown-item>
-              Dashboard
-            </el-dropdown-item>
-          </router-link>
-          <el-dropdown-item divided>
-            <span style="display:block;" @click="logout">{{ $t('navbar.logOut') }}</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      </div>
     </div>
   </div>
 </template>
@@ -79,6 +84,38 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.column-left {
+  float: left;
+  width: 30%;
+  h3 {
+    line-height: 50px;
+    display: inline-block;
+    color:  #000;
+    font: bold 25px 'Cookie', cursive;
+    margin: 5px 10px;
+    span {
+      color:  #5383d3;
+    }
+  }
+}
+.column-center {
+  float: left;
+  width: 50%;
+}
+.column-right {
+  float: right;
+  width: 20%;
+}
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+@media screen and (max-width: 800px) {
+  .column-left {
+    width: 50%;
+  }
+}
 .navbar {
   height: 50px;
   overflow: hidden;
@@ -109,10 +146,6 @@ export default {
   .menu {
     &_right {
       float: right;
-    }
-    &_left {
-      left: 30%;
-      position: absolute;
     }
     height: 100%;
     line-height: 50px;

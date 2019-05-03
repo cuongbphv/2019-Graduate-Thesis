@@ -40,7 +40,7 @@ export default {
 .contact_bar {
   height: 35px;
   overflow: hidden;
-  background:#00AFF0;
+  background: #292c2f;
 
   .right-menu {
     float: right;

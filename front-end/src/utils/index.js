@@ -292,3 +292,11 @@ export function createUniqueString() {
   const randomNum = parseInt((1 + Math.random()) * 65536) + ''
   return (+(randomNum + timestamp)).toString(32)
 }
+
+export function compareExpression(key, order) {
+  return (a, b) => {
+    if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) return 0
+    const comparison = a[key].localeCompare(b[key])
+    return order ? (comparison * -1) : comparison
+  }
+}

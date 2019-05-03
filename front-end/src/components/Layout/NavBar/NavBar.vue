@@ -8,37 +8,32 @@
       <template v-if="device !== 'mobile'">
         <search class="right-menu-item" />
 
-        <error-log class="errLog-container right-menu-item hover-effect" />
+        <!--        <error-log class="errLog-container right-menu-item hover-effect" />-->
 
-        <screenfull class="right-menu-item hover-effect" />
+        <!--        <screenfull class="right-menu-item hover-effect" />-->
 
-        <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
-          <size-select class="right-menu-item hover-effect" />
-        </el-tooltip>
+        <!--        <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">-->
+        <!--          <size-select class="right-menu-item hover-effect" />-->
+        <!--        </el-tooltip>-->
 
         <lang-select class="right-menu-item hover-effect" />
 
-        <el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom">
-          <theme-picker class="right-menu-item hover-effect padding-top" />
-        </el-tooltip>
+        <!--        <el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom">-->
+        <!--          <theme-picker class="right-menu-item hover-effect padding-top" />-->
+        <!--        </el-tooltip>-->
       </template>
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="(profile.avatarUrl ? 'src/assets/default-avatar.gif' : profile.avatarUrl) + '?imageView2/1/w/80/h/80'" class="user-avatar">
+          <img :src="(profile.avatarUrl ? profile.avatarUrl : 'src/assets/default-avatar.gif') + '?imageView2/1/w/80/h/80'" class="user-avatar">
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/">
             <el-dropdown-item>
-              {{ $t('navbar.dashboard') }}
+              {{ $t('navbar.home') }}
             </el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">
-            <el-dropdown-item>
-              {{ $t('navbar.github') }}
-            </el-dropdown-item>
-          </a>
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">{{ $t('navbar.logOut') }}</span>
           </el-dropdown-item>
@@ -52,22 +47,22 @@
 import { mapGetters, mapActions, mapState } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import ErrorLog from '@/components/ErrorLog'
-import Screenfull from '@/components/Screenfull'
-import SizeSelect from '@/components/SizeSelect'
+// import ErrorLog from '@/components/ErrorLog'
+// import Screenfull from '@/components/Screenfull'
+// import SizeSelect from '@/components/SizeSelect'
 import LangSelect from '@/components/LangSelect'
-import ThemePicker from '@/components/ThemePicker'
+// import ThemePicker from '@/components/ThemePicker'
 import Search from '@/components/HeaderSearch'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    ErrorLog,
-    Screenfull,
-    SizeSelect,
+    // ErrorLog,
+    // Screenfull,
+    // SizeSelect,
     LangSelect,
-    ThemePicker,
+    // ThemePicker,
     Search
   },
   computed: {

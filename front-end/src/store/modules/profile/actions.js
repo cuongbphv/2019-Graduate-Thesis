@@ -1,6 +1,6 @@
 import profile from '@/api/profile'
 import { Status } from '@/utils/constants'
-import { setPermission } from '../../../utils/auth'
+import { setPermission } from '@/utils/auth'
 
 const initData = ({ commit }) => {
   return profile.initData().then(res => {

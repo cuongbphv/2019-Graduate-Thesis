@@ -37,6 +37,16 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
+    public void deleteProvince(Location location) {
+        locationRepository.delete(location);
+    }
+
+    @Override
+    public Location findByLocationId(String locationId) {
+        return locationRepository.findByLocationId(locationId);
+    }
+
+    @Override
     public Page<Location> getPagingLocation(String searchKey, int sortKey, boolean ascSort, int pageSize, int pageNumber) {
 
         if (searchKey.isEmpty()) {

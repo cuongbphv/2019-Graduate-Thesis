@@ -11,6 +11,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author cuongbphv created on 25/04/2019
@@ -21,5 +22,8 @@ public interface LocationRepository extends MongoRepository<Location, String>,
 
     @Query("{ 'name': {$regex : ?0, $options: 'i'} }")
     Page<Location> findLocationLikeName(String name, Pageable pageable);
+
+    @Query("{ '_id': ?0 }")
+    Location findByLocationId(String locationId);
 
 }

@@ -14,7 +14,19 @@ const GET_PAGING_LOCATION = (state, payload) => {
   state.entities = Object.assign({}, state.entities, newLocationEntities)
 }
 
+const ADD_NEW_PROVINCE = (state, payload) => {
+}
+
+const ADD_NEW_DISTRICT = (state, payload) => {
+}
+
+const ADD_NEW_WARD = (state, payload) => {
+}
+
 export default {
   IMPORT_LOCATION_DATA,
-  GET_PAGING_LOCATION
+  GET_PAGING_LOCATION,
+  ADD_NEW_PROVINCE,
+  ADD_NEW_DISTRICT,
+  ADD_NEW_WARD
 }

@@ -6,6 +6,9 @@ const API = {
   PROFILE: '/profile',
   // Location APIs
   LOCATION: '/location',
+  PROVINCE: '/location/province',
+  DISTRICT: 'location/district',
+  WARD: '/location/ward',
   IMPORT_LOCATION: '/location/import'
 }
 

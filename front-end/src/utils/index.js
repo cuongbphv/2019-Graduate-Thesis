@@ -70,7 +70,6 @@ export function formatTime(time, option) {
   }
 }
 
-// 格式化时间
 export function getQueryObject(url) {
   url = url == null ? window.location.href : url
   const search = url.substring(url.lastIndexOf('?') + 1)
@@ -145,9 +144,6 @@ export function html2Text(val) {
 }
 
 export function objectMerge(target, source) {
-  /* Merges two  objects,
-     giving the last one precedence */
-
   if (typeof target !== 'object') {
     target = {}
   }
@@ -181,45 +177,6 @@ export function toggleClass(element, className) {
   element.className = classString
 }
 
-export const pickerOptions = [
-  {
-    text: '今天',
-    onClick(picker) {
-      const end = new Date()
-      const start = new Date(new Date().toDateString())
-      end.setTime(start.getTime())
-      picker.$emit('pick', [start, end])
-    }
-  },
-  {
-    text: '最近一周',
-    onClick(picker) {
-      const end = new Date(new Date().toDateString())
-      const start = new Date()
-      start.setTime(end.getTime() - 3600 * 1000 * 24 * 7)
-      picker.$emit('pick', [start, end])
-    }
-  },
-  {
-    text: '最近一个月',
-    onClick(picker) {
-      const end = new Date(new Date().toDateString())
-      const start = new Date()
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-      picker.$emit('pick', [start, end])
-    }
-  },
-  {
-    text: '最近三个月',
-    onClick(picker) {
-      const end = new Date(new Date().toDateString())
-      const start = new Date()
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-      picker.$emit('pick', [start, end])
-    }
-  }
-]
-
 export function getTime(type) {
   if (type === 'start') {
     return new Date().getTime() - 3600 * 1000 * 24 * 90
@@ -230,17 +187,12 @@ export function getTime(type) {
 
 export function debounce(func, wait, immediate) {
   let timeout, args, context, timestamp, result
-
   const later = function() {
-    // 据上一次触发时间间隔
     const last = +new Date() - timestamp
-
-    // 上次被包装函数被调用时间间隔 last 小于设定时间间隔 wait
     if (last < wait && last > 0) {
       timeout = setTimeout(later, wait - last)
     } else {
       timeout = null
-      // 如果设定为immediate===true，因为开始边界已经调用过了此处无需调用
       if (!immediate) {
         result = func.apply(context, args)
         if (!timeout) context = args = null
@@ -263,11 +215,6 @@ export function debounce(func, wait, immediate) {
   }
 }
 
-/**
- * This is just a simple version of deep copy
- * Has a lot of edge cases bug
- * If you want to use a perfect deep copy, use lodash's _.cloneDeep
- */
 export function deepClone(source) {
   if (!source && typeof source !== 'object') {
     throw new Error('error arguments', 'deepClone')
@@ -299,4 +246,35 @@ export function compareExpression(key, order) {
     const comparison = a[key].localeCompare(b[key])
     return order ? (comparison * -1) : comparison
   }
+}
+
+export function toSlug(str) {
+  // Chuyển hết sang chữ thường
+  str = str.toLowerCase()
+  // xóa dấu
+  str = str.replace(/([àáạảãâầấậẩẫăằắặẳẵ])/g, 'a')
+  str = str.replace(/([èéẹẻẽêềếệểễ])/g, 'e')
+  str = str.replace(/([ìíịỉĩ])/g, 'i')
+  str = str.replace(/([òóọỏõôồốộổỗơờớợởỡ])/g, 'o')
+  str = str.replace(/([ùúụủũưừứựửữ])/g, 'u')
+  str = str.replace(/([ỳýỵỷỹ])/g, 'y')
+  str = str.replace(/(đ)/g, 'd')
+  // Xóa ký tự đặc biệt
+  str = str.replace(/([^0-9a-z-\s])/g, '')
+  // Xóa khoảng trắng thay bằng ký tự -
+  str = str.replace(/(\s+)/g, '-')
+  // xóa phần dự - ở đầu
+  str = str.replace(/^-+/g, '')
+  // xóa phần dư - ở cuối
+  str = str.replace(/-+$/g, '')
+  // return
+  return str
+}
+
+export function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = Math.random() * 16 | 0
+    const v = (c === 'x') ? r : (r & 0x3 | 0x8)
+    return v.toString(16)
+  })
 }

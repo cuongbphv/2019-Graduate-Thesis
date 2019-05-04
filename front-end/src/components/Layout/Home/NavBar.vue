@@ -32,7 +32,7 @@
               </router-link>
               <router-link v-if="profile.role.name === 'ADMIN'" to="/dashboard">
                 <el-dropdown-item>
-                  Dashboard
+                  {{ $t('navbar.dashboard') }}
                 </el-dropdown-item>
               </router-link>
               <el-dropdown-item divided>
@@ -40,6 +40,25 @@
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
+        </div>
+        <div v-if="profile.userId">
+          <el-tooltip :content="$t('label.message')" effect="dark" placement="bottom">
+            <el-badge :value="3" class="item">
+              <el-button class="badge" size="medium" icon="el-icon-message" />
+            </el-badge>
+          </el-tooltip>
+          <el-tooltip :content="$t('label.notify')" effect="dark" placement="bottom">
+            <el-badge :value="1" class="item">
+              <el-button class="badge" size="medium" icon="el-icon-bell" />
+            </el-badge>
+          </el-tooltip>
+          <el-tooltip :content="$t('label.create')" effect="dark" placement="bottom">
+            <el-badge class="item">
+              <router-link to="/advertising">
+                <el-button class="badge" size="medium" icon="el-icon-edit" />
+              </router-link>
+            </el-badge>
+          </el-tooltip>
         </div>
       </div>
     </div>
@@ -105,6 +124,23 @@ export default {
 .column-right {
   float: right;
   width: 20%;
+  .item {
+    margin-left: -10px;
+    padding: 0;
+    float: right;
+    margin-top: 3px;
+  }
+  .badge {
+    background: none;
+    border: none;
+    font-size: 20px;
+  }
+  /deep/ .el-badge__content {
+    &.is-fixed {
+      top: 13px;
+      right: 30px;
+    }
+  }
 }
 .row:after {
   content: "";
@@ -113,6 +149,9 @@ export default {
 }
 @media screen and (max-width: 800px) {
   .column-left {
+    width: 50%;
+  }
+  .column-right {
     width: 50%;
   }
 }
@@ -145,10 +184,14 @@ export default {
 
   .menu {
     &_right {
+      height: 50px;
       float: right;
     }
-    height: 100%;
     line-height: 50px;
+
+    /deep/ .el-button--medium {
+      padding: 10px 20px !important;
+    }
 
     &:focus {
       outline: none;

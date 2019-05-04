@@ -18,6 +18,7 @@
         class="filter-item"
         style="margin-left: 10px;"
         type="danger"
+        @click="handleDeleteLocation"
       >{{ $t('button.delete') }}</el-button>
       <el-button
         class="filter-item"
@@ -85,7 +86,7 @@
       </el-dialog>
     </div>
 
-    <add-location-modal :visible="addDialogVisible" :add-mode="addMode" />
+    <add-location-modal :visible="addDialogVisible" :add-mode="addMode" @closeModal="handleCloseModal" />
 
     <el-breadcrumb separator="/" style="margin-bottom: 15px; font-weight: 500;">
       <el-breadcrumb-item v-if="mode === 'district' || mode === 'ward'">
@@ -105,6 +106,7 @@
       :search-key="searchKey"
       @handleLoadListDistricts="showTableDistrict"
       @keepProvincePaging="saveProvincePagingStatus"
+      @keepListIdToDelete="handleDeleteProvince"
     />
 
     <table-district
@@ -188,14 +190,18 @@ export default {
         headers: {
           'Authorization': 'Bearer ' + getToken()
         }
-      }
+      },
+      deletedIds: {}
     }
   },
   methods: {
-    ...mapActions('location', ['loadListPagingLocation']),
+    ...mapActions('location', ['loadListPagingLocation', 'deleteProvinces']),
     // Handle fo import database
     openImportDialog() {
       this.dialogVisible = true
+    },
+    handleCloseModal() {
+      this.addDialogVisible = false
     },
     openAddLocationDialog() {
       this.addDialogVisible = true
@@ -211,7 +217,7 @@ export default {
         }
       } else if (this.mode === 'ward') {
         this.addMode = {
-          mode: 'district',
+          mode: 'ward',
           proId: this.provinceId,
           proName: this.provinceName,
           id: this.districtId,
@@ -241,22 +247,54 @@ export default {
     },
     loadListBefore(mode) {
       this.mode = mode
+      this.deletedIds = {}
     },
     showTableDistrict({ id, name }) {
       this.provinceId = id
       this.provinceName = name
       this.mode = 'district'
+      this.deletedIds = {}
     },
     showTableWard({ id, name }) {
       this.districtId = id
       this.districtName = name
       this.mode = 'ward'
+      this.deletedIds = {}
     },
     saveProvincePagingStatus(paging) {
       this.tempPaging.provincePaging = Object.assign({}, paging)
     },
     saveDistrictPagingStatus(paging) {
       this.tempPaging.districtPaging = Object.assign({}, paging)
+    },
+    handleDeleteProvince(ids) {
+      let allIds = []
+      for (const key in ids) {
+        if (ids.hasOwnProperty(key)) {
+          allIds = [...allIds, ...ids[key]]
+        }
+      }
+      this.deletedIds = allIds
+    },
+    handleDeleteLocation() {
+      if (this.deletedIds.length > 0) {
+        this.$confirm(this.$t('message.confirm_delete'), this.$t('label.warning'), {
+          confirmButtonText: this.$t('button.confirm'),
+          cancelButtonText: this.$t('button.cancel'),
+          type: 'warning'
+        }).then(() => {
+          if (this.mode === 'province') {
+            this.deleteProvinces(this.deletedIds).then(() => {
+              this.loadListPagingLocation(this.tempPaging.provincePaging)
+            })
+          }
+        }).catch(() => {
+        })
+      } else {
+        this.$alert(this.$t('message.info_delete'), this.$t('label.info'), {
+          confirmButtonText: 'OK'
+        })
+      }
     }
   }
 }

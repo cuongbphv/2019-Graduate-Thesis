@@ -9,6 +9,7 @@ import HomeLayout from '@/views/layout/HomeLayout'
 
 /* Router Modules */
 import profileRouter from './modules/profile'
+import advertisingRouter from './modules/advertising'
 import componentsRouter from './modules/components'
 // import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
@@ -80,14 +81,14 @@ export const allRoutes = [
           permission: 'VIEW_HOME'
         }
       },
-      profileRouter
+      profileRouter,
+      advertisingRouter
     ]
   },
   {
     path: '/permission',
     component: Layout,
     redirect: '/permission/index',
-    alwaysShow: true, // will always show the root menu
     meta: {
       title: 'permission',
       icon: 'lock',
@@ -99,8 +100,7 @@ export const allRoutes = [
         component: () => import('@/views/permission/page'),
         name: 'PagePermission',
         meta: {
-          title: 'pagePermission',
-          roles: ['admin'] // or you can only set roles in sub nav
+          title: 'pagePermission'
         }
       },
       {
@@ -109,7 +109,6 @@ export const allRoutes = [
         name: 'DirectivePermission',
         meta: {
           title: 'directivePermission'
-          // if do not set roles, means: this page does not require permission
         }
       },
       {
@@ -117,8 +116,7 @@ export const allRoutes = [
         component: () => import('@/views/permission/role'),
         name: 'RolePermission',
         meta: {
-          title: 'rolePermission',
-          roles: ['admin']
+          title: 'rolePermission'
         }
       }
     ]

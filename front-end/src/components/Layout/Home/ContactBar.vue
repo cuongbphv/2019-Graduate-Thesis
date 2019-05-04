@@ -3,9 +3,9 @@
     <div class="right-menu">
       <template>
         <span class="right-menu-item" style="font-size: 12px">Email: cuongbphv@gmail.com</span>
-        <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
-          <size-select class="right-menu-item hover-effect" />
-        </el-tooltip>
+        <!--        <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">-->
+        <!--          <size-select class="right-menu-item hover-effect" />-->
+        <!--        </el-tooltip>-->
 
         <lang-select class="right-menu-item hover-effect" />
 
@@ -18,14 +18,14 @@
 </template>
 
 <script>
-import SizeSelect from '@/components/SizeSelect'
+// import SizeSelect from '@/components/SizeSelect'
 import LangSelect from '@/components/LangSelect'
 import ThemePicker from '@/components/ThemePicker'
 import { mapGetters } from 'vuex'
 export default {
   name: 'ContactBar',
   components: {
-    SizeSelect,
+    // SizeSelect,
     LangSelect,
     ThemePicker
   },

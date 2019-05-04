@@ -1,5 +1,7 @@
 package com.graduate.thesis.backend.controller;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.graduate.thesis.backend.entity.Location;
 import com.graduate.thesis.backend.entity.model.District;
 import com.graduate.thesis.backend.entity.model.Ward;
@@ -122,24 +124,30 @@ public class LocationController extends AbstractBasedAPI {
 
     @DeleteMapping(Constant.PROVINCE_API)
     public ResponseEntity<RestAPIResponse> deleteProvinceByIds (
-            @RequestParam("province_ids") String provinceIds
+            @RequestParam("ids") String provinceIds
     ) {
 
-        String[] listProvinceIds = provinceIds.split(",");
-
-        for(String provinceId : listProvinceIds) {
-
-            Location location = locationService.findByLocationId(provinceId);
-
-            if (location == null) {
-                throw new ApplicationException(APIStatus.ERR_LOCATION_NOT_FOUND);
-            }
-
-            locationService.deleteProvince(location);
-        }
+        List<String> listProvinceIds = Lists.newArrayList(Splitter.on(",").split(provinceIds));
+        locationService.deleteListProvince(listProvinceIds);
 
         return responseUtil.successResponse("OK");
     }
+
+//    @DeleteMapping(Constant.PROVINCE_API + Constant.WITHIN_ID)
+//    public ResponseEntity<RestAPIResponse> deleteProvinceById (
+//            @PathVariable("id") String provinceId
+//    ) {
+//
+//        Location location = locationService.findByLocationId(provinceId);
+//
+//        if (location == null) {
+//            throw new ApplicationException(APIStatus.ERR_LOCATION_NOT_FOUND);
+//        }
+//
+//        locationService.deleteProvince(provinceId);
+//
+//        return responseUtil.successResponse("OK");
+//    }
 
     @DeleteMapping(Constant.DISTRICT_API)
     public ResponseEntity<RestAPIResponse> deleteDistrictByIds (

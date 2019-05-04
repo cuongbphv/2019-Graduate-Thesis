@@ -2,6 +2,7 @@
   <div class="table-province">
     <el-table
       :key="0"
+      ref="provinceTable"
       v-loading="listLoading"
       :data="listPagingLocation"
       border
@@ -72,6 +73,7 @@
             type="danger"
             icon="el-icon-delete"
             circle
+            @click="deleteProvince(scope.row.id)"
           />
         </template>
       </el-table-column>
@@ -114,7 +116,8 @@ export default {
         ascSort: true,
         sortKey: 1,
         searchKey: ''
-      }
+      },
+      provinceIds: {}
     }
   },
   computed: {
@@ -138,14 +141,36 @@ export default {
     this.getList()
   },
   methods: {
-    ...mapActions('location', ['loadListPagingLocation']),
+    ...mapActions('location', ['loadListPagingLocation', 'deleteProvinces']),
     getList() {
       this.listLoading = true
+      this.loadListWithSelected()
+    },
+    loadListWithSelected() {
       this.loadListPagingLocation(this.listQuery).then(() => {
+        const selected = this.provinceIds[this.listQuery.pageNumber]
+        if (selected) {
+          this.listPagingLocation.forEach((province, index) => {
+            if (selected.includes(province.id)) {
+              this.$refs.provinceTable.toggleRowSelection(this.listPagingLocation[index])
+            }
+          })
+        }
         setTimeout(() => {
           this.listLoading = false
         }, 500)
       })
+    },
+    deleteProvince(id) {
+      this.$confirm(this.$t('message.confirm_delete'), this.$t('label.warning'), {
+        confirmButtonText: this.$t('button.confirm'),
+        cancelButtonText: this.$t('button.cancel'),
+        type: 'warning'
+      }).then(() => {
+        this.deleteProvinces(id).then(() => {
+          this.loadListWithSelected()
+        })
+      }).catch(() => {})
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -160,17 +185,14 @@ export default {
       this.$emit('handleLoadListDistricts', { id: row.id, name: row.name })
       this.$emit('keepProvincePaging', this.listQuery)
     },
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row)
-        })
-      } else {
-        this.$refs.multipleTable.clearSelection()
+    handleSelectionChange(rows) {
+      if (rows.length > 0) {
+        // eslint-disable-next-line
+        let ids = {}
+        ids[this.listQuery.pageNumber] = rows.map(province => province.id)
+        this.provinceIds = Object.assign({}, this.provinceIds, ids)
+        this.$emit('keepListIdToDelete', this.provinceIds)
       }
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val
     }
   }
 }

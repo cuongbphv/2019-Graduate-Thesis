@@ -20,7 +20,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
  * @author cuongbphv created on 29/04/2019
  */
 @Repository
-public class DistrictAggregation implements LocationRepositoryCustom {
+public class DistrictAggregation {
 
     private final MongoTemplate mongoTemplate;
 
@@ -29,7 +29,6 @@ public class DistrictAggregation implements LocationRepositoryCustom {
         this.mongoTemplate = mongoTemplate;
     }
 
-    @Override
     public List<District> getDistrictByProvinceId(String provinceId, String searchKey, int sortKey, boolean ascSort) {
         SortOperation sortOperation = buildSortOperation(sortKey, ascSort);
         GroupOperation groupOperation = buildGroupOperation();

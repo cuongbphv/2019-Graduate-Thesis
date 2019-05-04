@@ -18,6 +18,6 @@ export default {
   background-size: cover;
   background-position: 50%;
   background-repeat: no-repeat;
-  background-image: url("../../../assets/home-search-block-bner.jpg");
+  background-image: url("../../../assets/background.jpg");
 }
 </style>

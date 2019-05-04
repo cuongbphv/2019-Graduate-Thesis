@@ -4,7 +4,6 @@ import com.graduate.thesis.backend.entity.Location;
 import com.graduate.thesis.backend.entity.model.District;
 import com.graduate.thesis.backend.repository.LocationRepository;
 import com.graduate.thesis.backend.repository.aggregation.DistrictAggregation;
-import com.graduate.thesis.backend.repository.aggregation.LocationRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +23,7 @@ public class LocationServiceImpl implements LocationService {
     LocationRepository locationRepository;
 
     @Autowired
-    LocationRepositoryCustom locationRepositoryCustom;
+    DistrictAggregation districtAggregation;
 
     @Override
     public void saveLocation(Location location) {
@@ -37,8 +36,13 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public void deleteProvince(Location location) {
-        locationRepository.delete(location);
+    public void deleteProvince(String id) {
+        locationRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteListProvince(List<String> ids) {
+        locationRepository.deleteByIdIn(ids);
     }
 
     @Override
@@ -65,7 +69,7 @@ public class LocationServiceImpl implements LocationService {
             searchKey = " ";
         }
 
-        return locationRepositoryCustom.getDistrictByProvinceId(provinceId, searchKey, sortKey, ascSort);
+        return districtAggregation.getDistrictByProvinceId(provinceId, searchKey, sortKey, ascSort);
     }
 
     private Pageable getPageLocation(int sortKey, boolean ascSort, int pageNumber, int pageSize) {

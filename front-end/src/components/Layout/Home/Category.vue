@@ -111,7 +111,6 @@ export default {
 <style scoped>
   .home-feature-block {
     position: relative;
-    margin-bottom: 40px
   }
 
   .home-feature-block .container {

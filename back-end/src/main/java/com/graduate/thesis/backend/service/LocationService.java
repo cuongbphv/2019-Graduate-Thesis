@@ -15,7 +15,9 @@ public interface LocationService {
 
     void saveListLocation(List<Location> locations);
 
-    void deleteProvince(Location location);
+    void deleteProvince(String id);
+
+    void deleteListProvince(List<String> ids);
 
     Location findByLocationId(String locationId);
 

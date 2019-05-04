@@ -8,7 +8,7 @@ export default class CommonModelMap {
     })
   }
 
-  static toParamGetList(param) {
+  static toParam(param) {
     return snakeCaseKeys(param)
   }
 }

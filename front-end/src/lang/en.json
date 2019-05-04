@@ -108,6 +108,7 @@
     "detail": "Detail",
 	  "save": "Save",
     "reset": "Reset",
+    "confirm": "Confirm",
     "cancel": "Cancel",
     "import": "Import",
     "choose_file": "Choose data file",
@@ -176,7 +177,24 @@
   "label": {
     "search": "Type Search Input",
     "upload_modal": "Upload Data",
-    "list_province": "List Province"
+    "list_province": "List Province",
+    "message": "Message",
+    "notify": "Notification",
+    "create": "Create Post",
+    "add_district": "Add district",
+    "add_ward": "Add ward",
+    "add_new_province": "Add New Province",
+    "add_new_district": "Add New District",
+    "add_new_ward": "Add New Ward",
+    "district_list": "District List",
+    "ward_list": "Ward List",
+    "id": "ID",
+    "name": "Name",
+    "slug": "Slug",
+    "type": "Type",
+    "name_with_type": "Name With Type",
+    "warning": "Warning",
+    "info": "Info"
   },
   "errorLog": {
     "tips": "Please click the bug icon in the upper right corner",
@@ -215,7 +233,9 @@
   "message": {
     "change_language": "Switch language success",
     "login_success": "Login successfully! Welcome back to SmartMarket!",
-    "change_pass_success": "Change password successfully!"
+    "change_pass_success": "Change password successfully!",
+    "confirm_delete": "Do you want to continue deleting?",
+    "info_delete": "Please choose elements to delete"
   },
   "userProfile": {
     "firstName": "First name",

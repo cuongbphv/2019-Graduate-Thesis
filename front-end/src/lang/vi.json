@@ -75,7 +75,7 @@
   "navbar": {
     "logOut": "Đăng xuất",
     "profile": "Trang cá nhân",
-    "dashboard": "Dashboard",
+    "dashboard": "Bảng điều khiển",
     "github": "Github",
     "theme": "Theme",
     "size": "Global Size",
@@ -108,6 +108,7 @@
     "detail": "Chi tiết",
 	  "save": "Lưu lại",
     "reset": "Đặt lại",
+    "confirm": "Xác nhận",
     "cancel": "Hủy bỏ",
     "import": "Nhập dữ liệu",
     "choose_file": "Chọn tập tin dữ liệu",
@@ -157,8 +158,8 @@
     "date": "Date",
     "author": "Author",
     "readings": "Readings",
-    "status": "Status",
-    "actions": "Actions",
+    "status": "Trạng thái",
+    "actions": "Thao tác",
     "edit": "Chỉnh sửa",
     "publish": "Publish",
     "draft": "Lưu nháp",
@@ -176,7 +177,24 @@
   "label": {
     "search": "Nhập nội dung tìm kiếm",
     "upload_modal": "Tải lên dữ liệu",
-    "list_province": "Danh sách tỉnh"
+    "list_province": "Danh sách tỉnh",
+    "message": "Tin nhắn",
+    "notify": "Thông báo",
+    "create": "Đăng tin",
+    "add_district": "Thêm huyện/thị xã",
+    "add_ward": "Thêm phường/xã",
+    "add_new_province": "Thêm Tỉnh mới",
+    "add_new_district": "Thêm Huyện / Thị xã mới",
+    "add_new_ward": "Thêm Phường / Xã mới",
+    "district_list": "Danh sách huyện/ thị xã",
+    "ward_list": "Danh sách phường / xã",
+    "id": "Mã",
+    "name": "Tên",
+    "slug": "Rút gọn",
+    "type": "Loại",
+    "name_with_type": "Tên cùng loại",
+    "warning": "Cảnh báo",
+    "info": "Thông báo"
   },
   "errorLog": {
     "tips": "Please click the bug icon in the upper right corner",
@@ -215,7 +233,9 @@
   "message": {
     "change_language": "Thay đổi ngôn ngữ thành công",
     "login_success": "Đăng nhập thành công! Chào mừng quay trở lại SmartMarket!",
-    "change_pass_success": "Thay đổi mật khẩu thành công!"
+    "change_pass_success": "Thay đổi mật khẩu thành công!",
+    "confirm_delete": "Bạn có muốn tiếp tục xóa không?",
+    "info_delete": "Vui lòng chọn đối tượng muốn xóa"
   },
   "userProfile": {
     "firstName": "Tên",

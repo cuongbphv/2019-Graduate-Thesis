@@ -194,7 +194,9 @@
     "type": "Loại",
     "name_with_type": "Tên cùng loại",
     "warning": "Cảnh báo",
-    "info": "Thông báo"
+    "info": "Thông báo",
+    "backToTop": "Lên Đầu Trang",
+    "json_example": "Định dạng dữ liệu JSON mẫu (Ghi chú khi nhập dữ liệu, dữ liệu cũ sẽ bị ghi đè)"
   },
   "errorLog": {
     "tips": "Please click the bug icon in the upper right corner",
@@ -235,7 +237,10 @@
     "login_success": "Đăng nhập thành công! Chào mừng quay trở lại SmartMarket!",
     "change_pass_success": "Thay đổi mật khẩu thành công!",
     "confirm_delete": "Bạn có muốn tiếp tục xóa không?",
-    "info_delete": "Vui lòng chọn đối tượng muốn xóa"
+    "info_delete": "Vui lòng chọn đối tượng muốn xóa",
+    "location": {
+      "add_province_success": "Thêm tỉnh mới thành công"
+    }
   },
   "userProfile": {
     "firstName": "Tên",
@@ -266,5 +271,8 @@
       "updateSettingSuccess": "Cập nhật cài đặt thành công",
       "updatePasswordSuccess": "Thay đổi mật khẩu thành công"
     }
+  },
+  "code": {
+    "505": "Tỉnh đã tồn tại trong cơ sở dữ liệu"
   }
 }

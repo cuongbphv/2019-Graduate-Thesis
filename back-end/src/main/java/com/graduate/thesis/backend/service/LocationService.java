@@ -21,6 +21,8 @@ public interface LocationService {
 
     Location findByLocationId(String locationId);
 
+    List<Location> findByIdOrName(String id, String name);
+
     Page<Location> getPagingLocation(String searchKey, int sortKey, boolean ascSort, int pageSize, int pageNumber);
 
     List<District> getPagingDistrictsByProvinceId(

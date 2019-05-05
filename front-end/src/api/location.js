@@ -9,6 +9,7 @@ export default {
     return Api.get(API.LOCATION, { params: params }).then(res => res.data)
   },
   addNewProvince(params) {
+    console.info(params)
     return Api.post(API.PROVINCE, params).then(res => res.data)
   },
   addNewDistrict(params) {

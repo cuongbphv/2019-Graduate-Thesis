@@ -19,5 +19,6 @@ export default {
   background-position: 50%;
   background-repeat: no-repeat;
   background-image: url("../../../assets/background.jpg");
+  filter: blur(5px);
 }
 </style>

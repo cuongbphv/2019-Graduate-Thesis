@@ -194,7 +194,9 @@
     "type": "Type",
     "name_with_type": "Name With Type",
     "warning": "Warning",
-    "info": "Info"
+    "info": "Info",
+    "backToTop": "Back To Top",
+    "json_example": "Example JSON data (Notes: When import new data, old data were overridden)"
   },
   "errorLog": {
     "tips": "Please click the bug icon in the upper right corner",
@@ -235,7 +237,10 @@
     "login_success": "Login successfully! Welcome back to SmartMarket!",
     "change_pass_success": "Change password successfully!",
     "confirm_delete": "Do you want to continue deleting?",
-    "info_delete": "Please choose elements to delete"
+    "info_delete": "Please choose elements to delete",
+    "location": {
+      "add_province_success": "Add new province successfully"
+    }
   },
   "userProfile": {
     "firstName": "First name",
@@ -266,5 +271,8 @@
       "updateSettingSuccess": "Update settings successfully",
       "updatePasswordSuccess": "Update password successfully"
     }
+  },
+  "code": {
+    "505": "New province existed in database"
   }
 }

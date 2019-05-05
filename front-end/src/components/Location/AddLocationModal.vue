@@ -6,15 +6,15 @@
     top="3vh"
     @close="handleClose"
   >
-    <el-form v-if="localMode.mode === 'province'" :model="province">
+    <el-form v-if="localMode.mode === 'province'">
       <el-form-item :label="$t('label.id')">
         <el-input v-model="province.id" placeholder="1, 23" />
       </el-form-item>
       <el-form-item :label="$t('label.name')">
-        <el-input v-model="province.name" placeholder="Bình Dương, Hồ Chí Minh" />
+        <el-input v-model="province.name" placeholder="Bình Dương, Hồ Chí Minh" @change="toSlug(province.name)" />
       </el-form-item>
       <el-form-item :label="$t('label.slug')">
-        <el-input v-model="province.slug" placeholder="binh-duong, ho-chi-minh" :disabled="true" />
+        <el-input :value="toSlug(province.name)" :disabled="true" placeholder="binh-duong, ho-chi-minh" />
       </el-form-item>
       <el-form-item :label="$t('label.type')">
         <el-input v-model="province.type" placeholder="tinh, thanh-pho" />
@@ -44,7 +44,7 @@
                 <el-input v-model="district.name" placeholder="Bến Cát" />
               </el-form-item>
               <el-form-item :label="$t('label.slug')">
-                <el-input v-model="district.slug" placeholder="ben-cat" />
+                <el-input :value="toSlug(district.name)" :disabled="true" placeholder="ben-cat" />
               </el-form-item>
               <el-form-item :label="$t('label.type')">
                 <el-input v-model="district.type" placeholder="huyen, thi-xa" />
@@ -75,7 +75,7 @@
                         <el-input v-model="ward.name" placeholder="An Điền" />
                       </el-form-item>
                       <el-form-item :label="$t('label.slug')">
-                        <el-input v-model="ward.slug" placeholder="an-dien" />
+                        <el-input :value="toSlug(ward.name)" :disabled="true" placeholder="an-dien" />
                       </el-form-item>
                       <el-form-item :label="$t('label.type')">
                         <el-input v-model="ward.type" placeholder="phuong, xa" />
@@ -135,7 +135,7 @@
                 <el-input v-model="district.name" placeholder="Bến Cát" />
               </el-form-item>
               <el-form-item :label="$t('label.slug')">
-                <el-input v-model="district.slug" placeholder="ben-cat" />
+                <el-input :value="toSlug(district.name)" :disabled="true" placeholder="ben-cat" />
               </el-form-item>
               <el-form-item :label="$t('label.type')">
                 <el-input v-model="district.type" placeholder="huyen, thi-xa" />
@@ -166,7 +166,7 @@
                         <el-input v-model="ward.name" placeholder="Bến Cát" />
                       </el-form-item>
                       <el-form-item :label="$t('label.slug')">
-                        <el-input v-model="ward.slug" placeholder="ben-cat" />
+                        <el-input :value="toSlug(ward.name)" :disabled="true" placeholder="ben-cat" />
                       </el-form-item>
                       <el-form-item :label="$t('label.type')">
                         <el-input v-model="ward.type" placeholder="huyen, thi-xa" />
@@ -226,7 +226,7 @@
                 <el-input v-model="ward.name" placeholder="Bến Cát" />
               </el-form-item>
               <el-form-item :label="$t('label.slug')">
-                <el-input v-model="ward.slug" placeholder="ben-cat" />
+                <el-input :value="toSlug(ward.name)" :disabled="true" placeholder="ben-cat" />
               </el-form-item>
               <el-form-item :label="$t('label.type')">
                 <el-input v-model="ward.type" placeholder="huyen, thi-xa" />
@@ -261,6 +261,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { toSlug, uuidv4 } from '@/utils'
+import { showMessageAfterCallAPI } from '@/utils/message'
 export default {
   name: 'AddLocationModal',
   components: {
@@ -299,11 +300,6 @@ export default {
     }
   },
   watch: {
-    'province.name': function(newVal) {
-      if (newVal !== '') {
-        this.province.slug = toSlug(newVal)
-      }
-    },
     visible: function(newVal) {
       this.dialogVisible = newVal
     },
@@ -322,6 +318,9 @@ export default {
   },
   methods: {
     ...mapActions('location', ['addNewProvince', 'addNewDistrict', 'addNewWard']),
+    toSlug(name) {
+      return toSlug(name)
+    },
     handleClose() {
       this.$emit('closeModal', '')
     },
@@ -391,7 +390,9 @@ export default {
     },
     addNewLocation() {
       if (this.localMode.mode === 'province') {
-        this.addNewProvince(this.province)
+        this.addNewProvince(this.province).then(res => {
+          showMessageAfterCallAPI(res, 'message.location.add_province_success')
+        })
       } else if (this.localMode.mode === 'district') {
         this.addNewDistrict(this.districts)
       } else if (this.localMode.mode === 'ward') {

@@ -2,6 +2,7 @@ const advertisingRouter = {
   path: '/advertising',
   redirect: '/advertising/create',
   hidden: true,
+  component: () => import('@/views/advertising/Advertising.vue'),
   name: 'ClassifiedAdvertising',
   children: [
     {

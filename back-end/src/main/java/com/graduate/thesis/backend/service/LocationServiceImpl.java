@@ -51,6 +51,11 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
+    public List<Location> findByIdOrName(String id, String name) {
+        return locationRepository.findByIdOrName(id, name);
+    }
+
+    @Override
     public Page<Location> getPagingLocation(String searchKey, int sortKey, boolean ascSort, int pageSize, int pageNumber) {
 
         if (searchKey.isEmpty()) {

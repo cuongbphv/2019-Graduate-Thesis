@@ -117,6 +117,8 @@ export default {
         if (res.status === Status.SUCCESS) {
           showSuccess('message.create_category_success')
           this.$emit('createCategorySuccess')
+          this.category = {}
+          this.image = null
         } else {
           showError('errors.category.' + res.status)
         }

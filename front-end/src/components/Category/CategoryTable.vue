@@ -27,10 +27,10 @@
       @createCategorySuccess="handleCreateCategorySuccess"
     />
     <category-detail-modal
-      :visible="categoryDialogVisible"
+      :visible="categoryUpdateDialogVisible"
       :category-id="categoryDialogId"
-      @closeModal="handleCloseCreateCategoryModal"
-      @createCategorySuccess="handleCreateCategorySuccess"
+      @closeModal="handleCloseUpdateCategoryModal"
+      @createCategorySuccess="handleUpdateCategorySuccess"
     />
     <el-breadcrumb separator="/" style="margin-bottom: 15px; font-weight: 500;">
       <el-breadcrumb-item>
@@ -166,7 +166,7 @@ export default {
         pageNumber: 1,
         pageSize: 10,
         ascSort: true,
-        sortKey: 1,
+        sortKey: 0,
         searchKey: ''
       },
       categoryIds: {},
@@ -174,6 +174,7 @@ export default {
       metadataDialogCategoryId: '',
       metadataMode: 'metadata',
       categoryDialogVisible: false,
+      categoryUpdateDialogVisible: false,
       categoryDialogParentId: null,
       categoryDialogId: ''
     }
@@ -254,7 +255,7 @@ export default {
         return element.id === row.id
       })
       console.log('before', this.listBreadCrumb)
-      this.listBreadCrumb = Object.assign({}, this.listBreadCrumb.slice(0, index + 1))
+      this.listBreadCrumb = Object.assign([], this.listBreadCrumb.slice(0, index + 1))
       console.log('after', this.listBreadCrumb)
 
       // reset table state
@@ -298,7 +299,7 @@ export default {
     },
     handleOpenUpdateModal(row) {
       this.categoryDialogId = row.id
-      this.categoryDialogVisible = true
+      this.categoryUpdateDialogVisible = true
     },
     handleUpdateMetadataSuccess(data) {
       const index = this.listPagingCategory.findIndex(item => {
@@ -319,8 +320,15 @@ export default {
     handleCloseCreateCategoryModal() {
       this.categoryDialogVisible = false
     },
+    handleCloseUpdateCategoryModal() {
+      this.categoryUpdateDialogVisible = false
+    },
     handleCreateCategorySuccess() {
       this.categoryDialogVisible = false
+      this.loadListWithSelected()
+    },
+    handleUpdateCategorySuccess() {
+      this.categoryUpdateDialogVisible = false
       this.loadListWithSelected()
     },
     handleSelectionChange(rows) {

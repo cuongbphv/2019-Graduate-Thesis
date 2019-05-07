@@ -190,7 +190,7 @@ export default {
     },
     getFilter(id) {
       category.getFilter(id).then(res => {
-        if (res.status === 200) {
+        if (res.status === 200 && res.data) {
           this.metadataModel = res.data
         }
       })

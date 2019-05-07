@@ -37,8 +37,8 @@ export default {
           pageNumber: 1,
           pageSize: 10,
           searchKey: '',
-          ascSort: true,
-          sortKey: 1
+          ascSort: false,
+          sortKey: 0
         },
         districtPaging: {
           pageNumber: 1,

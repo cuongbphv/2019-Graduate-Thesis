@@ -41,7 +41,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Page<CategoryResponse> getPagingCategory(String searchKey, String parentId, int sortKey, boolean ascSort, int pageSize, int pageNumber) {
 
-        String properties = "name";
+        String properties = "createdDate";
+
+        if(sortKey == 1){
+            properties = "name";
+        }
+
 
         PageRequest pageRequest = new PageRequest(pageNumber - 1, pageSize,
                 ascSort ? Sort.Direction.ASC : Sort.Direction.DESC, properties);

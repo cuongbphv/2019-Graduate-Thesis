@@ -15,6 +15,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class MetadataOption {
 
+    private String label;
+
     private String value;
 
     private String image;

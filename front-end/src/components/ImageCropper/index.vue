@@ -829,8 +829,11 @@ export default {
         method: 'put',
         data: fmData
       }).then(resData => {
-        that.loading = 2
-        that.$emit('crop-upload-success', createImgUrl)
+        if(resData.data.status === 200) {
+          that.loading = 2
+          that.$emit('crop-upload-success', createImgUrl)
+          that.$emit('image-url', resData.data.data)
+        }
       }).catch(err => {
         if (that.value) {
           that.loading = 3

@@ -112,7 +112,8 @@
     "cancel": "Hủy bỏ",
     "import": "Nhập dữ liệu",
     "choose_file": "Chọn tập tin dữ liệu",
-    "back": "Quay lại"
+    "back": "Quay lại",
+    "upload": "Tải lên"
   },
   "documentation": {
     "documentation": "Documentation",
@@ -171,7 +172,10 @@
       "city": "Thành phố / Tỉnh",
       "district": "Quận / Huyện",
       "ward": "Xã / Phường",
-      "type": "Loại"
+      "type": "Loại",
+      "name": "Tên",
+      "metadata": "Metadata",
+      "filter": "Lọc nâng cao"
     }
   },
   "label": {
@@ -194,7 +198,28 @@
     "type": "Loại",
     "name_with_type": "Tên cùng loại",
     "warning": "Cảnh báo",
-    "info": "Thông báo"
+    "description": "Mô tả",
+    "info": "Thông báo",
+    "color": "Màu sắc",
+    "text": "Văn bản",
+    "image": "Hình ảnh",
+    "price": "Giá cả",
+    "select": "Chọn",
+    "single_choice": "Chọn một",
+    "multi_choice": "Chọn nhiều",
+    "options": "Các lựa chọn",
+    "category": "Danh mục",
+    "metadata_details": "Chi tiết Metadata",
+    "filter_details": "Chi tiết điều kiện lọc",
+    "add_new_metadata": "Thêm Metadata",
+    "add_new_filter": "Thêm diều kiện lọc",
+    "add_new_options": "Thêm lựa chọn",
+    "selection_type": "Kiểu lựa chọn",
+    "value": "Giá trị",
+    "create_category": "Tạo danh mục mới"
+  },
+  "place_holder": {
+    "category_description": "Mô tả sơ lược về danh mục này"
   },
   "errorLog": {
     "tips": "Please click the bug icon in the upper right corner",
@@ -235,7 +260,11 @@
     "login_success": "Đăng nhập thành công! Chào mừng quay trở lại SmartMarket!",
     "change_pass_success": "Thay đổi mật khẩu thành công!",
     "confirm_delete": "Bạn có muốn tiếp tục xóa không?",
-    "info_delete": "Vui lòng chọn đối tượng muốn xóa"
+    "info_delete": "Vui lòng chọn đối tượng muốn xóa",
+    "update_metadata_success": "Cập nhật metadata thành công",
+    "update_filter_success": "Cập nhật lọc thành công",
+    "create_category_success": "Tạo danh mục thành công",
+    "update_category_success": "Cập nhật danh mục thành công"
   },
   "userProfile": {
     "firstName": "Tên",
@@ -265,6 +294,18 @@
     "message": {
       "updateSettingSuccess": "Cập nhật cài đặt thành công",
       "updatePasswordSuccess": "Thay đổi mật khẩu thành công"
+    }
+  },
+  "errors": {
+    "400": "Giá trị nhập sai, vui lòng kiểm tra và thử lại",
+    "401": "Bạn cần đăng nhập trước",
+    "403": "Bạn không có quyền truy cập vào tài nguyên này",
+    "500": "Lỗi server, vui lòng liên hệ để được hỗ trợ",
+    "metadata": {
+      "404": "Không tìm thấy danh mục này"
+    },
+    "category": {
+      "409": "Đã tồn tại danh mục này"
     }
   }
 }

@@ -9,7 +9,11 @@ const API = {
   PROVINCE: '/location/province',
   DISTRICT: 'location/district',
   WARD: '/location/ward',
-  IMPORT_LOCATION: '/location/import'
+  IMPORT_LOCATION: '/location/import',
+  // CATEGORY APIs
+  CATEGORY: '/category',
+  METADATA: '/metadata',
+  FILTER: '/filter'
 }
 
 const Status = {

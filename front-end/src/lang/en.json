@@ -112,7 +112,8 @@
     "cancel": "Cancel",
     "import": "Import",
     "choose_file": "Choose data file",
-    "back": "Back"
+    "back": "Back",
+    "upload": "Upload"
   },
   "documentation": {
     "documentation": "Documentation",
@@ -171,7 +172,10 @@
       "city": "City/Province",
       "district": "District",
       "ward": "Ward",
-      "type": "Type"
+      "type": "Type",
+      "name": "Name",
+      "metadata": "Metadata",
+      "filter": "Filter"
     }
   },
   "label": {
@@ -194,7 +198,28 @@
     "type": "Type",
     "name_with_type": "Name With Type",
     "warning": "Warning",
-    "info": "Info"
+    "description": "Description",
+    "info": "Info",
+    "color": "Color",
+    "text": "Text",
+    "image": "Image",
+    "price": "Price",
+    "select": "Select",
+    "single_choice": "Single choice",
+    "multi_choice": "Multiple choice",
+    "options": "Options",
+    "category": "Category",
+    "metadata_details": "Metadata details",
+    "filter_details": "Filter details",
+    "add_new_metadata": "Add New Metadata",
+    "add_new_options": "Add New option",
+    "add_new_filter": "Add new filter",
+    "selection_type": "Selection Type",
+    "value": "Value",
+    "create_category": "Create new category"
+  },
+  "place_holder": {
+    "category_description": "Writing a short description for this category"
   },
   "errorLog": {
     "tips": "Please click the bug icon in the upper right corner",
@@ -235,7 +260,11 @@
     "login_success": "Login successfully! Welcome back to SmartMarket!",
     "change_pass_success": "Change password successfully!",
     "confirm_delete": "Do you want to continue deleting?",
-    "info_delete": "Please choose elements to delete"
+    "info_delete": "Please choose elements to delete",
+    "update_metadata_success": "Update metadata successfully",
+    "update_filter_success": "Update filter successfully",
+    "create_category_success": "Create category successfully",
+    "update_category_success": "Update category successfully"
   },
   "userProfile": {
     "firstName": "First name",
@@ -265,6 +294,18 @@
     "message": {
       "updateSettingSuccess": "Update settings successfully",
       "updatePasswordSuccess": "Update password successfully"
+    }
+  },
+  "errors": {
+    "400": "Invalid value.Check your input and try again",
+    "401": "Unauthorize",
+    "403": "You do not have permission to access this resource",
+    "500": "Internal server error, for more detail - contact support",
+    "metadata": {
+      "404": "Category not found"
+    },
+    "category": {
+      "409": "Category is existed"
     }
   }
 }

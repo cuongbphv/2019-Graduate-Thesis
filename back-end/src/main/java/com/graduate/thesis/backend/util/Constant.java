@@ -26,6 +26,7 @@ public interface Constant {
     String CATEGORY_API = API_PREFIX + "/category";
     String METADATA =  "/metadata";
     String FILTER = "/filter";
+    String IMAGE = "/image";
 
     // Location APIs
     String LOCATION_API = API_PREFIX + "/location";

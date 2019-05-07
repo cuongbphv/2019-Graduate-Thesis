@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
-import store from '@/store'
+import { getToken } from './auth'
 
 // create an axios instance
 const service = axios.create({
@@ -13,7 +13,7 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // Do something before request is sent
-    const token = store.getters['auth/token']
+    const token = getToken()
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`
     }

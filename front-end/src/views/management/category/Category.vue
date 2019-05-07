@@ -1,140 +1,206 @@
 <template>
-  <div>
-    <div class="app-container">
-
-      <el-button type="primary" size="small" style="margin:0 0 20px 0;">ADD</el-button>
-      <el-button type="danger" size="small" style="margin:0 0 20px 0;">DELETE</el-button>
-
-      <tree-table
-        ref="TreeTable"
-        :data="tableData"
-        :default-expand-all="true"
-        :columns="columns"
-        border
-        default-children="children"
-        @selection-change="selectChange"
-      >
-
-        <template slot="selection">
-          <el-table-column type="selection" align="center" width="55" />
-        </template>
-
-        <template slot="pre-column">
-          <el-table-column type="expand" width="55">
-            <template>
-              <el-tag type="info">
-                Here is just a placeholder slot, you can display anything.
-              </el-tag>
-            </template>
-          </el-table-column>
-        </template>
-
-        <template slot="append" slot-scope="{scope}">
-          <el-button
-            size="mini"
-            type="primary"
-            @click="addMenuItem(scope.row,'brother')"
-          >Append Brother</el-button>
-          <el-button
-            size="mini"
-            type="primary"
-            @click="addMenuItem(scope.row,'children')"
-          >Append Child
-          </el-button>
-        </template>
-        <template slot="operation" slot-scope="{scope}">
-          <el-button size="mini" type="success" @click="editItem(scope.row)">Edit</el-button>
-          <el-button size="mini" type="danger" @click="deleteItem(scope.row)">Delete</el-button>
-        </template>
-      </tree-table>
-    </div>
-
-    <el-dialog :visible.sync="dialogFormVisible" title="Edit">
-      <el-form :model="tempItem" label-width="100px" style="width:600px">
-        <el-form-item label="Name">
-          <el-input v-model.trim="tempItem.name" placeholder="Name" />
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="updateItem">Confirm</el-button>
-      </span>
-    </el-dialog>
-
+  <div class="app-container">
+    <table-category
+      :search-key="searchKey"
+      :paging="tempPaging.provincePaging"
+    />
   </div>
 </template>
-
 <script>
-import TreeTable from '@/components/TreeTable'
-import data from './data.js'
+import TableCategory from '@/components/Category/CategoryTable'
+
+import waves from '@/directive/waves'
+import { API } from '@/utils/constants'
+import { getToken } from '@/utils/auth'
+import { mapActions } from 'vuex'
 
 export default {
-  components: { TreeTable },
+  name: 'Category',
+  components: {
+    TableCategory
+  },
+  directives: { waves },
   data() {
     return {
-      tableData: [],
-      tempItem: {},
-      dialogFormVisible: false,
-      columns: [
-        {
-          label: 'Name',
-          key: 'name',
-          expand: true
+      mode: 'province',
+      provinceId: '00',
+      districtId: '00',
+      provinceName: '',
+      districtName: '',
+      addMode: {},
+      fileList: [],
+      dialogVisible: false,
+      addDialogVisible: false,
+      searchKey: '',
+      tempPaging: {
+        provincePaging: {
+          pageNumber: 1,
+          pageSize: 10,
+          searchKey: '',
+          ascSort: true,
+          sortKey: 1
         },
-        {
-          label: 'Metadata',
-          key: 'metadata',
-          expand: true
+        districtPaging: {
+          pageNumber: 1,
+          pageSize: 10,
+          searchKey: '',
+          ascSort: false,
+          sortKey: 'name'
         },
-        {
-          label: 'Append',
-          key: 'append',
-          width: 300
-        },
-        {
-          label: 'Operation',
-          key: 'operation',
-          width: 160
+        wardPaging: {
+          pageNumber: 1,
+          pageSize: 10,
+          searchKey: '',
+          ascSort: false,
+          sortKey: 'name'
         }
-      ]
+      },
+      importLoading: false,
+      uploadModel: {
+        url: process.env.VUE_APP_BASE_URL + API.IMPORT_LOCATION,
+        headers: {
+          'Authorization': 'Bearer ' + getToken()
+        }
+      },
+      deletedIds: {}
     }
   },
-  created() {
-    this.getData()
-  },
   methods: {
-    getData() {
-      this.tableData = data
+    ...mapActions('location', ['loadListPagingLocation', 'deleteProvinces']),
+    // Handle fo import database
+    openImportDialog() {
+      this.dialogVisible = true
     },
-    editItem(row) {
-      this.tempItem = Object.assign({}, row)
-      this.dialogFormVisible = true
+    handleCloseModal() {
+      this.addDialogVisible = false
     },
-    async updateItem() {
-      await this.$refs.TreeTable.updateTreeNode(this.tempItem)
-      this.dialogFormVisible = false
-    },
-    addMenuItem(row, type) {
-      if (type === 'children') {
-        this.$refs.TreeTable.addChild(row, { name: 'child', timeLine: this.randomNum() })
+    openAddLocationDialog() {
+      this.addDialogVisible = true
+      if (this.mode === 'province') {
+        this.addMode = {
+          mode: 'province'
+        }
+      } else if (this.mode === 'district') {
+        this.addMode = {
+          mode: 'district',
+          id: this.provinceId,
+          name: this.provinceName
+        }
+      } else if (this.mode === 'ward') {
+        this.addMode = {
+          mode: 'ward',
+          proId: this.provinceId,
+          proName: this.provinceName,
+          id: this.districtId,
+          name: this.districtName
+        }
       }
-
-      if (type === 'brother') {
-        this.$refs.TreeTable.addBrother(row, { name: 'brother', timeLine: this.randomNum() })
+    },
+    handleOnSuccess(res, file, fileList) {
+      this.dialogVisible = false
+      this.loadListPagingLocation(this.tempPaging.provincePaging)
+      this.fileList = []
+      this.$message({
+        message: 'Upload location data successfully',
+        type: 'success'
+      })
+    },
+    handleOnExceed(file, fileList) {
+      this.$message({
+        message: 'Remove uploaded file to upload new file',
+        type: 'error'
+      })
+    },
+    handleRemove(file, fileList) {
+    },
+    // Handle action with table
+    handleSearchLocation() {
+    },
+    loadListBefore(mode) {
+      this.mode = mode
+      this.deletedIds = {}
+    },
+    showTableDistrict({ id, name }) {
+      this.provinceId = id
+      this.provinceName = name
+      this.mode = 'district'
+      this.deletedIds = {}
+    },
+    showTableWard({ id, name }) {
+      this.districtId = id
+      this.districtName = name
+      this.mode = 'ward'
+      this.deletedIds = {}
+    },
+    saveProvincePagingStatus(paging) {
+      this.tempPaging.provincePaging = Object.assign({}, paging)
+    },
+    saveDistrictPagingStatus(paging) {
+      this.tempPaging.districtPaging = Object.assign({}, paging)
+    },
+    handleDeleteProvince(ids) {
+      let allIds = []
+      for (const key in ids) {
+        if (ids.hasOwnProperty(key)) {
+          allIds = [...allIds, ...ids[key]]
+        }
       }
+      this.deletedIds = allIds
     },
-    deleteItem(row) {
-      this.$refs.TreeTable.delete(row)
-    },
-    selectChange(val) {
-      console.log(val)
-    },
-    randomNum() {
-      // return 1~100
-      const max = 100
-      const min = 1
-      return Math.floor(Math.random() * (max - min + 1) + min)
+    handleDeleteLocation() {
+      if (this.deletedIds.length > 0) {
+        this.$confirm(this.$t('message.confirm_delete'), this.$t('label.warning'), {
+          confirmButtonText: this.$t('button.confirm'),
+          cancelButtonText: this.$t('button.cancel'),
+          type: 'warning'
+        }).then(() => {
+          if (this.mode === 'province') {
+            this.deleteProvinces(this.deletedIds).then(() => {
+              this.loadListPagingLocation(this.tempPaging.provincePaging)
+            })
+          }
+        }).catch(() => {
+        })
+      } else {
+        this.$alert(this.$t('message.info_delete'), this.$t('label.info'), {
+          confirmButtonText: 'OK'
+        })
+      }
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .edit-input {
+    padding-right: 100px;
+  }
+  .cancel-btn {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+  }
+  /deep/ .el-upload {
+    display: block;
+  }
+  /deep/ .el-table, .el-checkbox__inner {
+    z-index: 0;
+  }
+  .upload-dialog {
+    z-index: 2;
+  }
+  .format-code {
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 14px;
+    line-height: 20px;
+    overflow-y: auto;
+    background: #eef1f6;
+    code {
+      padding: 0;
+      line-height: 25px;
+      display: inline;
+      background: none;
+    }
+  }
+</style>

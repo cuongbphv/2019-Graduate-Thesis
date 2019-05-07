@@ -43,7 +43,7 @@
           type="success"
           size="medium"
           icon="el-icon-save"
-          @click="createCategory"
+          @click="updateCategory"
         >{{ $t('button.save') }}</el-button>
       </el-form-item>
     </el-form>
@@ -68,7 +68,7 @@ import category from '@/api/category'
 import { Status } from '../../utils/constants'
 import { showSuccess, showError } from '../../utils/message'
 export default {
-  name: 'CreateCategoryModal',
+  name: 'CategoryDetailModal',
   components: {
     ImageCropper
   },
@@ -77,7 +77,7 @@ export default {
       type: Boolean,
       default: false
     },
-    parentId: {
+    categoryId: {
       type: String,
       default: null
     }
@@ -85,13 +85,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      category: {
-        name: '',
-        slug: '',
-        parentId: null,
-        description: '',
-        image: null
-      },
+      category: {},
       title: this.$t('label.create_category'),
       imagecropperShow: false,
       imagecropperKey: 0,
@@ -106,16 +100,32 @@ export default {
     },
     visible: function(newVal) {
       this.dialogVisible = newVal
+    },
+    categoryId: function(newVal) {
+      if (newVal !== '') {
+        this.getCategory(newVal)
+      } else {
+        this.category = {}
+      }
     }
   },
   created() {
   },
   methods: {
-    createCategory() {
-      this.category.parentId = this.parentId
-      category.createCategory(this.category).then(res => {
+    getCategory(id) {
+      category.getCategoryById(id).then(res => {
+        if (res.status === Status.SUCCESS && res.data) {
+          this.category = res.data
+          this.image = res.data.image
+        } else {
+          showError('errors.category.' + res.status)
+        }
+      })
+    },
+    updateCategory() {
+      category.updateCategory(this.category, this.category.id).then(res => {
         if (res.status === Status.SUCCESS) {
-          showSuccess('message.create_category_success')
+          showSuccess('message.update_category_success')
           this.$emit('createCategorySuccess')
         } else {
           showError('errors.category.' + res.status)

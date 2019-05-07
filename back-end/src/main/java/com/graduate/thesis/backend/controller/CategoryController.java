@@ -8,12 +8,17 @@ import com.graduate.thesis.backend.model.response.CategoryResponse;
 import com.graduate.thesis.backend.model.response.RestAPIResponse;
 import com.graduate.thesis.backend.repository.aggregation.CategoryAggregation;
 import com.graduate.thesis.backend.service.CategoryService;
+import com.graduate.thesis.backend.service.FileStorageService;
 import com.graduate.thesis.backend.util.APIStatus;
+import com.graduate.thesis.backend.util.CommonUtil;
 import com.graduate.thesis.backend.util.Constant;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Date;
 import java.util.List;
@@ -32,6 +37,9 @@ public class CategoryController extends AbstractBasedAPI {
     @Autowired
     private CategoryAggregation categoryAggregation;
 
+    @Autowired
+    FileStorageService fileUploadService;
+
     @RequestMapping(value = Constant.WITHIN_ID, method = RequestMethod.GET)
     public ResponseEntity<RestAPIResponse> getCategory(
             @PathVariable("id") String categoryId
@@ -46,17 +54,33 @@ public class CategoryController extends AbstractBasedAPI {
         return responseUtil.successResponse(category);
     }
 
+//    @RequestMapping(method = RequestMethod.GET)
+//    public ResponseEntity<RestAPIResponse> getParentCategory(
+//    ){
+//
+//        List<CategoryResponse> categories = categoryAggregation.getParentCategory();
+//
+//        if(categories == null){
+//            throw new ApplicationException(APIStatus.ERR_CATEGORY_NOT_FOUND);
+//        }
+//
+//        return responseUtil.successResponse(categories);
+//    }
+
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<RestAPIResponse> getParentCategory(
-    ){
+    public ResponseEntity<RestAPIResponse> getListPagingLocation (
+            @RequestParam(value = "search_key", defaultValue = "") String searchKey,
+            @RequestParam( value = "parent_id", defaultValue = "") String parentId,
+            @RequestParam("sort_key") int sortKey,
+            @RequestParam("asc_sort") boolean ascSort,
+            @RequestParam("page_size") int pageSize,
+            @RequestParam("page_number") int pageNumber
+    ) {
 
-        List<CategoryResponse> categories = categoryAggregation.getParentCategory();
+        Page<CategoryResponse> locations = categoryService.getPagingCategory(searchKey,parentId,
+                sortKey, ascSort, pageSize, pageNumber);
 
-        if(categories == null){
-            throw new ApplicationException(APIStatus.ERR_CATEGORY_NOT_FOUND);
-        }
-
-        return responseUtil.successResponse(categories);
+        return responseUtil.successResponse(locations);
     }
 
 
@@ -72,7 +96,7 @@ public class CategoryController extends AbstractBasedAPI {
 
         ObjectId parentId;
 
-        if(categoryRequest.getParentId().isEmpty() || categoryRequest.getParentId() == null){
+        if( categoryRequest.getParentId() == null || categoryRequest.getParentId().isEmpty()){
             parentId = null;
         }
         else{
@@ -113,7 +137,7 @@ public class CategoryController extends AbstractBasedAPI {
 
         ObjectId parentId;
 
-        if(categoryRequest.getParentId().isEmpty() || categoryRequest.getParentId() == null){
+        if(categoryRequest.getParentId() == null || categoryRequest.getParentId().isEmpty()){
             parentId = null;
         }
         else{
@@ -203,5 +227,26 @@ public class CategoryController extends AbstractBasedAPI {
         Category updated = categoryService.save(existedCategory);
 
         return responseUtil.successResponse(updated.getFilter());
+    }
+
+    @RequestMapping(value = Constant.IMAGE, method = RequestMethod.PUT)
+    public ResponseEntity<RestAPIResponse> updateUserAvatar(
+            @RequestPart(value = "avatar") MultipartFile avatarImg
+    ) {
+
+        if (avatarImg == null) {
+            throw new ApplicationException(APIStatus.ERR_BAD_REQUEST);
+        }
+
+        String fileName = "category_" + CommonUtil.generateUUID() + CommonUtil.getFileExtension(avatarImg);
+
+        String url = fileUploadService.storeFile(avatarImg, fileName);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/v1/files/")
+                .path(fileName)
+                .toUriString();
+
+        return responseUtil.successResponse(fileDownloadUri);
     }
 }

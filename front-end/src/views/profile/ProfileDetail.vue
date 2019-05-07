@@ -1,81 +1,83 @@
 <template>
-  <div class="container">
-    <header />
-    <main>
-      <el-row>
-        <el-col class="left" :md="8" :lg="8">
-          <div class="photo-left">
-            <pan-thumb :image="image">
-              <slot>
-                <a href="javascript:void(0)" @click="imagecropperShow = true">Change Avatar</a>
-              </slot>
-            </pan-thumb>
-            <!--            <div class="active"></div>-->
-          </div>
-          <h4 class="name"> {{ profile.firstName + ' ' + profile.lastName }}</h4>
-          <p class="info"> Personal User </p>
-          <p class="info">{{ profile.email }}</p>
-          <el-row class="stats">
-            <el-col class="stat" :md="8">
-              <p class="number-stat">{{ profile.followedBy.length || 0 }}</p>
-              <p class="desc-stat">Followers</p>
-            </el-col>
-            <el-col class="stat" :md="8">
-              <p class="number-stat">{{ profile.following.length || 0 }}</p>
-              <p class="desc-stat">Following</p>
-            </el-col>
-            <el-col class="stat" :md="8">
-              <p class="number-stat">38</p>
-              <p class="desc-stat">Uploads</p>
-            </el-col>
-          </el-row>
-          <p class="desc"> {{ profile.description }} </p>
-          <!--          <div class="social">-->
-          <!--            <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'facebook' }" />-->
-          <!--            <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'google' }" />-->
-          <!--          </div>-->
-        </el-col>
-        <el-col class="right" :md="16" :lg="16">
-          <el-row>
-            <ul class="nav">
-              <li>
-                <router-link :to="{path: 'history'}">Lịch sử</router-link>
-              </li>
-              <li>
-                <router-link :to="{path: 'info'}">Thông tin</router-link>
-              </li>
-              <li>
-                <router-link :to="{path: 'settings'}">Cài đặt</router-link>
-              </li>
-              <li>Cửa hàng</li>
-              <li>Tin nhắn</li>
-              <li>Trợ giúp</li>
-            </ul>
-          </el-row>
-          <!--<span class="follow">Follow</span>-->
-          <el-container>
-            <transition name="fade-transform" mode="out-in">
-              <keep-alive :include="cachedViews">
-                <router-view :key="key" />
-              </keep-alive>
-            </transition>
-          </el-container>
-        </el-col>
-      </el-row>
-    </main>
+  <transition name="fade-transform" mode="out-in">
+    <div class="container">
+      <header />
+      <main>
+        <el-row>
+          <el-col class="left" :md="8" :lg="8">
+            <div class="photo-left">
+              <pan-thumb :image="image">
+                <slot>
+                  <a href="javascript:void(0)" @click="imagecropperShow = true">Change Avatar</a>
+                </slot>
+              </pan-thumb>
+              <!--            <div class="active"></div>-->
+            </div>
+            <h4 class="name"> {{ profile.firstName + ' ' + profile.lastName }}</h4>
+            <p class="info"> Personal User </p>
+            <p class="info">{{ profile.email }}</p>
+            <el-row class="stats">
+              <el-col class="stat" :md="8">
+                <p class="number-stat">{{ profile.followedBy.length || 0 }}</p>
+                <p class="desc-stat">Followers</p>
+              </el-col>
+              <el-col class="stat" :md="8">
+                <p class="number-stat">{{ profile.following.length || 0 }}</p>
+                <p class="desc-stat">Following</p>
+              </el-col>
+              <el-col class="stat" :md="8">
+                <p class="number-stat">38</p>
+                <p class="desc-stat">Uploads</p>
+              </el-col>
+            </el-row>
+            <p class="desc"> {{ profile.description }} </p>
+            <!--          <div class="social">-->
+            <!--            <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'facebook' }" />-->
+            <!--            <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'google' }" />-->
+            <!--          </div>-->
+          </el-col>
+          <el-col class="right" :md="16" :lg="16">
+            <el-row>
+              <ul class="nav">
+                <li>
+                  <router-link :to="{path: 'history'}">Lịch sử</router-link>
+                </li>
+                <li>
+                  <router-link :to="{path: 'info'}">Thông tin</router-link>
+                </li>
+                <li>
+                  <router-link :to="{path: 'settings'}">Cài đặt</router-link>
+                </li>
+                <li>Cửa hàng</li>
+                <li>Tin nhắn</li>
+                <li>Trợ giúp</li>
+              </ul>
+            </el-row>
+            <!--<span class="follow">Follow</span>-->
+            <el-container>
+              <transition name="fade-transform" mode="out-in">
+                <keep-alive :include="cachedViews">
+                  <router-view :key="key" />
+                </keep-alive>
+              </transition>
+            </el-container>
+          </el-col>
+        </el-row>
+      </main>
 
-    <image-cropper
-      v-show="imagecropperShow"
-      :key="imagecropperKey"
-      :width="300"
-      :height="300"
-      url="/profile/avatar"
-      lang-type="vi"
-      @close="close"
-      @crop-upload-success="cropSuccess"
-    />
+      <image-cropper
+        v-show="imagecropperShow"
+        :key="imagecropperKey"
+        :width="300"
+        :height="300"
+        url="/profile/avatar"
+        lang-type="vi"
+        @close="close"
+        @crop-upload-success="cropSuccess"
+      />
 
-  </div>
+    </div>
+  </transition>
 </template>
 
 <script>

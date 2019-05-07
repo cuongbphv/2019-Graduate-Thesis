@@ -238,9 +238,21 @@
     "change_pass_success": "Thay đổi mật khẩu thành công!",
     "confirm_delete": "Bạn có muốn tiếp tục xóa không?",
     "info_delete": "Vui lòng chọn đối tượng muốn xóa",
+    "keep_data": "Bạn có muốn giữ dữ liệu bạn đã chọn trước đó không?",
     "location": {
       "add_province_success": "Thêm tỉnh mới thành công"
     }
+  },
+  "advertising": {
+    "additional_info": "Nhập thông tin bổ sung cho tin rao vặt",
+    "title": "Tiêu đề",
+    "title_placeholder": "Nhập tiêu đề",
+    "description": "Mô tả",
+    "description_placeholder": "Nhập mô tả",
+    "price": "Giá",
+    "price_range": "Khoảng giá",
+    "sell": "Bán",
+    "buy": "Mua"
   },
   "userProfile": {
     "firstName": "Tên",

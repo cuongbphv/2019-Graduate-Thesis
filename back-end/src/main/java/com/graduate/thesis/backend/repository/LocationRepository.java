@@ -21,6 +21,9 @@ public interface LocationRepository extends MongoRepository<Location, String> {
     @Query("{ '_id': ?0 }")
     Location findByLocationId(String locationId);
 
+    @Query("{ 'name': {$regex : ?0, $options: 'i'} }")
+    List<Location> fillAllLocation(String name);
+
     @Query("{ $or: [ { _id : ?0} , { name : ?1 } ] }")
     List<Location> findByIdOrName(String id, String name);
 

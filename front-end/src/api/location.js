@@ -8,6 +8,9 @@ export default {
   getPagingLocation(params) {
     return Api.get(API.LOCATION, { params: params }).then(res => res.data)
   },
+  getAllLocation(params) {
+    return Api.get(API.GET_LIST_LOCATION, { params: params }).then(res => res.data)
+  },
   addNewProvince(params) {
     console.info(params)
     return Api.post(API.PROVINCE, params).then(res => res.data)

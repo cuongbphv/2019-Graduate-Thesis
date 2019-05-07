@@ -14,7 +14,18 @@ const GET_PAGING_LOCATION = (state, payload) => {
   state.entities = Object.assign({}, state.entities, newLocationEntities)
 }
 
+const GET_LIST_LOCATION = (state, payload) => {
+  const newLocationIds = Array.from(new Set(payload.map(location => location.id)))
+  const newLocationEntities = payload.reduce((locations, location) => {
+    locations[location.id] = new Location(location)
+    return locations
+  }, {})
+  state.ids = newLocationIds
+  state.entities = Object.assign({}, state.entities, newLocationEntities)
+}
+
 export default {
   IMPORT_LOCATION_DATA,
-  GET_PAGING_LOCATION
+  GET_PAGING_LOCATION,
+  GET_LIST_LOCATION
 }

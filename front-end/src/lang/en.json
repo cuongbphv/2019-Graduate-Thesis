@@ -238,9 +238,21 @@
     "change_pass_success": "Change password successfully!",
     "confirm_delete": "Do you want to continue deleting?",
     "info_delete": "Please choose elements to delete",
+    "keep_data": "Do you want keep old data which you chose before?",
     "location": {
       "add_province_success": "Add new province successfully"
     }
+  },
+  "advertising": {
+    "additional_info": "Additional Info for Classified Advertising",
+    "title": "Title",
+    "title_placeholder": "Input Title",
+    "description": "Description",
+    "description_placeholder": "Input Description",
+    "price": "Price",
+    "price_range": "Price Range",
+    "sell": "Sell",
+    "buy": "Buy"
   },
   "userProfile": {
     "firstName": "First name",

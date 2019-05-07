@@ -110,6 +110,16 @@ public class LocationController extends AbstractBasedAPI {
         return responseUtil.successResponse(locations);
     }
 
+    @GetMapping(Constant.GET_LIST)
+    public ResponseEntity<RestAPIResponse> getListPagingLocation (
+            @RequestParam("search_key") String searchKey
+    ) {
+
+        List<Location> locations = locationService.fillAllLocation(searchKey);
+
+        return responseUtil.successResponse(locations);
+    }
+
     @GetMapping(Constant.PROVINCE_API + Constant.WITHIN_ID)
     public ResponseEntity<RestAPIResponse> getListPagingDistrictByProvinceId (
             @PathVariable("id") String provinceId,

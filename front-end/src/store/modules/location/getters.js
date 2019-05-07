@@ -1,4 +1,4 @@
-const listPagingLocation = state => {
+const listLocation = state => {
   return state.ids.map(id => state.entities[id])
 }
 
@@ -11,7 +11,7 @@ const listWardByDistrictId = state => (provinceId, districtId) => {
 }
 
 export default {
-  listPagingLocation,
+  listLocation,
   listDistrictByProvinceId,
   listWardByDistrictId
 }

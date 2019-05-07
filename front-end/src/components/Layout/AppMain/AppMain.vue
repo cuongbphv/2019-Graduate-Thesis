@@ -5,7 +5,9 @@
         <router-view :key="key" />
       </keep-alive>
     </transition>
-    <router-view v-else />
+    <keep-alive v-else :include="cachedViews">
+      <router-view />
+    </keep-alive>
   </section>
 </template>
 
@@ -20,8 +22,8 @@ export default {
       return this.$route.fullPath
     },
     noTransition() {
-      const exception = ['ProfileHistory', 'ProfileInformation', 'AccountSetting']
-      return exception.includes(this.$route.name) && !this.$route.redirectedFrom
+      const exception = ['ProfileDetail', 'ProfileHistory', 'ProfileInformation', 'AccountSetting']
+      return exception.includes(this.$route.name)
     }
   }
 }

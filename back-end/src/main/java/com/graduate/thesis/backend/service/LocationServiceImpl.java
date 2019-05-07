@@ -56,6 +56,11 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
+    public List<Location> fillAllLocation(String name) {
+        return locationRepository.fillAllLocation(name);
+    }
+
+    @Override
     public Page<Location> getPagingLocation(String searchKey, int sortKey, boolean ascSort, int pageSize, int pageNumber) {
 
         if (searchKey.isEmpty()) {

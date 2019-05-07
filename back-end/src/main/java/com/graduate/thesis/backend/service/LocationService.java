@@ -23,6 +23,8 @@ public interface LocationService {
 
     List<Location> findByIdOrName(String id, String name);
 
+    List<Location> fillAllLocation(String name);
+
     Page<Location> getPagingLocation(String searchKey, int sortKey, boolean ascSort, int pageSize, int pageNumber);
 
     List<District> getPagingDistrictsByProvinceId(

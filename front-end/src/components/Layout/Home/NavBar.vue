@@ -69,7 +69,7 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import Hamburger from '@/components/Hamburger'
 import SearchBar from '@/components/Layout/Home/SearchBar'
-import Login from '@/components/Auth/Login/LoginModal'
+import Login from '@/components/Auth/LoginModal'
 
 export default {
   name: 'NavBar',
@@ -106,8 +106,9 @@ export default {
 .column-left {
   float: left;
   width: 30%;
+  line-height: 55px;
+
   h3 {
-    line-height: 50px;
     display: inline-block;
     color:  #000;
     font: bold 25px 'Cookie', cursive;
@@ -120,6 +121,7 @@ export default {
 .column-center {
   float: left;
   width: 50%;
+  padding-top: 3px;
 }
 .column-right {
   float: right;
@@ -156,10 +158,12 @@ export default {
   }
 }
 .navbar {
-  height: 50px;
+  height: 55px;
   overflow: hidden;
   position: relative;
   background: #fff;
+  border-bottom: 1px solid #d8dce5;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
 
   .hamburger-container {
     line-height: 46px;
@@ -183,11 +187,12 @@ export default {
   }
 
   .menu {
+    line-height: 55px;
+
     &_right {
       height: 50px;
       float: right;
     }
-    line-height: 50px;
 
     /deep/ .el-button--medium {
       padding: 10px 20px !important;
@@ -232,7 +237,7 @@ export default {
       margin-right: 30px;
 
       .avatar-wrapper {
-        margin-top: 5px;
+        margin-top: 6px;
         position: relative;
 
         .user-avatar {

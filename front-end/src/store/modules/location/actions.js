@@ -24,6 +24,17 @@ const loadListPagingLocation = ({ commit }, query) => {
   })
 }
 
+const loadListLocation = ({ commit }, query) => {
+  const param = CommonModelMap.toParam(query)
+  return location.getAllLocation(param).then(res => {
+    if (res.status === Status.SUCCESS) {
+      commit('GET_LIST_LOCATION', res.data)
+    }
+  }).catch(error => {
+    throw error
+  })
+}
+
 const addNewProvince = ({ commit }, province) => {
   const param = Location.toProvinceParam(province)
   return location.addNewProvince(param).then(res => {
@@ -89,6 +100,7 @@ const deleteDistricts = ({ commit }, params) => {
 export default {
   importLocationData,
   loadListPagingLocation,
+  loadListLocation,
   addNewProvince,
   addNewDistrict,
   addNewWard,

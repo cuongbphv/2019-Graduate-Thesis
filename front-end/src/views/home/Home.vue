@@ -37,7 +37,6 @@
 
     <el-tooltip placement="top" :content="$t('label.backToTop')">
       <back-to-top
-        :custom-style="myBackToTopStyle"
         :visibility-height="300"
         :back-position="50"
         transition-name="fade"
@@ -59,17 +58,7 @@ export default {
     BackToTop
   },
   data() {
-    return {
-      myBackToTopStyle: {
-        right: '50px',
-        bottom: '50px',
-        width: '40px',
-        height: '40px',
-        'border-radius': '4px',
-        'line-height': '45px',
-        background: '#e7eaf1'
-      }
-    }
+    return {}
   },
   beforeCreate() {
     const token = new URL(window.location.href).searchParams.get('token')

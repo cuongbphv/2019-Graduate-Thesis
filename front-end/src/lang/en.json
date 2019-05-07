@@ -323,6 +323,9 @@
     },
     "category": {
       "409": "Category is existed"
+    },
+    "location": {
+      "505": "New province existed in database"
     }
   }
 }

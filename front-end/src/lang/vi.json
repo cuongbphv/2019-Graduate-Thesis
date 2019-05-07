@@ -323,6 +323,9 @@
     },
     "category": {
       "409": "Đã tồn tại danh mục này"
+    },
+    "location": {
+      "505": "Tỉnh đã tồn tại trong cơ sở dữ liệu"
     }
   }
 }

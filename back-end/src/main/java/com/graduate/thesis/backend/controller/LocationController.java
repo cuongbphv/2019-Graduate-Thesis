@@ -6,6 +6,9 @@ import com.graduate.thesis.backend.entity.Location;
 import com.graduate.thesis.backend.entity.model.District;
 import com.graduate.thesis.backend.entity.model.Ward;
 import com.graduate.thesis.backend.exception.ApplicationException;
+import com.graduate.thesis.backend.model.request.location.DistrictRequest;
+import com.graduate.thesis.backend.model.request.location.NewProvinceRequest;
+import com.graduate.thesis.backend.model.request.location.WardRequest;
 import com.graduate.thesis.backend.model.response.RestAPIResponse;
 import com.graduate.thesis.backend.service.FileStorageService;
 import com.graduate.thesis.backend.service.LocationService;
@@ -22,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.*;
@@ -106,6 +110,16 @@ public class LocationController extends AbstractBasedAPI {
         return responseUtil.successResponse(locations);
     }
 
+    @GetMapping(Constant.GET_LIST)
+    public ResponseEntity<RestAPIResponse> getListPagingLocation (
+            @RequestParam("search_key") String searchKey
+    ) {
+
+        List<Location> locations = locationService.fillAllLocation(searchKey);
+
+        return responseUtil.successResponse(locations);
+    }
+
     @GetMapping(Constant.PROVINCE_API + Constant.WITHIN_ID)
     public ResponseEntity<RestAPIResponse> getListPagingDistrictByProvinceId (
             @PathVariable("id") String provinceId,
@@ -122,6 +136,70 @@ public class LocationController extends AbstractBasedAPI {
         return responseUtil.successResponse(locations);
     }
 
+    @PostMapping(Constant.PROVINCE_API)
+    public ResponseEntity<RestAPIResponse> addNewProvince(
+            @RequestBody NewProvinceRequest newProvinceRequest
+    ) {
+
+        List<Location> locations = locationService.findByIdOrName(
+                newProvinceRequest.getId(), newProvinceRequest.getName());
+
+        if (locations.size() > 0) {
+            throw new ApplicationException(APIStatus.ERR_LOCATION_EXISTED);
+        }
+
+        Location province = new Location();
+        province.setId(newProvinceRequest.getId());
+        province.setCode(newProvinceRequest.getId());
+        province.setName(newProvinceRequest.getName());
+        province.setSlug(newProvinceRequest.getSlug());
+        province.setType(newProvinceRequest.getType());
+        province.setNameWithType(newProvinceRequest.getNameWithType());
+
+        List<District> newDistricts = new ArrayList<>();
+
+        for(DistrictRequest district : newProvinceRequest.getDistricts()) {
+            // set data to new district
+            District newDistrict = new District();
+            newDistrict.setId(district.getId());
+            newDistrict.setCode(district.getId());
+            newDistrict.setType(district.getName());
+            newDistrict.setSlug(district.getSlug());
+            newDistrict.setName(district.getName());
+            newDistrict.setNameWithType(district.getNameWithType());
+            newDistrict.setParentCode(province.getId());
+            newDistrict.setPath(district.getName() + ", " + province.getName());
+            newDistrict.setPathWithType(district.getNameWithType() + ", " + province.getNameWithType());
+
+            List<Ward> newWards = new ArrayList<>();
+
+            // map wards
+            List<WardRequest> wards = district.getWards();
+            for (WardRequest ward : wards) {
+                Ward newWard = new Ward();
+                newWard.setId(ward.getId());
+                newWard.setName(ward.getName());
+                newWard.setType(ward.getType());
+                newWard.setCode(ward.getId());
+                newWard.setSlug(ward.getSlug());
+                newWard.setNameWithType(ward.getNameWithType());
+                newWard.setParentCode(district.getId());
+                newWard.setPath(ward.getName() + ", " + district.getName() + ", " + province.getName());
+                newWard.setPath(ward.getNameWithType() + ", " + district.getNameWithType() + ", " + province.getNameWithType());
+                newWards.add(newWard);
+            }
+
+            newDistrict.setWards(newWards);
+            newDistricts.add(newDistrict);
+        }
+
+        province.setDistricts(newDistricts);
+
+        locationService.saveLocation(province);
+
+        return responseUtil.successResponse("OK");
+    }
+
     @DeleteMapping(Constant.PROVINCE_API)
     public ResponseEntity<RestAPIResponse> deleteProvinceByIds (
             @RequestParam("ids") String provinceIds
@@ -132,22 +210,6 @@ public class LocationController extends AbstractBasedAPI {
 
         return responseUtil.successResponse("OK");
     }
-
-//    @DeleteMapping(Constant.PROVINCE_API + Constant.WITHIN_ID)
-//    public ResponseEntity<RestAPIResponse> deleteProvinceById (
-//            @PathVariable("id") String provinceId
-//    ) {
-//
-//        Location location = locationService.findByLocationId(provinceId);
-//
-//        if (location == null) {
-//            throw new ApplicationException(APIStatus.ERR_LOCATION_NOT_FOUND);
-//        }
-//
-//        locationService.deleteProvince(provinceId);
-//
-//        return responseUtil.successResponse("OK");
-//    }
 
     @DeleteMapping(Constant.DISTRICT_API)
     public ResponseEntity<RestAPIResponse> deleteDistrictByIds (

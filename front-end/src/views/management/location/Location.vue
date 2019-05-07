@@ -46,7 +46,7 @@
             icon="el-icon-upload2"
           >{{ $t('button.choose_file') }}</el-button>
         </el-upload>
-        <h3>JSON example data</h3>
+        <h3>{{ $t('label.json_example') }}</h3>
         <pre class="format-code">
             <code>
               {
@@ -288,8 +288,7 @@ export default {
               this.loadListPagingLocation(this.tempPaging.provincePaging)
             })
           }
-        }).catch(() => {
-        })
+        }).catch(() => {})
       } else {
         this.$alert(this.$t('message.info_delete'), this.$t('label.info'), {
           confirmButtonText: 'OK'

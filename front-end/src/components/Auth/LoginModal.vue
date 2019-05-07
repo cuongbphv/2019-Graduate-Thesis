@@ -103,7 +103,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { showSuccess } from '../../../utils/message'
+import { showSuccess } from '@/utils/message'
 export default {
   name: 'Login',
   props: {

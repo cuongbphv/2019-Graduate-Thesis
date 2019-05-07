@@ -4,7 +4,7 @@
       :key="0"
       ref="provinceTable"
       v-loading="listLoading"
-      :data="listPagingLocation"
+      :data="listLocation"
       border
       fit
       highlight-current-row
@@ -121,7 +121,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('location', ['listPagingLocation']),
+    ...mapGetters('location', ['listLocation']),
     ...mapState('location', ['totalElements', 'totalPages'])
   },
   watch: {
@@ -150,9 +150,9 @@ export default {
       this.loadListPagingLocation(this.listQuery).then(() => {
         const selected = this.provinceIds[this.listQuery.pageNumber]
         if (selected) {
-          this.listPagingLocation.forEach((province, index) => {
+          this.listLocation.forEach((province, index) => {
             if (selected.includes(province.id)) {
-              this.$refs.provinceTable.toggleRowSelection(this.listPagingLocation[index])
+              this.$refs.provinceTable.toggleRowSelection(this.listLocation[index])
             }
           })
         }

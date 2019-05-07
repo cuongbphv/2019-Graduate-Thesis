@@ -30,7 +30,7 @@ public enum APIStatus {
 
     // LOCATION
     ERR_LOCATION_NOT_FOUND(504, "Location not found"),
-
+    ERR_LOCATION_EXISTED(505, "Location has existed"),
     //FILE
     ERR_FILE_NOT_FOUND(888, "File not found"),
     ERR_CANT_STORE(889, "Could not store file"),

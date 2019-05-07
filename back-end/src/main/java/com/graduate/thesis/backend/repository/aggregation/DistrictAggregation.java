@@ -40,7 +40,7 @@ public class DistrictAggregation {
                 sortOperation,
                 groupOperation,
                 projectOperation
-        ), Location.class, District.class).getMappedResults();
+        ), "location", District.class).getMappedResults();
     }
 
     private SortOperation buildSortOperation(int sortKey, boolean ascSort) {

@@ -14,19 +14,18 @@ const GET_PAGING_LOCATION = (state, payload) => {
   state.entities = Object.assign({}, state.entities, newLocationEntities)
 }
 
-const ADD_NEW_PROVINCE = (state, payload) => {
-}
-
-const ADD_NEW_DISTRICT = (state, payload) => {
-}
-
-const ADD_NEW_WARD = (state, payload) => {
+const GET_LIST_LOCATION = (state, payload) => {
+  const newLocationIds = Array.from(new Set(payload.map(location => location.id)))
+  const newLocationEntities = payload.reduce((locations, location) => {
+    locations[location.id] = new Location(location)
+    return locations
+  }, {})
+  state.ids = newLocationIds
+  state.entities = Object.assign({}, state.entities, newLocationEntities)
 }
 
 export default {
   IMPORT_LOCATION_DATA,
   GET_PAGING_LOCATION,
-  ADD_NEW_PROVINCE,
-  ADD_NEW_DISTRICT,
-  ADD_NEW_WARD
+  GET_LIST_LOCATION
 }

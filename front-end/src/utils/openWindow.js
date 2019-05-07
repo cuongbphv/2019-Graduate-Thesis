@@ -1,11 +1,3 @@
-/**
- *Created by jiachenpan on 16/11/29.
- * @param {Sting} url
- * @param {Sting} title
- * @param {Number} w
- * @param {Number} h
- */
-
 export default function openWindow(url, title, w, h) {
   // Fixes dual-screen position                            Most browsers       Firefox
   const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : screen.left
@@ -18,7 +10,6 @@ export default function openWindow(url, title, w, h) {
   const top = ((height / 2) - (h / 2)) + dualScreenTop
   const newWindow = window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left)
 
-  // Puts focus on the newWindow
   if (window.focus) {
     newWindow.focus()
   }

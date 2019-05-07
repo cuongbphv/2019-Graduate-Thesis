@@ -1,6 +1,7 @@
 import location from '@/api/location'
 import { Status } from '@/utils/constants'
 import CommonModelMap from '../../models/CommonModelMap'
+import Location from '../../models/Location'
 
 const importLocationData = ({ commit }, fileData) => {
   return location.importLocationData(fileData).then(res => {
@@ -23,19 +24,28 @@ const loadListPagingLocation = ({ commit }, query) => {
   })
 }
 
-const addNewProvince = ({ commit }, province) => {
-  const param = CommonModelMap.toParam(province)
-  return location.addNewProvince(param).then(res => {
+const loadListLocation = ({ commit }, query) => {
+  const param = CommonModelMap.toParam(query)
+  return location.getAllLocation(param).then(res => {
     if (res.status === Status.SUCCESS) {
-      commit('ADD_NEW_PROVINCE', res.data)
+      commit('GET_LIST_LOCATION', res.data)
     }
   }).catch(error => {
     throw error
   })
 }
 
+const addNewProvince = ({ commit }, province) => {
+  const param = Location.toProvinceParam(province)
+  return location.addNewProvince(param).then(res => {
+    return res
+  }).catch(error => {
+    throw error
+  })
+}
+
 const addNewDistrict = ({ commit }, province) => {
-  const param = CommonModelMap.toParam(province)
+  const param = Location.toListDistrictParam(province)
   return location.addNewDistrict(param).then(res => {
     if (res.status === Status.SUCCESS) {
       commit('ADD_NEW_DISTRICT', res.data)
@@ -46,7 +56,7 @@ const addNewDistrict = ({ commit }, province) => {
 }
 
 const addNewWard = ({ commit }, province) => {
-  const param = CommonModelMap.toParam(province)
+  const param = Location.toListWardParam(province)
   return location.addNewWard(param).then(res => {
     if (res.status === Status.SUCCESS) {
       commit('ADD_NEW_WARD', res.data)
@@ -90,6 +100,7 @@ const deleteDistricts = ({ commit }, params) => {
 export default {
   importLocationData,
   loadListPagingLocation,
+  loadListLocation,
   addNewProvince,
   addNewDistrict,
   addNewWard,

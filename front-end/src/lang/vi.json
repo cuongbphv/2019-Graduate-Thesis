@@ -216,7 +216,9 @@
     "add_new_options": "Thêm lựa chọn",
     "selection_type": "Kiểu lựa chọn",
     "value": "Giá trị",
-    "create_category": "Tạo danh mục mới"
+    "create_category": "Tạo danh mục mới",
+    "backToTop": "Lên Đầu Trang",
+    "json_example": "Định dạng dữ liệu JSON mẫu (Ghi chú khi nhập dữ liệu, dữ liệu cũ sẽ bị ghi đè)"
   },
   "place_holder": {
     "category_description": "Mô tả sơ lược về danh mục này"
@@ -261,10 +263,25 @@
     "change_pass_success": "Thay đổi mật khẩu thành công!",
     "confirm_delete": "Bạn có muốn tiếp tục xóa không?",
     "info_delete": "Vui lòng chọn đối tượng muốn xóa",
+    "keep_data": "Bạn có muốn giữ dữ liệu bạn đã chọn trước đó không?",
+    "location": {
+      "add_province_success": "Thêm tỉnh mới thành công"
+    },
     "update_metadata_success": "Cập nhật metadata thành công",
     "update_filter_success": "Cập nhật lọc thành công",
     "create_category_success": "Tạo danh mục thành công",
     "update_category_success": "Cập nhật danh mục thành công"
+  },
+  "advertising": {
+    "additional_info": "Nhập thông tin bổ sung cho tin rao vặt",
+    "title": "Tiêu đề",
+    "title_placeholder": "Nhập tiêu đề",
+    "description": "Mô tả",
+    "description_placeholder": "Nhập mô tả",
+    "price": "Giá",
+    "price_range": "Khoảng giá",
+    "sell": "Bán",
+    "buy": "Mua"
   },
   "userProfile": {
     "firstName": "Tên",

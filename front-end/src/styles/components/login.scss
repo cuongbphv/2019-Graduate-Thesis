@@ -164,3 +164,7 @@ $dark_gray: #889aa4;
     }
   }
 }
+
+/deep/ .el-dialog__body {
+  padding-bottom: 30px !important;
+}

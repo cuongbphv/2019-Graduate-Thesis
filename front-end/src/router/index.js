@@ -10,11 +10,7 @@ import HomeLayout from '@/views/layout/HomeLayout'
 /* Router Modules */
 import profileRouter from './modules/profile'
 import advertisingRouter from './modules/advertising'
-import componentsRouter from './modules/components'
 // import chartsRouter from './modules/charts'
-import tableRouter from './modules/table'
-import treeTableRouter from './modules/tree-table'
-// import nestedRouter from './modules/nested'
 
 export const allRoutes = [
   {
@@ -176,9 +172,6 @@ export const allRoutes = [
       }
     ]
   },
-  componentsRouter,
-  tableRouter,
-  treeTableRouter,
   { path: '*', redirect: '/404', hidden: true }
 ]
 

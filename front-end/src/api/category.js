@@ -1,11 +1,9 @@
 import Api from '../api/api'
 import { API } from '../utils/constants'
-import CommonModelMap from '../store/models/CommonModelMap'
 
 export default {
   getCategoryPaging(params) {
-    const queryParams = CommonModelMap.toParam(params)
-    return Api.get(API.CATEGORY, { params: queryParams }).then(res => res.data)
+    return Api.get(API.CATEGORY, { params: params }).then(res => res.data)
   },
   getCategoryById(id) {
     return Api.get(API.CATEGORY + `/${id}`).then(res => res.data)

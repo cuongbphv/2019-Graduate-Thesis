@@ -2,12 +2,12 @@
   <div class="create-advertising">
     <div class="step-progress">
       <el-steps :active="step" simple>
-        <el-step title="Category" icon="el-icon-menu" />
-        <el-step title="Location" icon="el-icon-location" />
-        <el-step title="Image" icon="el-icon-picture-outline" />
-        <el-step title="Info" icon="el-icon-info" />
-        <el-step title="Preview" icon="el-icon-edit-outline" />
-        <el-step title="Submit" icon="el-icon-success" />
+        <el-step :title="$t('advertising.category')" icon="el-icon-menu" />
+        <el-step :title="$t('advertising.location')" icon="el-icon-location" />
+        <el-step :title="$t('advertising.image')" icon="el-icon-picture-outline" />
+        <el-step :title="$t('advertising.info')" icon="el-icon-info" />
+        <el-step :title="$t('advertising.preview')" icon="el-icon-edit-outline" />
+        <el-step :title="$t('advertising.submit')" icon="el-icon-success" />
       </el-steps>
     </div>
 
@@ -15,7 +15,7 @@
       <transition name="fade-transform" mode="out-in">
         <step1 v-if="step === 1" />
         <step2 v-if="step === 2" :location="newAdvertising.location" @submitFormLocation="saveLocationData" />
-        <step3 v-if="step === 3" @submitFormImage="saveImage" />
+        <step3 v-if="step === 3" :images="newAdvertising.images" @submitFormImage="saveImage" />
         <step4 v-if="step === 4" />
       </transition>
     </div>
@@ -52,7 +52,10 @@ export default {
       newAdvertising: {
         category: {},
         location: {},
-        images: [],
+        images: {
+          data: [],
+          keepData: false
+        },
         description: {},
         author: {}
       },
@@ -76,6 +79,21 @@ export default {
           this.newAdvertising.location = {}
           this.step = step
         })
+      } else if (step === 3 && this.newAdvertising.images.data.length > 0) {
+        this.$confirm(this.$t('message.keep_data'), this.$t('label.warning'), {
+          confirmButtonText: this.$t('button.confirm'),
+          cancelButtonText: this.$t('button.cancel'),
+          type: 'warning'
+        }).then(() => {
+          this.newAdvertising.images.keepData = true
+          this.step = step
+        }).catch(() => {
+          this.newAdvertising.images = {
+            data: [],
+            keepData: false
+          }
+          this.step = step
+        })
       } else {
         this.step = step
       }
@@ -86,7 +104,7 @@ export default {
       this.step++
     },
     saveImage(imageList) {
-      this.newAdvertising.images = [...imageList]
+      this.newAdvertising.images.data = [...imageList]
     },
     backToTop() {
       const start = window.pageYOffset

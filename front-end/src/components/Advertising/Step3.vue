@@ -36,9 +36,24 @@
 <script>
 export default {
   name: 'Step3',
+  props: {
+    images: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       fileList: []
+    }
+  },
+  created() {
+    if (this.images.keepData) {
+      this.images.data.forEach(f => {
+        this.handleOnChange(f.raw)
+      })
     }
   },
   methods: {
@@ -65,14 +80,14 @@ export default {
     font-weight: bold;
   }
 
-  .upload-form {
-    /deep/ .el-upload-list--picture-card {
-      .el-upload-list__item {
-        width: 180px;
-        height: 180px;
-      }
+  /deep/ .el-upload-list--picture-card {
+    .el-upload-list__item {
+      width: 180px;
+      height: 180px;
     }
+  }
 
+  .upload-form {
     /deep/ .el-upload--picture-card {
       border: none;
       height: auto;

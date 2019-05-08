@@ -47,13 +47,13 @@
       :key="0"
       ref="categoryTable"
       v-loading="listLoading"
-      :data="listPagingCategory"
+      :data="listCategory"
       border
       fit
       highlight-current-row
       style="width: 100%;"
       @sort-change="sortChange"
-      @select="handleSelectionChange"
+      @selection-change="handleSelectionChange"
     >
       <el-table-column
         type="selection"
@@ -128,11 +128,11 @@
 
 <script>
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-import category from '@/api/category'
-import { Status } from '../../utils/constants'
+// import { Status } from '../../utils/constants'
 import MetadataModal from './MetadataModal'
 import CreateCategoryModal from './CreateCategoryModal'
 import CategoryDetailModal from './CategoryDetailModal'
+import { mapActions, mapGetters, mapState } from 'vuex'
 export default {
   name: 'TableCategory',
   components: {
@@ -157,11 +157,8 @@ export default {
   },
   data() {
     return {
-      listPagingCategory: [],
       listBreadCrumb: [],
       listLoading: false,
-      totalPages: 0,
-      totalElements: 0,
       listQuery: {
         pageNumber: 1,
         pageSize: 10,
@@ -180,6 +177,8 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('category', ['listCategory']),
+    ...mapState('category', ['totalElements', 'totalPages'])
   },
   watch: {
     searchKey: function(newVal) {
@@ -199,6 +198,7 @@ export default {
     this.getList()
   },
   methods: {
+    ...mapActions('category', ['loadListPagingCategory']),
     getList(parentElement) {
       // reset table state
       this.categoryIds = {}
@@ -215,40 +215,31 @@ export default {
     },
     loadListWithSelected() {
       this.listLoading = true
-      category.getCategoryPaging(this.listQuery).then(res => {
-        if (res.status === Status.SUCCESS) {
-          // Retrieve data
-          this.listPagingCategory = res.data.content
-          this.totalPages = res.data.totalPages
-          this.totalElements = res.data.totalElements
-          // resolve selected element
-          const selected = this.categoryIds[this.listQuery.pageNumber]
-          console.log('selected', selected)
-          if (selected) {
-            this.listPagingCategory.forEach((cat, index) => {
-              if (selected.includes(cat.id)) {
-                console.log('inside selection toggle', this.listPagingCategory[index])
-                this.$refs.categoryTable.toggleRowSelection(this.listPagingCategory[index])
-              }
-            })
-          }
-          this.listLoading = false
+      this.loadListPagingCategory(this.listQuery).then(() => {
+        const selected = this.categoryIds[this.listQuery.pageNumber]
+        if (selected) {
+          this.listCategory.forEach((cat, index) => {
+            if (selected.includes(cat.id)) {
+              this.$refs.categoryTable.toggleRowSelection(this.listCategory[index])
+            }
+          })
         }
+        this.listLoading = false
       })
     },
     loadListSubCategory(row) {
       this.listLoading = true
       this.listQuery.parentId = row.id
       this.listQuery.pageNumber = 1
-      category.getCategoryPaging(this.listQuery).then(res => {
-        if (res.status === Status.SUCCESS) {
-          // Retrieve data
-          this.listPagingCategory = res.data.content
-          this.totalPages = res.data.totalPages
-          this.totalElements = res.data.totalElements
-          this.listLoading = false
-        }
-      })
+      // category.getCategoryPaging(this.listQuery).then(res => {
+      //   if (res.status === Status.SUCCESS) {
+      //     // Retrieve data
+      //     this.listPagingCategory = res.data.content
+      //     this.totalPages = res.data.totalPages
+      //     this.totalElements = res.data.totalElements
+      //     this.listLoading = false
+      //   }
+      // })
     },
     handleBreadCrumbClick(row) {
       const index = this.listBreadCrumb.findIndex(element => {
@@ -302,16 +293,16 @@ export default {
       this.categoryUpdateDialogVisible = true
     },
     handleUpdateMetadataSuccess(data) {
-      const index = this.listPagingCategory.findIndex(item => {
+      const index = this.listCategory.findIndex(item => {
         return item.id === this.metadataDialogCategoryId
       })
-      this.listPagingCategory[index].metadata = data
+      this.listCategory[index].metadata = data
     },
     handleUpdateFilterSuccess(data) {
-      const index = this.listPagingCategory.findIndex(item => {
+      const index = this.listCategory.findIndex(item => {
         return item.id === this.metadataDialogCategoryId
       })
-      this.listPagingCategory[index].filter = data
+      this.listCategory[index].filter = data
     },
     handleCloseModal() {
       this.metadataDialogVisible = false

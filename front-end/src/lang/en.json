@@ -281,7 +281,13 @@
     "price": "Price",
     "price_range": "Price Range",
     "sell": "Sell",
-    "buy": "Buy"
+    "buy": "Buy",
+    "category": "Category",
+    "location": "Location",
+    "image": "Image",
+    "info": "Info",
+    "preview": "Preview",
+    "submit": "Submit"
   },
   "userProfile": {
     "firstName": "First name",

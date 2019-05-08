@@ -281,7 +281,13 @@
     "price": "Giá",
     "price_range": "Khoảng giá",
     "sell": "Bán",
-    "buy": "Mua"
+    "buy": "Mua",
+    "category": "Danh mục",
+    "location": "Khu vực",
+    "image": "Hình ảnh",
+    "info": "Thông tin",
+    "preview": "Xem lại",
+    "submit": "Xác nhận"
   },
   "userProfile": {
     "firstName": "Tên",

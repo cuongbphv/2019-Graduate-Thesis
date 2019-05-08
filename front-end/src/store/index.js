@@ -8,6 +8,7 @@ import layout from './modules/layout'
 import profile from './modules/profile'
 import permission from './modules/permission'
 import location from './modules/location'
+import category from './modules/category'
 
 Vue.use(Vuex)
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     profile,
     permission,
     location,
+    category,
     errorLog,
     tagsView
   },

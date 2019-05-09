@@ -56,4 +56,12 @@ public class CommonUtil {
         return name.substring(lastIndexOf);
     }
 
+    public static String getFileFormat(String fileName) {
+        int lastIndexOf = fileName.lastIndexOf(".");
+        if (lastIndexOf == -1) {
+            return "";
+        }
+        return fileName.substring(lastIndexOf + 1);
+    }
+
 }

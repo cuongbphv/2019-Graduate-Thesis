@@ -50,7 +50,7 @@ public class FileStorageService {
                 Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             }
 
-            return this.fileStorageLocation.toString() + fileName;
+            return this.fileStorageLocation.toString() + "\\" + fileName;
 
         } catch (IOException ex) {
             ex.printStackTrace();

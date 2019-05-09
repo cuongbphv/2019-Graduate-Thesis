@@ -5,12 +5,14 @@
     <el-upload
       class="upload-form"
       drag
-      action=""
+      :action="uploadModel.url"
       :on-change="handleOnChange"
+      :headers="uploadModel.headers"
       :on-remove="handleRemove"
+      :on-success="handleOnSuccess"
       :file-list="fileList"
-      :auto-upload="false"
       list-type="picture-card"
+      accept="image/*"
       multiple
     >
       <i class="el-icon-upload" />
@@ -34,37 +36,63 @@
 </template>
 
 <script>
+import { API, Status } from '@/utils/constants'
+import { getToken } from '@/utils/auth'
+import { mapActions } from 'vuex'
+
 export default {
   name: 'Step3',
   props: {
     images: {
-      type: Object,
+      type: Array,
       default: () => {
-        return {}
+        return []
       }
     }
   },
   data() {
     return {
-      fileList: []
+      fileList: [],
+      uploadModel: {
+        url: process.env.VUE_APP_BASE_URL + API.UPLOAD_TEMP_IMAGE,
+        headers: {
+          'Authorization': 'Bearer ' + getToken()
+        }
+      }
     }
   },
   created() {
-    if (this.images.keepData) {
-      this.images.data.forEach(f => {
-        this.handleOnChange(f.raw)
-      })
+    if (this.images.length > 0) {
+      this.fileList = this.images
     }
   },
   methods: {
-    handleRemove(file, fileList) {
-      const index = this.fileList.findIndex(f => f.uid === file.uid)
-      this.fileList.splice(index, 1)
-      this.$emit('submitFormImage', this.fileList)
+    ...mapActions('advertising', ['removeTempImage']),
+    handleOnChange() {
+
     },
-    handleOnChange(file) {
-      this.fileList.push(file)
-      this.$emit('submitFormImage', this.fileList)
+    handleRemove(file, fileList) {
+      const fileName = file.url.substring(file.url.lastIndexOf('/') + 1)
+      this.removeTempImage({
+        fileName: fileName
+      }).then(res => {
+        if (res.status === Status.SUCCESS) {
+          const index = this.fileList.findIndex(f => f.uid === file.uid)
+          this.fileList.splice(index, 1)
+          this.$emit('submitFormImage', this.fileList)
+          this.$message({
+            message: 'Delete file successfully.',
+            type: 'success'
+          })
+        }
+      })
+    },
+    handleOnSuccess(res, file, fileList) {
+      if (res.status === Status.SUCCESS) {
+        file.url = res.data
+        this.fileList.push(file)
+        this.$emit('submitFormImage', this.fileList)
+      }
     }
   }
 }

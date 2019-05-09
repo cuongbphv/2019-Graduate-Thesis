@@ -1,3 +1,11 @@
+import i18n from '@/lang'
+
+// define constant
+const SECOND_MILLIS = 1000
+const MINUTE_MILLIS = 60 * SECOND_MILLIS
+const HOUR_MILLIS = 60 * MINUTE_MILLIS
+const DAY_MILLIS = 24 * HOUR_MILLIS
+
 export function parseTime(time, cFormat) {
   if (arguments.length === 0) {
     return null
@@ -277,4 +285,32 @@ export function uuidv4() {
     const v = (c === 'x') ? r : (r & 0x3 | 0x8)
     return v.toString(16)
   })
+}
+
+export function getTimeAgo(date) {
+  // convert date to time stamp
+  const timestamp = new Date(date).getTime()
+  // get time stamp by timezone of local
+  const timeZoneStamp = -1 * (new Date().getTimezoneOffset()) * 60 * 1000
+  const now = new Date().getTime() - timeZoneStamp
+  // validate timestamp
+  if (timestamp > now || timestamp <= 0) return null
+  // calculate diff between time
+  const diff = now - timestamp
+  // return result by diff
+  if (diff < MINUTE_MILLIS) {
+    return i18n.t('time_ago.now')
+  } else if (diff < 2 * MINUTE_MILLIS) {
+    return i18n.t('time_ago.a_minute_ago')
+  } else if (diff < 50 * MINUTE_MILLIS) {
+    return Math.floor(diff / MINUTE_MILLIS) + ' ' + i18n.t('time-ago.minute_ago')
+  } else if (diff < 90 * MINUTE_MILLIS) {
+    return i18n.t('time_ago.a_hour_ago')
+  } else if (diff < 24 * HOUR_MILLIS) {
+    return Math.floor(diff / HOUR_MILLIS) + ' ' + i18n.t('time-ago.hour_ago')
+  } else if (diff < 48 * HOUR_MILLIS) {
+    return i18n.t('time_ago.a_day_ago')
+  } else {
+    return Math.floor(diff / DAY_MILLIS) + ' ' + i18n.t('time_ago.day_ago')
+  }
 }

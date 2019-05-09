@@ -48,55 +48,24 @@ export default {
   },
   data() {
     return {
-      step: 4,
+      step: 1,
       newAdvertising: {
         category: {},
         location: {},
-        images: {
-          data: [],
-          keepData: false
-        },
+        images: [],
         description: {},
         author: {}
       },
       interval: null,
-      isMoving: false
+      isMoving: false,
+      keepData: false
     }
   },
   created() {
   },
   methods: {
     changeStep(step) {
-      if (step === 2 && Object.keys(this.newAdvertising.location).length > 0) {
-        this.$confirm(this.$t('message.keep_data'), this.$t('label.warning'), {
-          confirmButtonText: this.$t('button.confirm'),
-          cancelButtonText: this.$t('button.cancel'),
-          type: 'warning'
-        }).then(() => {
-          this.newAdvertising.location.keepData = true
-          this.step = step
-        }).catch(() => {
-          this.newAdvertising.location = {}
-          this.step = step
-        })
-      } else if (step === 3 && this.newAdvertising.images.data.length > 0) {
-        this.$confirm(this.$t('message.keep_data'), this.$t('label.warning'), {
-          confirmButtonText: this.$t('button.confirm'),
-          cancelButtonText: this.$t('button.cancel'),
-          type: 'warning'
-        }).then(() => {
-          this.newAdvertising.images.keepData = true
-          this.step = step
-        }).catch(() => {
-          this.newAdvertising.images = {
-            data: [],
-            keepData: false
-          }
-          this.step = step
-        })
-      } else {
-        this.step = step
-      }
+      this.step = step
       this.backToTop()
     },
     saveLocationData(location) {
@@ -104,7 +73,7 @@ export default {
       this.step++
     },
     saveImage(imageList) {
-      this.newAdvertising.images.data = [...imageList]
+      this.newAdvertising.images = imageList
     },
     backToTop() {
       const start = window.pageYOffset

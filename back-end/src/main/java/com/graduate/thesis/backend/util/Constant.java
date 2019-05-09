@@ -35,6 +35,11 @@ public interface Constant {
     String WARD_API = "/ward";
     String IMPORT_LOCATION_DATA = "/import";
 
+    // Advertising APIs
+    String ADVERTISING_API = API_PREFIX + "/advertising";
+    String UPLOAD_TEMP_IMAGE = "/upload_temp_image";
+    String REMOVE_TEMP_IMAGE = "/remove_temp_image";
+
     //USER
     public static final String USER_API = API_PREFIX + "/user";
     public static final String CURRENT_USER =  "/me";

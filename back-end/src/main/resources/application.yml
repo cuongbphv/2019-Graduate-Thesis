@@ -74,6 +74,7 @@ auth0:
 file:
   upload-dir: ./target/uploads/
   data-dir: ./target/data/
+  temp-dir: ./target/temp/
 
 logging:
   level:

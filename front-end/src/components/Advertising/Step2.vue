@@ -105,7 +105,7 @@ export default {
   },
   created() {
     this.localLocation = Object.assign({}, this.location)
-    if (this.localLocation.keepData) {
+    if (Object.keys(this.localLocation).length > 0) {
       if (this.localLocation.province) {
         this.mode = 'province'
         this.originalDistricts = this.listDistrictByProvinceId(this.localLocation.province.id)

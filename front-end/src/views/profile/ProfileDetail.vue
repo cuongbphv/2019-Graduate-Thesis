@@ -1,6 +1,6 @@
 <template>
   <transition name="fade-transform" mode="out-in">
-    <div class="container">
+    <div class="profile-container">
       <header />
       <main>
         <el-row>
@@ -132,8 +132,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .container {
-    margin: 0 auto;
+  .profile-container {
+    margin: 10px 15px;
     padding: 0 !important;
     background-color: #fff;
     box-shadow: 0 3px 6px rgba(0,0,0,0.10), 0 3px 6px rgba(0,0,0,0.10);

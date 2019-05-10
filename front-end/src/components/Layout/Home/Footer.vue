@@ -1,16 +1,14 @@
 <template>
   <footer class="footer-distributed">
     <div class="footer-left">
-      <h3>Smart<span>Market</span></h3>
+      <h3>Bee<span>Market</span></h3>
       <p class="footer-links">
-        <a href="#">Home</a>
-        <a href="#">Blog</a>
-        <a href="#">Pricing</a>
-        <a href="#">About</a>
-        <a href="#">Faq</a>
-        <a href="#">Contact</a>
+        <router-link to="home">{{ $t('footer.home') }}</router-link>
+        <router-link to="home">{{ $t('footer.about') }}</router-link>
+        <router-link to="home">{{ $t('footer.contact') }}</router-link>
+        <router-link to="home">{{ $t('footer.faq') }}</router-link>
       </p>
-      <p class="footer-company-name">Copyright &copy; 2019</p>
+      <p class="footer-company-name">{{ $t('footer.copyright') }} &copy; 2019</p>
     </div>
 
     <div class="footer-center">
@@ -30,8 +28,8 @@
 
     <div class="footer-right">
       <p class="footer-company-about">
-        <span>Thông tin website</span>
-        Trang chuyên tin rao vặt cho cá nhân, cửa hàng với giao diện thân thiện, hỗ trợ các chức năng tìm kiếm nhanh, tiện ích.
+        <span>{{ $t('footer.title') }}</span>
+        {{ $t('footer.description') }}
       </p>
       <div class="footer-icons">
         <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'facebook' }" size="2x" />
@@ -57,13 +55,12 @@ export default {
     text-align: left;
     font: bold 16px sans-serif;
     padding: 55px 50px;
-    margin-top: 80px;
     h3 {
       color:  #ffffff;
       font: normal 36px 'Cookie', cursive;
       margin: 0;
       span {
-        color:  #5383d3;
+        color:  #ffba00;
       }
     }
     .footer-links {

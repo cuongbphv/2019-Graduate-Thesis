@@ -1,6 +1,5 @@
 <template>
   <div class="home-container">
-    <about class="about" />
     <div class="main-container">
       <category />
       <div style="padding: 20px;">
@@ -35,27 +34,18 @@
       </div>
     </div>
 
-    <el-tooltip placement="top" :content="$t('label.backToTop')">
-      <back-to-top
-        :visibility-height="300"
-        :back-position="50"
-        transition-name="fade"
-      />
-    </el-tooltip>
-
   </div>
 </template>
 
 <script>
 import { About, Category } from '@/components/Layout/Home/index'
-import BackToTop from '@/components/BackToTop'
 import { mapActions } from 'vuex'
 export default {
   name: 'Home',
   components: {
+    // eslint-disable-next-line
     About,
-    Category,
-    BackToTop
+    Category
   },
   data() {
     return {}
@@ -83,8 +73,7 @@ export default {
   }
   .main-container {
     position: absolute;
-    margin: 0 70px !important;
-    padding-top: 150px;
+    margin: 10px 15px;
   }
   .time {
     font-size: 13px;

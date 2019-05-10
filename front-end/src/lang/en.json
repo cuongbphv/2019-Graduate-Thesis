@@ -81,6 +81,15 @@
     "size": "Global Size",
     "home": "Home"
   },
+  "footer": {
+    "home": "Home",
+    "about": "About",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "copyright": "Copyright",
+    "title": "About Website",
+    "description": "Website for classified advertising of invidual and shops with friendly interface, support quickly search, utilities."
+  },
   "login": {
     "title": "Login Form",
     "logIn": "Log in",
@@ -252,6 +261,10 @@
     "closeAll": "Close All"
   },
   "validator": {
+    "required": "This field is required",
+    "description": {
+      "max_length": "Description can not be less than {length} characters"
+    },
     "password": {
       "max_length": "The password can not be less than {max_length} characters",
       "not_match": "Confirm password is not matching"

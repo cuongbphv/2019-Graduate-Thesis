@@ -81,6 +81,15 @@
     "size": "Global Size",
     "home": "Trang chủ"
   },
+  "footer": {
+    "home": "Trang chủ",
+    "about": "Thông tin",
+    "faq": "FAQ",
+    "contact": "Liên hệ",
+    "copyright": "Bản quyền",
+    "title": "Thông tin website",
+    "description": "Trang chuyên tin rao vặt cho cá nhân, cửa hàng với giao diện thân thiện, hỗ trợ các chức năng tìm kiếm nhanh, tiện ích."
+  },
   "login": {
     "title": "Đăng nhập",
     "logIn": "Đăng nhập",
@@ -252,6 +261,10 @@
     "closeAll": "Close All"
   },
   "validator": {
+    "required": "Trường yêu cầu nội dung",
+    "description": {
+      "max_length": "Mô tả không ngắn hơn {length} kí tự"
+    },
     "password": {
       "max_length": "Mật khẩu không ngắn hơn {max_length} kí tự",
       "not_match": "Mật khẩu xác nhận không đúng"

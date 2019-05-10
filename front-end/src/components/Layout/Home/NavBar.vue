@@ -8,7 +8,7 @@
           :is-active="sidebar.opened"
           class="hamburger-container"
         />
-        <router-link to="/"><h3>Smart<span>Market</span></h3></router-link>
+        <router-link to="/"><img src="../../../assets/logo.png" alt="No logo"></router-link>
       </div>
       <div class="column-center">
         <template v-if="device !== 'mobile'">
@@ -108,14 +108,10 @@ export default {
   width: 30%;
   line-height: 55px;
 
-  h3 {
+  img {
+    height: 50px;
     display: inline-block;
-    color:  #000;
-    font: bold 25px 'Cookie', cursive;
-    margin: 5px 10px;
-    span {
-      color:  #5383d3;
-    }
+    margin: 0 0 0 30px;
   }
 }
 .column-center {
@@ -152,6 +148,9 @@ export default {
 @media screen and (max-width: 800px) {
   .column-left {
     width: 50%;
+    img {
+      margin: 0;
+    }
   }
   .column-right {
     width: 50%;

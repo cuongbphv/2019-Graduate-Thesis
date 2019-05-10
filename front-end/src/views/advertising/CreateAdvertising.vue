@@ -24,23 +24,14 @@
       <el-button style="float: left;" type="primary" @click="changeStep(step - 1)">Prev</el-button>
       <el-button style="float: right;" type="primary" @click="changeStep(step + 1)">Next</el-button>
     </el-row>
-
-    <el-tooltip placement="top" :content="$t('label.backToTop')">
-      <back-to-top
-        :visibility-height="300"
-        transition-name="fade"
-      />
-    </el-tooltip>
   </div>
 </template>
 
 <script>
-import BackToTop from '@/components/BackToTop'
 import { Step1, Step2, Step3, Step4 } from '@/components/Advertising/index'
 export default {
   name: 'CreateAdvertising',
   components: {
-    BackToTop,
     Step1,
     Step2,
     Step3,
@@ -48,7 +39,7 @@ export default {
   },
   data() {
     return {
-      step: 1,
+      step: 4,
       newAdvertising: {
         category: {},
         location: {},
@@ -101,14 +92,12 @@ export default {
 
 <style lang="scss" scoped>
 .create-advertising {
-  margin: 10px 70px !important;
-  border-radius: 20px;
+  margin: 10px 15px !important;
   border: 1px solid #d8dce5;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
 
   .step-progress {
     /deep/ .el-steps--simple {
-      border-radius: 20px 20px 0 0;
       border-bottom: 1px solid #d8dce5;
       box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
 

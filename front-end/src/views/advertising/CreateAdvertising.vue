@@ -21,10 +21,6 @@
       </transition>
     </div>
 
-    <el-row class="step-action">
-      <el-button style="float: left;" type="primary" @click="changeStep(step - 1)">Prev</el-button>
-      <el-button style="float: right;" type="primary" @click="changeStep(step + 1)">Next</el-button>
-    </el-row>
   </div>
 </template>
 
@@ -41,7 +37,7 @@ export default {
   },
   data() {
     return {
-      step: 4,
+      step: 5,
       newAdvertising: {
         category: {},
         location: {},
@@ -104,6 +100,7 @@ export default {
       border-bottom: 1px solid #d8dce5;
       box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
       border-radius: 0 !important;
+      padding: 1rem 2rem;
 
       .el-step__title {
         font-size: 15px;
@@ -112,12 +109,39 @@ export default {
     }
   }
 
-  .step-content {
-    padding: 30px;
+  @media screen and (min-width: 991px) and (max-width: 1000px) {
+    .step-progress {
+      /deep/ .el-steps {
+        .el-step.is-simple:not(:last-of-type) .el-step__title {
+          max-width: 100% !important;
+        }
+      }
+    }
   }
 
-  .step-action {
-    padding: 20px 15%;
+  @media screen and (min-width: 761px) and (max-width: 990px) {
+    .step-progress {
+
+      /deep/ .el-steps--simple {
+        padding: 0.75rem 1rem;
+      }
+
+      /deep/ .el-steps {
+        .el-step.is-simple:not(:last-of-type) .el-step__title {
+          max-width: 100% !important;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 760px) {
+    .step-progress {
+      display: none;
+    }
+  }
+
+  .step-content {
+    padding: 30px;
   }
 }
 </style>

@@ -72,6 +72,11 @@
       </el-row>
     </el-form>
 
+    <el-row class="center-padding-top">
+      <el-button type="primary" @click="changeStep(step - 1)">Prev</el-button>
+      <el-button type="success" @click="changeStep(step + 1)">Continue</el-button>
+    </el-row>
+
   </div>
 </template>
 

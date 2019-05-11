@@ -14,6 +14,13 @@ export default {
   updateCategory(params, id) {
     return Api.put(API.CATEGORY + `/${id}`, params).then(res => res.data)
   },
+  deleteCategory(params) {
+    return Api.delete(API.CATEGORY, {
+      params: {
+        ids: Array.isArray(params) && params.join(',') || params
+      }
+    }).then(res => res.data)
+  },
   updateMetadata(params, id) {
     return Api.put(API.CATEGORY + `/${id}` + API.METADATA, params).then(res => res.data)
   },

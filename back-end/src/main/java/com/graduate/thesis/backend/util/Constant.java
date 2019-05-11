@@ -45,6 +45,8 @@ public interface Constant {
     public static final String AVATAR =  "/avatar";
     public static final String SETTINGS =  "/settings";
 
+    // Address APIs
+    String ADDRESS_API = API_PREFIX + "/address";
 
 
     //FILE

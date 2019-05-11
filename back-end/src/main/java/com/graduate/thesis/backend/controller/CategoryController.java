@@ -1,5 +1,7 @@
 package com.graduate.thesis.backend.controller;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.graduate.thesis.backend.entity.Category;
 import com.graduate.thesis.backend.entity.model.Metadata;
 import com.graduate.thesis.backend.exception.ApplicationException;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -89,11 +92,6 @@ public class CategoryController extends AbstractBasedAPI {
             @RequestBody CategoryRequest categoryRequest
             ){
 
-        if(categoryService.findBySlugAndStatus(categoryRequest.getSlug(),
-                Constant.Status.ACTIVE.getValue()).isPresent()){
-            throw new ApplicationException(APIStatus.ERR_CATEGORY_EXISTED);
-        }
-
         ObjectId parentId;
 
         if( categoryRequest.getParentId() == null || categoryRequest.getParentId().isEmpty()){
@@ -101,6 +99,11 @@ public class CategoryController extends AbstractBasedAPI {
         }
         else{
             parentId = new ObjectId(categoryRequest.getParentId());
+        }
+
+        if(categoryService.findByNameAndStatusAndParentId(categoryRequest.getName(),
+                Constant.Status.ACTIVE.getValue(), parentId).isPresent()){
+            throw new ApplicationException(APIStatus.ERR_CATEGORY_EXISTED);
         }
 
         Category category = new Category();
@@ -156,6 +159,30 @@ public class CategoryController extends AbstractBasedAPI {
         Category updated = categoryService.save(existedCategory);
 
         return responseUtil.successResponse(updated);
+    }
+
+
+    @RequestMapping(method = RequestMethod.DELETE)
+    public ResponseEntity<RestAPIResponse> deleteCategory(
+            @RequestParam("ids") String ids
+    ){
+
+        List<String> listCategoryId = Lists.newArrayList(Splitter.on(",").split(ids));
+
+        for(String id : listCategoryId){
+
+            List<String> deleteIds = new ArrayList<>();
+
+            deleteIds.add(id);
+            List<String> subCategoryIds = categoryAggregation.getSubIdByParentId(id).getIds();
+            if(subCategoryIds != null) {
+                deleteIds.addAll(subCategoryIds);
+            }
+
+            categoryAggregation.deleteCategoryByIds(deleteIds);
+        }
+
+        return responseUtil.successResponse("OK");
     }
 
 
@@ -249,4 +276,5 @@ public class CategoryController extends AbstractBasedAPI {
 
         return responseUtil.successResponse(fileDownloadUri);
     }
+
 }

@@ -10,6 +10,7 @@
         class="filter-item"
         style="margin-left: 10px;"
         type="danger"
+        @click="handleDeleteCategory"
       >{{ $t('button.delete') }}</el-button>
     </div>
     <metadata-modal
@@ -67,7 +68,7 @@
           <span v-else>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.header.metadata')" align="center" prop="2" min-width="100px">
+      <el-table-column :label="$t('table.header.metadata')" align="center" min-width="100px">
         <template slot-scope="scope">
           <template>
             <el-button
@@ -79,7 +80,7 @@
           </template>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.header.filter')" align="center" prop="3" min-width="100px">
+      <el-table-column :label="$t('table.header.filter')" align="center" min-width="100px">
         <template slot-scope="scope">
           <template>
             <el-button
@@ -128,7 +129,6 @@
 
 <script>
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-// import { Status } from '../../utils/constants'
 import MetadataModal from './MetadataModal'
 import CreateCategoryModal from './CreateCategoryModal'
 import CategoryDetailModal from './CategoryDetailModal'
@@ -198,7 +198,7 @@ export default {
     this.getList()
   },
   methods: {
-    ...mapActions('category', ['loadListPagingCategory']),
+    ...mapActions('category', ['loadListPagingCategory', 'deleteCategoryByIds']),
     getList(parentElement) {
       // reset table state
       this.categoryIds = {}
@@ -231,15 +231,6 @@ export default {
       this.listLoading = true
       this.listQuery.parentId = row.id
       this.listQuery.pageNumber = 1
-      // category.getCategoryPaging(this.listQuery).then(res => {
-      //   if (res.status === Status.SUCCESS) {
-      //     // Retrieve data
-      //     this.listPagingCategory = res.data.content
-      //     this.totalPages = res.data.totalPages
-      //     this.totalElements = res.data.totalElements
-      //     this.listLoading = false
-      //   }
-      // })
     },
     handleBreadCrumbClick(row) {
       const index = this.listBreadCrumb.findIndex(element => {
@@ -255,25 +246,46 @@ export default {
       this.listQuery.parentId = row.id
       this.loadListWithSelected()
     },
-    deleteProvince(id) {
-      this.$confirm(this.$t('message.confirm_delete'), this.$t('label.warning'), {
-        confirmButtonText: this.$t('button.confirm'),
-        cancelButtonText: this.$t('button.cancel'),
-        type: 'warning'
-      }).then(() => {
-        this.deleteProvinces(id).then(() => {
-          this.loadListWithSelected()
+    // deleteCategory(id) {
+    //   this.$confirm(this.$t('message.confirm_delete'), this.$t('label.warning'), {
+    //     confirmButtonText: this.$t('button.confirm'),
+    //     cancelButtonText: this.$t('button.cancel'),
+    //     type: 'warning'
+    //   }).then(() => {
+    //     this.deleteProvinces(id).then(() => {
+    //       this.loadListWithSelected()
+    //     })
+    //   }).catch(() => {})
+    // },
+    handleDeleteCategory() {
+      let allIds = []
+      for (const key in this.categoryIds) {
+        if (this.categoryIds.hasOwnProperty(key)) {
+          allIds = [...allIds, ...this.categoryIds[key]]
+        }
+      }
+      if (allIds.length > 0) {
+        this.$confirm(this.$t('message.confirm_delete'), this.$t('label.warning'), {
+          confirmButtonText: this.$t('button.confirm'),
+          cancelButtonText: this.$t('button.cancel'),
+          type: 'warning'
+        }).then(() => {
+          this.deleteCategoryByIds(allIds).then(() => {
+            this.categoryIds = {}
+            this.loadListWithSelected()
+          })
+        }).catch(() => {})
+      } else {
+        this.$alert(this.$t('message.info_delete'), this.$t('label.info'), {
+          confirmButtonText: 'OK'
         })
-      }).catch(() => {})
+      }
     },
     sortChange({ prop, order }) {
       this.listQuery.ascSort = order === 'descending'
+      this.listQuery.sortKey = parseInt(prop)
       this.loadListWithSelected()
     },
-    // handleLoadListDistricts(row) {
-    //   this.$emit('handleLoadListDistricts', { id: row.id, name: row.name })
-    //   this.$emit('keepProvincePaging', this.listQuery)
-    // },
     handleOpenMetadataModal(row) {
       this.metadataDialogVisible = true
       this.metadataDialogCategoryId = row.id

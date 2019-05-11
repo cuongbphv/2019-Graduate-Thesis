@@ -28,7 +28,6 @@ public class Category {
 
     private String name;
 
-    @Indexed
     private String slug;
 
     private String description;

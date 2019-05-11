@@ -12,7 +12,16 @@ const loadListPagingCategory = ({ commit }, query) => {
     throw error
   })
 }
-
+const deleteCategoryByIds = ({ commit }, ids) => {
+  return category.deleteCategory(ids).then(res => {
+    if (res.status === Status.SUCCESS) {
+      console.info(res)
+    }
+  }).catch(error => {
+    throw error
+  })
+}
 export default {
-  loadListPagingCategory
+  loadListPagingCategory,
+  deleteCategoryByIds
 }

@@ -4,6 +4,7 @@ import com.graduate.thesis.backend.entity.Category;
 import com.graduate.thesis.backend.entity.Location;
 import com.graduate.thesis.backend.model.response.CategoryResponse;
 import com.graduate.thesis.backend.repository.CategoryRepository;
+import com.graduate.thesis.backend.util.Constant;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,6 +35,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Optional<Category> findByNameAndStatusAndParentId(String name, int status, ObjectId parentId) {
+        return categoryRepository.findByNameAndStatusAndParentId(name, status, parentId);
+    }
+
+    @Override
     public Category findCategoryByIdAndStatus(String id, int status) {
         return categoryRepository.findCategoryByIdAndStatus(id,status);
     }
@@ -60,7 +66,8 @@ public class CategoryServiceImpl implements CategoryService {
             parent = new ObjectId(parentId);
         }
 
-        return categoryRepository.findCategoryLikeNameAndParentId(searchKey, parent, pageRequest);
+        return categoryRepository.findCategoryLikeNameAndParentIdAndStatus(
+                searchKey, parent, Constant.Status.ACTIVE.getValue(), pageRequest);
     }
 
 //    @Override

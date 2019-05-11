@@ -1,25 +1,19 @@
-package com.graduate.thesis.backend.entity;
+package com.graduate.thesis.backend.model.request.address;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author Huy Pham
  */
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Document("address")
-public class Address {
-
-    @Id
-    private String id;
+public class AddressRequest {
 
     private String userId;
 
@@ -30,7 +24,5 @@ public class Address {
     private String wardId;
 
     private String detail;
-
-    private int status;
 
 }

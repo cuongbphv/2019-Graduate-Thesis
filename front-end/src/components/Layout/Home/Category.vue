@@ -1,7 +1,7 @@
 <template>
   <section class="category">
     <div class="container">
-      <div class="category-title">Rao vặt vui, mua may bán đắt cùng SmartMarket</div>
+      <div class="category-title">Rao vặt vui, mua may bán đắt cùng BeeMarket</div>
 
       <div class="category-area">
 
@@ -33,7 +33,6 @@ export default {
 
   .category .container {
     background: #fff;
-    border-radius: 4px;
     padding: 20px
   }
 

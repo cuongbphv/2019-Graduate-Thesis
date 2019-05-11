@@ -17,6 +17,7 @@
         <step2 v-if="step === 2" :location="newAdvertising.location" @submitFormLocation="saveLocationData" />
         <step3 v-if="step === 3" :images="newAdvertising.images" @submitFormImage="saveImage" />
         <step4 v-if="step === 4" />
+        <step5 v-if="step === 5" />
       </transition>
     </div>
 
@@ -28,14 +29,15 @@
 </template>
 
 <script>
-import { Step1, Step2, Step3, Step4 } from '@/components/Advertising/index'
+import { Step1, Step2, Step3, Step4, Step5 } from '@/components/Advertising/index'
 export default {
   name: 'CreateAdvertising',
   components: {
     Step1,
     Step2,
     Step3,
-    Step4
+    Step4,
+    Step5
   },
   data() {
     return {
@@ -95,11 +97,13 @@ export default {
   margin: 10px 15px !important;
   border: 1px solid #d8dce5;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
+  background: #FFF;
 
   .step-progress {
     /deep/ .el-steps--simple {
       border-bottom: 1px solid #d8dce5;
       box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
+      border-radius: 0 !important;
 
       .el-step__title {
         font-size: 15px;

@@ -2,35 +2,47 @@
   <div class="home-container">
     <div class="main-container">
       <category />
-      <div style="padding: 20px;">
-        <el-divider content-position="left">Tìm kiếm hàng đầu</el-divider>
-        <el-row>
-          <el-col v-for="(o, index) in 4" :key="o" :span="5" :offset="index > 0 ? 1 : 0">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }">
-              <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image" alt="No image">
-              <div style="padding: 14px;">
-                <span>Yummy hamburger</span>
-                <div class="bottom clearfix">
-                  <el-button type="text" class="button">Operating</el-button>
+
+      <div class="search-trending">
+        <div class="header">
+          <h6>Tìm kiếm hàng đầu</h6>
+        </div>
+        <div class="body">
+          <el-row>
+            <el-col v-for="(o, index) in 4" :key="o" :span="5" :offset="index > 0 ? 1 : 0">
+              <el-card shadow="hover" :body-style="{ padding: '0px' }">
+                <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image" alt="No image">
+                <div style="padding: 14px;">
+                  <span>Yummy hamburger</span>
+                  <div class="bottom clearfix">
+                    <el-button type="text" class="button">Operating</el-button>
+                  </div>
                 </div>
-              </div>
-            </el-card>
-          </el-col>
-        </el-row>
-        <el-divider content-position="left">Tin mới nhất</el-divider>
-        <el-row>
-          <el-col v-for="(o, index) in 4" :key="o" :span="5" :offset="index > 0 ? 1 : 0">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }">
-              <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image" alt="No image">
-              <div style="padding: 14px;">
-                <span>Yummy hamburger</span>
-                <div class="bottom clearfix">
-                  <el-button type="text" class="button">Operating</el-button>
+              </el-card>
+            </el-col>
+          </el-row>
+        </div>
+      </div>
+
+      <div class="search-trending">
+        <div class="header">
+          <h6>Tin mới nhất</h6>
+        </div>
+        <div class="body">
+          <el-row>
+            <el-col v-for="(o, index) in 4" :key="o" :span="5" :offset="index > 0 ? 1 : 0">
+              <el-card shadow="hover" :body-style="{ padding: '0px' }">
+                <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image" alt="No image">
+                <div style="padding: 14px;">
+                  <span>Yummy hamburger</span>
+                  <div class="bottom clearfix">
+                    <el-button type="text" class="button">Operating</el-button>
+                  </div>
                 </div>
-              </div>
-            </el-card>
-          </el-col>
-        </el-row>
+              </el-card>
+            </el-col>
+          </el-row>
+        </div>
       </div>
     </div>
 
@@ -68,12 +80,14 @@ export default {
 <style lang="scss" scoped>
 .home-container {
   position: relative;
+  margin: 1.25rem 0;
+
   .about {
     position: absolute;
   }
   .main-container {
     position: absolute;
-    margin: 10px 15px;
+    margin: 10px 40px;
   }
   .time {
     font-size: 13px;
@@ -98,6 +112,26 @@ export default {
   }
   .clearfix:after {
     clear: both
+  }
+
+  .search-trending {
+    background: #FFF;
+    margin-top: 1.25rem;
+
+    .header {
+      border-bottom: 1px solid #d8dce5;
+      padding: 1.25rem;
+
+      h6 {
+        font-size: 1rem;
+        color: rgba(0,0,0,.54);
+        font-weight: 500;
+      }
+    }
+
+    .body {
+      padding: 1.25rem 1rem 1.25rem 3rem;
+    }
   }
 }
 </style>

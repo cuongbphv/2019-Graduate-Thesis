@@ -7,6 +7,14 @@
     </div>
     <app-main />
     <home-footer />
+
+    <el-tooltip placement="top" :content="$t('label.backToTop')">
+      <back-to-top
+        :visibility-height="300"
+        :back-position="0"
+        transition-name="fade"
+      />
+    </el-tooltip>
   </div>
 </template>
 
@@ -14,6 +22,7 @@
 import { ContactBar, NavBar, HomeFooter } from '@/components/Layout/Home/index'
 import AppMain from '@/components/Layout/AppMain/AppMain'
 import ResizeMixin from '@/mixins/ResizeHandler'
+import BackToTop from '@/components/BackToTop'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'HomeLayout',
@@ -21,7 +30,8 @@ export default {
     ContactBar,
     NavBar,
     AppMain,
-    HomeFooter
+    HomeFooter,
+    BackToTop
   },
   mixins: [ResizeMixin],
   computed: {

@@ -6,12 +6,13 @@
       <el-radio label="buy" border>{{ $t('advertising.buy') }}</el-radio>
     </el-radio-group>
 
-    <el-form :model="localInfo" label-position="left" label-width="150px">
+    <el-form :model="localInfo" :rules="advertisingRules" label-position="left" label-width="150px">
       <el-row>
         <el-col :md="24" :lg="24">
-          <el-form-item :label="$t('advertising.title')">
+          <el-form-item :label="$t('advertising.title')" prop="title">
             <el-input
               v-model="localInfo.title"
+              name="title"
               :placeholder="$t('advertising.title_placeholder')"
               maxlength="50"
               show-word-limit
@@ -22,9 +23,10 @@
 
       <el-row>
         <el-col :span="24">
-          <el-form-item :label="$t('advertising.description')">
+          <el-form-item :label="$t('advertising.description')" prop="description">
             <el-input
               v-model="localInfo.description"
+              name="description"
               type="textarea"
               :rows="8"
               maxlength="2000"
@@ -70,6 +72,11 @@
       </el-row>
     </el-form>
 
+    <el-row class="center-padding-top">
+      <el-button type="primary" @click="changeStep(step - 1)">Prev</el-button>
+      <el-button type="success" @click="changeStep(step + 1)">Continue</el-button>
+    </el-row>
+
   </div>
 </template>
 
@@ -88,7 +95,7 @@ export default {
           description: '',
           adsType: 'sell',
           price: 1000,
-          rangePrice: 0,
+          rangePrice: [0, 50],
           title: ''
         }
       }
@@ -105,11 +112,36 @@ export default {
         suffix: '',
         precision: 0,
         masked: false
+      },
+      advertisingRules: {
+        title: [{ required: true, message: this.$t('validator.required'), trigger: 'blur' }],
+        description: [{ required: true, trigger: 'blur', validator: (rule, value, callback) => {
+          if (value.length < 20) {
+            callback(new Error(this.$t('validator.description.max_length', { 'length': 20 })))
+          }
+          callback()
+        } }]
       }
+    }
+  },
+  watch: {
+    'localInfo.rangePrice': function(newVal) {
+      this.localInfo.rangePrice = newVal
+      if (this.localInfo.adsType === 'buy') {
+        this.localInfo.price = this.localInfo.rangePrice[0] * 100000
+        this.localInfo.maxPrice = this.localInfo.rangePrice[1] * 100000
+      }
+    },
+    advertisingType: function(newVal) {
+      this.localInfo.adsType = newVal
     }
   },
   created() {
     this.localInfo = Object.assign({}, this.info)
+    if (this.localInfo.adsType === 'buy') {
+      this.localInfo.price = this.localInfo.rangePrice[0] * 100000
+      this.localInfo.maxPrice = this.localInfo.rangePrice[1] * 100000
+    }
   },
   methods: {
     handleChange(value) {

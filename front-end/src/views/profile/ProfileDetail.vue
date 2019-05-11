@@ -1,6 +1,6 @@
 <template>
   <transition name="fade-transform" mode="out-in">
-    <div class="container">
+    <div class="profile-container">
       <header />
       <main>
         <el-row>
@@ -132,8 +132,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .container {
-    margin: 0 auto;
+  .profile-container {
+    margin: 10px 15px;
     padding: 0 !important;
     background-color: #fff;
     box-shadow: 0 3px 6px rgba(0,0,0,0.10), 0 3px 6px rgba(0,0,0,0.10);
@@ -265,10 +265,6 @@ export default {
   .social i:nth-child(3)  { color: #bd081c; }
   .social i:nth-child(4)  { color: #36465d; }
 
-  .right {
-    padding: 0 25px 0 25px !important;
-  }
-
   .nav {
     display: inline-flex;
     list-style-type: none;
@@ -310,16 +306,50 @@ export default {
     }
   }
 
-  @media (max-width:990px) {
+  @media (max-width: 1250px) {
     .nav {
-      display: none;
+      li {
+        margin: 0 20px 0 0;
+      }
     }
+  }
+
+  @media (min-width: 691px) and (max-width:990px) {
+    .right {
+      padding: 0 25px;
+      .nav {
+        padding-left: 2rem;
+        li {
+          margin: 0 20px;
+        }
+      }
+    }
+
     .follow {
       width: 50%;
       margin-left: 25%;
       display: block;
       position: unset;
       text-align: center;
+    }
+  }
+
+  @media (min-width: 501px) and (max-width: 690px) {
+    .right {
+      .nav {
+        padding: 20px;
+      }
+      .el-container {
+        form {
+          padding-left: 20px !important;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 500px) {
+    .right {
+      overflow-y: scroll;
     }
   }
 </style>

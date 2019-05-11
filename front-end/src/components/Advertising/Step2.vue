@@ -52,6 +52,11 @@
     <!--    <div v-else-if="locationType === 2" />-->
 
     <!--    </div>-->
+
+    <el-row class="center-padding-top">
+      <el-button type="primary" @click="changeStep(step - 1)">Prev</el-button>
+      <el-button type="success" @click="changeStep(step + 1)">Continue</el-button>
+    </el-row>
   </div>
 </template>
 
@@ -105,7 +110,7 @@ export default {
   },
   created() {
     this.localLocation = Object.assign({}, this.location)
-    if (this.localLocation.keepData) {
+    if (Object.keys(this.localLocation).length > 0) {
       if (this.localLocation.province) {
         this.mode = 'province'
         this.originalDistricts = this.listDistrictByProvinceId(this.localLocation.province.id)
@@ -187,6 +192,7 @@ export default {
 
     ul{
       list-style: none;
+      padding: 0;
     }
     li {
       background: #f5f7fa;

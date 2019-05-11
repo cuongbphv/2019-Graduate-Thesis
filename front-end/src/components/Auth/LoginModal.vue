@@ -120,9 +120,7 @@ export default {
         confirmPassword: ''
       },
       loginRules: {
-        phone: [{ required: true, message: 'Please input phone number', trigger: 'blur' }
-          // { type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change']}
-        ],
+        phone: [{ required: true, message: this.$t('validator.required'), trigger: 'blur' }],
         password: [{ required: true, trigger: 'blur', validator: (rule, value, callback) => {
           if (value.length < 6) {
             callback(new Error(this.$t('validator.password.max_length', { 'max_length': 6 })))

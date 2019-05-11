@@ -14,7 +14,11 @@ const API = {
   // CATEGORY APIs
   CATEGORY: '/category',
   METADATA: '/metadata',
-  FILTER: '/filter'
+  FILTER: '/filter',
+  // ADVERTISING APIs
+  ADVERTISING: '/advertising',
+  UPLOAD_TEMP_IMAGE: '/advertising/upload_temp_image',
+  REMOVE_TEMP_IMAGE: '/advertising/remove_temp_image'
 }
 
 const Status = {

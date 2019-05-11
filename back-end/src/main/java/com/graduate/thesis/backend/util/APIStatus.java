@@ -35,6 +35,8 @@ public enum APIStatus {
     ERR_FILE_NOT_FOUND(888, "File not found"),
     ERR_CANT_STORE(889, "Could not store file"),
     ERR_FILE_TYPE(890, "Could not determine file type"),
+    ERR_SMALL_IMAGE(891, "Image is small"),
+    ERR_UPLOAD_FILE(892, "There is an error occur in upload process"),
 
     //CATEGORY
     ERR_CATEGORY_EXISTED(409, "Category is existed"),

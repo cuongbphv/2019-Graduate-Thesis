@@ -12,9 +12,7 @@ import com.graduate.thesis.backend.model.request.location.WardRequest;
 import com.graduate.thesis.backend.model.response.RestAPIResponse;
 import com.graduate.thesis.backend.service.FileStorageService;
 import com.graduate.thesis.backend.service.LocationService;
-import com.graduate.thesis.backend.util.APIStatus;
-import com.graduate.thesis.backend.util.Constant;
-import com.graduate.thesis.backend.util.UniqueID;
+import com.graduate.thesis.backend.util.*;
 import org.apache.commons.io.FilenameUtils;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -46,8 +44,8 @@ public class LocationController extends AbstractBasedAPI {
     @Autowired
     FileStorageService fileStorageService;
 
-    @Value("${file.data-dir}")
-    private String dataPath;
+    @Value("${file.upload-dir}")
+    private String uploadPath;
 
     /**
      * brief: import location data from json file
@@ -60,13 +58,13 @@ public class LocationController extends AbstractBasedAPI {
     ) {
         try
         {
-            String fileExtension = FilenameUtils.getExtension(jsonFile.getOriginalFilename());
-            if (fileExtension == null) {
+            String fileExtension = CommonUtil.getFileExtension(jsonFile);
+            if (fileExtension.isEmpty()) {
                 throw new ApplicationException(APIStatus.ERR_FILE_TYPE);
             }
-            String filePathName = UniqueID.getUUID() + "." + fileExtension.toLowerCase();
+            String filePathName = "location_" + UniqueID.getUUID() + fileExtension;
             // Folder to save file
-            File folder = new File(dataPath);
+            File folder = new File(uploadPath);
             // Write file stream to server storage
             if (!folder.exists()) {
                 // create the named directory.
@@ -87,7 +85,7 @@ public class LocationController extends AbstractBasedAPI {
             // save list location to database
             locationService.saveListLocation(locations);
             //delete file
-//            FileUtils.forceDelete(destFile);
+            FileUtil.deleteFile(uploadPath + filePathName);
             return responseUtil.successResponse("Upload successfully!");
         } catch (IOException e) {
             e.printStackTrace();

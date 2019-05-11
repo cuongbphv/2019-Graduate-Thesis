@@ -17,86 +17,44 @@
         <step2 v-if="step === 2" :location="newAdvertising.location" @submitFormLocation="saveLocationData" />
         <step3 v-if="step === 3" :images="newAdvertising.images" @submitFormImage="saveImage" />
         <step4 v-if="step === 4" />
+        <step5 v-if="step === 5" />
       </transition>
     </div>
 
-    <el-row class="step-action">
-      <el-button style="float: left;" type="primary" @click="changeStep(step - 1)">Prev</el-button>
-      <el-button style="float: right;" type="primary" @click="changeStep(step + 1)">Next</el-button>
-    </el-row>
-
-    <el-tooltip placement="top" :content="$t('label.backToTop')">
-      <back-to-top
-        :visibility-height="300"
-        transition-name="fade"
-      />
-    </el-tooltip>
   </div>
 </template>
 
 <script>
-import BackToTop from '@/components/BackToTop'
-import { Step1, Step2, Step3, Step4 } from '@/components/Advertising/index'
+import { Step1, Step2, Step3, Step4, Step5 } from '@/components/Advertising/index'
 export default {
   name: 'CreateAdvertising',
   components: {
-    BackToTop,
     Step1,
     Step2,
     Step3,
-    Step4
+    Step4,
+    Step5
   },
   data() {
     return {
-      step: 4,
+      step: 5,
       newAdvertising: {
         category: {},
         location: {},
-        images: {
-          data: [],
-          keepData: false
-        },
+        images: [],
         description: {},
         author: {}
       },
       interval: null,
-      isMoving: false
+      isMoving: false,
+      keepData: false
     }
   },
   created() {
   },
   methods: {
     changeStep(step) {
-      if (step === 2 && Object.keys(this.newAdvertising.location).length > 0) {
-        this.$confirm(this.$t('message.keep_data'), this.$t('label.warning'), {
-          confirmButtonText: this.$t('button.confirm'),
-          cancelButtonText: this.$t('button.cancel'),
-          type: 'warning'
-        }).then(() => {
-          this.newAdvertising.location.keepData = true
-          this.step = step
-        }).catch(() => {
-          this.newAdvertising.location = {}
-          this.step = step
-        })
-      } else if (step === 3 && this.newAdvertising.images.data.length > 0) {
-        this.$confirm(this.$t('message.keep_data'), this.$t('label.warning'), {
-          confirmButtonText: this.$t('button.confirm'),
-          cancelButtonText: this.$t('button.cancel'),
-          type: 'warning'
-        }).then(() => {
-          this.newAdvertising.images.keepData = true
-          this.step = step
-        }).catch(() => {
-          this.newAdvertising.images = {
-            data: [],
-            keepData: false
-          }
-          this.step = step
-        })
-      } else {
-        this.step = step
-      }
+      this.step = step
       this.backToTop()
     },
     saveLocationData(location) {
@@ -104,7 +62,7 @@ export default {
       this.step++
     },
     saveImage(imageList) {
-      this.newAdvertising.images.data = [...imageList]
+      this.newAdvertising.images = imageList
     },
     backToTop() {
       const start = window.pageYOffset
@@ -132,16 +90,17 @@ export default {
 
 <style lang="scss" scoped>
 .create-advertising {
-  margin: 10px 70px !important;
-  border-radius: 20px;
+  margin: 10px 15px !important;
   border: 1px solid #d8dce5;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
+  background: #FFF;
 
   .step-progress {
     /deep/ .el-steps--simple {
-      border-radius: 20px 20px 0 0;
       border-bottom: 1px solid #d8dce5;
       box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
+      border-radius: 0 !important;
+      padding: 1rem 2rem;
 
       .el-step__title {
         font-size: 15px;
@@ -150,12 +109,39 @@ export default {
     }
   }
 
-  .step-content {
-    padding: 30px;
+  @media screen and (min-width: 991px) and (max-width: 1000px) {
+    .step-progress {
+      /deep/ .el-steps {
+        .el-step.is-simple:not(:last-of-type) .el-step__title {
+          max-width: 100% !important;
+        }
+      }
+    }
   }
 
-  .step-action {
-    padding: 20px 15%;
+  @media screen and (min-width: 761px) and (max-width: 990px) {
+    .step-progress {
+
+      /deep/ .el-steps--simple {
+        padding: 0.75rem 1rem;
+      }
+
+      /deep/ .el-steps {
+        .el-step.is-simple:not(:last-of-type) .el-step__title {
+          max-width: 100% !important;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 760px) {
+    .step-progress {
+      display: none;
+    }
+  }
+
+  .step-content {
+    padding: 30px;
   }
 }
 </style>

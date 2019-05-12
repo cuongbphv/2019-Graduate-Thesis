@@ -1,9 +1,9 @@
 <template>
   <div class="step2">
-    <h3>Chọn khu vực tỉnh, thành phố</h3>
+    <h3>{{ $t('advertising.step2') }}</h3>
     <el-radio-group v-model="locationType" size="small">
-      <el-radio :label="1" border>Choose New Location</el-radio>
-      <el-radio :label="2" border>Choose Your Address</el-radio>
+      <el-radio :label="1" border>{{ $t('advertising.new_location') }}</el-radio>
+      <el-radio :label="2" border>{{ $t('advertising.exist_location') }}</el-radio>
     </el-radio-group>
 
     <div v-if="locationType === 1">
@@ -14,9 +14,9 @@
               v-model="searchKey"
               icon="search"
               name="title"
-              placeholder="Nhập khu vực tìm kiếm"
+              :placeholder="$t('advertising.search_placeholder')"
               @keyup.enter.native="getList"
-            >Tìm kiếm</md-input>
+            >{{ $t('advertising.search') }}</md-input>
           </el-form-item>
         </el-form>
       </div>
@@ -54,8 +54,8 @@
     <!--    </div>-->
 
     <el-row class="center-padding-top">
-      <el-button type="primary" @click="changeStep(step - 1)">Prev</el-button>
-      <el-button type="success" @click="changeStep(step + 1)">Continue</el-button>
+      <el-button type="primary" @click="changeStep('back')">{{ $t('button.previous') }}</el-button>
+      <el-button type="success" @click="changeStep('next')">{{ $t('button.continue') }}</el-button>
     </el-row>
   </div>
 </template>
@@ -106,30 +106,36 @@ export default {
           return ward.name.toLowerCase().includes(this.searchKey.toLowerCase())
         })
       }
+    },
+    location: function(newVal) {
+      this.initData()
     }
   },
   created() {
-    this.localLocation = Object.assign({}, this.location)
-    if (Object.keys(this.localLocation).length > 0) {
-      if (this.localLocation.province) {
-        this.mode = 'province'
-        this.originalDistricts = this.listDistrictByProvinceId(this.localLocation.province.id)
-        this.listDistricts = [...this.originalDistricts]
-      }
-      if (this.localLocation.district) {
-        this.mode = 'district'
-        this.originalWards = this.listWardByDistrictId(this.localLocation.province.id, this.localLocation.district.id)
-        this.listWards = [...this.originalWards]
-      }
-      if (this.localLocation.ward) {
-        this.mode = 'ward'
-      }
-    } else {
-      this.getList()
-    }
+    this.initData()
   },
   methods: {
     ...mapActions('location', ['loadListLocation']),
+    initData() {
+      if (Object.keys(this.location).length > 0) {
+        this.localLocation = Object.assign({}, this.location)
+        if (this.localLocation.province) {
+          this.mode = 'province'
+          this.originalDistricts = this.listDistrictByProvinceId(this.localLocation.province.id)
+          this.listDistricts = [...this.originalDistricts]
+        }
+        if (this.localLocation.district) {
+          this.mode = 'district'
+          this.originalWards = this.listWardByDistrictId(this.localLocation.province.id, this.localLocation.district.id)
+          this.listWards = [...this.originalWards]
+        }
+        if (this.localLocation.ward) {
+          this.mode = 'ward'
+        }
+      } else {
+        this.getList()
+      }
+    },
     getList() {
       this.loadListLocation({
         searchKey: this.searchKey
@@ -160,6 +166,18 @@ export default {
         this.localLocation.ward = ward
         this.$emit('submitFormLocation', this.localLocation)
       }
+    },
+    changeStep(action) {
+      if (action === 'next') {
+        if (!this.location.province || !this.location.district || !this.location.ward) {
+          this.$message({
+            message: 'Please select location for classified advertising.',
+            type: 'error'
+          })
+          return
+        }
+      }
+      this.$emit('submitFormLocation', this.localLocation)
     }
   }
 }

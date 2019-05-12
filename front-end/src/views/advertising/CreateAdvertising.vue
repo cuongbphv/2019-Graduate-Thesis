@@ -13,11 +13,33 @@
 
     <div class="step-content">
       <transition name="fade-transform" mode="out-in">
-        <step1 v-if="step === 1" />
-        <step2 v-if="step === 2" :location="newAdvertising.location" @submitFormLocation="saveLocationData" />
-        <step3 v-if="step === 3" :images="newAdvertising.images" @submitFormImage="saveImage" />
-        <step4 v-if="step === 4" />
-        <step5 v-if="step === 5" />
+        <step1
+          v-if="step === 1"
+        />
+        <step2
+          v-else-if="step === 2"
+          :location="newAdvertising.location"
+          @changeStep="handleChangeStep"
+          @submitFormLocation="saveLocationData"
+        />
+        <step3
+          v-else-if="step === 3"
+          :images="newAdvertising.images"
+          @changeStep="handleChangeStep"
+          @submitFormImage="saveImage"
+        />
+        <step4
+          v-else-if="step === 4"
+          :info="newAdvertising.additionalInfo"
+          @changeStep="handleChangeStep"
+          @submitFormAdditionalInfo="saveAdditionalInfo"
+        />
+        <step5
+          v-else-if="step === 5"
+          :preview-data="newAdvertising"
+          @changeStep="handleChangeStep"
+          @submitNewAdvertising="saveNewAdvertising"
+        />
       </transition>
     </div>
 
@@ -26,6 +48,7 @@
 
 <script>
 import { Step1, Step2, Step3, Step4, Step5 } from '@/components/Advertising/index'
+import { mapActions } from 'vuex'
 export default {
   name: 'CreateAdvertising',
   components: {
@@ -37,24 +60,50 @@ export default {
   },
   data() {
     return {
-      step: 5,
+      step: 2,
       newAdvertising: {
         category: {},
         location: {},
         images: [],
-        description: {},
-        author: {}
+        additionalInfo: {}
       },
       interval: null,
-      isMoving: false,
-      keepData: false
+      isMoving: false
     }
   },
   created() {
+    const previousData = JSON.parse(localStorage.getItem('previous_data'))
+    if (Object.keys(previousData.category).length > 0 || Object.keys(previousData.location).length > 0 ||
+      Object.keys(previousData.additionalInfo).length > 0 || previousData.images.length > 0) {
+      this.$confirm('Do you want to keep data in previous post?', this.$t('label.info'), {
+        confirmButtonText: this.$t('button.confirm'),
+        cancelButtonText: this.$t('button.cancel'),
+        type: 'info'
+      }).then(() => {
+        this.newAdvertising = Object.assign({}, previousData)
+      }).catch(() => {
+        localStorage.removeItem('previous_data')
+      })
+    }
+  },
+  beforeDestroy() {
+    localStorage.setItem('previous_data', JSON.stringify(this.newAdvertising))
   },
   methods: {
-    changeStep(step) {
-      this.step = step
+    ...mapActions('advertising', ['addNewAdvertising']),
+    handleChangeStep(action) {
+      if (action === 'back') {
+        this.step--
+      } else if (action === 'next') {
+        if (this.step === 5) {
+          this.addNewAdvertising(this.newAdvertising).then((res) => {
+            console.info(res)
+            this.step++
+          })
+        } else {
+          this.step++
+        }
+      }
       this.backToTop()
     },
     saveLocationData(location) {
@@ -63,6 +112,12 @@ export default {
     },
     saveImage(imageList) {
       this.newAdvertising.images = imageList
+    },
+    saveAdditionalInfo(info) {
+      this.newAdvertising.additionalInfo = Object.assign({}, info)
+    },
+    saveNewAdvertising() {
+
     },
     backToTop() {
       const start = window.pageYOffset
@@ -106,7 +161,15 @@ export default {
         font-size: 15px;
         line-height: 25px;
       }
+
+      .el-step__icon {
+        z-index: 0;
+      }
     }
+  }
+
+  .step-content {
+    padding: 30px;
   }
 
   @media screen and (min-width: 991px) and (max-width: 1000px) {
@@ -140,8 +203,10 @@ export default {
     }
   }
 
-  .step-content {
-    padding: 30px;
+  @media screen and (max-width: 375px) {
+    .step-content {
+      padding: 20px 10px;
+    }
   }
 }
 </style>

@@ -122,7 +122,10 @@
     "import": "Nhập dữ liệu",
     "choose_file": "Chọn tập tin dữ liệu",
     "back": "Quay lại",
-    "upload": "Tải lên"
+    "upload": "Tải lên",
+    "previous": "Bước trước",
+    "continue": "Tiếp tục",
+    "post": "Đăng bài"
   },
   "documentation": {
     "documentation": "Documentation",
@@ -262,6 +265,7 @@
   },
   "validator": {
     "required": "Trường yêu cầu nội dung",
+    "missing_data": "Trường bị thiếu dữ liệu",
     "description": {
       "max_length": "Mô tả không ngắn hơn {length} kí tự"
     },
@@ -300,7 +304,19 @@
     "image": "Hình ảnh",
     "info": "Thông tin",
     "preview": "Xem lại",
-    "submit": "Xác nhận"
+    "submit": "Xác nhận",
+    "province": "Tỉnh",
+    "district": "Quận / Huyện",
+    "ward": "Phường / Xã",
+    "ads_type": "Loại tin",
+    "min_price": "Giá tối thiểu",
+    "max_price": "Giá tối đa",
+    "list_image": "Danh sách hình",
+    "step2": "Chọn khu vực tỉnh, thành phố",
+    "new_location": "Chọn địa chỉ mới",
+    "exist_location": "Địa chỉ có sẵn",
+    "search": "Tìm kiếm",
+    "search_placeholder": "Nhập khu vực tìm kiếm"
   },
   "userProfile": {
     "firstName": "Tên",

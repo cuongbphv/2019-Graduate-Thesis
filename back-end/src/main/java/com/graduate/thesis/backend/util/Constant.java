@@ -110,15 +110,15 @@ public interface Constant {
         }
     }
 
-    enum ArticleType{
+    enum AdsType{
 
-        ARTICLE("ARTICLE", 1),
-        QUESTION("QUESTION",2);
+        BUY("BUY", 1),
+        SELL("SELL", 2);
 
         private final String name;
         private final int value;
 
-        ArticleType(String name, int value){
+        AdsType(String name, int value){
             this.name = name;
             this.value = value;
         }

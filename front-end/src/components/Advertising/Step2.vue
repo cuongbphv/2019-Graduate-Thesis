@@ -1,10 +1,16 @@
 <template>
   <div class="step2">
     <h3>{{ $t('advertising.step2') }}</h3>
-    <el-radio-group v-model="locationType" size="small">
-      <el-radio :label="1" border>{{ $t('advertising.new_location') }}</el-radio>
-      <el-radio :label="2" border>{{ $t('advertising.exist_location') }}</el-radio>
-    </el-radio-group>
+    <el-row>
+      <el-radio-group v-model="locationType" size="small">
+        <el-col :xs="24" :md="12" style="padding: 0.5rem 1rem">
+          <el-radio :label="1" border>{{ $t('advertising.new_location') }}</el-radio>
+        </el-col>
+        <el-col :xs="24" :md="12" style="padding: 0.5rem 1rem">
+          <el-radio :label="2" border>{{ $t('advertising.exist_location') }}</el-radio>
+        </el-col>
+      </el-radio-group>
+    </el-row>
 
     <div v-if="locationType === 1">
       <div class="search-form">
@@ -49,9 +55,39 @@
       </div>
     </div>
 
-    <!--    <div v-else-if="locationType === 2" />-->
-
-    <!--    </div>-->
+    <div v-else-if="locationType === 2">
+      <div class="choose-location">
+        <hr>
+        <el-row>
+          <el-radio-group v-model="selectedLocation" class="group-address">
+            <el-col
+              v-for="item in existedAddress"
+              :key="item.id"
+              :xs="24"
+              :md="{offset: 6,span:12}"
+              :class="{'selected' : selectedLocation === item.id}"
+              @click="selectLocation(item.id)"
+            >
+              <el-radio :label="item.id">
+                {{ item.detail + ', ' + item.ward.name + ', ' + item.district.name + ', ' + item.province.name }}
+              </el-radio>
+            </el-col>
+          </el-radio-group>
+          <el-col style="text-align: center;">
+            <el-button
+              style="text-align: center; margin-top: 1rem"
+              @click="addAddressDialogVisible = true"
+            ><i class="el-icon-plus" /> Thêm d?a ch? m?i</el-button>
+          </el-col>
+        </el-row>
+        <add-address-modal
+          :visible="addAddressDialogVisible"
+          @createAddressSuccess="handleCreateSuccess"
+          @closeAddressModal="handleCloseAddressModal"
+        />
+        <hr>
+      </div>
+    </div>
 
     <el-row class="center-padding-top">
       <el-button type="primary" @click="changeStep('back')">{{ $t('button.previous') }}</el-button>
@@ -62,10 +98,12 @@
 
 <script>
 import MdInput from '@/components/MDinput'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
+import AddAddressModal from '../Address/AddAddressModal'
 export default {
   name: 'Step2',
   components: {
+    AddAddressModal,
     MdInput
   },
   props: {
@@ -85,11 +123,15 @@ export default {
       listDistricts: [],
       originalDistricts: [],
       listWards: [],
-      originalWards: []
+      originalWards: [],
+      addAddressDialogVisible: false,
+      existedAddress: [],
+      selectedLocation: ''
     }
   },
   computed: {
-    ...mapGetters('location', ['listLocation', 'listDistrictByProvinceId', 'listWardByDistrictId'])
+    ...mapGetters('location', ['listLocation', 'listDistrictByProvinceId', 'listWardByDistrictId']),
+    ...mapState('address', ['addresses'])
   },
   watch: {
     searchKey: function(newVal) {
@@ -107,15 +149,25 @@ export default {
         })
       }
     },
+    addresses: function(newVal) {
+      this.existedAddress = Object.assign([], this.existedAddress, newVal)
+      if (this.existedAddress.length > 0) {
+        this.selectedLocation = this.existedAddress[0].id
+      }
+    },
     location: function(newVal) {
       this.initData()
     }
   },
   created() {
     this.initData()
+
+    // load existed address
+    this.getListAddress()
   },
   methods: {
     ...mapActions('location', ['loadListLocation']),
+    ...mapActions('address', ['getAddressByUserId']),
     initData() {
       if (Object.keys(this.location).length > 0) {
         this.localLocation = Object.assign({}, this.location)
@@ -140,6 +192,9 @@ export default {
       this.loadListLocation({
         searchKey: this.searchKey
       })
+    },
+    getListAddress() {
+      this.getAddressByUserId()
     },
     setLocation(province, district, ward) {
       this.searchKey = ''
@@ -166,6 +221,17 @@ export default {
         this.localLocation.ward = ward
         this.$emit('submitFormLocation', this.localLocation)
       }
+    },
+    selectLocation(id) {
+      this.selectedLocation = id
+    },
+    handleCreateSuccess(data) {
+      this.addAddressDialogVisible = false
+      this.getAddressByUserId()
+      this.selectedLocation = data.id
+    },
+    handleCloseAddressModal() {
+      this.addAddressDialogVisible = false
     },
     changeStep(action) {
       if (action === 'next') {
@@ -229,6 +295,41 @@ export default {
       &.selected {
         background: #dee0e5;
         color: #409EFF;
+      }
+    }
+  }
+  .choose-location{
+    text-align: left;
+    margin-top: 1rem;
+
+    .el-radio-group {
+      display: block;
+
+      .el-col {
+        padding: 0.5rem;
+        margin-bottom: 0.25rem;
+        margin-top: 0.25rem;
+        line-height: 1rem;
+        background: #f5f7fa;
+        color: #606266;
+        &:hover {
+          background: #dee0e5;
+          color: #409EFF;
+          cursor: pointer;
+        }
+
+        &.selected {
+          background: #dee0e5;
+          color: #409EFF;
+        }
+      }
+
+      .is-checked {
+        font-weight: bold;
+      }
+
+      .el-radio {
+        font-size: 1.2em;
       }
     }
   }

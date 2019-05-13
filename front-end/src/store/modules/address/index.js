@@ -3,11 +3,7 @@ import actions from './actions'
 import mutations from './mutations'
 
 const state = {
-  ids: [],
-  entities: {},
-  metadata: [],
-  totalElements: 0,
-  totalPages: 0
+  addresses: []
 }
 
 export default {

@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,11 +21,18 @@ import java.util.Optional;
 @Repository
 public interface CategoryRepository extends MongoRepository<Category, String> {
 
-    Optional<Category> findBySlugAndStatus(String name, int status);
+    Optional<Category> findBySlugAndStatus(String slug, int status);
+
+    Optional<Category> findByNameAndStatusAndParentId(String name, int status, ObjectId parentId);
 
     @Query("{ '_id': ?0, 'status': ?1 }")
     Category findCategoryByIdAndStatus(String id, int status);
 
-    @Query("{ 'name': {$regex : ?0, $options: 'i'}, 'parentId': ?1 }")
-    Page<CategoryResponse> findCategoryLikeNameAndParentId(String name, ObjectId parentId, Pageable pageable);
+    @Query("{ 'name': {$regex : ?0, $options: 'i'}, 'parentId': ?1, status: ?2 }")
+    Page<CategoryResponse> findCategoryLikeNameAndParentIdAndStatus(
+            String name, ObjectId parentId, int status , Pageable pageable);
+
+    @Query("{ 'name': {$regex : ?0, $options: 'i'}, 'parentId': ?1, status: ?2 }")
+    List<CategoryResponse> findCategoryLikeNameAndParentIdAndStatus(
+            String name, ObjectId parentId, int status);
 }

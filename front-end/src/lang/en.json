@@ -287,7 +287,8 @@
     "update_metadata_success": "Update metadata successfully",
     "update_filter_success": "Update filter successfully",
     "create_category_success": "Create category successfully",
-    "update_category_success": "Update category successfully"
+    "update_category_success": "Update category successfully",
+    "create_address_success": "Tạo địa chỉ thành công"
   },
   "advertising": {
     "additional_info": "Additional Info for Classified Advertising",

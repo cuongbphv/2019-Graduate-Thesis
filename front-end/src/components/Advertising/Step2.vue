@@ -1,14 +1,13 @@
 <template>
   <div class="step2">
-    <h3 v-if="locationType === 1"><i class="el-icon-location" />Chọn khu vực tỉnh, thành phố</h3>
-    <h3 v-else-if="locationType === 2"><i class="el-icon-location" />Chọn địa chỉ bán hàng</h3>
+    <h3>{{ $t('advertising.step2') }}</h3>
     <el-row>
       <el-radio-group v-model="locationType" size="small">
         <el-col :xs="24" :md="12" style="padding: 0.5rem 1rem">
-          <el-radio :label="1" border>Choose New Location</el-radio>
+          <el-radio :label="1" border>{{ $t('advertising.new_location') }}</el-radio>
         </el-col>
         <el-col :xs="24" :md="12" style="padding: 0.5rem 1rem">
-          <el-radio :label="2" border>Choose Your Address</el-radio>
+          <el-radio :label="2" border>{{ $t('advertising.exist_location') }}</el-radio>
         </el-col>
       </el-radio-group>
     </el-row>
@@ -21,9 +20,9 @@
               v-model="searchKey"
               icon="search"
               name="title"
-              placeholder="Nhập khu vực tìm kiếm"
+              :placeholder="$t('advertising.search_placeholder')"
               @keyup.enter.native="getList"
-            >Tìm kiếm</md-input>
+            >{{ $t('advertising.search') }}</md-input>
           </el-form-item>
         </el-form>
       </div>
@@ -78,7 +77,7 @@
             <el-button
               style="text-align: center; margin-top: 1rem"
               @click="addAddressDialogVisible = true"
-            ><i class="el-icon-plus" /> Thêm địa chỉ mới</el-button>
+            ><i class="el-icon-plus" /> Th�m d?a ch? m?i</el-button>
           </el-col>
         </el-row>
         <add-address-modal
@@ -91,8 +90,8 @@
     </div>
 
     <el-row class="center-padding-top">
-      <el-button type="primary" @click="changeStep(step - 1)">Prev</el-button>
-      <el-button type="success" @click="changeStep(step + 1)">Continue</el-button>
+      <el-button type="primary" @click="changeStep('back')">{{ $t('button.previous') }}</el-button>
+      <el-button type="success" @click="changeStep('next')">{{ $t('button.continue') }}</el-button>
     </el-row>
   </div>
 </template>
@@ -155,27 +154,13 @@ export default {
       if (this.existedAddress.length > 0) {
         this.selectedLocation = this.existedAddress[0].id
       }
+    },
+    location: function(newVal) {
+      this.initData()
     }
   },
   created() {
-    this.localLocation = Object.assign({}, this.location)
-    if (Object.keys(this.localLocation).length > 0) {
-      if (this.localLocation.province) {
-        this.mode = 'province'
-        this.originalDistricts = this.listDistrictByProvinceId(this.localLocation.province.id)
-        this.listDistricts = [...this.originalDistricts]
-      }
-      if (this.localLocation.district) {
-        this.mode = 'district'
-        this.originalWards = this.listWardByDistrictId(this.localLocation.province.id, this.localLocation.district.id)
-        this.listWards = [...this.originalWards]
-      }
-      if (this.localLocation.ward) {
-        this.mode = 'ward'
-      }
-    } else {
-      this.getList()
-    }
+    this.initData()
 
     // load existed address
     this.getListAddress()
@@ -183,6 +168,26 @@ export default {
   methods: {
     ...mapActions('location', ['loadListLocation']),
     ...mapActions('address', ['getAddressByUserId']),
+    initData() {
+      if (Object.keys(this.location).length > 0) {
+        this.localLocation = Object.assign({}, this.location)
+        if (this.localLocation.province) {
+          this.mode = 'province'
+          this.originalDistricts = this.listDistrictByProvinceId(this.localLocation.province.id)
+          this.listDistricts = [...this.originalDistricts]
+        }
+        if (this.localLocation.district) {
+          this.mode = 'district'
+          this.originalWards = this.listWardByDistrictId(this.localLocation.province.id, this.localLocation.district.id)
+          this.listWards = [...this.originalWards]
+        }
+        if (this.localLocation.ward) {
+          this.mode = 'ward'
+        }
+      } else {
+        this.getList()
+      }
+    },
     getList() {
       this.loadListLocation({
         searchKey: this.searchKey
@@ -227,6 +232,18 @@ export default {
     },
     handleCloseAddressModal() {
       this.addAddressDialogVisible = false
+    },
+    changeStep(action) {
+      if (action === 'next') {
+        if (!this.location.province || !this.location.district || !this.location.ward) {
+          this.$message({
+            message: 'Please select location for classified advertising.',
+            type: 'error'
+          })
+          return
+        }
+      }
+      this.$emit('submitFormLocation', this.localLocation)
     }
   }
 }

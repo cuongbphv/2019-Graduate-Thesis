@@ -284,8 +284,8 @@ export default {
         /*border-bottom: 2px solid #999;*/
       /*}*/
       .router-link-active {
-        color: #999;
-        border-bottom: 2px solid #999;
+        color: #42b1fa;
+        border-bottom: 2px solid #42b1fa;
       }
     }
   }

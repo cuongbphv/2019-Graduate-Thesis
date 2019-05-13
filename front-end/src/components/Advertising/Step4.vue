@@ -2,11 +2,11 @@
   <div class="step4">
     <h3>{{ $t('advertising.additional_info') }}</h3>
     <el-radio-group v-model="advertisingType" size="small">
-      <el-radio label="sell" border>{{ $t('advertising.sell') }}</el-radio>
-      <el-radio label="buy" border>{{ $t('advertising.buy') }}</el-radio>
+      <el-radio :label="1" border>{{ $t('advertising.sell') }}</el-radio>
+      <el-radio :label="2" border>{{ $t('advertising.buy') }}</el-radio>
     </el-radio-group>
 
-    <el-form :model="localInfo" :rules="advertisingRules" label-position="left" label-width="150px">
+    <el-form ref="additionalInfo" :model="localInfo" :rules="advertisingRules" label-position="left" label-width="100px">
       <el-row>
         <el-col :md="24" :lg="24">
           <el-form-item :label="$t('advertising.title')" prop="title">
@@ -37,7 +37,7 @@
         </el-col>
       </el-row>
 
-      <el-row v-if="advertisingType === 'sell'">
+      <el-row v-if="advertisingType === 1">
         <el-col :md="24" :lg="24">
           <el-form-item :label="$t('advertising.price')">
             <money
@@ -73,8 +73,8 @@
     </el-form>
 
     <el-row class="center-padding-top">
-      <el-button type="primary" @click="changeStep(step - 1)">Prev</el-button>
-      <el-button type="success" @click="changeStep(step + 1)">Continue</el-button>
+      <el-button type="primary" @click="changeStep('back')">{{ $t('button.previous') }}</el-button>
+      <el-button type="success" @click="changeStep('next')">{{ $t('button.continue') }}</el-button>
     </el-row>
 
   </div>
@@ -87,24 +87,24 @@ export default {
   components: {
     Money
   },
-  prop: {
+  props: {
     info: {
       type: Object,
       default: () => {
-        return {
-          description: '',
-          adsType: 'sell',
-          price: 1000,
-          rangePrice: [0, 50],
-          title: ''
-        }
+        return {}
       }
     }
   },
   data() {
     return {
-      advertisingType: 'sell',
-      localInfo: {},
+      advertisingType: 1,
+      localInfo: {
+        description: '',
+        adsType: 1,
+        price: 1000,
+        rangePrice: [5, 50],
+        title: ''
+      },
       money: {
         decimal: '.',
         thousands: ',',
@@ -127,7 +127,7 @@ export default {
   watch: {
     'localInfo.rangePrice': function(newVal) {
       this.localInfo.rangePrice = newVal
-      if (this.localInfo.adsType === 'buy') {
+      if (this.localInfo.adsType === 2) {
         this.localInfo.price = this.localInfo.rangePrice[0] * 100000
         this.localInfo.maxPrice = this.localInfo.rangePrice[1] * 100000
       }
@@ -137,15 +137,34 @@ export default {
     }
   },
   created() {
-    this.localInfo = Object.assign({}, this.info)
-    if (this.localInfo.adsType === 'buy') {
+    if (Object.keys(this.info).length > 0) {
+      this.localInfo = Object.assign({}, this.info)
+    }
+    if (this.localInfo.adsType === 2) {
+      this.advertisingType = this.localInfo.adsType
       this.localInfo.price = this.localInfo.rangePrice[0] * 100000
       this.localInfo.maxPrice = this.localInfo.rangePrice[1] * 100000
     }
   },
   methods: {
-    handleChange(value) {
-      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+    changeStep(action) {
+      if (action === 'next') {
+        this.$refs.additionalInfo.validate((valid) => {
+          if (valid) {
+            this.$emit('submitFormAdditionalInfo', this.localInfo)
+            this.$emit('changeStep', action)
+          } else {
+            if (action === 'next') {
+              this.$message({
+                message: 'Please fill in additional info for classified advertising.',
+                type: 'error'
+              })
+            }
+          }
+        })
+      } else {
+        this.$emit('changeStep', action)
+      }
     }
   }
 }

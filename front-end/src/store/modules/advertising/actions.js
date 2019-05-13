@@ -1,4 +1,5 @@
 import CommonModelMap from '../../models/CommonModelMap'
+import Advertising from '../../models/Advertising'
 import advertising from '@/api/advertising'
 
 const removeTempImage = ({ commit }, params) => {
@@ -18,7 +19,17 @@ const uploadTempImage = ({ commit }, params) => {
   })
 }
 
+const addNewAdvertising = ({ commit }, params) => {
+  const ads = Advertising.toNewAdvertising(params)
+  return advertising.createNewAdvertising(ads).then(res => {
+    return res
+  }).catch(error => {
+    throw error
+  })
+}
+
 export default {
   removeTempImage,
-  uploadTempImage
+  uploadTempImage,
+  addNewAdvertising
 }

@@ -229,6 +229,12 @@ code {
   padding: 0 15px;
   transition: border-color .2s cubic-bezier(.645,.045,.355,1);
   width: 100%;
+  &:disabled {
+    background-color: #f5f7fa;
+    border-color: #E4E7ED;
+    color: #C0C4CC;
+    cursor: not-allowed;
+  }
 }
 
 .center-padding-top {

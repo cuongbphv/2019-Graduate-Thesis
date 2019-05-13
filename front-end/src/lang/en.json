@@ -122,7 +122,10 @@
     "import": "Import",
     "choose_file": "Choose data file",
     "back": "Back",
-    "upload": "Upload"
+    "upload": "Upload",
+    "previous": "Previous",
+    "continue": "Continue",
+    "post": "Submit"
   },
   "documentation": {
     "documentation": "Documentation",
@@ -207,7 +210,7 @@
     "type": "Type",
     "name_with_type": "Name With Type",
     "warning": "Warning",
-   "description": "Description",
+    "description": "Description",
     "info": "Info",
     "color": "Color",
     "text": "Text",
@@ -262,6 +265,7 @@
   },
   "validator": {
     "required": "This field is required",
+    "missing_data": "This field is missing data",
     "description": {
       "max_length": "Description can not be less than {length} characters"
     },
@@ -301,7 +305,19 @@
     "image": "Image",
     "info": "Info",
     "preview": "Preview",
-    "submit": "Submit"
+    "submit": "Submit",
+    "province": "Province",
+    "district": "District",
+    "ward": "Ward",
+    "ads_type": "Ads Type",
+    "min_price": "Min Price",
+    "max_price": "Max Price",
+    "list_image": "List image",
+    "step2": "Choose province, city",
+    "new_location": "Choose New Location",
+    "exist_location": "Choose Your Address",
+    "search": "Search",
+    "search_placeholder": "Input location where you want to post"
   },
   "userProfile": {
     "firstName": "First name",

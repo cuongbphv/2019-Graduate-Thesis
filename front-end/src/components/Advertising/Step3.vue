@@ -34,8 +34,8 @@
     </div>
 
     <el-row class="center-padding-top">
-      <el-button type="primary" @click="changeStep(step - 1)">Prev</el-button>
-      <el-button type="success" @click="changeStep(step + 1)">Continue</el-button>
+      <el-button type="primary" @click="changeStep('back')">{{ $t('button.previous') }}</el-button>
+      <el-button type="success" @click="changeStep('next')">{{ $t('button.continue') }}</el-button>
     </el-row>
   </div>
 </template>
@@ -98,6 +98,18 @@ export default {
         this.fileList.push(file)
         this.$emit('submitFormImage', this.fileList)
       }
+    },
+    changeStep(action) {
+      if (action === 'next') {
+        if (this.fileList.length === 0) {
+          this.$message({
+            message: 'Please upload less an image for classified advertising.',
+            type: 'error'
+          })
+          return
+        }
+      }
+      this.$emit('changeStep', action)
     }
   }
 }
@@ -117,6 +129,12 @@ export default {
     .el-upload-list__item {
       width: 180px;
       height: 180px;
+    }
+  }
+
+  @media screen and (max-width: 494px) {
+    /deep/ .el-upload-dragger {
+      width: 180px !important;
     }
   }
 

@@ -29,7 +29,13 @@ const Status = {
   CREATED: 201
 }
 
+const AdsLocationType = {
+  NEW_LOCATION: 1,
+  EXISTED_LOCATION: 2
+}
+
 export {
   API,
-  Status
+  Status,
+  AdsLocationType
 }

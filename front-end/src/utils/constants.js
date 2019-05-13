@@ -13,8 +13,11 @@ const API = {
   IMPORT_LOCATION: '/location/import',
   // CATEGORY APIs
   CATEGORY: '/category',
+  LIST_CATEGORY: '/category/list',
   METADATA: '/metadata',
   FILTER: '/filter',
+  // ADDRESS APIs
+  ADDRESS: '/address',
   // ADVERTISING APIs
   ADVERTISING: '/advertising',
   UPLOAD_TEMP_IMAGE: '/advertising/upload_temp_image',

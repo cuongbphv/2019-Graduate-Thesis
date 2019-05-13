@@ -236,9 +236,7 @@ export default {
       const index = this.listBreadCrumb.findIndex(element => {
         return element.id === row.id
       })
-      console.log('before', this.listBreadCrumb)
       this.listBreadCrumb = Object.assign([], this.listBreadCrumb.slice(0, index + 1))
-      console.log('after', this.listBreadCrumb)
 
       // reset table state
       this.categoryIds = {}

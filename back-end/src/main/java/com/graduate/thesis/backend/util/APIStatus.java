@@ -40,7 +40,10 @@ public enum APIStatus {
 
     //CATEGORY
     ERR_CATEGORY_EXISTED(409, "Category is existed"),
-    ERR_CATEGORY_NOT_FOUND(404, "Category not found")
+    ERR_CATEGORY_NOT_FOUND(404, "Category not found"),
+
+    //ADDRESS
+    ERR_ADDRESS_NOT_FOUND(404, "Address not found for this user")
 
     ;
 

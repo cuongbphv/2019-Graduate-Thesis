@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -42,6 +43,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category findCategoryByIdAndStatus(String id, int status) {
         return categoryRepository.findCategoryByIdAndStatus(id,status);
+    }
+
+    @Override
+    public List<CategoryResponse> getAllCategory(String searchKey, ObjectId parentObjId) {
+        return categoryRepository.findCategoryLikeNameAndParentIdAndStatus(searchKey, parentObjId,
+                Constant.Status.ACTIVE.getValue());
     }
 
     @Override

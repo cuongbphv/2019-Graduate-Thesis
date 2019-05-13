@@ -1,6 +1,8 @@
 package com.graduate.thesis.backend;
 
 import com.graduate.thesis.backend.config.FileStorageProperties;
+import com.graduate.thesis.backend.model.response.AddressResponse;
+import com.graduate.thesis.backend.repository.aggregation.AddressAggregation;
 import com.graduate.thesis.backend.repository.aggregation.CategoryAggregation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -22,6 +24,9 @@ public class Application implements CommandLineRunner {
     @Autowired
     CategoryAggregation categoryAggregation;
 
+    @Autowired
+    AddressAggregation addressAggregation;
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -33,6 +38,7 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
 
     }
 }

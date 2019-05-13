@@ -37,7 +37,7 @@ export default {
   },
   data() {
     return {
-      step: 5,
+      step: 1,
       newAdvertising: {
         category: {},
         location: {},

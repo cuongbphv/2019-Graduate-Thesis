@@ -283,7 +283,8 @@
     "update_metadata_success": "Cập nhật metadata thành công",
     "update_filter_success": "Cập nhật lọc thành công",
     "create_category_success": "Tạo danh mục thành công",
-    "update_category_success": "Cập nhật danh mục thành công"
+    "update_category_success": "Cập nhật danh mục thành công",
+    "create_address_success": "Tạo địa chỉ thành công"
   },
   "advertising": {
     "additional_info": "Nhập thông tin bổ sung cho tin rao vặt",

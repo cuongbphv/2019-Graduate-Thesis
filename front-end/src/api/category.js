@@ -5,6 +5,9 @@ export default {
   getCategoryPaging(params) {
     return Api.get(API.CATEGORY, { params: params }).then(res => res.data)
   },
+  getListCategory(params) {
+    return Api.get(API.LIST_CATEGORY, { params: params }).then(res => res.data)
+  },
   getCategoryById(id) {
     return Api.get(API.CATEGORY + `/${id}`).then(res => res.data)
   },

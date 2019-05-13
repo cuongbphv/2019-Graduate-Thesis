@@ -3,6 +3,7 @@ package com.graduate.thesis.backend.controller;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.graduate.thesis.backend.entity.Category;
+import com.graduate.thesis.backend.entity.Location;
 import com.graduate.thesis.backend.entity.model.Metadata;
 import com.graduate.thesis.backend.exception.ApplicationException;
 import com.graduate.thesis.backend.model.request.CategoryRequest;
@@ -82,6 +83,26 @@ public class CategoryController extends AbstractBasedAPI {
 
         Page<CategoryResponse> locations = categoryService.getPagingCategory(searchKey,parentId,
                 sortKey, ascSort, pageSize, pageNumber);
+
+        return responseUtil.successResponse(locations);
+    }
+
+    @GetMapping(Constant.GET_LIST)
+    public ResponseEntity<RestAPIResponse> getListPagingLocation (
+            @RequestParam(value = "search_key", defaultValue = "") String searchKey,
+            @RequestParam( value = "parent_id", defaultValue = "") String parentId
+    ) {
+
+        ObjectId parentObjId;
+
+        if(parentId.isEmpty()){
+            parentObjId = null;
+        }
+        else{
+            parentObjId = new ObjectId(parentId);
+        }
+
+        List<CategoryResponse> locations = categoryService.getAllCategory(searchKey, parentObjId);
 
         return responseUtil.successResponse(locations);
     }

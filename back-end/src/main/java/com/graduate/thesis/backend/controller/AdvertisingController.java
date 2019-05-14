@@ -1,10 +1,12 @@
 package com.graduate.thesis.backend.controller;
 
+import com.graduate.thesis.backend.entity.ClassifiedAdvertising;
 import com.graduate.thesis.backend.exception.ApplicationException;
 import com.graduate.thesis.backend.model.request.advertising.NewAdvertisingRequest;
 import com.graduate.thesis.backend.model.response.RestAPIResponse;
 import com.graduate.thesis.backend.security.CurrentUser;
 import com.graduate.thesis.backend.security.oauth2.user.UserPrincipal;
+import com.graduate.thesis.backend.service.ClassifiedAdvertisingService;
 import com.graduate.thesis.backend.service.FileStorageService;
 import com.graduate.thesis.backend.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +40,26 @@ public class AdvertisingController extends AbstractBasedAPI {
     @Autowired
     FileStorageService fileStorageService;
 
+    @Autowired
+    ClassifiedAdvertisingService classifiedAdvertisingService;
+
     @PostMapping()
     public ResponseEntity<RestAPIResponse> createNewAdvertising (
-            @CurrentUser UserPrincipal userPrincipal,
             @RequestBody NewAdvertisingRequest reqModel
     ) {
 
-        return responseUtil.successResponse("");
+        ClassifiedAdvertising classifiedAdvertising = new ClassifiedAdvertising();
+        classifiedAdvertising.setLocationType(reqModel.getLocationType());
+        classifiedAdvertising.setProvinceId(reqModel.getProvinceId());
+        classifiedAdvertising.setDistrictId(reqModel.getDistrictId());
+        classifiedAdvertising.setWardId(reqModel.getWardId());
+        classifiedAdvertising.setAddressId(reqModel.getAddressId());
+        classifiedAdvertising.setImages(reqModel.getImages());
+        classifiedAdvertising.setAdditionalInfo(reqModel.getAdditionalInfo());
+        classifiedAdvertising.setBreadcrumbs(reqModel.getBreadcrumbs());
+        classifiedAdvertising.setMetadata(reqModel.getMetadata());
+
+        return responseUtil.successResponse(classifiedAdvertisingService.save(classifiedAdvertising));
     }
 
     @PostMapping(value = Constant.UPLOAD_TEMP_IMAGE)

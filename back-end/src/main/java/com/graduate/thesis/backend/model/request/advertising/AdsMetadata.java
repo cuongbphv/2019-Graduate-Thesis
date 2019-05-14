@@ -5,16 +5,23 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
- * @author cuongbphv created on 12/05/2019
+ * @author cuongbphv created on 15/05/2019
  */
 @Getter
 @Setter
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class AdditionalInfo {
-    private String title;
-    private String description;
-    private String adsType;
-    private long maxPrice;
-    private long price;
+public class AdsMetadata {
+
+    private String label;
+
+    private String slug;
+
+    private String selectionType;
+
+    private String type;
+
+    private String value;
 }

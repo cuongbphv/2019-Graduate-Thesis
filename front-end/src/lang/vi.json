@@ -227,6 +227,9 @@
     "add_new_filter": "Thêm diều kiện lọc",
     "add_new_options": "Thêm lựa chọn",
     "selection_type": "Kiểu lựa chọn",
+    "add_address": "Thêm địa chỉ",
+    "update_address": "Cập nhật địa chỉ",
+    "delete_address": "Xóa địa chỉ",
     "value": "Giá trị",
     "create_category": "Tạo danh mục mới",
     "backToTop": "Lên Đầu Trang",
@@ -288,7 +291,9 @@
     "update_filter_success": "Cập nhật lọc thành công",
     "create_category_success": "Tạo danh mục thành công",
     "update_category_success": "Cập nhật danh mục thành công",
-    "create_address_success": "Tạo địa chỉ thành công"
+    "create_address_success": "Tạo địa chỉ thành công",
+    "update_address_success": "Cập nhật địa chỉ thành công",
+    "delete_address_success": "Xóa địa chỉ thành công"
   },
   "advertising": {
     "additional_info": "Nhập thông tin bổ sung cho tin rao vặt",

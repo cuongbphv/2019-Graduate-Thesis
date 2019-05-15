@@ -31,6 +31,14 @@ const profileRouter = {
       meta: {
         permission: 'MANAGE_PROFILE_INFORMATION'
       }
+    },
+    {
+      path: 'address',
+      name: 'AddressManagement',
+      component: () => import('@/views/profile/profile-detail/Address'),
+      meta: {
+        permission: 'MANAGE_ACCOUNT_ADDRESS'
+      }
     }
   ]
 }

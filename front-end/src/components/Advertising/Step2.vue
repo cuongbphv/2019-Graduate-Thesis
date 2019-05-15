@@ -77,7 +77,7 @@
             <el-button
               style="text-align: center; margin-top: 1rem"
               @click="addAddressDialogVisible = true"
-            ><i class="el-icon-plus" /> Th�m d?a ch? m?i</el-button>
+            ><i class="el-icon-plus" /> Thêm địa chỉ mới</el-button>
           </el-col>
         </el-row>
         <add-address-modal

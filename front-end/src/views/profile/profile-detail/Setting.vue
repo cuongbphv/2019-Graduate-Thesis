@@ -1,108 +1,110 @@
 <template>
-  <el-form ref="formSetting" style="padding-left: 50px" :model="settingForm" label-position="left" label-width="150px">
-    <el-row>
-      <el-col>
-        <el-form-item :label="$t('userSetting.changePassword')">
-          <el-button v-if="!allowChangePass" type="primary" icon="el-icon-edit" circle @click="allowChangePass = true" />
-          <el-button v-if="allowChangePass" icon="el-icon-close" circle @click="allowChangePass = false" />
+  <div class="settings">
+    <el-form ref="formSetting" style="padding-left: 50px" :model="settingForm" label-position="left" label-width="150px">
+      <el-row>
+        <el-col>
+          <el-form-item :label="$t('userSetting.changePassword')">
+            <el-button v-if="!allowChangePass" type="primary" icon="el-icon-edit" circle @click="allowChangePass = true" />
+            <el-button v-if="allowChangePass" icon="el-icon-close" circle @click="allowChangePass = false" />
+          </el-form-item>
+        </el-col>
+        <el-col>
+          <el-form
+            v-if="allowChangePass"
+            ref="changePassForm"
+            :model="changePassForm"
+            :rules="changePassRules"
+            style="padding-left: 50px"
+            label-position="left"
+            label-width="150px"
+          >
+            <el-row>
+              <el-col :md="18">
+                <el-form-item :label="$t('userSetting.currentPassword')" prop="currentPassword">
+                  <el-input
+                    v-model="changePassForm.currentPassword"
+                    type="password"
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :md="18">
+                <el-form-item :label="$t('userSetting.newPassword')" prop="newPassword">
+                  <el-input
+                    v-model="changePassForm.newPassword"
+                    :type="passwordType"
+                  />
+                  <span class="show-pwd" @click="showPwd">
+                    <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+                  </span>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :md="18">
+                <el-form-item :label="$t('userSetting.retypePassword')" prop="retypePassword">
+                  <el-input
+                    v-model="changePassForm.retypePassword"
+                    :type="passwordType"
+                    @keyup.enter.native="handleChangePassword"
+                  />
+                  <span class="show-pwd" @click="showPwd">
+                    <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+                  </span>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-form-item>
+                <el-button
+                  type="success"
+                  icon="el-icon-circle-check-outline"
+                  @click="handleChangePassword"
+                >
+                  {{ $t('button.save') }}
+                </el-button>
+              </el-form-item>
+            </el-row>
+          </el-form>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-form-item :label="$t('userSetting.enable')">
+          <el-switch v-model="settingForm.enable" :width="40" />
         </el-form-item>
-      </el-col>
-      <el-col>
-        <el-form
-          v-if="allowChangePass"
-          ref="changePassForm"
-          :model="changePassForm"
-          :rules="changePassRules"
-          style="padding-left: 50px"
-          label-position="left"
-          label-width="150px"
-        >
-          <el-row>
-            <el-col :md="18">
-              <el-form-item :label="$t('userSetting.currentPassword')" prop="currentPassword">
-                <el-input
-                  v-model="changePassForm.currentPassword"
-                  type="password"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :md="18">
-              <el-form-item :label="$t('userSetting.newPassword')" prop="newPassword">
-                <el-input
-                  v-model="changePassForm.newPassword"
-                  :type="passwordType"
-                />
-                <span class="show-pwd" @click="showPwd">
-                  <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-                </span>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :md="18">
-              <el-form-item :label="$t('userSetting.retypePassword')" prop="retypePassword">
-                <el-input
-                  v-model="changePassForm.retypePassword"
-                  :type="passwordType"
-                  @keyup.enter.native="handleChangePassword"
-                />
-                <span class="show-pwd" @click="showPwd">
-                  <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-                </span>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-form-item>
-              <el-button
-                type="success"
-                icon="el-icon-circle-check-outline"
-                @click="handleChangePassword"
-              >
-                {{ $t('button.save') }}
-              </el-button>
-            </el-form-item>
-          </el-row>
-        </el-form>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-form-item :label="$t('userSetting.enable')">
-        <el-switch v-model="settingForm.enable" :width="40" />
-      </el-form-item>
-    </el-row>
-    <el-row v-if="settingForm.enable">
-      <el-form-item :label="$t('userSetting.notificationFor')">
-        <el-checkbox
-          v-for="item in settingForm.items"
-          :key="item.key"
-          v-model="item.enable"
-          :label="$t('userSetting.' + item.key)"
-        />
-      </el-form-item>
-    </el-row>
-    <el-row>
-      <el-form-item>
-        <el-button
-          type="success"
-          :disabled="!formUpdated"
-          icon="el-icon-circle-check-outline"
-          @click="handleUpdateSetting"
-        >
-          {{ $t('button.save') }}
-        </el-button>
-        <el-button
-          :disabled="!formUpdated"
-          icon="el-icon-refresh"
-          @click="handleResetButton"
-        >
-          {{ $t('button.reset') }}
-        </el-button>
-      </el-form-item>
-    </el-row>
-  </el-form>
+      </el-row>
+      <el-row v-if="settingForm.enable">
+        <el-form-item :label="$t('userSetting.notificationFor')">
+          <el-checkbox
+            v-for="item in settingForm.items"
+            :key="item.key"
+            v-model="item.enable"
+            :label="$t('userSetting.' + item.key)"
+          />
+        </el-form-item>
+      </el-row>
+      <el-row>
+        <el-form-item>
+          <el-button
+            type="success"
+            :disabled="!formUpdated"
+            icon="el-icon-circle-check-outline"
+            @click="handleUpdateSetting"
+          >
+            {{ $t('button.save') }}
+          </el-button>
+          <el-button
+            :disabled="!formUpdated"
+            icon="el-icon-refresh"
+            @click="handleResetButton"
+          >
+            {{ $t('button.reset') }}
+          </el-button>
+        </el-form-item>
+      </el-row>
+    </el-form>
+  </div>
 </template>
 
 <script>
@@ -221,6 +223,10 @@ export default {
     color: $dark_gray;
     cursor: pointer;
     user-select: none;
+  }
+
+  .settings{
+    margin-top: 20px;
   }
 
 </style>

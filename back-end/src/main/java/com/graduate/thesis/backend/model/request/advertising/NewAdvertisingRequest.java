@@ -17,10 +17,17 @@ import java.util.List;
 @Setter
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class NewAdvertisingRequest {
+
     private int locationType;
-    private Location province;
-    private District district;
-    private Ward ward;
+    private String provinceId;
+    private String districtId;
+    private String wardId;
+    private String addressId;
+
     private List<Image> images;
+
     private AdditionalInfo additionalInfo;
+
+    private List<String> breadcrumbs;
+    private List<AdsMetadata> metadata;
 }

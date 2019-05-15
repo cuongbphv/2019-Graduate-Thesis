@@ -323,7 +323,9 @@
     "new_location": "Choose New Location",
     "exist_location": "Choose Your Address",
     "search": "Search",
-    "search_placeholder": "Input location where you want to post"
+    "search_placeholder": "Input location where you want to post",
+    "category_sub": "Sub Category",
+    "address": "Address"
   },
   "userProfile": {
     "firstName": "First name",

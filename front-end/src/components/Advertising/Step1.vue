@@ -55,7 +55,7 @@
     </div>
 
     <el-row class="center-padding-top">
-      <el-button type="success" @click="changeStep(step + 1)">Continue</el-button>
+      <el-button type="success" @click="changeStep('next')">{{ $t('button.continue') }}</el-button>
     </el-row>
   </div>
 </template>
@@ -68,6 +68,14 @@ export default {
   name: 'Step1',
   components: {
     MdInput
+  },
+  props: {
+    category: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
   },
   data() {
     return {
@@ -114,7 +122,22 @@ export default {
     }
   },
   created() {
-    this.loadListCategory(this.selectedCategoryId)
+    if (Object.keys(this.category).length > 0) {
+      this.showMetadata = true
+      this.selectedCategoryId = this.category.breadCrumb[this.category.breadCrumb.length - 1].id
+      this.listBreadCrumb = this.category.breadCrumb
+      this.listMetadata = this.category.listMetadata
+      let allMeta = []
+      for (const key in this.listMetadata) {
+        if (this.listMetadata.hasOwnProperty(key)) {
+          allMeta = [...allMeta, ...this.listMetadata[key]]
+        }
+      }
+      this.metadataTemplate = allMeta
+      this.postMetadata = this.category.postMetadata
+    } else {
+      this.loadListCategory(this.selectedCategoryId)
+    }
   },
   methods: {
     ...mapActions('category', ['getListCategory', 'getMetadataByCategoryId']),
@@ -142,6 +165,23 @@ export default {
       this.listBreadCrumb = Object.assign([], this.listBreadCrumb.slice(0, index + 1))
       this.listMetadata = Object.assign([], this.listMetadata.slice(0, index + 1))
       this.loadListCategory(item.id)
+    },
+    changeStep(action) {
+      if (action === 'next') {
+        if (this.selectedCategoryId === null) {
+          this.$message({
+            message: 'Please select category for classified advertising.',
+            type: 'error'
+          })
+          return
+        }
+        this.$emit('changeStep', action)
+        this.$emit('submitFormCategory', {
+          breadCrumb: this.listBreadCrumb,
+          listMetadata: this.listMetadata,
+          postMetadata: this.postMetadata
+        })
+      }
     }
   }
 }

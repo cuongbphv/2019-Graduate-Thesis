@@ -2,7 +2,7 @@
   <div class="step2">
     <h3>{{ $t('advertising.step2') }}</h3>
     <el-row>
-      <el-radio-group v-model="locationType" size="small">
+      <el-radio-group v-model="localLocation.locationType" size="small">
         <el-col :xs="24" :md="12" style="padding: 0.5rem 1rem">
           <el-radio :label="1" border>{{ $t('advertising.new_location') }}</el-radio>
         </el-col>
@@ -12,7 +12,7 @@
       </el-radio-group>
     </el-row>
 
-    <div v-if="locationType === 1">
+    <div v-if="localLocation.locationType === 1">
       <div class="search-form">
         <el-form>
           <el-form-item prop="title">
@@ -55,7 +55,7 @@
       </div>
     </div>
 
-    <div v-else-if="locationType === 2">
+    <div v-else-if="localLocation.locationType === 2">
       <div class="choose-location">
         <hr>
         <el-row>
@@ -116,8 +116,9 @@ export default {
   },
   data() {
     return {
-      localLocation: {},
-      locationType: 1,
+      localLocation: {
+        locationType: 1
+      },
       searchKey: '',
       mode: 'province',
       listDistricts: [],
@@ -161,7 +162,6 @@ export default {
   },
   created() {
     this.initData()
-
     // load existed address
     this.getListAddress()
   },
@@ -172,17 +172,21 @@ export default {
       if (Object.keys(this.location).length > 0) {
         this.localLocation = Object.assign({}, this.location)
         if (this.localLocation.province) {
-          this.mode = 'province'
-          this.originalDistricts = this.listDistrictByProvinceId(this.localLocation.province.id)
-          this.listDistricts = [...this.originalDistricts]
-        }
-        if (this.localLocation.district) {
-          this.mode = 'district'
-          this.originalWards = this.listWardByDistrictId(this.localLocation.province.id, this.localLocation.district.id)
-          this.listWards = [...this.originalWards]
-        }
-        if (this.localLocation.ward) {
-          this.mode = 'ward'
+          this.loadListLocation({
+            searchKey: this.searchKey
+          }).then(() => {
+            this.mode = 'province'
+            this.originalDistricts = this.listDistrictByProvinceId(this.localLocation.province.id)
+            this.listDistricts = [...this.originalDistricts]
+            if (this.localLocation.district) {
+              this.mode = 'district'
+              this.originalWards = this.listWardByDistrictId(this.localLocation.province.id, this.localLocation.district.id)
+              this.listWards = [...this.originalWards]
+            }
+            if (this.localLocation.ward) {
+              this.mode = 'ward'
+            }
+          })
         }
       } else {
         this.getList()
@@ -219,7 +223,7 @@ export default {
       }
       if (ward) {
         this.localLocation.ward = ward
-        this.$emit('submitFormLocation', this.localLocation)
+        this.listWards = [...this.listWardByDistrictId(this.localLocation.province.id, this.localLocation.district.id)]
       }
     },
     selectLocation(id) {
@@ -235,15 +239,33 @@ export default {
     },
     changeStep(action) {
       if (action === 'next') {
-        if (!this.location.province || !this.location.district || !this.location.ward) {
-          this.$message({
-            message: 'Please select location for classified advertising.',
-            type: 'error'
-          })
-          return
+        if (this.localLocation.locationType === 1) {
+          if (!this.localLocation.province || !this.localLocation.district || !this.localLocation.ward) {
+            this.$message({
+              message: 'Please select location for classified advertising.',
+              type: 'error'
+            })
+            return
+          }
+        } else if (this.localLocation.locationType === 2) {
+          if (this.selectedLocation === '') {
+            this.$message({
+              message: 'Please select location for classified advertising.',
+              type: 'error'
+            })
+            return
+          }
         }
       }
-      this.$emit('submitFormLocation', this.localLocation)
+      this.$emit('changeStep', action)
+      if (this.localLocation.locationType === 1) {
+        this.$emit('submitFormLocation', this.localLocation)
+      } else if (this.localLocation.locationType === 2) {
+        this.$emit('submitFormLocation', {
+          locationType: 2,
+          selectedLocation: this.selectedLocation
+        })
+      }
     }
   }
 }

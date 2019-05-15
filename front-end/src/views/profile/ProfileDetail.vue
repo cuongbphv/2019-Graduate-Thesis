@@ -142,7 +142,7 @@ export default {
   }
 
   header {
-    background: url("https://image.noelshack.com/fichiers/2017/38/2/1505775648-annapurnafocus.jpg") no-repeat center;
+    background: url("../../assets/profile_background.jpg") no-repeat center;
     background-size: cover;
     height: 200px;
     i {

@@ -1,6 +1,7 @@
 import CommonModelMap from '../../models/CommonModelMap'
 import Advertising from '../../models/Advertising'
 import advertising from '@/api/advertising'
+import { Status } from '@/utils/constants'
 
 const removeTempImage = ({ commit }, params) => {
   const param = CommonModelMap.toParam(params)
@@ -22,7 +23,10 @@ const uploadTempImage = ({ commit }, params) => {
 const addNewAdvertising = ({ commit }, params) => {
   const ads = Advertising.toNewAdvertising(params)
   return advertising.createNewAdvertising(ads).then(res => {
-    return res
+    if (res.status === Status.SUCCESS) {
+      commit('CREATE_NEW_CLASSIFIED_ADVERTISING', res.data)
+      return res.data.id
+    }
   }).catch(error => {
     throw error
   })

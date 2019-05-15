@@ -28,12 +28,89 @@
         </el-col>
       </el-row>
 
-      <el-row>
+      <div v-if="localData.location.locationType === 1">
+        <el-row>
+          <el-col :md="24" :lg="24">
+            <el-form-item :label="$t('advertising.province')">
+              <el-input
+                v-model="localData.location.province.name"
+                name="title"
+                :placeholder="$t('validator.missing_data')"
+                disabled
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :md="24" :lg="24">
+            <el-form-item :label="$t('advertising.district')" prop="title">
+              <el-input
+                v-model="localData.location.district.name"
+                :placeholder="$t('validator.missing_data')"
+                disabled
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :md="24" :lg="24">
+            <el-form-item :label="$t('advertising.ward')" prop="title">
+              <el-input
+                v-model="localData.location.ward.name"
+                :placeholder="$t('validator.missing_data')"
+                disabled
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </div>
+
+      <div v-else>
+        <el-row>
+          <el-col :md="24" :lg="24">
+            <el-form-item :label="$t('advertising.province')">
+              <el-input
+                v-model="selected.province.name"
+                name="title"
+                :placeholder="$t('validator.missing_data')"
+                disabled
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :md="24" :lg="24">
+            <el-form-item :label="$t('advertising.district')" prop="title">
+              <el-input
+                v-model="selected.district.name"
+                :placeholder="$t('validator.missing_data')"
+                disabled
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :md="24" :lg="24">
+            <el-form-item :label="$t('advertising.ward')" prop="title">
+              <el-input
+                v-model="selected.ward.name"
+                :placeholder="$t('validator.missing_data')"
+                disabled
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </div>
+
+      <el-row v-for="(item, index) in localData.category.breadCrumb" :key="item.slug">
         <el-col :md="24" :lg="24">
-          <el-form-item :label="$t('advertising.province')">
+          <el-form-item :label="index === 0 ? $t('advertising.category') : $t('advertising.category_sub')" prop="title">
             <el-input
-              v-model="localData.location.province.name"
-              name="title"
+              v-model="item.name"
               :placeholder="$t('validator.missing_data')"
               disabled
             />
@@ -41,23 +118,11 @@
         </el-col>
       </el-row>
 
-      <el-row>
+      <el-row v-for="item in localData.category.postMetadata" :key="item.slug">
         <el-col :md="24" :lg="24">
-          <el-form-item :label="$t('advertising.district')" prop="title">
+          <el-form-item :label="item.label" prop="title">
             <el-input
-              v-model="localData.location.district.name"
-              :placeholder="$t('validator.missing_data')"
-              disabled
-            />
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row>
-        <el-col :md="24" :lg="24">
-          <el-form-item :label="$t('advertising.ward')" prop="title">
-            <el-input
-              v-model="localData.location.ward.name"
+              v-model="item.value"
               :placeholder="$t('validator.missing_data')"
               disabled
             />
@@ -115,20 +180,6 @@
         </el-row>
       </div>
 
-      <!--      <el-row>-->
-      <!--        <el-col :md="24" :lg="24">-->
-      <!--          <el-form-item :label="$t('advertising.title')" prop="title">-->
-      <!--            <el-input-->
-      <!--              v-model="localInfo.title"-->
-      <!--              name="title"-->
-      <!--              :placeholder="$t('advertising.title_placeholder')"-->
-      <!--              maxlength="50"-->
-      <!--              show-word-limit-->
-      <!--            />-->
-      <!--          </el-form-item>-->
-      <!--        </el-col>-->
-      <!--      </el-row>-->
-
       <el-row>
         <el-col :span="24">
           <el-form-item :label="$t('advertising.description')">
@@ -154,6 +205,7 @@
 
 <script>
 import { Money } from 'v-money'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Step5',
   components: {
@@ -191,6 +243,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('address', ['selected']),
     adsType() {
       if (this.localData.additionalInfo.adsType === 2) return this.$t('advertising.buy')
       else if (this.localData.additionalInfo.adsType === 1) return this.$t('advertising.sell')
@@ -200,15 +253,17 @@ export default {
   created() {
     if (Object.keys(this.previewData).length > 0) {
       this.localData = Object.assign({}, this.previewData)
-      console.info(this.localData)
+      this.getAddressByAddressId(this.localData.location.selectedLocation)
     }
   },
   methods: {
+    ...mapActions('address', ['getAddressByAddressId']),
     changeStep(action) {
       if (action === 'next') {
         this.$emit('submitNewAdvertising', this.localData)
+      } else {
+        this.$emit('changeStep', action)
       }
-      this.$emit('changeStep', action)
     }
   }
 }

@@ -77,6 +77,14 @@ export const allRoutes = [
           permission: 'VIEW_HOME'
         }
       },
+      {
+        path: '/search',
+        component: () => import('@/views/search/SearchPage'),
+        name: 'SearchPage',
+        meta: {
+          title: 'search-page'
+        }
+      },
       profileRouter,
       advertisingRouter
     ]

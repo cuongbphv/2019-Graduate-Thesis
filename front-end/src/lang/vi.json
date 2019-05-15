@@ -323,7 +323,9 @@
     "new_location": "Chọn địa chỉ mới",
     "exist_location": "Địa chỉ có sẵn",
     "search": "Tìm kiếm",
-    "search_placeholder": "Nhập khu vực tìm kiếm"
+    "search_placeholder": "Nhập khu vực tìm kiếm",
+    "category_sub": "Danh mục con",
+    "address": "Địa chỉ"
   },
   "userProfile": {
     "firstName": "Tên",

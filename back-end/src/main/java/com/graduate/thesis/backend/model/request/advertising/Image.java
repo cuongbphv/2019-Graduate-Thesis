@@ -11,9 +11,8 @@ import lombok.Setter;
 public class Image {
     private String name;
     private long uid;
-    private int percent;
+    private int percentage;
     private String url;
     private long size;
     private String status;
-    private Object response;
 }

@@ -2,31 +2,75 @@
   <section class="category">
     <div class="container">
       <div class="category-title">Rao vặt vui, mua may bán đắt cùng BeeMarket</div>
-
-      <div class="category-area">
-
-        <div class="category-col">
-          <div class="category-col-panel">
-            <div class="category-col-title">Nhà đất</div>
-            <div class="category-col-desc">
-              Nhà đất, nhà ở, nhà trọ,...
-            </div>
-            <svg-icon class="category-col-icon" icon-class="message" />
-          </div>
-        </div>
-
-      </div>
+      <!--<div class="category-area">-->
+      <!--<div class="category-col">-->
+      <!--&lt;!&ndash;<div class="category-col-panel">&ndash;&gt;-->
+      <!--&lt;!&ndash;<div class="category-col-title">Nhà đất</div>&ndash;&gt;-->
+      <!--&lt;!&ndash;<div class="category-col-desc">&ndash;&gt;-->
+      <!--&lt;!&ndash;Nhà đất, nhà ở, nhà trọ,...&ndash;&gt;-->
+      <!--&lt;!&ndash;</div>&ndash;&gt;-->
+      <!--&lt;!&ndash;<svg-icon class="category-col-icon" icon-class="message" />&ndash;&gt;-->
+      <!--&lt;!&ndash;</div>&ndash;&gt;-->
+      <!--</div>-->
+      <!--</div>-->
+      <el-row>
+        <el-col
+          v-for="cat in listCategory"
+          :key="cat.id"
+          :xs="12"
+          :sm="8"
+          :md="6"
+          :lg="4"
+        >
+          <el-tooltip :content="cat.description || defaultDescription" placement="top" effect="light">
+            <a class="category-item">
+              <img
+                :src="cat.image || defaultCatImg"
+                :alt="cat.slug"
+                class="category-img"
+              >
+              <p>{{ cat.name }}</p>
+            </a>
+          </el-tooltip>
+        </el-col>
+      </el-row>
     </div>
   </section>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
-  name: 'Category'
+  name: 'Category',
+  data() {
+    return {
+      listQuery: {
+        pageNumber: 1,
+        pageSize: 100,
+        ascSort: true,
+        sortKey: 1,
+        searchKey: ''
+      },
+      defaultCatImg: 'https://kwmv.org/wp-content/uploads/2018/06/hinh-anh-be-gai-de-thuong-xinh-dang-yeu-1.jpg',
+      defaultDescription: this.$t('label.default_cate_des')
+    }
+  },
+  computed: {
+    ...mapGetters('category', ['listCategory'])
+  },
+  created() {
+    this.getListCategory()
+  },
+  methods: {
+    ...mapActions('category', ['loadListPagingCategory', 'deleteCategoryByIds']),
+    getListCategory() {
+      this.loadListPagingCategory(this.listQuery)
+    }
+  }
 }
 </script>
 
-<style scoped>
+<style lang="scss"  scoped>
   .category {
     position: relative;
   }
@@ -42,7 +86,33 @@ export default {
     text-align: center;
     color: #ff6f00;
     margin-bottom: 15px;
-    font-weight: 500
+    font-weight: 500;
+  }
+
+  .category-item{
+    margin-bottom: 1.5rem;
+    display: block;
+    text-align: center;
+
+    &:hover{
+      color: blue;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    &:first-child{
+      margin-top: 2rem;
+    }
+
+    p{
+      margin-top: 0.5rem;
+    }
+
+    .category-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 10%;
+    }
   }
 
   .category-area {

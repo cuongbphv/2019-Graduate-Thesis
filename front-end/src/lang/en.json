@@ -221,6 +221,7 @@
     "multi_choice": "Multiple choice",
     "options": "Options",
     "category": "Category",
+    "default_cate_des": "Not updated yet",
     "metadata_details": "Metadata details",
     "filter_details": "Filter details",
     "add_new_metadata": "Add New Metadata",

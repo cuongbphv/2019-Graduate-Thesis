@@ -221,6 +221,7 @@
     "multi_choice": "Chọn nhiều",
     "options": "Các lựa chọn",
     "category": "Danh mục",
+    "default_cate_des": "Chưa cập nhật",
     "metadata_details": "Chi tiết Metadata",
     "filter_details": "Chi tiết điều kiện lọc",
     "add_new_metadata": "Thêm Metadata",

@@ -58,8 +58,24 @@ public class AdvertisingController extends AbstractBasedAPI {
         classifiedAdvertising.setAdditionalInfo(reqModel.getAdditionalInfo());
         classifiedAdvertising.setBreadcrumbs(reqModel.getBreadcrumbs());
         classifiedAdvertising.setMetadata(reqModel.getMetadata());
+        classifiedAdvertising.setStatus(Constant.Status.ACTIVE.getValue());
 
         return responseUtil.successResponse(classifiedAdvertisingService.save(classifiedAdvertising));
+    }
+
+    @GetMapping(value = Constant.WITHIN_ID)
+    public ResponseEntity<RestAPIResponse> getClassifiedAdsDetail (
+            @PathVariable("id") String adsId
+    ) {
+
+        ClassifiedAdvertising classifiedAdvertising = classifiedAdvertisingService
+                .getClassifiedAdsDetail(adsId, Constant.Status.ACTIVE.getValue());
+
+        if (classifiedAdvertising == null) {
+            throw new ApplicationException(APIStatus.ERR_CLASSIFIED_ADVERTISING_NOT_FOUND);
+        }
+
+        return responseUtil.successResponse(classifiedAdvertising);
     }
 
     @PostMapping(value = Constant.UPLOAD_TEMP_IMAGE)

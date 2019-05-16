@@ -230,7 +230,9 @@
     "value": "Value",
     "create_category": "Create new category",
     "backToTop": "Back To Top",
-    "json_example": "Example JSON data (Notes: When import new data, old data were overridden)"
+    "json_example": "Example JSON data (Notes: When import new data, old data were overridden)",
+    "vi": "Vietnamese",
+    "en": "English"
   },
   "place_holder": {
     "category_description": "Writing a short description for this category"

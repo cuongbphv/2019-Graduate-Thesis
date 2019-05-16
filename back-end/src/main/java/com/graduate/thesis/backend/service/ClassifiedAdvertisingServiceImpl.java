@@ -18,4 +18,9 @@ public class ClassifiedAdvertisingServiceImpl implements ClassifiedAdvertisingSe
     public ClassifiedAdvertising save(ClassifiedAdvertising classifiedAdvertising) {
         return classifiedAdvertisingRepository.save(classifiedAdvertising);
     }
+
+    @Override
+    public ClassifiedAdvertising getClassifiedAdsDetail(String id, int status) {
+        return classifiedAdvertisingRepository.findClassifiedAdvertisingByIdAndStatus(id, status);
+    }
 }

@@ -43,8 +43,10 @@ public enum APIStatus {
     ERR_CATEGORY_NOT_FOUND(404, "Category not found"),
 
     //ADDRESS
-    ERR_ADDRESS_NOT_FOUND(404, "Address not found for this user")
+    ERR_ADDRESS_NOT_FOUND(404, "Address not found for this user"),
 
+    // Classified Advertising
+    ERR_CLASSIFIED_ADVERTISING_NOT_FOUND(604, "Classified Advertising not found")
     ;
 
 

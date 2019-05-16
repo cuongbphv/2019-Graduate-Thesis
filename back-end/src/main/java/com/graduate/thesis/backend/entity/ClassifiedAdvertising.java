@@ -42,4 +42,6 @@ public class ClassifiedAdvertising {
     private List<String> breadcrumbs;
 
     private List<AdsMetadata> metadata;
+
+    private int status;
 }

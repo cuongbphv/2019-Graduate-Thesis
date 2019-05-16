@@ -5,10 +5,12 @@
     </div>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item :disabled="language==='vi'" command="vi">
-        Tiếng Việt
+        <img src="../../assets/vi.png" alt="No icon">
+        <span>{{ $t('label.vi') }}</span>
       </el-dropdown-item>
       <el-dropdown-item :disabled="language==='en'" command="en">
-        English
+        <img src="../../assets/en.png" alt="No icon">
+        <span>{{ $t('label.en') }}</span>
       </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
@@ -33,3 +35,17 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  /deep/ .el-dropdown-menu__item {
+    display: table;
+    img, span {
+      display: table-cell;
+      vertical-align: middle;
+      margin-top: 2px;
+    }
+    span {
+      padding-left: 5px;
+    }
+  }
+</style>

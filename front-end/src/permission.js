@@ -6,8 +6,8 @@ import { getToken, getPermission } from '@/utils/auth' // get token from cookie 
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteListNoToken = ['/login', '/auth-redirect', '/home', '/search'] // no redirect whitelist
-const whiteListToken = ['/login', '/auth-redirect', '/home', '/search', '/404', '/401']
+const whiteListNoToken = ['/login', '/auth-redirect', '/home', '/404'] // no redirect whitelist
+const whiteListToken = ['/login', '/auth-redirect', '/home', '/404', '/401']
 
 router.beforeEach((to, from, next) => {
   // start progress bar
@@ -34,7 +34,7 @@ router.beforeEach((to, from, next) => {
     }
   } else { /* has no token*/
     // check page user access in white list can access without permission
-    if (whiteListNoToken.indexOf(to.path) !== -1) {
+    if (whiteListNoToken.indexOf(to.path) !== -1 || to.meta.skip) {
       next() // ok go to page
     } else { // else go to login and keep url to redirect after login
       next(`/login?redirect=${to.path}`)
@@ -46,7 +46,7 @@ router.beforeEach((to, from, next) => {
 
 function handleNextRoute(to, next) {
   // continue route function
-  if (whiteListToken.indexOf(to.path) !== -1) {
+  if (whiteListToken.indexOf(to.path) !== -1 || to.meta.skip) {
     next() // ok go to page
   } else { // go to other page
     // check role of user who logged in and hasn't had role yet

@@ -82,7 +82,8 @@ export const allRoutes = [
         component: () => import('@/views/search/SearchPage'),
         name: 'SearchPage',
         meta: {
-          title: 'search-page'
+          title: 'search-page',
+          skip: true
         }
       },
       profileRouter,

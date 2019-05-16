@@ -31,6 +31,8 @@ public class Address {
 
     private String detail;
 
+    private boolean defaultAddress;
+
     private int status;
 
 }

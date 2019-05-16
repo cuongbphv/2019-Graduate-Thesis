@@ -32,7 +32,7 @@
       <el-form-item>
         <img
           v-if="image != null"
-          style="width: 230px; height: 100px"
+          style="width: 100px; height: 100px"
           :src="image"
           alt="category_img"
         >
@@ -50,7 +50,7 @@
     <image-cropper
       v-show="imagecropperShow"
       :key="imagecropperKey"
-      :width="230"
+      :width="100"
       :height="100"
       :no-circle="true"
       url="/category/image"

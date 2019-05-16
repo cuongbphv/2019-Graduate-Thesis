@@ -221,12 +221,16 @@
     "multi_choice": "Multiple choice",
     "options": "Options",
     "category": "Category",
+    "default_cate_des": "Not updated yet",
     "metadata_details": "Metadata details",
     "filter_details": "Filter details",
     "add_new_metadata": "Add New Metadata",
     "add_new_options": "Add New option",
     "add_new_filter": "Add new filter",
     "selection_type": "Selection Type",
+    "add_address": "Add new address",
+    "update_address": "Update address",
+    "delete_address": "Delete address",
     "value": "Value",
     "create_category": "Create new category",
     "backToTop": "Back To Top",
@@ -290,7 +294,9 @@
     "update_filter_success": "Update filter successfully",
     "create_category_success": "Create category successfully",
     "update_category_success": "Update category successfully",
-    "create_address_success": "Tạo địa chỉ thành công"
+    "create_address_success": "Create address successfully",
+    "update_address_success": "Update address successfully",
+    "delete_address_success": "Delete address successfully"
   },
   "advertising": {
     "additional_info": "Additional Info for Classified Advertising",

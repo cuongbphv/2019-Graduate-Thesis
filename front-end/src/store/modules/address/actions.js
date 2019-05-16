@@ -31,7 +31,7 @@ const createAddress = ({ commit }, params) => {
   })
 }
 const updateAddress = ({ commit }, params) => {
-  return address.updateAddress(params).then((res) => {
+  return address.updateAddress(params, params.id).then((res) => {
     if (res.status === Status.SUCCESS) {
       commit('UPDATE_ADDRESS', res.data)
       return res.data

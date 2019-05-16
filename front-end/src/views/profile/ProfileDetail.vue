@@ -4,7 +4,7 @@
       <header />
       <main>
         <el-row>
-          <el-col class="left" :md="8" :lg="8">
+          <el-col class="left" :xs="24" :md="8" :lg="8">
             <div class="photo-left">
               <pan-thumb :image="image">
                 <slot>
@@ -36,7 +36,7 @@
             <!--            <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'google' }" />-->
             <!--          </div>-->
           </el-col>
-          <el-col class="right" :md="16" :lg="16">
+          <el-col class="right" :xs="24" :md="14" :lg="14">
             <el-row>
               <ul class="nav">
                 <li>
@@ -48,8 +48,10 @@
                 <li>
                   <router-link :to="{path: 'settings'}">Cài đặt</router-link>
                 </li>
+                <li>
+                  <router-link :to="{path: 'address'}">Địa chỉ</router-link>
+                </li>
                 <li>Cửa hàng</li>
-                <li>Tin nhắn</li>
                 <li>Trợ giúp</li>
               </ul>
             </el-row>

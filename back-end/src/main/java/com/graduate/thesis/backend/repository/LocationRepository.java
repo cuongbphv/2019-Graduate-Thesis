@@ -29,6 +29,4 @@ public interface LocationRepository extends MongoRepository<Location, String> {
 
     void deleteByIdIn(List<String> ids);
 
-    void deleteById(String id);
-
 }

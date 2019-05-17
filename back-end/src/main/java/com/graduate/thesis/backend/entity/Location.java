@@ -35,4 +35,6 @@ public class Location {
 
     private List<District> districts;
 
+    private int status;
+
 }

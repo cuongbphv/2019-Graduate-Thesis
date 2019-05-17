@@ -1,13 +1,18 @@
 package com.graduate.thesis.backend.controller;
 
+import com.graduate.thesis.backend.entity.Address;
+import com.graduate.thesis.backend.entity.Category;
 import com.graduate.thesis.backend.entity.ClassifiedAdvertising;
+import com.graduate.thesis.backend.entity.UserProfile;
 import com.graduate.thesis.backend.exception.ApplicationException;
 import com.graduate.thesis.backend.model.request.advertising.NewAdvertisingRequest;
+import com.graduate.thesis.backend.model.response.AddressResponse;
 import com.graduate.thesis.backend.model.response.RestAPIResponse;
+import com.graduate.thesis.backend.repository.aggregation.AddressAggregation;
+import com.graduate.thesis.backend.repository.aggregation.LocationAggregation;
 import com.graduate.thesis.backend.security.CurrentUser;
 import com.graduate.thesis.backend.security.oauth2.user.UserPrincipal;
-import com.graduate.thesis.backend.service.ClassifiedAdvertisingService;
-import com.graduate.thesis.backend.service.FileStorageService;
+import com.graduate.thesis.backend.service.*;
 import com.graduate.thesis.backend.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +31,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author cuongbphv created on 08/05/2019
@@ -43,17 +52,34 @@ public class AdvertisingController extends AbstractBasedAPI {
     @Autowired
     ClassifiedAdvertisingService classifiedAdvertisingService;
 
+    @Autowired
+    CategoryService categoryService;
+
+    @Autowired
+    UserProfileService userProfileService;
+
+    @Autowired
+    AddressAggregation addressAggregation;
+
+    @Autowired
+    LocationAggregation locationAggregation;
+
     @PostMapping()
     public ResponseEntity<RestAPIResponse> createNewAdvertising (
+            @CurrentUser UserPrincipal userPrincipal,
             @RequestBody NewAdvertisingRequest reqModel
     ) {
 
         ClassifiedAdvertising classifiedAdvertising = new ClassifiedAdvertising();
         classifiedAdvertising.setLocationType(reqModel.getLocationType());
-        classifiedAdvertising.setProvinceId(reqModel.getProvinceId());
-        classifiedAdvertising.setDistrictId(reqModel.getDistrictId());
-        classifiedAdvertising.setWardId(reqModel.getWardId());
-        classifiedAdvertising.setAddressId(reqModel.getAddressId());
+        if (reqModel.getLocationType() == Constant.LocationType.DATA_ADDRESS.getValue()) {
+            classifiedAdvertising.setProvinceId(reqModel.getProvinceId());
+            classifiedAdvertising.setDistrictId(reqModel.getDistrictId());
+            classifiedAdvertising.setWardId(reqModel.getWardId());
+        } else if (reqModel.getLocationType() == Constant.LocationType.USER_ADDRESS.getValue()) {
+            classifiedAdvertising.setAddressId(reqModel.getAddressId());
+        }
+        classifiedAdvertising.setAuthorId(userPrincipal.getId());
         classifiedAdvertising.setImages(reqModel.getImages());
         classifiedAdvertising.setAdditionalInfo(reqModel.getAdditionalInfo());
         classifiedAdvertising.setBreadcrumbs(reqModel.getBreadcrumbs());
@@ -75,7 +101,44 @@ public class AdvertisingController extends AbstractBasedAPI {
             throw new ApplicationException(APIStatus.ERR_CLASSIFIED_ADVERTISING_NOT_FOUND);
         }
 
-        return responseUtil.successResponse(classifiedAdvertising);
+        // get address
+        AddressResponse authorAddress = null;
+        if (classifiedAdvertising.getLocationType() == Constant.LocationType.DATA_ADDRESS.getValue()) {
+            authorAddress = locationAggregation.getAddressByLocationId(
+                    classifiedAdvertising.getProvinceId(),
+                    classifiedAdvertising.getDistrictId(),
+                    classifiedAdvertising.getWardId()
+            );
+        } else if (classifiedAdvertising.getLocationType() == Constant.LocationType.USER_ADDRESS.getValue()) {
+            authorAddress = addressAggregation.getAddressByAddressIdAndUserId(
+                    classifiedAdvertising.getAddressId(),
+                    classifiedAdvertising.getAuthorId()
+            );
+        }
+
+        // get breadcrumb
+        List<Category> breadcrumbs = new ArrayList<>();
+
+        for (String id : classifiedAdvertising.getBreadcrumbs()) {
+            Category category = categoryService.findCategoryByIdAndStatus(id, Constant.Status.ACTIVE.getValue());
+            breadcrumbs.add(category);
+        }
+
+        // get author info
+        Optional<UserProfile> userProfile = userProfileService
+                .findByUserId(classifiedAdvertising.getAuthorId());
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("breadcrumbs", breadcrumbs);
+        response.put("detail", classifiedAdvertising);
+        if (userProfile.isPresent()) {
+            response.put("author", userProfile.get());
+        } else {
+            response.put("author", "Tài khoản bị khóa");
+        }
+        response.put("address", authorAddress);
+
+        return responseUtil.successResponse(response);
     }
 
     @PostMapping(value = Constant.UPLOAD_TEMP_IMAGE)
@@ -138,8 +201,8 @@ public class AdvertisingController extends AbstractBasedAPI {
             Graphics g = destImage.getGraphics();
             g.drawImage(srcImage, 0, 0, width, height, null);
             g.setColor(Color.WHITE);
-            g.setFont(new Font("Arial", Font.BOLD, 24));
-            g.drawString("BeeMarket", width - 150, height - 10);
+            g.setFont(new Font("Arial", Font.BOLD, 30));
+            g.drawString("BeeMARKET", width - 200, height - 20);
             g.dispose();
 
             // Write new image

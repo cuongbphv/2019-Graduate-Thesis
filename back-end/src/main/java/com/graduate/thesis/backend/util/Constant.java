@@ -18,9 +18,9 @@ public interface Constant {
     String GET_LIST = "/list";
 
     // Auth APIs
-    public static final String AUTH_API = API_PREFIX + "/auth";
-    public static final String REGISTRY_API =  "/register";
-    public static final String LOGIN_API =  "/login";
+    String AUTH_API = API_PREFIX + "/auth";
+    String REGISTRY_API =  "/register";
+    String LOGIN_API =  "/login";
 
     // Category APIs
     String CATEGORY_API = API_PREFIX + "/category";
@@ -41,32 +41,32 @@ public interface Constant {
     String REMOVE_TEMP_IMAGE = "/remove_temp_image";
 
     //USER
-    public static final String USER_API = API_PREFIX + "/user";
-    public static final String CURRENT_USER =  "/me";
-    public static final String CHANGE_PASSWORD =  "/password";
+    String USER_API = API_PREFIX + "/user";
+    String CURRENT_USER =  "/me";
+    String CHANGE_PASSWORD =  "/password";
 
     //Profile management
-    public static final String PROFILE_API = API_PREFIX + "/profile";
-    public static final String AVATAR =  "/avatar";
-    public static final String SETTINGS =  "/settings";
+    String PROFILE_API = API_PREFIX + "/profile";
+    String AVATAR =  "/avatar";
+    String SETTINGS =  "/settings";
 
     // Address APIs
     String ADDRESS_API = API_PREFIX + "/address";
 
 
     //FILE
-    public static final String FILE = API_PREFIX + "/files";
+    String FILE = API_PREFIX + "/files";
 
-    public static final int RANDOM_MIN = 100000;
-    public static final int RANDOM_MAX = 999999;
-    public static final int DEFAULT_EXPIRE_TIME = 3600000; // miliseconds (1 hour)
-    public static final int MAX_EXPIRE_TIME = 86400000; // miliseconds (1 day)
-    public static final String DEFAULT_EXPIRE_TIME_STR = "3600000"; // miliseconds (1 hour)
-    public static final int SALT_LENGTH = 6;
-    public static final String HEADER_TOKEN = "X-Access-Token";
+    int RANDOM_MIN = 100000;
+    int RANDOM_MAX = 999999;
+    int DEFAULT_EXPIRE_TIME = 3600000; // miliseconds (1 hour)
+    int MAX_EXPIRE_TIME = 86400000; // miliseconds (1 day)
+    String DEFAULT_EXPIRE_TIME_STR = "3600000"; // miliseconds (1 hour)
+    int SALT_LENGTH = 6;
+    String HEADER_TOKEN = "X-Access-Token";
 
 
-    public enum Status{
+    enum Status{
 
         DELETE("DELETE",0),
         ACTIVE("ACTIVE", 1),
@@ -90,15 +90,15 @@ public interface Constant {
         }
     }
 
-    enum CommentInteractStatus{
+    enum AdsType{
 
-        HEART("HEART", 1),
-        UNHEART("UNHEART",0);
+        BUY("BUY", 1),
+        SELL("SELL", 2);
 
         private final String name;
         private final int value;
 
-        CommentInteractStatus(String name, int value){
+        AdsType(String name, int value){
             this.name = name;
             this.value = value;
         }
@@ -112,15 +112,15 @@ public interface Constant {
         }
     }
 
-    enum AdsType{
+    enum LocationType{
 
-        BUY("BUY", 1),
-        SELL("SELL", 2);
+        DATA_ADDRESS("SELECT ADDRESS FROM DATA", 1),
+        USER_ADDRESS("EXISTED ADDRESS OF USER", 2);
 
         private final String name;
         private final int value;
 
-        AdsType(String name, int value){
+        LocationType(String name, int value){
             this.name = name;
             this.value = value;
         }
@@ -205,7 +205,7 @@ public interface Constant {
         }
     }
 
-    public enum SystemRole {
+    enum SystemRole {
 
         SYS_ADMIN(1, "Admin"),
         USER(3, "User"),
@@ -228,13 +228,13 @@ public interface Constant {
         public int getId(){ return id;}
     }
 
-    public enum ParamError {
+    enum ParamError {
         ;
 
         private final String name;
         private final String desc;
 
-        private ParamError(String name, String desc) {
+        ParamError(String name, String desc) {
             this.name = name;
             this.desc = desc;
         }
@@ -249,7 +249,7 @@ public interface Constant {
     }
 
 
-    public static enum ResetCodeType {
+    enum ResetCodeType {
 
         FORGOT_PASS(0, "Forgot Pass"), CHANGE_EMAIL(1, "Change email");
         private final int value;

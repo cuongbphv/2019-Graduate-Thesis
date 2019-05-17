@@ -32,4 +32,6 @@ public class Ward {
 
     private String parentCode;
 
+    private int status;
+
 }

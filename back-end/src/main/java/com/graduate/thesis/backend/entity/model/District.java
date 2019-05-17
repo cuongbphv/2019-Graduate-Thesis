@@ -36,4 +36,6 @@ public class District {
 
     private List<Ward> wards;
 
+    private int status;
+
 }

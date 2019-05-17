@@ -15,8 +15,6 @@ public interface LocationService {
 
     void saveListLocation(List<Location> locations);
 
-    void deleteProvince(String id);
-
     void deleteListProvince(List<String> ids);
 
     Location findByLocationId(String locationId);
@@ -26,8 +24,5 @@ public interface LocationService {
     List<Location> fillAllLocation(String name);
 
     Page<Location> getPagingLocation(String searchKey, int sortKey, boolean ascSort, int pageSize, int pageNumber);
-
-    List<District> getPagingDistrictsByProvinceId(
-            String provinceId, String searchKey, int sortKey, boolean ascSort, int pageSize, int pageNumber);
 
 }

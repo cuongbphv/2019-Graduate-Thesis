@@ -14,6 +14,7 @@ const API = {
   // CATEGORY APIs
   CATEGORY: '/category',
   LIST_CATEGORY: '/category/list',
+  BREADCRUMBS: '/category/breadcrumbs',
   METADATA: '/metadata',
   FILTER: '/filter',
   // ADDRESS APIs

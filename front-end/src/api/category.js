@@ -5,6 +5,9 @@ export default {
   getCategoryPaging(params) {
     return Api.get(API.CATEGORY, { params: params }).then(res => res.data)
   },
+  getBreadCrumbs(params) {
+    return Api.get(API.BREADCRUMBS, { params: params }).then(res => res.data)
+  },
   getListCategory(params) {
     return Api.get(API.LIST_CATEGORY, { params: params }).then(res => res.data)
   },

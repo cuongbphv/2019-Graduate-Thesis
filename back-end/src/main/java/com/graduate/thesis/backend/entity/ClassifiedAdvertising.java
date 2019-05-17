@@ -25,6 +25,8 @@ public class ClassifiedAdvertising {
     @Id
     private String id;
 
+    private String authorId;
+
     private int locationType;
 
     private String provinceId;

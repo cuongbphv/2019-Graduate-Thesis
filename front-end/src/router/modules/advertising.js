@@ -12,6 +12,14 @@ const advertisingRouter = {
       meta: {
         permission: 'CREATE_CLASSIFIED_ADVERTISING'
       }
+    },
+    {
+      path: ':id',
+      name: 'ClassifiedAdsDetail',
+      component: () => import('@/views/advertising/ClassifiedAdsDetail'),
+      meta: {
+        skip: true
+      }
     }
   ]
 }

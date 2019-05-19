@@ -32,8 +32,19 @@ const addNewAdvertising = ({ commit }, params) => {
   })
 }
 
+const getClassifiedAdsDetail = ({ commit }, id) => {
+  return advertising.getAdvertisingDetail(id).then(res => {
+    if (res.status === Status.SUCCESS) {
+      commit('GET_CLASSIFIED_ADVERTISING_DETAIL_BY_ID', res.data)
+    }
+  }).catch(error => {
+    throw error
+  })
+}
+
 export default {
   removeTempImage,
   uploadTempImage,
-  addNewAdvertising
+  addNewAdvertising,
+  getClassifiedAdsDetail
 }

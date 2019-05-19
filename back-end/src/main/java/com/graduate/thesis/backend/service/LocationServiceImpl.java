@@ -1,9 +1,7 @@
 package com.graduate.thesis.backend.service;
 
 import com.graduate.thesis.backend.entity.Location;
-import com.graduate.thesis.backend.entity.model.District;
 import com.graduate.thesis.backend.repository.LocationRepository;
-import com.graduate.thesis.backend.repository.aggregation.DistrictAggregation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,9 +20,6 @@ public class LocationServiceImpl implements LocationService {
     @Autowired
     LocationRepository locationRepository;
 
-    @Autowired
-    DistrictAggregation districtAggregation;
-
     @Override
     public void saveLocation(Location location) {
         locationRepository.save(location);
@@ -33,11 +28,6 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public void saveListLocation(List<Location> locations) {
         locationRepository.saveAll(locations);
-    }
-
-    @Override
-    public void deleteProvince(String id) {
-        locationRepository.deleteById(id);
     }
 
     @Override
@@ -69,17 +59,6 @@ public class LocationServiceImpl implements LocationService {
 
         return locationRepository.findLocationLikeName(
                 searchKey, getPageLocation(sortKey, ascSort, pageNumber, pageSize));
-    }
-
-    @Override
-    public List<District> getPagingDistrictsByProvinceId(
-            String provinceId, String searchKey, int sortKey, boolean ascSort, int pageSize, int pageNumber) {
-
-        if (searchKey.isEmpty()) {
-            searchKey = " ";
-        }
-
-        return districtAggregation.getDistrictByProvinceId(provinceId, searchKey, sortKey, ascSort);
     }
 
     private Pageable getPageLocation(int sortKey, boolean ascSort, int pageNumber, int pageSize) {

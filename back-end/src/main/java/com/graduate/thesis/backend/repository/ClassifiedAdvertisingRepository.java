@@ -2,6 +2,7 @@ package com.graduate.thesis.backend.repository;
 
 import com.graduate.thesis.backend.entity.ClassifiedAdvertising;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,4 +10,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ClassifiedAdvertisingRepository extends MongoRepository<ClassifiedAdvertising, String> {
+
+    @Query("{ '_id': ?0, 'status': ?1 }")
+    ClassifiedAdvertising findClassifiedAdvertisingByIdAndStatus(String id, int status);
+
 }

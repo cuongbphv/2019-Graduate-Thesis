@@ -6,5 +6,8 @@ import com.graduate.thesis.backend.entity.ClassifiedAdvertising;
  * @author cuongbphv created on 15/05/2019
  */
 public interface ClassifiedAdvertisingService {
+
     ClassifiedAdvertising save(ClassifiedAdvertising classifiedAdvertising);
+
+    ClassifiedAdvertising getClassifiedAdsDetail(String id, int status);
 }

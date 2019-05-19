@@ -118,22 +118,6 @@ public class LocationController extends AbstractBasedAPI {
         return responseUtil.successResponse(locations);
     }
 
-    @GetMapping(Constant.PROVINCE_API + Constant.WITHIN_ID)
-    public ResponseEntity<RestAPIResponse> getListPagingDistrictByProvinceId (
-            @PathVariable("id") String provinceId,
-            @RequestParam("search_key") String searchKey,
-            @RequestParam("sort_key") int sortKey,
-            @RequestParam("asc_sort") boolean ascSort,
-            @RequestParam("page_size") int pageSize,
-            @RequestParam("page_number") int pageNumber
-    ) {
-
-        List<District> locations = locationService.getPagingDistrictsByProvinceId(
-                provinceId, searchKey, sortKey, ascSort, pageSize, pageNumber);
-
-        return responseUtil.successResponse(locations);
-    }
-
     @PostMapping(Constant.PROVINCE_API)
     public ResponseEntity<RestAPIResponse> addNewProvince(
             @RequestBody NewProvinceRequest newProvinceRequest
@@ -153,6 +137,7 @@ public class LocationController extends AbstractBasedAPI {
         province.setSlug(newProvinceRequest.getSlug());
         province.setType(newProvinceRequest.getType());
         province.setNameWithType(newProvinceRequest.getNameWithType());
+        province.setStatus(Constant.Status.ACTIVE.getValue());
 
         List<District> newDistricts = new ArrayList<>();
 
@@ -168,6 +153,7 @@ public class LocationController extends AbstractBasedAPI {
             newDistrict.setParentCode(province.getId());
             newDistrict.setPath(district.getName() + ", " + province.getName());
             newDistrict.setPathWithType(district.getNameWithType() + ", " + province.getNameWithType());
+            newDistrict.setStatus(Constant.Status.ACTIVE.getValue());
 
             List<Ward> newWards = new ArrayList<>();
 
@@ -184,6 +170,7 @@ public class LocationController extends AbstractBasedAPI {
                 newWard.setParentCode(district.getId());
                 newWard.setPath(ward.getName() + ", " + district.getName() + ", " + province.getName());
                 newWard.setPath(ward.getNameWithType() + ", " + district.getNameWithType() + ", " + province.getNameWithType());
+                newWard.setStatus(Constant.Status.ACTIVE.getValue());
                 newWards.add(newWard);
             }
 
@@ -248,6 +235,7 @@ public class LocationController extends AbstractBasedAPI {
                 location.setNameWithType(provinceData.get("name_with_type").toString());
                 location.setCode(provinceData.get("code").toString());
                 location.setDistricts(handleJsonDistrictData(provinceData.getJSONObject("quan-huyen")));
+                location.setStatus(Constant.Status.ACTIVE.getValue());
             }
             locations.add(location);
         }
@@ -273,6 +261,7 @@ public class LocationController extends AbstractBasedAPI {
                 district.setCode(districtData.get("code").toString());
                 district.setParentCode(districtData.get("parent_code").toString());
                 district.setWards(handleJsonWardData(districtData.getJSONObject("xa-phuong")));
+                district.setStatus(Constant.Status.ACTIVE.getValue());
             }
             districts.add(district);
         }
@@ -297,6 +286,7 @@ public class LocationController extends AbstractBasedAPI {
                 ward.setNameWithType(wardData.get("name_with_type").toString());
                 ward.setCode(wardData.get("code").toString());
                 ward.setParentCode(wardData.get("parent_code").toString());
+                ward.setStatus(Constant.Status.ACTIVE.getValue());
             }
             wards.add(ward);
         }

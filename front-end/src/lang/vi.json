@@ -234,7 +234,9 @@
     "value": "Giá trị",
     "create_category": "Tạo danh mục mới",
     "backToTop": "Lên Đầu Trang",
-    "json_example": "Định dạng dữ liệu JSON mẫu (Ghi chú khi nhập dữ liệu, dữ liệu cũ sẽ bị ghi đè)"
+    "json_example": "Định dạng dữ liệu JSON mẫu (Ghi chú khi nhập dữ liệu, dữ liệu cũ sẽ bị ghi đè)",
+    "vi": "Tiếng Việt",
+    "en": "Tiếng Anh"
   },
   "place_holder": {
     "category_description": "Mô tả sơ lược về danh mục này"

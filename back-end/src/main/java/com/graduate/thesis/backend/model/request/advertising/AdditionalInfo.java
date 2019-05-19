@@ -14,7 +14,7 @@ import lombok.Setter;
 public class AdditionalInfo {
     private String title;
     private String description;
-    private String adsType;
+    private int adsType;
     private long maxPrice;
     private long price;
 }

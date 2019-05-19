@@ -25,6 +25,8 @@ public class ClassifiedAdvertising {
     @Id
     private String id;
 
+    private String authorId;
+
     private int locationType;
 
     private String provinceId;
@@ -42,4 +44,6 @@ public class ClassifiedAdvertising {
     private List<String> breadcrumbs;
 
     private List<AdsMetadata> metadata;
+
+    private int status;
 }

@@ -1,21 +1,31 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-      <div class="title-container">
-        <h3 class="title">
-          {{ $t('login.title') }}
-        </h3>
-        <lang-select class="set-language" />
+
+      <lang-select class="set-language" />
+
+      <p>{{ $t('login.connectWith') }}</p>
+      <div class="social">
+        <el-button class="el-button--primary" @click="handleLoginOAuth2('facebook')">
+          <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'facebook' }" size="2x" />
+          <span>acebook</span>
+        </el-button>
+        <el-button class="el-button--danger" @click="handleLoginOAuth2('google')">
+          <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'google' }" size="2x" />
+          <span>oogle</span>
+        </el-button>
       </div>
 
-      <el-form-item prop="username">
+      <hr class="hr-text" :data-content="$t('login.or')">
+
+      <el-form-item prop="phone">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          v-model="loginForm.username"
-          :placeholder="$t('login.username')"
-          name="username"
+          v-model="loginForm.phone"
+          :placeholder="$t('login.phoneNumber')"
+          name="phone"
           type="text"
           auto-complete="on"
         />
@@ -31,68 +41,102 @@
           :placeholder="$t('login.password')"
           name="password"
           auto-complete="on"
-          @keyup.enter.native="handleLogin"
+          @keyup.enter.native="handleLoginLocal"
         />
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">
-        {{ $t('login.logIn') }}
-      </el-button>
+      <transition name="fade-transform" mode="out-in">
+        <el-form-item v-if="checkMode('register')" prop="confirmPassword">
+          <span class="svg-container">
+            <svg-icon icon-class="password" />
+          </span>
+          <el-input
+            v-model="loginForm.confirmPassword"
+            :type="passwordType"
+            :placeholder="$t('login.confirmPassword')"
+            name="confirmPassword"
+            auto-complete="on"
+            @keyup.enter.native="handleLoginLocal"
+          />
+          <span class="show-pwd" @click="showPwd">
+            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          </span>
+        </el-form-item>
+      </transition>
 
-      <el-button class="m-0" type="primary" @click="showDialog=true">
-        {{ $t('login.thirdparty') }}
-      </el-button>
+      <div class="additional">
+        <el-checkbox>{{ $t('login.rememberMe') }}</el-checkbox>
+        <a href="#">{{ $t('login.forgotPassword') }}</a>
+      </div>
+
+      <div class="button_group">
+        <el-button v-if="checkMode('login')" :loading="loading" type="primary" @click.native.prevent="handleLoginLocal">
+          {{ $t('button.logIn') }}
+        </el-button>
+        <el-button v-if="checkMode('register')" :loading="loading" type="primary" @click.native.prevent="handleRegister">
+          {{ $t('button.signUp') }}
+        </el-button>
+      </div>
+
+      <h5 v-if="checkMode('login')">
+        {{ $t('login.dontHaveAccount') }}&nbsp;
+        <strong>
+          <a href="#" @click="switchMode('register')">{{ $t('button.signUp') }}</a>
+        </strong>
+      </h5>
+
+      <h5 v-if="checkMode('register')">
+        {{ $t('login.haveAccount') }}&nbsp;
+        <strong>
+          <a href="#" @click="switchMode('login')">{{ $t('button.logIn') }}</a>
+        </strong>
+      </h5>
+
     </el-form>
-
-    <el-dialog :title="$t('login.thirdparty')" :visible.sync="showDialog">
-      {{ $t('login.thirdpartyTips') }}
-      <br>
-      <br>
-      <br>
-      <social-sign />
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+import { mapActions } from 'vuex'
+import { showSuccess } from '@/utils/message'
 import LangSelect from '@/components/LangSelect'
-import SocialSign from './socialsignin'
 
 export default {
   name: 'Login',
-  components: { LangSelect, SocialSign },
+  components: { LangSelect },
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
-    }
     return {
       loginForm: {
-        username: 'admin',
-        password: '1111111'
+        phone: '',
+        password: '',
+        confirmPassword: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        phone: [{ required: true, message: this.$t('validator.required'), trigger: 'blur' }],
+        password: [{ required: true, trigger: 'blur', validator: (rule, value, callback) => {
+          if (value.length < 6) {
+            callback(new Error(this.$t('validator.password.max_length', { 'max_length': 6 })))
+          }
+          callback()
+        } }],
+        confirmPassword: [{ required: true, trigger: 'blur', validator: (rule, value, callback) => {
+          if (value.length < 6) {
+            callback(new Error(this.$t('validator.password.max_length', { 'max_length': 6 })))
+          }
+          if (this.loginForm.password !== this.loginForm.confirmPassword) {
+            callback(new Error(this.$t('validator.password.not_match')))
+          }
+          callback()
+        } }]
       },
       passwordType: 'password',
       loading: false,
-      showDialog: false,
-      redirect: undefined
+      isVisible: false,
+      title: 'Login',
+      mode: 'login'
     }
   },
   watch: {
@@ -103,13 +147,15 @@ export default {
       immediate: true
     }
   },
-  created() {
-    // window.addEventListener('hashchange', this.afterQRScan)
-  },
-  destroyed() {
-    // window.removeEventListener('hashchange', this.afterQRScan)
-  },
   methods: {
+    ...mapActions('auth', ['register', 'loginLocal', 'loginOAuth2']),
+    ...mapActions('profile', ['initData']),
+    ...mapActions('permission', ['loadRoutesByAuthorities']),
+    handleDrag() {
+    },
+    handleClose() {
+      this.$emit('closeLoginModal', '')
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -117,48 +163,72 @@ export default {
         this.passwordType = 'password'
       }
     },
-    handleLogin() {
+    handleLoginLocal() {
       this.$refs.loginForm.validate(valid => {
+        this.loading = true
         if (valid) {
-          this.loading = true
-          this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+          const params = {
+            phone: this.loginForm.phone,
+            password: this.loginForm.password
+          }
+          this.loginLocal(params).then(() => {
             this.loading = false
-            this.$router.push({ path: this.redirect || '/' })
-          }).catch(() => {
-            this.loading = false
+            this.isVisible = false
+            showSuccess('message.login_success')
+            this.initData().then((data) => {
+              this.loadRoutesByAuthorities(data.authorities).then(() => {
+                if (data.role.name === 'SYS_ADMIN') {
+                  this.$router.push('role')
+                } else if (data.role.name === 'ADMIN') {
+                  this.$router.push('dashboard')
+                } else if (data.role.name === 'MODERATOR') {
+                  this.$router.push('dashboard')
+                } else if (data.role.name === 'USER') {
+                  this.$router.push('home')
+                }
+              })
+            })
           })
-        } else {
-          console.log('error submit!!')
-          return false
         }
       })
     },
-    afterQRScan() {
-      // const hash = window.location.hash.slice(1)
-      // const hashObj = getQueryObject(hash)
-      // const originUrl = window.location.origin
-      // history.replaceState({}, '', originUrl)
-      // const codeMap = {
-      //   wechat: 'code',
-      //   tencent: 'code'
-      // }
-      // const codeName = hashObj[codeMap[this.auth_type]]
-      // if (!codeName) {
-      //   alert('第三方登录失败')
-      // } else {
-      //   this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
-      //     this.$router.push({ path: '/' })
-      //   })
-      // }
+    handleLoginOAuth2(type) {
+      window.open('http://localhost:8080/oauth2/authorize/' + type + '?redirect_uri=http://localhost:4040/#/home', '_blank')
+    },
+    handleRegister() {
+      this.$refs.loginForm.validate(valid => {
+        this.loading = true
+        if (valid) {
+          const params = {
+            phone: this.loginForm.phone,
+            password: this.loginForm.password
+          }
+          this.register(params).then((data) => {
+            this.loading = false
+            if (data) {
+              this.loginLocal(params).then(() => {
+                this.isVisible = false
+                this.$emit('closeLoginModal', '')
+                this.initData().then((authorities) => {
+                  this.loadRoutesByAuthorities(authorities)
+                })
+              })
+            }
+          })
+        }
+      })
+    },
+    switchMode(mode) {
+      this.mode = mode
+    },
+    checkMode(mode) {
+      return this.mode === mode
     }
   }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  /* 修复input 背景不协调 和光标变色 */
-  /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-
   $bg:#283443;
   $light_gray:#eee;
   $cursor: #fff;
@@ -203,15 +273,16 @@ export default {
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-$bg:#F5F6F8;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+  $bg:#283443;
+  $light_gray:#eee;
+  $cursor: #fff;
+  $dark_gray: #889aa4;
 
 .login-container {
   position: relative;
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
+  background-color: #fff;
   overflow: hidden;
   .login-form {
     border-radius: .625rem;
@@ -223,53 +294,130 @@ $light_gray:#eee;
     transform: translate(-50%,-50%);
     width: 520px;
     max-width: 100%;
-    padding: 100px 35px 50px;
+    padding: 50px 35px 50px;
     margin: auto;
     overflow: hidden;
-  }
-  .tips {
-    font-size: 14px;
-    color: #fff;
-    margin-bottom: 10px;
-    span {
-      &:first-of-type {
-        margin-right: 16px;
+
+    a {
+      &:hover {
+        color: #409EFF;
       }
     }
-  }
-  .svg-container {
-    padding: 6px 5px 6px 15px;
-    color: $dark_gray;
-    vertical-align: middle;
-    width: 30px;
-    display: inline-block;
-  }
-  .title-container {
-    position: relative;
-    .title {
-      font-size: 26px;
-      color: $light_gray;
-      margin: 0 auto 40px auto;
+    h5 {
+      line-height: 0;
+      margin-top: 50px;
+      color: #fff;
       text-align: center;
-      font-weight: bold;
+      a {
+        font-size: 1.2em;
+      }
+    }
+    p {
+      margin: 0;
+      text-align: center;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .el-input {
+      display: inline-block;
+      width: 85%;
+      input {
+        background: transparent;
+        border: 0;
+        -webkit-appearance: none;
+        border-radius: 0;
+        padding: 12px 5px 12px 15px;
+        color: $light_gray;
+        caret-color: $cursor;
+        &:-webkit-autofill {
+          box-shadow: 0 0 0 1000px $bg inset !important;
+          -webkit-text-fill-color: $cursor !important;
+        }
+      }
+      /deep/ .el-input__inner {
+        margin-top: 7px;
+      }
+    }
+    .el-form-item {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      color: #454545;
+    }
+    .svg-container {
+      padding: 6px 0 6px 10px;
+      color: $dark_gray;
+      vertical-align: middle;
+      width: 30px;
+      display: inline-block;
+    }
+    .show-pwd {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      font-size: 16px;
+      color: $dark_gray;
+      cursor: pointer;
+      user-select: none;
+    }
+    .social {
+      text-align: center;
+      span {
+        margin-left: -2px;
+      }
+    }
+    .hr-text {
+      line-height: 1em;
+      position: relative;
+      outline: 0;
+      border: 0;
+      text-align: center;
+      height: 1.5em;
+      &:before {
+        content: '';
+        background: linear-gradient(to right, transparent, #818078, transparent);
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 1px;
+      }
+      &:after {
+        content: attr(data-content);
+        position: relative;
+        display: inline-block;
+        padding: 0 .5em;
+        line-height: 1.5em;
+        color: #fff;
+        background: #232323;
+      }
+    }
+    .button_group {
+      margin-top: 5px;
+      text-align: center;
+      /deep/ .el-button {
+        width: 40%;
+      }
+    }
+    .additional {
+      line-height: 20px;
+      color: #fff;
+      a {
+        float: right;
+        margin-right: 12px;
+      }
+      /deep/ .el-checkbox {
+        margin-left: 12px;
+        color: #fff;
+      }
     }
     .set-language {
       color: #fff;
       position: absolute;
-      top: 3px;
       font-size:18px;
-      right: 0;
       cursor: pointer;
+      right: 10px;
     }
-  }
-  .show-pwd {
-    position: absolute;
-    right: 10px;
-    top: 7px;
-    font-size: 16px;
-    color: $dark_gray;
-    cursor: pointer;
-    user-select: none;
   }
 }
 </style>

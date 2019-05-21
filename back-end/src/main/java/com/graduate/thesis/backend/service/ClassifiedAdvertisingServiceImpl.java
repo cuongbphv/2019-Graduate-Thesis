@@ -3,6 +3,9 @@ package com.graduate.thesis.backend.service;
 import com.graduate.thesis.backend.entity.ClassifiedAdvertising;
 import com.graduate.thesis.backend.repository.ClassifiedAdvertisingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,5 +25,11 @@ public class ClassifiedAdvertisingServiceImpl implements ClassifiedAdvertisingSe
     @Override
     public ClassifiedAdvertising getClassifiedAdsDetail(String id, int status) {
         return classifiedAdvertisingRepository.findClassifiedAdvertisingByIdAndStatus(id, status);
+    }
+
+    @Override
+    public Page<ClassifiedAdvertising> getPagingNewAds(int pageNumber, int pageSize, int status) {
+        return classifiedAdvertisingRepository.getNewAdsPaging(status,
+                new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "createdDate"));
     }
 }

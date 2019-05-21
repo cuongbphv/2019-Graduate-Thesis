@@ -22,8 +22,8 @@ router.beforeEach((to, from, next) => {
     } else {
       // make sure has token get user info when refresh page
       if (store.getters['permission/routes'].length === 0) {
-        store.dispatch('profile/initData').then(authorities => {
-          store.dispatch('permission/loadRoutesByAuthorities', authorities).then(() => {
+        store.dispatch('profile/initData').then(data => {
+          store.dispatch('permission/loadRoutesByAuthorities', data.authorities).then(() => {
             handleNextRoute(to, next)
           })
         })

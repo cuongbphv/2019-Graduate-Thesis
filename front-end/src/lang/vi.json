@@ -6,6 +6,8 @@
     "location": "Địa điểm",
     "category": "Danh mục",
     "user": "Người dùng",
+    "role": "Vai trò",
+    "access": "Quyền truy cập",
     "store": "Cửa hàng",
     "icons": "Biểu tượng",
     "introduction": "Giới thiệu",
@@ -187,7 +189,13 @@
       "type": "Loại",
       "name": "Tên",
       "metadata": "Metadata",
-      "filter": "Lọc nâng cao"
+      "filter": "Lọc nâng cao",
+      "permission": "Quyền",
+      "loginAccount": "Tài khoản đăng nhập",
+      "createdDate": "Ngày tạo",
+      "role": "Vai trò",
+      "provider": "Nhà cung cấp",
+      "status": "Trạng thái"
     }
   },
   "label": {
@@ -236,7 +244,14 @@
     "backToTop": "Lên Đầu Trang",
     "json_example": "Định dạng dữ liệu JSON mẫu (Ghi chú khi nhập dữ liệu, dữ liệu cũ sẽ bị ghi đè)",
     "vi": "Tiếng Việt",
-    "en": "Tiếng Anh"
+    "en": "Tiếng Anh",
+    "status": {
+      "all": "Tất cả",
+      "active": "Hoạt động",
+      "delete": "Đã xóa",
+      "block": "Bị khóa",
+      "pending": "Chờ xử lý"
+    }
   },
   "place_holder": {
     "category_description": "Mô tả sơ lược về danh mục này"

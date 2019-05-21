@@ -10,7 +10,7 @@ import HomeLayout from '@/views/layout/HomeLayout'
 /* Router Modules */
 import profileRouter from './modules/profile'
 import advertisingRouter from './modules/advertising'
-// import chartsRouter from './modules/charts'
+import managementRouter from './modules/management'
 
 export const allRoutes = [
   {
@@ -43,6 +43,52 @@ export const allRoutes = [
     path: '/401',
     component: () => import('@/views/errorPage/401'),
     hidden: true
+  },
+  {
+    path: '/sys_admin_role',
+    component: Layout,
+    redirect: 'role',
+    meta: {
+      title: 'permission',
+      icon: 'lock'
+    },
+    children: [
+      {
+        path: '/role',
+        component: () => import('@/views/sys_admin/Role'),
+        name: 'Role',
+        meta: {
+          title: 'role',
+          permission: 'MANAGE_APP_ROLE'
+        }
+      },
+      {
+        path: '/permission',
+        component: () => import('@/views/sys_admin/Permission'),
+        name: 'Permission',
+        meta: {
+          title: 'access',
+          permission: 'MANAGE_APP_PERMISSION'
+        }
+      }
+    ]
+  },
+  {
+    path: '/sys_admin_user',
+    component: Layout,
+    redirect: 'user_role',
+    children: [
+      {
+        path: '/user_role',
+        component: () => import('@/views/sys_admin/UserRole'),
+        name: 'Role',
+        meta: {
+          title: 'user',
+          icon: 'peoples',
+          permission: 'MANAGE_USER_ROLE'
+        }
+      }
+    ]
   },
   {
     path: '/admin',
@@ -90,85 +136,7 @@ export const allRoutes = [
       advertisingRouter
     ]
   },
-  {
-    path: '/permission',
-    component: Layout,
-    redirect: '/permission/index',
-    meta: {
-      title: 'permission',
-      icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
-    },
-    children: [
-      {
-        path: 'page',
-        component: () => import('@/views/permission/page'),
-        name: 'PagePermission',
-        meta: {
-          title: 'pagePermission'
-        }
-      },
-      {
-        path: 'directive',
-        component: () => import('@/views/permission/directive'),
-        name: 'DirectivePermission',
-        meta: {
-          title: 'directivePermission'
-        }
-      },
-      {
-        path: 'role',
-        component: () => import('@/views/permission/role'),
-        name: 'RolePermission',
-        meta: {
-          title: 'rolePermission'
-        }
-      }
-    ]
-  },
-  {
-    path: '/manage',
-    component: Layout,
-    meta: {
-      title: 'management',
-      icon: 'component'
-    },
-    children: [
-      {
-        path: 'location',
-        component: () => import('@/views/management/location/Location'),
-        name: 'Location',
-        meta: {
-          title: 'location',
-          icon: 'location',
-          permission: 'MANAGE_LOCATION'
-        }
-      },
-      {
-        path: 'category',
-        component: () => import('@/views/management/category/Category'),
-        name: 'Category',
-        meta: {
-          title: 'category',
-          icon: 'list-category',
-          permission: 'MANAGE_CATEGORY'
-        }
-      },
-      {
-        path: 'user',
-        component: () => import('@/views/tab/index'),
-        name: 'User Management',
-        meta: { title: 'user', icon: 'peoples' }
-      },
-      {
-        path: 'store',
-        component: () => import('@/views/tab/index'),
-        name: 'Store',
-        meta: { title: 'store', icon: 'store' }
-      }
-    ]
-  },
-
+  managementRouter,
   {
     path: '/icon',
     component: Layout,

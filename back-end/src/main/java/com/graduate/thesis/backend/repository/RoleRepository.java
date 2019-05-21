@@ -18,4 +18,7 @@ public interface RoleRepository extends MongoRepository<Role, String> {
     @Query("{ '_id': ?0 }")
     Role findByRoleId(String roleId);
 
+    @Query("{ 'status' : ?0 }")
+    List<Role> findAllByStatus(int status);
+
 }

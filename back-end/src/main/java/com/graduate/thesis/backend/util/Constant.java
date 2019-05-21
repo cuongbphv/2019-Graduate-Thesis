@@ -16,6 +16,8 @@ public interface Constant {
 
     // Common APIs
     String GET_LIST = "/list";
+    String GET_NEW_ITEM = "/new";
+    String GET_TOP_SEARCH = "/trend";
 
     // Auth APIs
     String AUTH_API = API_PREFIX + "/auth";
@@ -45,6 +47,12 @@ public interface Constant {
     String CURRENT_USER =  "/me";
     String CHANGE_PASSWORD =  "/password";
 
+    // Role APIs
+    String ROLE_API = API_PREFIX + "/role";
+
+    // Permission APIs
+    String PERMISSION_API = API_PREFIX + "/permission";
+
     //Profile management
     String PROFILE_API = API_PREFIX + "/profile";
     String AVATAR =  "/avatar";
@@ -65,6 +73,24 @@ public interface Constant {
     int SALT_LENGTH = 6;
     String HEADER_TOKEN = "X-Access-Token";
 
+    // ROLE
+    enum Role{
+        SYS_ADMIN("SYS_ADMIN"),
+        ADMIN("ADMIN"),
+        MODERATOR("MODERATOR"),
+        USER("USER");
+
+        private final String name;
+
+        Role(String name){
+            this.name = name;
+        }
+
+        public String getName(){
+            return  this.name;
+        }
+
+    }
 
     enum Status{
 

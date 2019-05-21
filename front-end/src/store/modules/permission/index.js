@@ -4,7 +4,8 @@ import mutations from './mutations'
 
 const state = {
   routes: [],
-  roles: []
+  roles: [],
+  permissions: []
 }
 
 export default {

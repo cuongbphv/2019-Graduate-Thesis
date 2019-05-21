@@ -21,16 +21,19 @@ public enum APIStatus {
     ERR_INTERNAL_SERVER(500, "Internal Server Error"),
     ERR_CREATE_MODEL(501, "Create model error"),
 
-    //USER
+    //USER_ROLE_PERMISSION
     ERR_USER_NOT_FOUND(404, "User not found"),
     ERR_USER_PROFILE_NOT_FOUND(404, "User Profile Not Found"),
     ERR_USER_PROFILE_EXISTED(409, "User Profile Have Existed"),
     ERR_USER_ROLE_NOT_FOUND(404, "User Role Not Found"),
     ERR_USER_INCORRECT_PASSWORD(401, "Password is incorrect"),
+    ERR_PERMISSION_NOT_FOUND(554, "Permission not found"),
+    ERR_ROLE_NOT_FOUND(564, "Role not found"),
 
     // LOCATION
     ERR_LOCATION_NOT_FOUND(504, "Location not found"),
     ERR_LOCATION_EXISTED(505, "Location has existed"),
+
     //FILE
     ERR_FILE_NOT_FOUND(888, "File not found"),
     ERR_CANT_STORE(889, "Could not store file"),

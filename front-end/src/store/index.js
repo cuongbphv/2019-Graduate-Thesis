@@ -11,6 +11,7 @@ import location from './modules/location'
 import permission from './modules/permission'
 import profile from './modules/profile'
 import address from './modules/address'
+import sysAdminUser from './modules/sys-admin-user'
 
 Vue.use(Vuex)
 
@@ -24,6 +25,7 @@ export default new Vuex.Store({
     location,
     permission,
     profile,
+    sysAdminUser,
     errorLog,
     tagsView
   },

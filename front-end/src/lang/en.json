@@ -6,6 +6,8 @@
     "location": "Location",
     "category": "Category",
     "user": "User",
+    "role": "Role",
+    "access": "Access Permission",
     "store": "Store",
     "icons": "Icons",
     "introduction": "Introduction",
@@ -187,7 +189,13 @@
       "type": "Type",
       "name": "Name",
       "metadata": "Metadata",
-      "filter": "Filter"
+      "filter": "Filter",
+      "permission": "Permission",
+      "loginAccount": "Login Account",
+      "createdDate": "Created Date",
+      "role": "Role",
+      "provider": "Provider",
+      "status": "Status"
     }
   },
   "label": {
@@ -236,7 +244,14 @@
     "backToTop": "Back To Top",
     "json_example": "Example JSON data (Notes: When import new data, old data were overridden)",
     "vi": "Vietnamese",
-    "en": "English"
+    "en": "English",
+    "status": {
+      "all": "All",
+      "active": "Active",
+      "delete": "Delete",
+      "block": "Block",
+      "pending": "Pending"
+    }
   },
   "place_holder": {
     "category_description": "Writing a short description for this category"

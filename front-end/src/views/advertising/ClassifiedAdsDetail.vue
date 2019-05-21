@@ -49,7 +49,8 @@
               </div>
             </el-col>
             <el-col :xs="18" :sm="20" :md="21">
-              <h3>{{ '' | formatName(author.firstName, author.lastName) }}</h3>
+              <h3 v-if="i18n.locale === 'vi'">{{ author.lastName + ' ' + author.firstName }}</h3>
+              <h3 v-if="i18n.locale === 'en'">{{ author.firstName + ' ' + author.lastName }}</h3>
               <p>Ngày tham gia: {{ author.createdDate | formatDate(author.createdDate) }}</p>
               <div class="author-action">
                 <el-row>
@@ -87,6 +88,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import i18n from '@/lang'
 export default {
   name: 'ClassifiedAdsDetail',
   data() {
@@ -96,7 +98,8 @@ export default {
       additionalInfo: {},
       author: {},
       address: {},
-      metadata: []
+      metadata: [],
+      i18n: i18n
     }
   },
   computed: {

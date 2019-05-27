@@ -5,6 +5,7 @@ const API = {
   CHANGE_PASSWORD: '/user/password',
   SYS_ADMIN_LIST_USER: '/user/list',
   PROFILE: '/profile',
+  UPDATE_PERSONAL_PERMISSION: '/profile/permissions',
   // Location APIs
   LOCATION: '/location',
   GET_LIST_LOCATION: '/location/list',

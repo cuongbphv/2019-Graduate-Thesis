@@ -62,11 +62,12 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" class-name="small-padding fixed-width">
-        <template>
+        <template slot-scope="scope">
           <el-button
             type="primary"
             icon="el-icon-edit"
             circle
+            @click="handleUpdateUser(scope.row)"
           />
           <el-button
             type="danger"
@@ -76,6 +77,35 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog :visible.sync="dialogVisible" :title="$t('label.update_role_permission')">
+      <el-form label-width="130px" label-position="left">
+        <el-form-item :label="$t('label.role')">
+          <el-select v-model="handleUser.roleId" :placeholder="$t('place_holder.select_role_user')" style="margin-left: 22px;">
+            <el-option
+              v-for="item in roles"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('label.list_permission')">
+          <el-tree
+            ref="tree"
+            :data="listPermissions"
+            :props="{label: 'name'}"
+            node-key="id"
+            show-checkbox
+            class="permission-tree"
+          />
+        </el-form-item>
+      </el-form>
+      <div style="text-align:right;">
+        <el-button type="danger" @click="dialogVisible = false">{{ $t('button.cancel') }}</el-button>
+        <el-button type="primary" @click="confirmActionRole">{{ $t('button.confirm') }}</el-button>
+      </div>
+    </el-dialog>
 
     <pagination
       v-show="totalElements > 0"
@@ -94,6 +124,8 @@ import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import { mapGetters, mapActions } from 'vuex'
 import i18n from '@/lang'
+import sysAdmin from '@/api/sys-admin'
+import { Status } from '@/utils/constants'
 
 export default {
   name: 'ComplexTable',
@@ -122,6 +154,10 @@ export default {
     return {
       tableKey: 0,
       listLoading: true,
+      dialogVisible: false,
+      handleUser: {},
+      listPermissions: [],
+      selectedPermission: [],
       listQuery: {
         searchKey: '',
         sortKey: 7,
@@ -173,9 +209,14 @@ export default {
   },
   computed: {
     ...mapGetters('sysAdminUser', ['listUser', 'totalElements']),
-    ...mapGetters('permission', ['roles']),
+    ...mapGetters('permission', ['roles', 'permissions', 'permissionByRoleId']),
     totalPage() {
       return Math.ceil(this.totalElements / this.listQuery.pageSize)
+    }
+  },
+  watch: {
+    'handleUser.roleId': function() {
+      this.filterPermissionByRole()
     }
   },
   created() {
@@ -184,7 +225,7 @@ export default {
   },
   methods: {
     ...mapActions('sysAdminUser', ['getListUserPaging']),
-    ...mapActions('permission', ['getListRoles']),
+    ...mapActions('permission', ['getListRoles', 'getListPermissions']),
     getList() {
       this.listLoading = true
       this.getListUserPaging(this.listQuery).then(() => {
@@ -231,6 +272,50 @@ export default {
       }
       this.handleFilter()
     },
+    handleUpdateUser(user) {
+      this.dialogVisible = true
+      this.handleUser = Object.assign({}, user)
+      this.filterPermissionByRole()
+    },
+    confirmActionRole() {
+      const ids = this.$refs.tree.getCheckedNodes().filter(permission => !permission.disabled).map(permission => permission.id)
+      sysAdmin.updatePersonalPermission({
+        userId: this.handleUser.userId,
+        roleId: this.handleUser.roleId,
+        permissionIds: ids
+      }).then(res => {
+        if (res.status === Status.SUCCESS) {
+          this.getList()
+          this.$message({
+            message: this.$t('message.update_personal_permission_success'),
+            type: 'success'
+          })
+          this.dialogVisible = false
+        }
+      })
+    },
+    filterPermissionByRole() {
+      this.selectedPermission = []
+      const roleId = this.roles.find(role => role.id === this.handleUser.roleId).id
+      this.getListPermissions({
+        searchKey: '',
+        ascSort: true
+      }).then(() => {
+        this.listPermissions = [...this.permissions]
+        this.$nextTick(() => {
+          this.listPermissions.forEach(permission => {
+            if (this.permissionByRoleId(roleId).findIndex(rolePermission => rolePermission.id === permission.id) !== -1) {
+              permission.disabled = true
+              this.selectedPermission.push(permission)
+            }
+            if (this.handleUser.userPermissions && this.handleUser.userPermissions.findIndex(personalPermission => personalPermission.id === permission.id) !== -1) {
+              this.selectedPermission.push(permission)
+            }
+          })
+          this.$refs.tree.setCheckedNodes(this.selectedPermission)
+        })
+      })
+    },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {
@@ -243,3 +328,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  /deep/ .el-dialog {
+    margin-top: 3vh !important;
+  }
+</style>

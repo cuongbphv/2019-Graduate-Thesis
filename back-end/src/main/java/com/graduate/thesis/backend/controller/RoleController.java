@@ -4,7 +4,7 @@ import com.graduate.thesis.backend.entity.Permission;
 import com.graduate.thesis.backend.entity.Role;
 import com.graduate.thesis.backend.entity.UserAccount;
 import com.graduate.thesis.backend.exception.ApplicationException;
-import com.graduate.thesis.backend.model.request.RoleRequest;
+import com.graduate.thesis.backend.model.request.role_permission.RoleRequest;
 import com.graduate.thesis.backend.model.response.RestAPIResponse;
 import com.graduate.thesis.backend.model.response.RoleResponse;
 import com.graduate.thesis.backend.security.CurrentUser;

@@ -1,4 +1,4 @@
-package com.graduate.thesis.backend.model.request;
+package com.graduate.thesis.backend.model.request.role_permission;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,23 +10,21 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * @author cuongbphv created on 20/05/2019
+ * @author cuongbphv created on 25/05/2019
  */
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleRequest {
+public class PersonalPermissionsRequest {
 
-    private String id;
-
-    @NotNull
     @NotBlank
-    private String name;
-
-    private String description;
-
     @NotNull
+    private String userId;
+
+    @NotBlank
+    @NotNull
+    private String roleId;
+
     private List<String> permissionIds;
 }

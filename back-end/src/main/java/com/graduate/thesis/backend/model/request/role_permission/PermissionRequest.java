@@ -1,4 +1,4 @@
-package com.graduate.thesis.backend.model.request;
+package com.graduate.thesis.backend.model.request.role_permission;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

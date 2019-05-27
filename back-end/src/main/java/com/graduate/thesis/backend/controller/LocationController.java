@@ -185,6 +185,24 @@ public class LocationController extends AbstractBasedAPI {
         return responseUtil.successResponse("OK");
     }
 
+    @PutMapping(Constant.PROVINCE_API + Constant.WITHIN_ID)
+    public ResponseEntity<RestAPIResponse> updateProvinceById(
+            @PathVariable("id") String provinceId,
+            @RequestBody NewProvinceRequest req
+    ) {
+
+        Location province = locationService.findByLocationId(provinceId);
+
+        if (province == null) throw new ApplicationException(APIStatus.ERR_LOCATION_NOT_FOUND);
+
+        province.setName(req.getName());
+        province.setSlug(req.getSlug());
+        province.setType(req.getType());
+        locationService.saveLocation(province);
+
+        return responseUtil.successResponse("OK");
+    }
+
     @DeleteMapping(Constant.PROVINCE_API)
     public ResponseEntity<RestAPIResponse> deleteProvinceByIds (
             @RequestParam("ids") String provinceIds

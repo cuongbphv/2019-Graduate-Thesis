@@ -22,15 +22,15 @@
       >{{ $t('button.delete') }}</el-button>
     </div>
 
-    <el-dialog :visible.sync="dialogVisible" title="Add New Permission">
+    <el-dialog :visible.sync="dialogVisible" :title="$t('label.add_new_permission')">
       <el-form :model="permission" label-width="80px" label-position="left">
-        <el-form-item label="Name">
-          <el-input v-model="permission.name" placeholder="Role Name" />
+        <el-form-item :label="$t('place_holder.permission_name')">
+          <el-input v-model="permission.name" :placeholder="$t('place_holder.permission_name')" />
         </el-form-item>
       </el-form>
       <div style="text-align:right;">
-        <el-button type="danger" @click="dialogVisible = false">{{ $t('permission.cancel') }}</el-button>
-        <el-button type="primary" @click="addNewPermission">{{ $t('permission.confirm') }}</el-button>
+        <el-button type="danger" @click="dialogVisible = false">{{ $t('button.cancel') }}</el-button>
+        <el-button type="primary" @click="addNewPermission">{{ $t('button.confirm') }}</el-button>
       </div>
     </el-dialog>
 
@@ -156,7 +156,7 @@ export default {
         if (res.status === Status.SUCCESS) {
           this.getList()
           this.$message({
-            message: 'Add new permission successfully',
+            message: this.$t('message.add_new_permission_success'),
             type: 'success'
           })
           this.permission.name = ''
@@ -177,7 +177,7 @@ export default {
         if (res.status === Status.SUCCESS) {
           this.getList()
           this.$message({
-            message: 'Update permission successfully',
+            message: this.$t('message.update_permission_success'),
             type: 'success'
           })
         }
@@ -187,7 +187,7 @@ export default {
       row.name = this.originalName[row.id]
       row.edit = false
       this.$message({
-        message: 'Permission name has restored originally',
+        message: this.$t('message.permission_restore'),
         type: 'info'
       })
     },
@@ -204,7 +204,7 @@ export default {
             if (res.status === Status.SUCCESS) {
               this.getList()
               this.$message({
-                message: 'Delete permission successfully',
+                message: this.$t('message.delete_permission_success'),
                 type: 'success'
               })
             }
@@ -228,7 +228,7 @@ export default {
           if (res.status === Status.SUCCESS) {
             this.getList()
             this.$message({
-              message: 'Delete permission successfully',
+              message: this.$t('message.delete_permission_success'),
               type: 'success'
             })
           }

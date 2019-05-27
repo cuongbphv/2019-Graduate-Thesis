@@ -127,21 +127,12 @@
     "upload": "Upload",
     "previous": "Previous",
     "continue": "Continue",
-    "post": "Submit"
+    "post": "Submit",
+    "new_role": "New Role"
   },
   "documentation": {
     "documentation": "Documentation",
     "github": "Github Repository"
-  },
-  "permission": {
-    "addRole": "New Role",
-    "editPermission": "Edit Permission",
-    "roles": "Your roles",
-    "switchRoles": "Switch roles",
-    "tips": "In some cases it is not suitable to use v-permission, such as element Tab component or el-table-column and other asynchronous rendering dom cases which can only be achieved by manually setting the v-if.",
-    "delete": "Delete",
-    "confirm": "Confirm",
-    "cancel": "Cancel"
   },
   "guide": {
     "description": "The guide page is useful for some people who entered the project for the first time. You can briefly introduce the features of the project. Demo is based on ",
@@ -251,10 +242,24 @@
       "delete": "Delete",
       "block": "Block",
       "pending": "Pending"
-    }
+    },
+    "dialog_type": {
+      "warning": "Warning",
+      "delete": "Delete",
+      "info": "Info"
+    },
+    "add_new_permission": "Add New Permission",
+    "list_permission": "List Permission",
+    "update_role_permission": "Update User Role and Permission",
+    "role": "Role",
+    "edit_role": "Edit Role"
   },
   "place_holder": {
-    "category_description": "Writing a short description for this category"
+    "category_description": "Writing a short description for this category",
+    "permission_name": "Permission Name",
+    "role_name": "Role Name",
+    "role_description": "Role Description",
+    "select_role_user": "Select Role User"
   },
   "errorLog": {
     "tips": "Please click the bug icon in the upper right corner",
@@ -303,7 +308,9 @@
     "info_delete": "Please choose elements to delete",
     "keep_data": "Do you want keep old data which you chose before?",
     "location": {
-      "add_province_success": "Add new province successfully"
+      "add_province_success": "Add new province successfully",
+      "province_restore": "Province has restored originally",
+      "update_province_success": "Update province successfully"
     },
     "update_metadata_success": "Update metadata successfully",
     "update_filter_success": "Update filter successfully",
@@ -311,7 +318,16 @@
     "update_category_success": "Update category successfully",
     "create_address_success": "Create address successfully",
     "update_address_success": "Update address successfully",
-    "delete_address_success": "Delete address successfully"
+    "delete_address_success": "Delete address successfully",
+    "add_new_permission_success": "Add new permission successfully",
+    "update_permission_success": "Update permission successfully",
+    "permission_restore": "Permission name has restored originally",
+    "delete_permission_success": "Delete permission successfully",
+    "confirm_remove_role": "Confirm to remove the role?",
+    "delete_role_success": "Delete role successfully",
+    "update_role_success": "Update role and role permission successfully",
+    "create_role_success": "Create role and role permission successfully",
+    "update_personal_permission_success": "Update personal permission successfully"
   },
   "advertising": {
     "additional_info": "Additional Info for Classified Advertising",

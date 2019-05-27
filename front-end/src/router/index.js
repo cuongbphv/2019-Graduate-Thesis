@@ -81,7 +81,7 @@ export const allRoutes = [
       {
         path: '/user_role',
         component: () => import('@/views/sys_admin/UserRole'),
-        name: 'Role',
+        name: 'UserRole',
         meta: {
           title: 'user',
           icon: 'peoples',

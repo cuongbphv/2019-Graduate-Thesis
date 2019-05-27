@@ -44,6 +44,13 @@ const addNewProvince = ({ commit }, province) => {
   })
 }
 
+const updateProvince = ({ commit }, params) => {
+  const param = Location.toProvinceParam(params)
+  return location.updateProvince(params.id, param).then(res => {
+    return res
+  })
+}
+
 const addNewDistrict = ({ commit }, province) => {
   const param = Location.toListDistrictParam(province)
   return location.addNewDistrict(param).then(res => {
@@ -104,6 +111,7 @@ export default {
   addNewProvince,
   addNewDistrict,
   addNewWard,
+  updateProvince,
   deleteProvinces,
   deleteDistricts
 }

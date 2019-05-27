@@ -57,6 +57,7 @@ public interface Constant {
     String PROFILE_API = API_PREFIX + "/profile";
     String AVATAR =  "/avatar";
     String SETTINGS =  "/settings";
+    String PERSONAL_PERMISSION = "/permissions";
 
     // Address APIs
     String ADDRESS_API = API_PREFIX + "/address";

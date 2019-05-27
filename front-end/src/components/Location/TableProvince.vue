@@ -51,14 +51,14 @@
             type="primary"
             icon="el-icon-edit"
             circle
-            @click="scope.row.edit = !scope.row.edit"
+            @click="editProvince(scope.row)"
           />
           <el-button
             v-if="scope.row.edit"
             type="primary"
             icon="el-icon-check"
             circle
-            @click="scope.row.edit = !scope.row.edit"
+            @click="confirmUpdateProvince(scope.row)"
           />
           <el-button
             v-if="scope.row.edit"
@@ -92,6 +92,7 @@
 <script>
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import { mapActions, mapGetters, mapState } from 'vuex'
+import { Status } from '../../utils/constants'
 export default {
   name: 'TableDistrict',
   components: {
@@ -117,7 +118,8 @@ export default {
         sortKey: 1,
         searchKey: ''
       },
-      provinceIds: {}
+      provinceIds: {},
+      originalProvince: {}
     }
   },
   computed: {
@@ -141,7 +143,7 @@ export default {
     this.getList()
   },
   methods: {
-    ...mapActions('location', ['loadListPagingLocation', 'deleteProvinces']),
+    ...mapActions('location', ['loadListPagingLocation', 'deleteProvinces', 'updateProvince']),
     getList() {
       this.listLoading = true
       this.loadListWithSelected()
@@ -159,6 +161,38 @@ export default {
         setTimeout(() => {
           this.listLoading = false
         }, 500)
+      })
+    },
+    editProvince(row) {
+      row.edit = !row.edit
+      this.originalProvince[row.id] = {
+        name: row.name,
+        type: row.type
+      }
+      console.info(this.originalProvince)
+    },
+    cancelEdit(row) {
+      row.name = this.originalProvince[row.id].name
+      row.type = this.originalProvince[row.id].type
+      row.edit = false
+      this.$message({
+        message: this.$t('message.location.province_restore'),
+        type: 'info'
+      })
+    },
+    confirmUpdateProvince(row) {
+      row.edit = !row.edit
+      this.updateProvince({
+        id: row.id,
+        name: row.name,
+        type: row.type
+      }).then(res => {
+        if (res.status === Status.SUCCESS) {
+          this.$message({
+            message: this.$t('message.location.update_province_success'),
+            type: 'success'
+          })
+        }
       })
     },
     deleteProvince(id) {

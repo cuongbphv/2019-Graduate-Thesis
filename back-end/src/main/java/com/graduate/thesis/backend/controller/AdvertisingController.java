@@ -4,6 +4,7 @@ import com.graduate.thesis.backend.entity.Address;
 import com.graduate.thesis.backend.entity.Category;
 import com.graduate.thesis.backend.entity.ClassifiedAdvertising;
 import com.graduate.thesis.backend.entity.UserProfile;
+import com.graduate.thesis.backend.entity.elastic.ClassifiedAdvertisingElastic;
 import com.graduate.thesis.backend.exception.ApplicationException;
 import com.graduate.thesis.backend.model.request.advertising.NewAdvertisingRequest;
 import com.graduate.thesis.backend.model.response.AddressResponse;
@@ -13,10 +14,12 @@ import com.graduate.thesis.backend.repository.aggregation.LocationAggregation;
 import com.graduate.thesis.backend.security.CurrentUser;
 import com.graduate.thesis.backend.security.oauth2.user.UserPrincipal;
 import com.graduate.thesis.backend.service.*;
+import com.graduate.thesis.backend.service.elastic.ClassifiedAdvertisingElasticService;
 import com.graduate.thesis.backend.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -31,10 +34,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author cuongbphv created on 08/05/2019
@@ -64,6 +65,9 @@ public class AdvertisingController extends AbstractBasedAPI {
     @Autowired
     LocationAggregation locationAggregation;
 
+    @Autowired
+    ClassifiedAdvertisingElasticService classifiedAdvertisingElasticService;
+
     @PostMapping()
     public ResponseEntity<RestAPIResponse> createNewAdvertising (
             @CurrentUser UserPrincipal userPrincipal,
@@ -84,9 +88,15 @@ public class AdvertisingController extends AbstractBasedAPI {
         classifiedAdvertising.setAdditionalInfo(reqModel.getAdditionalInfo());
         classifiedAdvertising.setBreadcrumbs(reqModel.getBreadcrumbs());
         classifiedAdvertising.setMetadata(reqModel.getMetadata());
+        classifiedAdvertising.setCreatedDate(new Date());
+        classifiedAdvertising.setModifiedDate(new Date());
         classifiedAdvertising.setStatus(Constant.Status.ACTIVE.getValue());
 
-        return responseUtil.successResponse(classifiedAdvertisingService.save(classifiedAdvertising));
+        ClassifiedAdvertising createdAds = classifiedAdvertisingService.save(classifiedAdvertising);
+
+        indexAds(createdAds);
+
+        return responseUtil.successResponse(createdAds);
     }
 
     @GetMapping(value = Constant.WITHIN_ID)
@@ -249,6 +259,47 @@ public class AdvertisingController extends AbstractBasedAPI {
             e.printStackTrace();
             return "";
         }
+    }
+
+
+    @Async
+    public void indexAds(ClassifiedAdvertising classifiedAdvertising){
+
+        UserProfile author = userProfileService.findByUserId(classifiedAdvertising.getAuthorId())
+                .orElseThrow(() -> new ApplicationException(APIStatus.ERR_USER_PROFILE_NOT_FOUND));
+
+        AddressResponse addressResponse;
+
+        if(classifiedAdvertising.getLocationType() == Constant.LocationType.DATA_ADDRESS.getValue()){
+            addressResponse = addressAggregation.getAddressByLocationId(
+                    classifiedAdvertising.getProvinceId(),
+                    classifiedAdvertising.getDistrictId(),
+                    classifiedAdvertising.getWardId()
+            );
+        }
+        else{
+            addressResponse = addressAggregation.getAddressByAddressIdAndUserId(
+                            classifiedAdvertising.getAddressId(),
+                            classifiedAdvertising.getAuthorId()
+                    );
+        }
+
+        ClassifiedAdvertisingElastic elasticModal = new ClassifiedAdvertisingElastic();
+
+        elasticModal.setId(classifiedAdvertising.getId());
+        elasticModal.setAuthor(author);
+        elasticModal.setLocationType(classifiedAdvertising.getLocationType());
+        elasticModal.setAddress(addressResponse);
+        elasticModal.setImages(classifiedAdvertising.getImages());
+        elasticModal.setAdditionalInfo(classifiedAdvertising.getAdditionalInfo());
+        elasticModal.setBreadcrumbs(classifiedAdvertising.getBreadcrumbs());
+        elasticModal.setMetadata(classifiedAdvertising.getMetadata());
+        elasticModal.setCreatedDate(classifiedAdvertising.getCreatedDate());
+        elasticModal.setModifiedDate(classifiedAdvertising.getModifiedDate());
+        elasticModal.setStatus(classifiedAdvertising.getStatus());
+
+        classifiedAdvertisingElasticService.index(elasticModal);
+
     }
 
 }

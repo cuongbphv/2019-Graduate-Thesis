@@ -2,6 +2,7 @@ package com.graduate.thesis.backend.repository.aggregation;
 
 import com.graduate.thesis.backend.entity.Address;
 import com.graduate.thesis.backend.entity.Category;
+import com.graduate.thesis.backend.entity.Location;
 import com.graduate.thesis.backend.model.response.AddressResponse;
 import com.graduate.thesis.backend.model.response.CategoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,6 +159,29 @@ public class AddressAggregation {
 
         AggregationResults<AddressResponse> results =
                 mongoTemplate.aggregate(aggregation,"address" , AddressResponse.class);
+
+        return results.getUniqueMappedResult();
+    }
+
+    public AddressResponse getAddressByLocationId(String provinceId, String districtId, String wardId) {
+
+        String filterQuery =
+                "{ $project: { \"province.districts\" : 0 ,\"district.wards\" : 0} }";
+
+        AggregationResults<AddressResponse> results =
+                mongoTemplate.aggregate(Aggregation.newAggregation(
+                        AddressResponse.class,
+                        match(Criteria.where("_id").is(provinceId)),
+                        unwind("districts"),
+                        match(Criteria.where("districts._id").is(districtId)),
+                        unwind("districts.wards"),
+                        match(Criteria.where("districts.wards._id").is(wardId)),
+                        project()
+                                .and("$$ROOT").as("province")
+                                .and("$districts").as("district")
+                                .and("$districts.wards").as("ward"),
+                        new CustomProjectAggregationOperation(filterQuery)
+                ), Location.class, AddressResponse.class);
 
         return results.getUniqueMappedResult();
     }

@@ -1,9 +1,11 @@
 package com.graduate.thesis.backend;
 
 import com.graduate.thesis.backend.config.FileStorageProperties;
+import com.graduate.thesis.backend.model.request.advertising.AdsMetadata;
 import com.graduate.thesis.backend.model.response.AddressResponse;
 import com.graduate.thesis.backend.repository.aggregation.AddressAggregation;
 import com.graduate.thesis.backend.repository.aggregation.CategoryAggregation;
+import com.graduate.thesis.backend.service.elastic.ClassifiedAdvertisingElasticService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -27,6 +29,9 @@ public class Application implements CommandLineRunner {
     @Autowired
     AddressAggregation addressAggregation;
 
+    @Autowired
+    ClassifiedAdvertisingElasticService classifiedAdvertisingElasticService;
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -39,6 +44,13 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+//        classifiedAdvertisingElasticService.delete("5ce441a8e3e36a1bf8b36c46");
 
+        classifiedAdvertisingElasticService.fullTextSearch(
+                "5cd2e54fe3e36a044830e7dd",
+                "xe",
+                new ArrayList<AdsMetadata>(),
+                0,
+                10);
     }
 }

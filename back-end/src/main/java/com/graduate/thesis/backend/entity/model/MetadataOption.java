@@ -17,6 +17,8 @@ public class MetadataOption {
 
     private String label;
 
+    private String enLabel;
+
     private String value;
 
     private String image;

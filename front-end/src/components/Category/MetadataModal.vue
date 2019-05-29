@@ -23,7 +23,14 @@
       </el-tooltip>
       <div v-for="(subMeta, parentIndex) in metadataModel" :key="subMeta._hash" style="padding: 15px">
         <el-form-item :label="$t('label.name')">
-          <el-input v-model="subMeta.label" />
+          <el-row>
+            <el-col :md="11" :lg="11">
+              <el-input v-model="subMeta.label" :placeholder="$t('label.vi')" />
+            </el-col>
+            <el-col :md="{span: 11, offset: 2}" :lg="{span: 11, offset: 2}">
+              <el-input v-model="subMeta.enLabel" :placeholder="$t('label.en')" />
+            </el-col>
+          </el-row>
         </el-form-item>
         <!--<el-form-item :label="$t('label.slug')">-->
         <!--<el-input :value="(subMeta.slug)" />-->
@@ -59,12 +66,17 @@
           </el-tooltip>
           <div v-for="(subOption, subIndex) in subMeta.options" :key="subOption._hash" style="padding: 15px">
             <el-row>
-              <el-col :md="11" :lg="11">
+              <el-col :md="14" :lg="14">
                 <el-form-item :label="$t('label.name')">
-                  <el-input v-model="subOption.label" />
+                  <el-col :md="11" :lg="11">
+                    <el-input v-model="subOption.label" :placeholder="$t('label.vi')" />
+                  </el-col>
+                  <el-col :md="{span: 11, offset: 2}" :lg="{span: 11, offset: 2}">
+                    <el-input v-model="subOption.enLabel" :placeholder="$t('label.en')" />
+                  </el-col>
                 </el-form-item>
               </el-col>
-              <el-col :md="{span: 11, offset: 2}" :lg="{span: 11, offset: 2}">
+              <el-col :md="{span: 8, offset: 2}" :lg="{span: 8, offset: 2}">
                 <el-form-item :label="$t('label.value')">
                   <el-input v-if="subMeta.type === 'text'" v-model="subOption.value" />
                   <el-color-picker v-if="subMeta.type === 'color'" v-model="subOption.value" />

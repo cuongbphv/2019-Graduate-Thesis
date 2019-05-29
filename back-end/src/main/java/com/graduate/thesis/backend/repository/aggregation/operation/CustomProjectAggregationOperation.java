@@ -1,4 +1,4 @@
-package com.graduate.thesis.backend.repository.aggregation;
+package com.graduate.thesis.backend.repository.aggregation.operation;
 
 import org.bson.Document;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;

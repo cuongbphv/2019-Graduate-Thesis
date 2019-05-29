@@ -3,7 +3,12 @@ import actions from './actions'
 import mutations from './mutations'
 
 const state = {
-  classifiedAds: {}
+  classifiedAds: {},
+  topNewClassifiedAds: {
+    content: [],
+    totalPages: 0,
+    totalElements: 0
+  }
 }
 
 export default {

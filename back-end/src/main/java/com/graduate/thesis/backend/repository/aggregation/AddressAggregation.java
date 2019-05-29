@@ -1,10 +1,9 @@
 package com.graduate.thesis.backend.repository.aggregation;
 
 import com.graduate.thesis.backend.entity.Address;
-import com.graduate.thesis.backend.entity.Category;
 import com.graduate.thesis.backend.entity.Location;
 import com.graduate.thesis.backend.model.response.AddressResponse;
-import com.graduate.thesis.backend.model.response.CategoryResponse;
+import com.graduate.thesis.backend.repository.aggregation.operation.CustomProjectAggregationOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;

@@ -3,7 +3,9 @@ const API = {
   REGISTER: '/auth/register',
   INIT_DATA: '/user/me',
   CHANGE_PASSWORD: '/user/password',
+  SYS_ADMIN_LIST_USER: '/user/list',
   PROFILE: '/profile',
+  UPDATE_PERSONAL_PERMISSION: '/profile/permissions',
   // Location APIs
   LOCATION: '/location',
   GET_LIST_LOCATION: '/location/list',
@@ -21,8 +23,12 @@ const API = {
   ADDRESS: '/address',
   // ADVERTISING APIs
   ADVERTISING: '/advertising',
+  NEW_ADVERTISING: '/advertising/new',
   UPLOAD_TEMP_IMAGE: '/advertising/upload_temp_image',
-  REMOVE_TEMP_IMAGE: '/advertising/remove_temp_image'
+  REMOVE_TEMP_IMAGE: '/advertising/remove_temp_image',
+  // ROLE_PERMISSION APIs
+  ROLE: '/role',
+  PERMISSION: '/permission'
 }
 
 const Status = {

@@ -31,4 +31,9 @@ public class UserAccountServiceImpl implements UserAccountService{
         return userAccountRepository.findByUserIdAndStatus(userId, Constant.Status.ACTIVE.getValue());
     }
 
+    @Override
+    public long countTotalAccount() {
+        return userAccountRepository.count();
+    }
+
 }

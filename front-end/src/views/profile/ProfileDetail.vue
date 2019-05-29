@@ -40,16 +40,16 @@
             <el-row>
               <ul class="nav">
                 <li>
-                  <router-link :to="{path: 'history'}">Lịch sử</router-link>
+                  <a @click="handleClickRouter('history')">Lịch sử</a>
                 </li>
                 <li>
-                  <router-link :to="{path: 'info'}">Thông tin</router-link>
+                  <a @click="handleClickRouter('info')">Thông tin</a>
                 </li>
                 <li>
-                  <router-link :to="{path: 'settings'}">Cài đặt</router-link>
+                  <a @click="handleClickRouter('settings')">Cài đặt</a>
                 </li>
                 <li>
-                  <router-link :to="{path: 'address'}">Địa chỉ</router-link>
+                  <a @click="handleClickRouter('address')">Địa chỉ</a>
                 </li>
                 <li>Cửa hàng</li>
                 <li>Trợ giúp</li>
@@ -86,6 +86,8 @@
 import ImageCropper from '@/components/ImageCropper'
 import PanThumb from '@/components/PanThumb'
 import { mapActions, mapState } from 'vuex'
+import { scrollTo } from '@/utils/scrollTo'
+
 export default {
   name: 'ProfileDetail',
   components: {
@@ -128,6 +130,10 @@ export default {
           this.image = response.avatarUrl
         }
       })
+    },
+    handleClickRouter(name) {
+      this.$router.push(name)
+      scrollTo(100)
     }
   }
 }
@@ -271,20 +277,12 @@ export default {
     display: inline-flex;
     list-style-type: none;
     li {
-      margin: 0 30px 0 10px;
+      margin: 0 30px 0 5px;
       cursor: pointer;
       font-size: 13pt;
       text-transform: uppercase;
       font-weight: 500;
       color: #888;
-      /*&:hover {*/
-        /*color: #999;*/
-        /*border-bottom: 2px solid #999;*/
-      /*}*/
-      /*&:nth-child(1) {*/
-        /*color: #999;*/
-        /*border-bottom: 2px solid #999;*/
-      /*}*/
       .router-link-active {
         color: #42b1fa;
         border-bottom: 2px solid #42b1fa;

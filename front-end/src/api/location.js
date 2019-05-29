@@ -21,6 +21,9 @@ export default {
   addNewWard(params) {
     return Api.post(API.WARD, params).then(res => res.data)
   },
+  updateProvince(id, params) {
+    return Api.put(API.PROVINCE + '/' + id, params).then(res => res.data)
+  },
   deleteProvinces(params) {
     return Api.delete(API.PROVINCE, {
       params: {

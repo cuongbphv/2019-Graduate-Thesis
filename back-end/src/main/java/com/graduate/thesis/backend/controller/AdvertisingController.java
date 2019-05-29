@@ -8,7 +8,9 @@ import com.graduate.thesis.backend.entity.elastic.ClassifiedAdvertisingElastic;
 import com.graduate.thesis.backend.exception.ApplicationException;
 import com.graduate.thesis.backend.model.request.advertising.NewAdvertisingRequest;
 import com.graduate.thesis.backend.model.response.AddressResponse;
+import com.graduate.thesis.backend.model.response.NewAdsPagingResponse;
 import com.graduate.thesis.backend.model.response.RestAPIResponse;
+import com.graduate.thesis.backend.model.response.advertising.NewAds;
 import com.graduate.thesis.backend.repository.aggregation.AddressAggregation;
 import com.graduate.thesis.backend.repository.aggregation.LocationAggregation;
 import com.graduate.thesis.backend.security.CurrentUser;
@@ -18,6 +20,7 @@ import com.graduate.thesis.backend.service.elastic.ClassifiedAdvertisingElasticS
 import com.graduate.thesis.backend.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
@@ -88,8 +91,9 @@ public class AdvertisingController extends AbstractBasedAPI {
         classifiedAdvertising.setAdditionalInfo(reqModel.getAdditionalInfo());
         classifiedAdvertising.setBreadcrumbs(reqModel.getBreadcrumbs());
         classifiedAdvertising.setMetadata(reqModel.getMetadata());
-        classifiedAdvertising.setCreatedDate(new Date());
-        classifiedAdvertising.setModifiedDate(new Date());
+        classifiedAdvertising.setCreatedDate(plus1Day(new Date()));
+		classifiedAdvertising.setModifiedDate(new Date());
+        // just for new after that will update pending status, after previewer confirm switch to active status
         classifiedAdvertising.setStatus(Constant.Status.ACTIVE.getValue());
 
         ClassifiedAdvertising createdAds = classifiedAdvertisingService.save(classifiedAdvertising);
@@ -147,6 +151,64 @@ public class AdvertisingController extends AbstractBasedAPI {
             response.put("author", "Tài khoản bị khóa");
         }
         response.put("address", authorAddress);
+
+        return responseUtil.successResponse(response);
+    }
+
+    @GetMapping(value = Constant.GET_NEW_ITEM)
+    public ResponseEntity<RestAPIResponse> getNewClassifiedAdsPaging (
+            @RequestParam(value = "page_number", defaultValue = "1") int pageNumber,
+            @RequestParam(value = "page_size", defaultValue = "4") int pageSize
+    ) {
+        Page<ClassifiedAdvertising> page = classifiedAdvertisingService.getPagingNewAds(pageNumber, pageSize,
+                Constant.Status.ACTIVE.getValue());
+
+        List<NewAds> listContent = new ArrayList<>();
+
+        for (ClassifiedAdvertising classifiedAdvertising : page.getContent()) {
+
+            NewAds newAds = new NewAds();
+            newAds.setClassifiedAdsId(classifiedAdvertising.getId());
+            newAds.setTitle(classifiedAdvertising.getAdditionalInfo().getTitle());
+            newAds.setCreatedDate(classifiedAdvertising.getCreatedDate());
+            newAds.setThumbnail(classifiedAdvertising.getImages().get(0));
+
+            AddressResponse authorAddress = null;
+            if (classifiedAdvertising.getLocationType() == Constant.LocationType.DATA_ADDRESS.getValue()) {
+                authorAddress = locationAggregation.getAddressByLocationId(classifiedAdvertising.getProvinceId(),
+                        classifiedAdvertising.getDistrictId(), classifiedAdvertising.getWardId());
+            } else if (classifiedAdvertising.getLocationType() == Constant.LocationType.USER_ADDRESS.getValue()) {
+                authorAddress = addressAggregation.getAddressByAddressIdAndUserId(classifiedAdvertising.getAddressId(),
+                        classifiedAdvertising.getAuthorId()
+                );
+            }
+            newAds.setAddressResponse(authorAddress);
+
+            // get breadcrumb
+            Category category = categoryService.findCategoryByIdAndStatus(classifiedAdvertising.getBreadcrumbs().get(0),
+                    Constant.Status.ACTIVE.getValue());
+
+            newAds.setCategoryId(category.getId());
+            newAds.setCategoryName(category.getName());
+
+            // get author info
+            Optional<UserProfile> userProfile = userProfileService
+                    .findByUserId(classifiedAdvertising.getAuthorId());
+
+            if (userProfile.isPresent()) {
+                newAds.setAuthorId(userProfile.get().getId());
+                newAds.setFirstName(userProfile.get().getFirstName());
+                newAds.setLastName(userProfile.get().getLastName());
+                newAds.setAvatarUrl(userProfile.get().getAvatarUrl());
+            }
+
+            listContent.add(newAds);
+        }
+
+        NewAdsPagingResponse response = new NewAdsPagingResponse();
+        response.setTotalPages(page.getTotalPages());
+        response.setTotalElements(page.getTotalElements());
+        response.setContent(listContent);
 
         return responseUtil.successResponse(response);
     }

@@ -6,7 +6,7 @@
 
     <div class="right-menu">
       <template v-if="device !== 'mobile'">
-        <search class="right-menu-item" />
+        <!--        <search class="right-menu-item" />-->
 
         <!--        <error-log class="errLog-container right-menu-item hover-effect" />-->
 
@@ -52,7 +52,7 @@ import Screenfull from '@/components/Screenfull'
 // import SizeSelect from '@/components/SizeSelect'
 import LangSelect from '@/components/LangSelect'
 // import ThemePicker from '@/components/ThemePicker'
-import Search from '@/components/HeaderSearch'
+// import Search from '@/components/HeaderSearch'
 
 export default {
   components: {
@@ -61,9 +61,9 @@ export default {
     // ErrorLog,
     Screenfull,
     // SizeSelect,
-    LangSelect,
+    LangSelect
     // ThemePicker,
-    Search
+    // Search
   },
   computed: {
     ...mapGetters('layout', ['sidebar', 'device']),
@@ -71,9 +71,10 @@ export default {
   },
   methods: {
     ...mapActions('layout', ['toggleSideBar']),
+    ...mapActions('auth', ['clear']),
     logout() {
-      this.$store.dispatch('LogOut').then(() => {
-        location.reload()// In order to re-instantiate the vue-router object to avoid bugs
+      this.clear().then(() => {
+        location.reload()
       })
     }
   }

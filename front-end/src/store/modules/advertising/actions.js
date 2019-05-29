@@ -42,9 +42,21 @@ const getClassifiedAdsDetail = ({ commit }, id) => {
   })
 }
 
+const getPagingNewClassifiedAds = ({ commit }, params) => {
+  const param = CommonModelMap.toParam(params)
+  return advertising.getNewClassifiedAds(param).then(res => {
+    if (res.status === Status.SUCCESS) {
+      commit('GET_PAGING_NEW_CLASSIFIED_ADVERTISING', res.data)
+    }
+  }).catch(error => {
+    throw error
+  })
+}
+
 export default {
   removeTempImage,
   uploadTempImage,
   addNewAdvertising,
-  getClassifiedAdsDetail
+  getClassifiedAdsDetail,
+  getPagingNewClassifiedAds
 }

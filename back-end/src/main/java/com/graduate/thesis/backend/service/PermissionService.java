@@ -11,8 +11,12 @@ import java.util.List;
 
 public interface PermissionService {
 
+    Permission savePermission(Permission permission);
+
     Permission findByPermissionId(String permissionId);
 
     List<Permission> findByListId(List<String> ids);
+
+    List<Permission> findAllByStatus(String searchKey, boolean ascSort, int status);
 
 }

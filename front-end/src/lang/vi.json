@@ -6,6 +6,8 @@
     "location": "Địa điểm",
     "category": "Danh mục",
     "user": "Người dùng",
+    "role": "Vai trò",
+    "access": "Quyền truy cập",
     "store": "Cửa hàng",
     "icons": "Biểu tượng",
     "introduction": "Giới thiệu",
@@ -125,21 +127,12 @@
     "upload": "Tải lên",
     "previous": "Bước trước",
     "continue": "Tiếp tục",
-    "post": "Đăng bài"
+    "post": "Đăng bài",
+    "new_role": "Vai trò mới"
   },
   "documentation": {
     "documentation": "Documentation",
     "github": "Github Repository"
-  },
-  "permission": {
-    "addRole": "New Role",
-    "editPermission": "Edit Permission",
-    "roles": "Your roles",
-    "switchRoles": "Switch roles",
-    "tips": "In some cases it is not suitable to use v-permission, such as element Tab component or el-table-column and other asynchronous rendering dom cases which can only be achieved by manually setting the v-if.",
-    "delete": "Delete",
-    "confirm": "Confirm",
-    "cancel": "Cancel"
   },
   "guide": {
     "description": "The guide page is useful for some people who entered the project for the first time. You can briefly introduce the features of the project. Demo is based on ",
@@ -187,7 +180,13 @@
       "type": "Loại",
       "name": "Tên",
       "metadata": "Metadata",
-      "filter": "Lọc nâng cao"
+      "filter": "Lọc nâng cao",
+      "permission": "Quyền",
+      "loginAccount": "Tài khoản đăng nhập",
+      "createdDate": "Ngày tạo",
+      "role": "Vai trò",
+      "provider": "Nhà cung cấp",
+      "status": "Trạng thái"
     }
   },
   "label": {
@@ -236,10 +235,31 @@
     "backToTop": "Lên Đầu Trang",
     "json_example": "Định dạng dữ liệu JSON mẫu (Ghi chú khi nhập dữ liệu, dữ liệu cũ sẽ bị ghi đè)",
     "vi": "Tiếng Việt",
-    "en": "Tiếng Anh"
+    "en": "Tiếng Anh",
+    "status": {
+      "all": "Tất cả",
+      "active": "Hoạt động",
+      "delete": "Đã xóa",
+      "block": "Bị khóa",
+      "pending": "Chờ xử lý"
+    },
+    "dialog_type": {
+      "warning": "Cảnh báo",
+      "delete": "Xóa bỏ",
+      "info": "Thông tin"
+    },
+    "add_new_permission": "Thêm quyền truy cập mới",
+    "list_permission": "Danh sách quyền",
+    "update_role_permission": "Cập nhật vai trò người dùng và quyền truy cập",
+    "role": "Vai trò",
+    "edit_role": "Chỉnh sửa vai trò"
   },
   "place_holder": {
-    "category_description": "Mô tả sơ lược về danh mục này"
+    "category_description": "Mô tả sơ lược về danh mục này",
+    "permission_name": "Tên quyền truy cập",
+    "role_name": "Tên vai trò",
+    "role_description": "Mô tả vai trò",
+    "select_role_user": "Lựa chọn vai trò người dùng"
   },
   "errorLog": {
     "tips": "Please click the bug icon in the upper right corner",
@@ -288,7 +308,9 @@
     "info_delete": "Vui lòng chọn đối tượng muốn xóa",
     "keep_data": "Bạn có muốn giữ dữ liệu bạn đã chọn trước đó không?",
     "location": {
-      "add_province_success": "Thêm tỉnh mới thành công"
+      "add_province_success": "Thêm tỉnh mới thành công",
+      "province_restore": "Thông tin tỉnh đã được khôi phục như cũ",
+      "update_province_success": "Cập nhật thông tin tỉnh thành công"
     },
     "update_metadata_success": "Cập nhật metadata thành công",
     "update_filter_success": "Cập nhật lọc thành công",
@@ -296,7 +318,16 @@
     "update_category_success": "Cập nhật danh mục thành công",
     "create_address_success": "Tạo địa chỉ thành công",
     "update_address_success": "Cập nhật địa chỉ thành công",
-    "delete_address_success": "Xóa địa chỉ thành công"
+    "delete_address_success": "Xóa địa chỉ thành công",
+    "add_new_permission_success": "Thêm quyền truy cập mới thành công",
+    "update_permission_success": "Cập nhật quyền truy cập thành công",
+    "permission_restore": "Quyền truy cập đã được khôi phục như cũ",
+    "delete_permission_success": "Xóa quyền truy cập thành công",
+    "confirm_remove_role": "Xác nhận loại bỏ vai trò này?",
+    "delete_role_success": "Xóa vai trò thành công",
+    "update_role_success": "Cập nhật vai trò và quyền vai trò thành công",
+    "create_role_success": "Tạo vai trò và quyền vai trò thành công",
+    "update_personal_permission_success": "Cập nhật quyền truy cập cá nhân thành công"
   },
   "advertising": {
     "additional_info": "Nhập thông tin bổ sung cho tin rao vặt",

@@ -14,4 +14,6 @@ public interface UserAccountService {
 
     UserAccount findActiveUserById(String userId);
 
+    long countTotalAccount();
+
 }

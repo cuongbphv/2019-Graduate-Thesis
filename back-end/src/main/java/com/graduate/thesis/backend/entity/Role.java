@@ -25,6 +25,8 @@ public class Role {
 
     private String name;
 
+    private String description;
+
     private List<String> permissions;
 
     private int status;

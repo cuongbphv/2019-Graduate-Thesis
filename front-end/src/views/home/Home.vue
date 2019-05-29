@@ -30,7 +30,7 @@
         </div>
         <div class="body">
           <el-row>
-            <el-col v-for="(o, index) in 4" :key="o" :span="5" :offset="index > 0 ? 1 : 0">
+            <el-col v-for="(item, index) in topPagingNewClassifiedAds" :key="item.classifiedAdsId" :span="5" :offset="index > 0 ? 1 : 0">
               <el-card shadow="hover" :body-style="{ padding: '0px' }">
                 <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image" alt="No image">
                 <div style="padding: 14px;">
@@ -51,7 +51,7 @@
 
 <script>
 import { About, Category } from '@/components/Layout/Home/index'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Home',
   components: {
@@ -60,7 +60,15 @@ export default {
     Category
   },
   data() {
-    return {}
+    return {
+      query: {
+        pageNumber: 1,
+        pageSize: 4
+      }
+    }
+  },
+  computed: {
+    ...mapGetters('advertising', ['topPagingNewClassifiedAds'])
   },
   beforeCreate() {
     const token = new URL(window.location.href).searchParams.get('token')
@@ -70,9 +78,13 @@ export default {
       })
     }
   },
+  created() {
+    // this.getPagingNewClassifiedAds(this.query)
+  },
   methods: {
     ...mapActions('auth', ['loginOAuth2']),
-    ...mapActions('profile', ['initData'])
+    ...mapActions('profile', ['initData']),
+    ...mapActions('advertising', ['getPagingNewClassifiedAds'])
   }
 }
 </script>

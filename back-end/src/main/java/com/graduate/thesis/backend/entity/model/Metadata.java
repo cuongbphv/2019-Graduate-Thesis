@@ -19,6 +19,8 @@ public class Metadata {
 
     private String label;
 
+    private String enLabel;
+
     private String slug;
 
     private String selectionType;

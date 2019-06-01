@@ -1,5 +1,6 @@
 package com.graduate.thesis.backend.entity;
 
+import com.graduate.thesis.backend.entity.elastic.ClassifiedAdvertisingElastic;
 import com.graduate.thesis.backend.model.request.advertising.AdditionalInfo;
 import com.graduate.thesis.backend.model.request.advertising.AdsMetadata;
 import com.graduate.thesis.backend.model.request.advertising.Image;
@@ -47,8 +48,33 @@ public class ClassifiedAdvertising {
 
     private List<AdsMetadata> metadata;
 
-    @CreatedDate
     private Date createdDate;
 
+    private Date modifiedDate;
+
     private int status;
+
+    public ClassifiedAdvertising(ClassifiedAdvertisingElastic classifiedAdvertisingElastic){
+
+        this.id = classifiedAdvertisingElastic.getId();
+        this.authorId = classifiedAdvertisingElastic.getAuthor().getId();
+        this.locationType = classifiedAdvertisingElastic.getLocationType();
+        this.images = classifiedAdvertisingElastic.getImages();
+        this.additionalInfo = classifiedAdvertisingElastic.getAdditionalInfo();
+        this.breadcrumbs = classifiedAdvertisingElastic.getBreadcrumbs();
+        this.metadata = classifiedAdvertisingElastic.getMetadata();
+        this.createdDate = classifiedAdvertisingElastic.getCreatedDate();
+        this.modifiedDate = classifiedAdvertisingElastic.getModifiedDate();
+        this.status = classifiedAdvertisingElastic.getStatus();
+
+        if(this.locationType == 1){
+            this.wardId = classifiedAdvertisingElastic.getAddress().getWard().getId();
+            this.districtId = classifiedAdvertisingElastic.getAddress().getDistrict().getId();
+            this.provinceId = classifiedAdvertisingElastic.getAddress().getProvince().getId();
+        }
+        else{
+            this.addressId = classifiedAdvertisingElastic.getAddress().getId();
+        }
+
+    }
 }

@@ -29,7 +29,7 @@
           <h2>{{ additionalInfo.title }}</h2>
           <el-row>
             <div class="price">{{ additionalInfo.price |
-              currency('VNĐ', 0, {symbolOnLeft: false, spaceBetweenAmountAndSymbol: true}) }}</div>
+              currency('VNĐ', 0, {symbolOnLeft: false, spaceBetweenAmountAndSymbol: true})</div>
             <div class="action">
               <el-badge :value="200" :max="99" class="item">
                 <el-button size="mini" type="success">Save</el-button>

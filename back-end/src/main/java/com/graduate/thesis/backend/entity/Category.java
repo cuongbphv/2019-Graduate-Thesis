@@ -28,6 +28,8 @@ public class Category {
 
     private String name;
 
+    private String enName;
+
     private String slug;
 
     private String description;

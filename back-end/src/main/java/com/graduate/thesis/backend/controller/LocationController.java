@@ -6,9 +6,7 @@ import com.graduate.thesis.backend.entity.Location;
 import com.graduate.thesis.backend.entity.model.District;
 import com.graduate.thesis.backend.entity.model.Ward;
 import com.graduate.thesis.backend.exception.ApplicationException;
-import com.graduate.thesis.backend.model.request.location.DistrictRequest;
-import com.graduate.thesis.backend.model.request.location.NewProvinceRequest;
-import com.graduate.thesis.backend.model.request.location.WardRequest;
+import com.graduate.thesis.backend.model.request.location.*;
 import com.graduate.thesis.backend.model.response.RestAPIResponse;
 import com.graduate.thesis.backend.service.FileStorageService;
 import com.graduate.thesis.backend.service.LocationService;
@@ -27,9 +25,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author cuongbphv created on 25/04/2019
@@ -210,6 +207,122 @@ public class LocationController extends AbstractBasedAPI {
 
         List<String> listProvinceIds = Lists.newArrayList(Splitter.on(",").split(provinceIds));
         locationService.deleteListProvince(listProvinceIds);
+
+        return responseUtil.successResponse("OK");
+    }
+
+    @PostMapping(Constant.DISTRICT_API)
+    public ResponseEntity<RestAPIResponse> addNewDistricts(
+            @RequestBody NewDistrictRequest newDistrictRequest
+    ) {
+
+        Location location = locationService.findByIdAndStatus(
+                newDistrictRequest.getProvinceId(), Constant.Status.ACTIVE.getValue());
+
+        if (location == null) {
+            throw new ApplicationException(APIStatus.ERR_LOCATION_EXISTED);
+        }
+
+        List<District> existedDistricts = location.getDistricts();
+
+        for(DistrictRequest district : newDistrictRequest.getDistricts()) {
+            if (existedDistricts.stream()
+                    .filter(existedDistrict ->
+                            existedDistrict.getId().equals(district.getId())
+                                    && existedDistrict.getSlug().equals(district.getSlug()))
+                    .collect(Collectors.toList()).size() > 0)
+                continue;
+            // set data to new district
+            District newDistrict = new District();
+            newDistrict.setId(district.getId());
+            newDistrict.setCode(district.getId());
+            newDistrict.setType(district.getName());
+            newDistrict.setSlug(district.getSlug());
+            newDistrict.setName(district.getName());
+            newDistrict.setNameWithType(district.getNameWithType());
+            newDistrict.setParentCode(location.getId());
+            newDistrict.setPath(district.getName() + ", " + location.getName());
+            newDistrict.setPathWithType(district.getNameWithType() + ", " + location.getNameWithType());
+            newDistrict.setStatus(Constant.Status.ACTIVE.getValue());
+
+            // map wards
+            List<Ward> newWards = new ArrayList<>();
+            List<WardRequest> wards = district.getWards();
+            for (WardRequest ward : wards) {
+                Ward newWard = new Ward();
+                newWard.setId(ward.getId());
+                newWard.setName(ward.getName());
+                newWard.setType(ward.getType());
+                newWard.setCode(ward.getId());
+                newWard.setSlug(ward.getSlug());
+                newWard.setNameWithType(ward.getNameWithType());
+                newWard.setParentCode(district.getId());
+                newWard.setPath(ward.getName() + ", " + district.getName() + ", " + location.getName());
+                newWard.setPath(ward.getNameWithType() + ", " + district.getNameWithType() + ", " + location.getNameWithType());
+                newWard.setStatus(Constant.Status.ACTIVE.getValue());
+                newWards.add(newWard);
+            }
+
+            newDistrict.setWards(newWards);
+            existedDistricts.add(newDistrict);
+        }
+
+        location.setDistricts(existedDistricts);
+
+        locationService.saveLocation(location);
+
+        return responseUtil.successResponse("OK");
+    }
+
+    @PostMapping(Constant.WARD_API)
+    public ResponseEntity<RestAPIResponse> addNewWards(
+            @RequestBody NewWardRequest newWardRequest
+    ) {
+
+        Location location = locationService.findByIdAndStatus(
+                newWardRequest.getProvinceId(), Constant.Status.ACTIVE.getValue());
+
+        if (location == null) {
+            throw new ApplicationException(APIStatus.ERR_LOCATION_EXISTED);
+        }
+
+        Optional<District> optional = location.getDistricts().stream()
+                .filter(district -> district.getId().equals(newWardRequest.getDistrictId()))
+                .findFirst();
+
+        if(!optional.isPresent()) {
+            throw new ApplicationException(APIStatus.ERR_LOCATION_EXISTED);
+        }
+
+        District district = optional.get();
+        List<Ward> wards = district.getWards();
+
+        // map wards
+        List<Ward> newWards = new ArrayList<>();
+        for (WardRequest ward : newWardRequest.getWards()) {
+            if (wards.stream()
+                    .filter(existedWard ->
+                            existedWard.getId().equals(ward.getId())
+                                    && existedWard.getSlug().equals(ward.getSlug()))
+                    .collect(Collectors.toList()).size() > 0)
+                continue;
+            Ward newWard = new Ward();
+            newWard.setId(ward.getId());
+            newWard.setName(ward.getName());
+            newWard.setType(ward.getType());
+            newWard.setCode(ward.getId());
+            newWard.setSlug(ward.getSlug());
+            newWard.setNameWithType(ward.getNameWithType());
+            newWard.setParentCode(district.getId());
+            newWard.setPath(ward.getName() + ", " + district.getName() + ", " + location.getName());
+            newWard.setPath(ward.getNameWithType() + ", " + district.getNameWithType() + ", " + location.getNameWithType());
+            newWard.setStatus(Constant.Status.ACTIVE.getValue());
+            newWards.add(newWard);
+        }
+
+        district.setWards(newWards);
+
+        locationService.saveLocation(location);
 
         return responseUtil.successResponse("OK");
     }

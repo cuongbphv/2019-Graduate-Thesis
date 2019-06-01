@@ -19,6 +19,8 @@ public interface LocationService {
 
     Location findByLocationId(String locationId);
 
+    Location findByIdAndStatus(String id, int status);
+
     List<Location> findByIdOrName(String id, String name);
 
     List<Location> fillAllLocation(String name);

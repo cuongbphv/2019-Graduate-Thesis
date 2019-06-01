@@ -7,16 +7,18 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author cuongbphv created on 15/05/2019
  */
 @Repository
 public interface ClassifiedAdvertisingRepository extends MongoRepository<ClassifiedAdvertising, String> {
 
-    @Query("{ '_id': ?0, 'status': ?1 }")
-    ClassifiedAdvertising findClassifiedAdvertisingByIdAndStatus(String id, int status);
+    @Query("{ '_id': ?0, 'status': { $in: ?1 } }")
+    ClassifiedAdvertising findClassifiedAdvertisingByIdAndStatus(String id, List<Integer> status);
 
-    @Query("{ 'status': ?0 }")
-    Page<ClassifiedAdvertising> getNewAdsPaging(int status, Pageable pageable);
+    @Query("{ 'name': {$regex : ?0, $options: 'i'}, 'status': { $in: ?1 } }")
+    Page<ClassifiedAdvertising> getNewAdsPaging(String searchKey, List<Integer> status, Pageable pageable);
 
 }

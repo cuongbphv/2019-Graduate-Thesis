@@ -30,7 +30,7 @@
         <el-form-item :label="$t('label.list_permission')">
           <el-tree
             ref="tree"
-            :data="listPermissions"
+            :data="permissions"
             :props="{label: 'name'}"
             node-key="id"
             show-checkbox
@@ -76,18 +76,9 @@ export default {
   },
   created() {
     this.getListRoles()
-    this.loadListPermission()
   },
   methods: {
     ...mapActions('permission', ['getListRoles', 'getListPermissions']),
-    loadListPermission() {
-      this.getListPermissions({
-        searchKey: '',
-        ascSort: true
-      }).then(() => {
-        this.listPermissions = [...this.permissions]
-      })
-    },
     handleAddRole() {
       this.role = Object.assign({}, defaultRole)
       if (this.$refs.tree) {
@@ -101,8 +92,11 @@ export default {
       this.dialogType = 'edit'
       this.dialogVisible = true
       this.role = Object.assign({}, row)
-      this.$nextTick(() => {
-        this.listPermissions.forEach(permission => {
+      this.getListPermissions({
+        searchKey: '',
+        ascSort: true
+      }).then(() => {
+        this.permissions.forEach(permission => {
           if (this.role.permissions.findIndex(rolePermission => rolePermission.id === permission.id) !== -1) {
             this.selectedPermission.push(permission)
           }

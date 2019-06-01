@@ -141,7 +141,7 @@ import { getToken } from '@/utils/auth'
 import { mapActions } from 'vuex'
 
 export default {
-  name: 'ComplexTable',
+  name: 'Location',
   components: {
     TableDistrict,
     TableWard,

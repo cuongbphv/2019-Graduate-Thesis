@@ -1,9 +1,6 @@
 package com.graduate.thesis.backend.controller;
 
-import com.graduate.thesis.backend.entity.Address;
-import com.graduate.thesis.backend.entity.Category;
-import com.graduate.thesis.backend.entity.ClassifiedAdvertising;
-import com.graduate.thesis.backend.entity.UserProfile;
+import com.graduate.thesis.backend.entity.*;
 import com.graduate.thesis.backend.exception.ApplicationException;
 import com.graduate.thesis.backend.model.request.advertising.NewAdvertisingRequest;
 import com.graduate.thesis.backend.model.response.AddressResponse;
@@ -65,6 +62,12 @@ public class AdvertisingController extends AbstractBasedAPI {
     @Autowired
     LocationAggregation locationAggregation;
 
+    @Autowired
+    UserAccountService userAccountService;
+
+    @Autowired
+    RoleService roleService;
+
     @PostMapping()
     public ResponseEntity<RestAPIResponse> createNewAdvertising (
             @CurrentUser UserPrincipal userPrincipal,
@@ -87,18 +90,51 @@ public class AdvertisingController extends AbstractBasedAPI {
         classifiedAdvertising.setMetadata(reqModel.getMetadata());
         classifiedAdvertising.setCreatedDate(plus1Day(new Date()));
         // just for new after that will update pending status, after previewer confirm switch to active status
-        classifiedAdvertising.setStatus(Constant.Status.ACTIVE.getValue());
+        classifiedAdvertising.setStatus(Constant.Status.PENDING.getValue());
 
         return responseUtil.successResponse(classifiedAdvertisingService.save(classifiedAdvertising));
     }
 
     @GetMapping(value = Constant.WITHIN_ID)
     public ResponseEntity<RestAPIResponse> getClassifiedAdsDetail (
+            @CurrentUser UserPrincipal userPrincipal,
             @PathVariable("id") String adsId
     ) {
 
-        ClassifiedAdvertising classifiedAdvertising = classifiedAdvertisingService
-                .getClassifiedAdsDetail(adsId, Constant.Status.ACTIVE.getValue());
+        ClassifiedAdvertising classifiedAdvertising;
+
+        UserAccount userAccount = userAccountService.findActiveUserById(userPrincipal.getId());
+        // case guest
+        if (userAccount == null) {
+            classifiedAdvertising = classifiedAdvertisingService
+                    .getClassifiedAdsDetail(adsId, Arrays.asList(Constant.Status.ACTIVE.getValue()));
+        } else { // case member
+            Role loginRole = roleService.findByRoleId(userAccount.getRoleId());
+            // check role admin or moderator can see classified advertising
+            if (loginRole.getName().equals(Constant.Role.ADMIN.getName())
+                    || loginRole.getName().equals(Constant.Role.MODERATOR.getName())) {
+                classifiedAdvertising = classifiedAdvertisingService
+                        .getClassifiedAdsDetail(adsId, Arrays.asList(
+                                Constant.Status.ACTIVE.getValue(), // see normal post
+                                Constant.Status.PENDING.getValue(), // see before accept post
+                                Constant.Status.BLOCK.getValue(), // see after block post
+                                Constant.Status.DELETE.getValue() // check reason delete post
+                        ));
+            } else { // case normal member
+                // who logged in is ads owner
+                if (userAccount.getId().equals(adsId)) {
+                    classifiedAdvertising = classifiedAdvertisingService
+                            .getClassifiedAdsDetail(adsId, Arrays.asList(
+                                    Constant.Status.ACTIVE.getValue(), // see normal post
+                                    Constant.Status.PENDING.getValue(), // see before accept post
+                                    Constant.Status.BLOCK.getValue() // see after block post
+                            ));
+                } else { // who logged in is not ads owner
+                    classifiedAdvertising = classifiedAdvertisingService
+                            .getClassifiedAdsDetail(adsId, Arrays.asList(Constant.Status.ACTIVE.getValue()));
+                }
+            }
+        }
 
         if (classifiedAdvertising == null) {
             throw new ApplicationException(APIStatus.ERR_CLASSIFIED_ADVERTISING_NOT_FOUND);
@@ -146,11 +182,41 @@ public class AdvertisingController extends AbstractBasedAPI {
 
     @GetMapping(value = Constant.GET_NEW_ITEM)
     public ResponseEntity<RestAPIResponse> getNewClassifiedAdsPaging (
+            @CurrentUser UserPrincipal userPrincipal,
             @RequestParam(value = "page_number", defaultValue = "1") int pageNumber,
-            @RequestParam(value = "page_size", defaultValue = "4") int pageSize
+            @RequestParam(value = "page_size", defaultValue = "4") int pageSize,
+            @RequestParam(value = "search_key", defaultValue = "") String searchKey,
+            @RequestParam(value = "sort_key", defaultValue = "1") int sortKey,
+            @RequestParam(value = "asc_sort", defaultValue = "true") boolean ascSort
     ) {
-        Page<ClassifiedAdvertising> page = classifiedAdvertisingService.getPagingNewAds(pageNumber, pageSize,
-                Constant.Status.ACTIVE.getValue());
+
+        UserAccount userAccount = userAccountService.findActiveUserById(userPrincipal.getId());
+
+        Page<ClassifiedAdvertising> page;
+
+        if (userAccount == null) {
+            page = classifiedAdvertisingService.getPagingNewAds(
+                    searchKey, sortKey, ascSort, pageNumber, pageSize,
+                    Arrays.asList(Constant.Status.ACTIVE.getValue()));
+        } else {
+            Role loginRole = roleService.findByRoleId(userAccount.getRoleId());
+            // check role admin or moderator can see classified advertising
+            if (loginRole.getName().equals(Constant.Role.ADMIN.getName())
+                    || loginRole.getName().equals(Constant.Role.MODERATOR.getName())) {
+                page = classifiedAdvertisingService.getPagingNewAds(
+                        searchKey, sortKey, ascSort, pageNumber, pageSize,
+                        Arrays.asList(
+                                Constant.Status.ACTIVE.getValue(), // see normal post
+                                Constant.Status.PENDING.getValue(), // see before accept post
+                                Constant.Status.BLOCK.getValue(), // see after block post
+                                Constant.Status.DELETE.getValue() // check reason delete post
+                        ));
+            } else {
+                page = classifiedAdvertisingService.getPagingNewAds(
+                        searchKey, sortKey, ascSort, pageNumber, pageSize,
+                        Arrays.asList(Constant.Status.ACTIVE.getValue()));
+            }
+        }
 
         List<NewAds> listContent = new ArrayList<>();
 

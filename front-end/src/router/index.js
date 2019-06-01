@@ -10,7 +10,7 @@ import HomeLayout from '@/views/layout/HomeLayout'
 /* Router Modules */
 import profileRouter from './modules/profile'
 import advertisingRouter from './modules/advertising'
-import managementRouter from './modules/management'
+// import managementRouter from './modules/management'
 
 export const allRoutes = [
   {
@@ -110,6 +110,74 @@ export const allRoutes = [
     ]
   },
   {
+    path: '/manage/location',
+    component: Layout,
+    redirect: 'dashboard',
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/management/location/Location'),
+        name: 'Location',
+        meta: {
+          title: 'location',
+          icon: 'location',
+          permission: 'MANAGE_LOCATION'
+        }
+      }
+    ]
+  },
+  {
+    path: '/manage/category',
+    component: Layout,
+    redirect: 'dashboard',
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/management/category/Category'),
+        name: 'Category',
+        meta: {
+          title: 'category',
+          icon: 'list-category',
+          permission: 'MANAGE_CATEGORY'
+        }
+      }
+    ]
+  },
+  {
+    path: '/manage/advertising',
+    component: Layout,
+    redirect: 'dashboard',
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/management/advertising/ListAdvertising'),
+        name: 'ListAdvertising',
+        meta: {
+          title: 'advertising',
+          icon: 'post',
+          permission: 'MANAGE_CLASSIFIED_ADVERTISING'
+        }
+      }
+    ]
+  },
+  {
+    path: '/manage/user',
+    component: Layout,
+    redirect: 'dashboard',
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/management/user/User'),
+        name: 'User',
+        meta: {
+          title: 'user',
+          icon: 'user',
+          permission: 'MANAGE_USER'
+        }
+      }
+    ]
+  },
+  {
     path: '',
     component: HomeLayout,
     redirect: 'home',
@@ -136,7 +204,7 @@ export const allRoutes = [
       advertisingRouter
     ]
   },
-  managementRouter,
+  // managementRouter,
   {
     path: '/icon',
     component: Layout,

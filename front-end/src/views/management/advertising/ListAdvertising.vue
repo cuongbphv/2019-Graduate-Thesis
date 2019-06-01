@@ -6,7 +6,7 @@
         :placeholder="$t('label.search')"
         style="width: 400px;"
         class="filter-item"
-        @keyup.enter.native="handleSearchUser"
+        @keyup.enter.native="handleSearchClassifiedAds"
       />
       <el-button
         class="filter-item"
@@ -22,7 +22,7 @@
 import waves from '@/directive/waves'
 
 export default {
-  name: 'User',
+  name: 'ListAdvertising',
   components: {
   },
   directives: { waves },
@@ -38,7 +38,7 @@ export default {
     }
   },
   methods: {
-    handleSearchUser() {
+    handleSearchClassifiedAds() {
     }
   }
 }

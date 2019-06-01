@@ -23,7 +23,7 @@
     </div>
 
     <el-dialog :visible.sync="dialogVisible" :title="$t('label.add_new_permission')">
-      <el-form :model="permission" label-width="80px" label-position="left">
+      <el-form :model="permission" label-width="150px" label-position="left">
         <el-form-item :label="$t('place_holder.permission_name')">
           <el-input v-model="permission.name" :placeholder="$t('place_holder.permission_name')" />
         </el-form-item>

@@ -8,6 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author cuongbphv created on 15/05/2019
  */
@@ -23,13 +25,35 @@ public class ClassifiedAdvertisingServiceImpl implements ClassifiedAdvertisingSe
     }
 
     @Override
-    public ClassifiedAdvertising getClassifiedAdsDetail(String id, int status) {
+    public ClassifiedAdvertising getClassifiedAdsDetail(String id, List<Integer> status) {
         return classifiedAdvertisingRepository.findClassifiedAdvertisingByIdAndStatus(id, status);
     }
 
     @Override
-    public Page<ClassifiedAdvertising> getPagingNewAds(int pageNumber, int pageSize, int status) {
-        return classifiedAdvertisingRepository.getNewAdsPaging(status,
-                new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "createdDate"));
+    public Page<ClassifiedAdvertising> getPagingNewAds(String searchKey, int sortKey, boolean ascSort,
+                                                       int pageNumber, int pageSize, List<Integer> status) {
+
+        if (searchKey.isEmpty()) {
+            searchKey = " ";
+        }
+
+        String properties = "";
+
+        switch (sortKey) {
+            case 1:
+                properties = "_id"; break;
+            case 2:
+                properties = "name"; break;
+            case 3:
+                properties = "type"; break;
+            case 4:
+                properties = "createdDate"; break;
+            default:
+                properties = "createdDate";
+        }
+
+        return classifiedAdvertisingRepository.getNewAdsPaging(searchKey, status,
+                new PageRequest(pageNumber - 1, pageSize,
+                        ascSort ? Sort.Direction.ASC : Sort.Direction.DESC, properties));
     }
 }

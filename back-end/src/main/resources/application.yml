@@ -1,0 +1,53 @@
+#MongoDB Config
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      uri: mongodb://localhost:27017/graduate_thesis_v1
+
+  security:
+      oauth2:
+        client:
+          registration:
+            google:
+              client-id: 1010672071642-fdlsc42jcl51btmi8jlvlm18kpa9i6ll.apps.googleusercontent.com
+              client-secret: a69oFdUKQ8S-j6WANi3_SNW_
+            facebook:
+              client-id: 2289113141355403
+              client-secret: 1681ffb65581998034aa24005c38af36
+
+  app:
+    auth:
+      tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
+      tokenExpirationMsec: 864000000
+
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 100MB
+
+file:
+  upload-dir: ./target/uploads/
+  data-dir: ./target/data/
+  temp-dir: ./target/temp/
+
+logging:
+  level:
+    web: trace
+    org:
+      springframework:
+        web: trace
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
+
+elastic:
+  url: http://localhost:9200
+  host: localhost
+  port: 9200
+  protocol: http
+  classified-ads:
+    index: classified_ads
+    type: _doc

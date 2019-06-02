@@ -187,7 +187,11 @@
       "createdDate": "Ngày tạo",
       "role": "Vai trò",
       "provider": "Nhà cung cấp",
-      "status": "Trạng thái"
+      "status": "Trạng thái",
+      "title": "Tiêu đề",
+      "author": "Tác giả",
+      "category": "Danh mục",
+      "location": "Địa điểm"
     }
   },
   "label": {
@@ -320,6 +324,7 @@
     "create_address_success": "Tạo địa chỉ thành công",
     "update_address_success": "Cập nhật địa chỉ thành công",
     "delete_address_success": "Xóa địa chỉ thành công",
+    "update_status_ads_success": "Cập nhật trạng thái tin rao vặt thành công",
     "add_new_permission_success": "Thêm quyền truy cập mới thành công",
     "update_permission_success": "Cập nhật quyền truy cập thành công",
     "permission_restore": "Quyền truy cập đã được khôi phục như cũ",

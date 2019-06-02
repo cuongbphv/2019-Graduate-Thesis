@@ -187,7 +187,11 @@
       "createdDate": "Created Date",
       "role": "Role",
       "provider": "Provider",
-      "status": "Status"
+      "status": "Status",
+      "title": "Title",
+      "author": "Author",
+      "category": "Category",
+      "location": "Location"
     }
   },
   "label": {
@@ -319,6 +323,7 @@
     "update_category_success": "Update category successfully",
     "create_address_success": "Create address successfully",
     "update_address_success": "Update address successfully",
+    "update_status_ads_success": "Update status of classified advertising successfully",
     "delete_address_success": "Delete address successfully",
     "add_new_permission_success": "Add new permission successfully",
     "update_permission_success": "Update permission successfully",

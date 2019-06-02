@@ -20,6 +20,14 @@ const uploadTempImage = ({ commit }, params) => {
   })
 }
 
+const changeStatusAds = ({ commit }, payload) => {
+  return advertising.changeStatusAds(payload.id, payload.status).then(res => {
+    return res
+  }).catch(error => {
+    throw error
+  })
+}
+
 const addNewAdvertising = ({ commit }, params) => {
   const ads = Advertising.toNewAdvertising(params)
   return advertising.createNewAdvertising(ads).then(res => {
@@ -53,10 +61,23 @@ const getPagingNewClassifiedAds = ({ commit }, params) => {
   })
 }
 
+const getPagingUserHistoryClassifiedAds = ({ commit }, params) => {
+  const param = CommonModelMap.toParam(params)
+  return advertising.getUserHistoryClassifiedAds(param).then(res => {
+    if (res.status === Status.SUCCESS) {
+      commit('GET_PAGING_NEW_CLASSIFIED_ADVERTISING', res.data)
+    }
+  }).catch(error => {
+    throw error
+  })
+}
+
 export default {
   removeTempImage,
   uploadTempImage,
+  changeStatusAds,
   addNewAdvertising,
   getClassifiedAdsDetail,
-  getPagingNewClassifiedAds
+  getPagingNewClassifiedAds,
+  getPagingUserHistoryClassifiedAds
 }

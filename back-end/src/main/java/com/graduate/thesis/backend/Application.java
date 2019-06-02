@@ -46,11 +46,11 @@ public class Application implements CommandLineRunner {
 
 //        classifiedAdvertisingElasticService.delete("5ce441a8e3e36a1bf8b36c46");
 
-        classifiedAdvertisingElasticService.fullTextSearch(
-                "5cd2e54fe3e36a044830e7dd",
-                "xe",
-                new ArrayList<AdsMetadata>(),
-                0,
-                10);
+//        classifiedAdvertisingElasticService.fullTextSearch(
+//                "5cd2e54fe3e36a044830e7dd",
+//                "xe",
+//                new ArrayList<AdsMetadata>(),
+//                0,
+//                10);
     }
 }

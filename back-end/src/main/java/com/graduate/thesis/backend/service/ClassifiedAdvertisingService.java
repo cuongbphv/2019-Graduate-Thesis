@@ -14,6 +14,31 @@ public interface ClassifiedAdvertisingService {
 
     ClassifiedAdvertising getClassifiedAdsDetail(String id, List<Integer> status);
 
-    Page<ClassifiedAdvertising> getPagingNewAds(String searchKey, int sortKey, boolean ascSort,
-                                                int pageNumber, int pageSize, List<Integer> status);
+    ClassifiedAdvertising getClassifiedAdsDetailByIdAndAuthor(String id, String authorId);
+
+    Page<ClassifiedAdvertising> getPagingNewAds(
+            String searchKey,
+            String provinceId,
+            String districtId,
+            String wardId,
+            String categoryId,
+            int sortKey,
+            boolean ascSort,
+            int pageNumber,
+            int pageSize,
+            List<Integer> status
+    );
+
+    Page<ClassifiedAdvertising> getPagingAdsByAuthorId(
+            String authorId,
+            String searchKey,
+            String provinceId,
+            String districtId,
+            String wardId,
+            String categoryId,
+            boolean ascSort,
+            int pageNumber,
+            int pageSize,
+            List<Integer> status
+    );
 }

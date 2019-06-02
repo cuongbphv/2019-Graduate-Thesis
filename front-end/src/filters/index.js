@@ -107,3 +107,14 @@ export function formatName(firstName, lastName) {
     return lastName + ' ' + firstName
   }
 }
+
+export function statusFilter(status) {
+  const statusMap = {
+    3: 'warning',
+    2: 'info',
+    1: 'primary',
+    0: 'danger'
+  }
+  return statusMap[status] || statusMap[2]
+}
+

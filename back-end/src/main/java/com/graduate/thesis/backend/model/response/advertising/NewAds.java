@@ -23,11 +23,13 @@ public class NewAds {
     private String lastName;
     private String avatarUrl;
     // classified advertising
+    private String id;
     private String classifiedAdsId;
     private String title;
     private Date createdDate;
     private AddressResponse addressResponse;
     private Image thumbnail;
+    private int status;
     // category
     private String categoryId;
     private String categoryName;

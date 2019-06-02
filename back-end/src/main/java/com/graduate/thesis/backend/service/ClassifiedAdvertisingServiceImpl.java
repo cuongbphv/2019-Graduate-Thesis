@@ -1,13 +1,17 @@
 package com.graduate.thesis.backend.service;
 
 import com.graduate.thesis.backend.entity.ClassifiedAdvertising;
+import com.graduate.thesis.backend.model.response.AddressResponse;
 import com.graduate.thesis.backend.repository.ClassifiedAdvertisingRepository;
+import com.graduate.thesis.backend.repository.aggregation.AddressAggregation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +22,9 @@ public class ClassifiedAdvertisingServiceImpl implements ClassifiedAdvertisingSe
 
     @Autowired
     ClassifiedAdvertisingRepository classifiedAdvertisingRepository;
+
+    @Autowired
+    AddressAggregation addressAggregation;
 
     @Override
     public ClassifiedAdvertising save(ClassifiedAdvertising classifiedAdvertising) {
@@ -30,30 +37,125 @@ public class ClassifiedAdvertisingServiceImpl implements ClassifiedAdvertisingSe
     }
 
     @Override
-    public Page<ClassifiedAdvertising> getPagingNewAds(String searchKey, int sortKey, boolean ascSort,
-                                                       int pageNumber, int pageSize, List<Integer> status) {
+    public ClassifiedAdvertising getClassifiedAdsDetailByIdAndAuthor(String id, String authorId) {
+        return classifiedAdvertisingRepository.findClassifiedAdvertisingByIdAndAuthorId(id, authorId);
+    }
 
-        if (searchKey.isEmpty()) {
-            searchKey = " ";
-        }
+    @Override
+    public Page<ClassifiedAdvertising> getPagingNewAds(
+            String searchKey,
+            String provinceId,
+            String districtId,
+            String wardId,
+            String categoryId,
+            int sortKey,
+            boolean ascSort,
+            int pageNumber,
+            int pageSize,
+            List<Integer> status
+    ) {
+
+        List<ClassifiedAdvertising> content = new ArrayList<>();
+
+        List<ClassifiedAdvertising> listAds;
 
         String properties = "";
 
         switch (sortKey) {
             case 1:
-                properties = "_id"; break;
+                properties = "additionalInfo.title"; break;
             case 2:
-                properties = "name"; break;
-            case 3:
-                properties = "type"; break;
-            case 4:
                 properties = "createdDate"; break;
+            case 3:
+                properties = "status"; break;
             default:
                 properties = "createdDate";
         }
 
-        return classifiedAdvertisingRepository.getNewAdsPaging(searchKey, status,
-                new PageRequest(pageNumber - 1, pageSize,
-                        ascSort ? Sort.Direction.ASC : Sort.Direction.DESC, properties));
+        Sort sort = new Sort(ascSort ? Sort.Direction.ASC : Sort.Direction.DESC, properties);
+
+        if (categoryId.isEmpty()) {
+            listAds = classifiedAdvertisingRepository.getNewAdsPaging(searchKey, status, sort);
+        } else {
+            listAds = classifiedAdvertisingRepository.getNewAdsPagingHasCategory(searchKey, categoryId, status, sort);
+        }
+
+        for (ClassifiedAdvertising ads : listAds) {
+            // classified ads of user has detail address
+            if (ads.getAddressId() != null) {
+                // get address detail
+                AddressResponse addressResponse = addressAggregation.getAddressByAddressIdAndUserId(
+                        ads.getAddressId(),
+                        ads.getAuthorId()
+                );
+                // if can not find address break this ads
+                if (addressResponse == null) continue;
+                // check valid case
+                if (!wardId.isEmpty()) {
+                    if (addressResponse.getWard().getId().equals(wardId)) {
+                        content.add(ads);
+                    }
+                    continue;
+                }
+                if (!districtId.isEmpty()) {
+                    if (addressResponse.getDistrict().getId().equals(districtId)) {
+                        content.add(ads);
+                    }
+                    continue;
+                }
+                if (!provinceId.isEmpty()) {
+                    if (addressResponse.getProvince().getId().equals(provinceId)) {
+                        content.add(ads);
+                    }
+                    continue;
+                }
+            }
+
+            if (!wardId.isEmpty()) {
+                if (ads.getWardId().equals(wardId)) {
+                    content.add(ads);
+                }
+                continue;
+            }
+            if (!districtId.isEmpty()) {
+                if (ads.getDistrictId().equals(districtId)) {
+                    content.add(ads);
+                }
+                continue;
+            }
+            if (!provinceId.isEmpty()) {
+                if (ads.getProvinceId().equals(provinceId)) {
+                    content.add(ads);
+                }
+                continue;
+            }
+            // all above case is wrong
+            content.add(ads);
+        }
+
+        return new PageImpl<>(content, new PageRequest(pageNumber - 1, pageSize), content.size());
+    }
+
+    @Override
+    public Page<ClassifiedAdvertising> getPagingAdsByAuthorId(
+            String authorId,
+            String searchKey,
+            String categoryId,
+            boolean ascSort,
+            int pageNumber,
+            int pageSize,
+            List<Integer> status
+    ) {
+
+        Pageable pageable = new PageRequest(pageNumber - 1, pageSize,
+                ascSort ? Sort.Direction.ASC : Sort.Direction.DESC, "createdDate");
+
+        if (categoryId.isEmpty()) {
+            return classifiedAdvertisingRepository.getUserHistoryAdsPagingNoCategory(
+                    searchKey, status, authorId, pageable);
+        } else {
+            return classifiedAdvertisingRepository.getUserHistoryAdsPagingHasCategory(
+                    searchKey, categoryId, status, authorId, pageable);
+        }
     }
 }

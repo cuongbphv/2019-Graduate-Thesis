@@ -28,8 +28,9 @@
         <div class="basic-info">
           <h2>{{ additionalInfo.title }}</h2>
           <el-row>
-            <div class="price">{{ additionalInfo.price |
-              currency('VNĐ', 0, {symbolOnLeft: false, spaceBetweenAmountAndSymbol: true})</div>
+            <div class="price">{{ additionalInfo.price | currency('VNĐ', 0, {symbolOnLeft: false, spaceBetweenAmountAndSymbol: true}) }}</div>
+            <span>-</span>
+            <div v-if="additionalInfo.maxPrice" class="price">{{ additionalInfo.maxPrice | currency('VNĐ', 0, {symbolOnLeft: false, spaceBetweenAmountAndSymbol: true}) }}</div>
             <div class="action">
               <el-badge :value="200" :max="99" class="item">
                 <el-button size="mini" type="success">Save</el-button>
@@ -89,6 +90,7 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import i18n from '@/lang'
+
 export default {
   name: 'ClassifiedAdsDetail',
   data() {
@@ -114,6 +116,8 @@ export default {
       this.author = Object.assign({}, this.classifiedAds.author)
       this.address = Object.assign({}, this.classifiedAds.address)
     })
+  },
+  created() {
   },
   methods: {
     ...mapActions('advertising', ['getClassifiedAdsDetail'])
@@ -195,6 +199,9 @@ export default {
         font-weight: bold;
         color: red;
         text-align: left;
+      }
+      span {
+        color: red;
       }
       .action {
         display: inline;

@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <div class="filter-item">
-        <span>Tìm kiếm</span>
+        <span>{{ $t('advertising.search') }}</span>
         <el-input
           v-model="listQuery.searchKey"
           :placeholder="$t('label.search')"
@@ -13,7 +13,7 @@
       </div>
 
       <div class="filter-item">
-        <span>Danh mục</span>
+        <span>{{ $t('advertising.category') }}</span>
         <el-select
           v-model="listQuery.categoryId"
           :placeholder="$t('table.header.category')"
@@ -26,7 +26,7 @@
       </div>
 
       <div class="filter-item">
-        <span>Trạng thái</span>
+        <span>{{ $t('table.header.status') }}</span>
         <el-select
           v-model="listQuery.status"
           :placeholder="$t('table.header.status')"
@@ -41,7 +41,7 @@
 
     <div class="filter-container">
       <div class="filter-item">
-        <span>Địa điểm</span>
+        <span>{{ $t('advertising.location') }}</span>
         <el-select
           v-model="listQuery.provinceId"
           :placeholder="$t('table.header.city')"
@@ -107,7 +107,7 @@
       </el-table-column>
       <el-table-column :label="$t('table.header.location')" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.addressResponse.ward.pathWithType }}</span>
+          <span>{{ scope.row.addressResponse.detail ? scope.row.addressResponse.detail + ', ' + scope.row.addressResponse.ward.pathWithType : scope.row.addressResponse.ward.pathWithType }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.header.createdDate')" align="center" width="140" prop="2" sortable="custom">
@@ -258,7 +258,10 @@ export default {
       this.getList()
     },
     getList() {
-      this.getPagingNewClassifiedAds(this.listQuery)
+      this.isLoading = true
+      this.getPagingNewClassifiedAds(this.listQuery).then(() => {
+        this.isLoading = false
+      })
     },
     handleSearchClassifiedAds() {
       this.getList()

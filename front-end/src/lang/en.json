@@ -129,7 +129,8 @@
     "previous": "Previous",
     "continue": "Continue",
     "post": "Submit",
-    "new_role": "New Role"
+    "new_role": "New Role",
+    "load_more": "Load More"
   },
   "documentation": {
     "documentation": "Documentation",

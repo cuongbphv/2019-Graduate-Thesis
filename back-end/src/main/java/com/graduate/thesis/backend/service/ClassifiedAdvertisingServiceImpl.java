@@ -1,17 +1,17 @@
 package com.graduate.thesis.backend.service;
 
 import com.graduate.thesis.backend.entity.ClassifiedAdvertising;
+import com.graduate.thesis.backend.model.response.AddressResponse;
 import com.graduate.thesis.backend.repository.ClassifiedAdvertisingRepository;
+import com.graduate.thesis.backend.repository.aggregation.AddressAggregation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +22,9 @@ public class ClassifiedAdvertisingServiceImpl implements ClassifiedAdvertisingSe
 
     @Autowired
     ClassifiedAdvertisingRepository classifiedAdvertisingRepository;
+
+    @Autowired
+    AddressAggregation addressAggregation;
 
     @Override
     public ClassifiedAdvertising save(ClassifiedAdvertising classifiedAdvertising) {
@@ -52,6 +55,10 @@ public class ClassifiedAdvertisingServiceImpl implements ClassifiedAdvertisingSe
             List<Integer> status
     ) {
 
+        List<ClassifiedAdvertising> content = new ArrayList<>();
+
+        List<ClassifiedAdvertising> listAds;
+
         String properties = "";
 
         switch (sortKey) {
@@ -65,48 +72,74 @@ public class ClassifiedAdvertisingServiceImpl implements ClassifiedAdvertisingSe
                 properties = "createdDate";
         }
 
-        Pageable pageable = new PageRequest(pageNumber - 1, pageSize,
-                ascSort ? Sort.Direction.ASC : Sort.Direction.DESC, properties);
+        Sort sort = new Sort(ascSort ? Sort.Direction.ASC : Sort.Direction.DESC, properties);
 
         if (categoryId.isEmpty()) {
-            if (!wardId.isEmpty()) {
-                return classifiedAdvertisingRepository.getNewAdsPagingNoCategory(
-                        searchKey, provinceId, districtId, wardId, status, pageable);
-            }
-            if (!districtId.isEmpty()) {
-                return classifiedAdvertisingRepository.getNewAdsPagingNoCategory(
-                        searchKey, provinceId, districtId, status, pageable);
-            }
-            if (!provinceId.isEmpty()) {
-                return classifiedAdvertisingRepository.getNewAdsPagingNoCategory(
-                        searchKey, provinceId, status, pageable);
-            }
-            return classifiedAdvertisingRepository.getNewAdsPaging(searchKey, status, pageable);
+            listAds = classifiedAdvertisingRepository.getNewAdsPaging(searchKey, status, sort);
         } else {
+            listAds = classifiedAdvertisingRepository.getNewAdsPagingHasCategory(searchKey, categoryId, status, sort);
+        }
+
+        for (ClassifiedAdvertising ads : listAds) {
+            // classified ads of user has detail address
+            if (ads.getAddressId() != null) {
+                // get address detail
+                AddressResponse addressResponse = addressAggregation.getAddressByAddressIdAndUserId(
+                        ads.getAddressId(),
+                        ads.getAuthorId()
+                );
+                // if can not find address break this ads
+                if (addressResponse == null) continue;
+                // check valid case
+                if (!wardId.isEmpty()) {
+                    if (addressResponse.getWard().getId().equals(wardId)) {
+                        content.add(ads);
+                    }
+                    continue;
+                }
+                if (!districtId.isEmpty()) {
+                    if (addressResponse.getDistrict().getId().equals(districtId)) {
+                        content.add(ads);
+                    }
+                    continue;
+                }
+                if (!provinceId.isEmpty()) {
+                    if (addressResponse.getProvince().getId().equals(provinceId)) {
+                        content.add(ads);
+                    }
+                    continue;
+                }
+            }
+
             if (!wardId.isEmpty()) {
-                return classifiedAdvertisingRepository.getNewAdsPagingHasCategory(
-                        searchKey, provinceId, districtId, wardId, categoryId, status, pageable);
+                if (ads.getWardId().equals(wardId)) {
+                    content.add(ads);
+                }
+                continue;
             }
             if (!districtId.isEmpty()) {
-                return classifiedAdvertisingRepository.getNewAdsPagingHasCategory(
-                        searchKey, provinceId, districtId, categoryId, status, pageable);
+                if (ads.getDistrictId().equals(districtId)) {
+                    content.add(ads);
+                }
+                continue;
             }
             if (!provinceId.isEmpty()) {
-                return classifiedAdvertisingRepository.getNewAdsPagingHasCategory(
-                        searchKey, provinceId, categoryId, status, pageable);
+                if (ads.getProvinceId().equals(provinceId)) {
+                    content.add(ads);
+                }
+                continue;
             }
-            return classifiedAdvertisingRepository.getNewAdsPagingHasCategory(
-                    searchKey, categoryId, status, pageable);
+            // all above case is wrong
+            content.add(ads);
         }
+
+        return new PageImpl<>(content, new PageRequest(pageNumber - 1, pageSize), content.size());
     }
 
     @Override
     public Page<ClassifiedAdvertising> getPagingAdsByAuthorId(
             String authorId,
             String searchKey,
-            String provinceId,
-            String districtId,
-            String wardId,
             String categoryId,
             boolean ascSort,
             int pageNumber,
@@ -118,32 +151,9 @@ public class ClassifiedAdvertisingServiceImpl implements ClassifiedAdvertisingSe
                 ascSort ? Sort.Direction.ASC : Sort.Direction.DESC, "createdDate");
 
         if (categoryId.isEmpty()) {
-            if (!wardId.isEmpty()) {
-                return classifiedAdvertisingRepository.getUserHistoryAdsPagingNoCategory(
-                        searchKey, provinceId, districtId, wardId, status, authorId, pageable);
-            }
-            if (!districtId.isEmpty()) {
-                return classifiedAdvertisingRepository.getUserHistoryAdsPagingNoCategory(
-                        searchKey, provinceId, districtId, status, authorId, pageable);
-            }
-            if (!provinceId.isEmpty()) {
-                return classifiedAdvertisingRepository.getUserHistoryAdsPagingNoCategory(
-                        searchKey, provinceId, status, authorId, pageable);
-            }
-            return classifiedAdvertisingRepository.getUserHistoryAdsPagingNoCategory(searchKey, status, authorId, pageable);
+            return classifiedAdvertisingRepository.getUserHistoryAdsPagingNoCategory(
+                    searchKey, status, authorId, pageable);
         } else {
-            if (!wardId.isEmpty()) {
-                return classifiedAdvertisingRepository.getUserHistoryAdsPagingHasCategory(
-                        searchKey, provinceId, districtId, wardId, categoryId, status, authorId, pageable);
-            }
-            if (!districtId.isEmpty()) {
-                return classifiedAdvertisingRepository.getUserHistoryAdsPagingHasCategory(
-                        searchKey, provinceId, districtId, categoryId, status, authorId, pageable);
-            }
-            if (!provinceId.isEmpty()) {
-                return classifiedAdvertisingRepository.getUserHistoryAdsPagingHasCategory(
-                        searchKey, provinceId, categoryId, status, authorId, pageable);
-            }
             return classifiedAdvertisingRepository.getUserHistoryAdsPagingHasCategory(
                     searchKey, categoryId, status, authorId, pageable);
         }

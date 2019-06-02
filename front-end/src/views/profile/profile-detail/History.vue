@@ -1,16 +1,37 @@
 <template>
   <div class="gallery">
 
-    <el-row style="text-align: right">
-      <el-dropdown split-button type="default" style="text-align: center;">
-        Sort
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>Action 1</el-dropdown-item>
-          <el-dropdown-item>Action 2</el-dropdown-item>
-          <el-dropdown-item>Action 3</el-dropdown-item>
-          <el-dropdown-item>Action 4</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+    <el-row class="row-filter">
+      <span>{{ $t('advertising.search') }}</span>
+      <el-input
+        v-model="listQuery.searchKey"
+        :placeholder="$t('label.search')"
+        style="width: 300px;"
+        class="filter-item"
+        @keyup.enter.native="handleFilter"
+      />
+
+      <el-select
+        v-model="listQuery.categoryId"
+        :placeholder="$t('table.header.category')"
+        clearable
+        class="filter-item"
+        @clear="listQuery.categoryId = ''"
+      >
+        <el-option v-for="item in listCategory" :key="item.id" :label="item.name" :value="item.id" />
+      </el-select>
+
+      <el-select
+        v-model="listQuery.status"
+        :placeholder="$t('table.header.status')"
+        clearable
+        class="filter-item"
+        @clear="listQuery.status = -1"
+      >
+        <el-option v-for="item in statusOptions" :key="item.status" :label="item.label" :value="item.status" />
+      </el-select>
+
+      <el-divider />
     </el-row>
 
     <el-timeline v-for="item in listUserClassifiedAds" :key="item.id">
@@ -22,8 +43,9 @@
             </el-col>
             <el-col :xs="16" :sm="16" :md="16" :lg="16">
               <h3>{{ item.title }}</h3>
-              <p>Danh mục <el-tag type="info">{{ item.categoryName }}</el-tag></p>
-              <p>Trạng thái <el-tag :type="item.status | statusFilter">{{ mapStatus(item.status) }}</el-tag></p>
+              <p>{{ $t('advertising.location') }} <el-tag type="info">{{ item.addressResponse.detail ? item.addressResponse.detail + ', ' + item.addressResponse.ward.pathWithType : item.addressResponse.ward.pathWithType }}</el-tag></p>
+              <p>{{ $t('advertising.category') }} <el-tag type="info">{{ item.categoryName }}</el-tag></p>
+              <p>{{ $t('table.header.status') }} <el-tag :type="item.status | statusFilter">{{ mapStatus(item.status) }}</el-tag></p>
             </el-col>
           </el-row>
         </el-card>
@@ -35,7 +57,7 @@
       class="load-more"
       type="primary"
       @click="handleLoadMore"
-    >Load More</el-button>
+    >{{ $t('button.load_more') }}</el-button>
   </div>
 </template>
 
@@ -51,32 +73,73 @@ export default {
         pageSize: 10,
         searchKey: '',
         ascSort: false,
-        sortKey: 2,
-        provinceId: '',
-        districtId: '',
-        wardId: '',
         categoryId: '',
         status: -1
-      }
+      },
+      statusOptions: [
+        {
+          status: -1,
+          label: this.$t('label.status.all')
+        },
+        {
+          status: 0,
+          label: this.$t('label.status.delete')
+        },
+        {
+          status: 1,
+          label: this.$t('label.status.active')
+        },
+        {
+          status: 2,
+          label: this.$t('label.status.pending')
+        },
+        {
+          status: 3,
+          label: this.$t('label.status.block')
+        }
+      ]
     }
   },
   computed: {
     ...mapState('advertising', ['totalPages', 'totalElements']),
-    ...mapGetters('advertising', ['listPagingClassifiedAds'])
+    ...mapGetters('advertising', ['listPagingClassifiedAds']),
+    ...mapGetters('location', ['listLocation', 'listDistrictByProvinceId', 'listWardByDistrictId']),
+    ...mapGetters('category', ['listCategory'])
+  },
+  watch: {
+    'listQuery.searchKey': function(newVal, oldVal) {
+      this.handleFilter()
+    },
+    'listQuery.status': function(newVal, oldVal) {
+      this.handleFilter()
+    },
+    'listQuery.categoryId': function(newVal, oldVal) {
+      this.handleFilter()
+    }
   },
   created() {
     this.getList()
+    this.loadListLocation({ searchKey: '' })
+    this.getListCategory({ searchKey: this.searchKey, parentId: null })
   },
   methods: {
     ...mapActions('advertising', ['getPagingUserHistoryClassifiedAds']),
+    ...mapActions('location', ['loadListLocation']),
+    ...mapActions('category', ['getListCategory']),
     getList() {
       this.getPagingUserHistoryClassifiedAds(this.listQuery).then(() => {
-        this.listUserClassifiedAds = [...this.listUserClassifiedAds, ...this.listPagingClassifiedAds]
+        this.listUserClassifiedAds = [...this.listPagingClassifiedAds]
       })
+    },
+    handleFilter() {
+      this.listQuery.pageNumber = 1
+      this.getList()
     },
     handleLoadMore() {
       this.listQuery.pageNumber++
-      this.getList()
+      this.getPagingUserHistoryClassifiedAds(this.listQuery).then(() => {
+        this.listUserClassifiedAds = [...this.listUserClassifiedAds, ...this.listPagingClassifiedAds]
+      })
     },
     mapStatus(status) {
       switch (status) {
@@ -120,6 +183,15 @@ export default {
       img {
         background: none;
         width: 90%;
+      }
+    }
+    .row-filter {
+      padding-left: 40px;
+      span {
+        padding-right: 35px;
+      }
+      .filter-item {
+        width: 150px;
       }
     }
   }

@@ -80,6 +80,12 @@ public class AdvertisingController extends AbstractBasedAPI {
             @RequestBody NewAdvertisingRequest reqModel
     ) {
 
+        UserAccount userAccount = userAccountService.findActiveUserById(userPrincipal.getId());
+        // case guest
+        if (userAccount == null) {
+            throw new ApplicationException(APIStatus.ERR_USER_NOT_FOUND);
+        }
+
         ClassifiedAdvertising classifiedAdvertising = new ClassifiedAdvertising();
         classifiedAdvertising.setLocationType(reqModel.getLocationType());
         if (reqModel.getLocationType() == Constant.LocationType.DATA_ADDRESS.getValue()) {
@@ -234,9 +240,6 @@ public class AdvertisingController extends AbstractBasedAPI {
             @RequestParam(value = "page_size", defaultValue = "10") int pageSize,
             @RequestParam(value = "search_key", defaultValue = "") String searchKey,
             @RequestParam(value = "asc_sort", defaultValue = "true") boolean ascSort,
-            @RequestParam(value = "province_id", defaultValue = "") String provinceId,
-            @RequestParam(value = "district_id", defaultValue = "") String districtId,
-            @RequestParam(value = "ward_id", defaultValue = "") String wardId,
             @RequestParam(value = "status", defaultValue = "-1") int status,
             @RequestParam(value = "category_id", defaultValue = "") String categoryId
     ) {
@@ -250,9 +253,6 @@ public class AdvertisingController extends AbstractBasedAPI {
         Page<ClassifiedAdvertising> page = classifiedAdvertisingService.getPagingAdsByAuthorId(
                 userAccount.getId(),
                 searchKey,
-                provinceId,
-                districtId,
-                wardId,
                 categoryId,
                 ascSort,
                 pageNumber,

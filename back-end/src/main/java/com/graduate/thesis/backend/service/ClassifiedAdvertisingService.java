@@ -32,9 +32,6 @@ public interface ClassifiedAdvertisingService {
     Page<ClassifiedAdvertising> getPagingAdsByAuthorId(
             String authorId,
             String searchKey,
-            String provinceId,
-            String districtId,
-            String wardId,
             String categoryId,
             boolean ascSort,
             int pageNumber,

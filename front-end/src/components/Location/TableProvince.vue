@@ -115,7 +115,7 @@ export default {
         pageNumber: 1,
         pageSize: 10,
         ascSort: true,
-        sortKey: 1,
+        sortKey: 2,
         searchKey: ''
       },
       provinceIds: {},
@@ -169,7 +169,6 @@ export default {
         name: row.name,
         type: row.type
       }
-      console.info(this.originalProvince)
     },
     cancelEdit(row) {
       row.name = this.originalProvince[row.id].name

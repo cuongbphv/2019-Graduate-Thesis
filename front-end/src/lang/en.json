@@ -314,9 +314,20 @@
     "info_delete": "Please choose elements to delete",
     "keep_data": "Do you want keep old data which you chose before?",
     "location": {
+      "upload_success": "Upload location data successfully",
+      "upload_exceed": "Remove uploaded file to upload new file",
       "add_province_success": "Add new province successfully",
+      "add_district_success": "Add new district successfully",
+      "add_ward_success": "Add new ward successfully",
       "province_restore": "Province has restored originally",
-      "update_province_success": "Update province successfully"
+      "update_province_success": "Update province successfully",
+      "district_restore": "District has restored originally",
+      "update_district_success": "Update district successfully",
+      "ward_restore": "Ward has restored originally",
+      "update_ward_success": "Update ward successfully",
+      "delete_province_success": "Delete province(s) successfully",
+      "delete_district_success": "Delete district(s) successfully",
+      "delete_ward_success": "Delete ward(s) successfully"
     },
     "update_metadata_success": "Update metadata successfully",
     "update_filter_success": "Update filter successfully",
@@ -337,7 +348,6 @@
     "update_personal_permission_success": "Update personal permission successfully"
   },
   "advertising": {
-    "additional_info": "Additional Info for Classified Advertising",
     "title": "Title",
     "title_placeholder": "Input Title",
     "description": "Description",
@@ -359,13 +369,32 @@
     "min_price": "Min Price",
     "max_price": "Max Price",
     "list_image": "List image",
-    "step2": "Choose province, city",
+    "step1": "Choose category for classified advertising",
+    "step2": "Choose province, city for classified advertising",
+    "step3": "Upload images for classified advertising",
+    "step4": "Additional Info for classified advertising",
+    "step5": "Preview classified advertising",
+    "image_required": "(*) You have to upload least an image for classified advertising",
+    "quick": "To sell faster:",
+    "rotate": "Rotate the horizontal camera to make the display more beautiful",
+    "more_view": "Capture from multiple corners of the product (front, back, side)",
+    "not": "Should not",
+    "internet": "Use duplicate images or get from the Internet",
+    "insert_phone": "Insert the phone number / email / logo in the picture",
+    "created_success": "You have created classified advertising successfully",
+    "watch": "Go to",
+    "post": "post",
+    "now": "you have just created now",
+    "drop": "Drop file here or",
+    "click": "click to upload",
     "new_location": "Choose New Location",
     "exist_location": "Choose Your Address",
     "search": "Search",
     "search_placeholder": "Input location where you want to post",
     "category_sub": "Sub Category",
-    "address": "Address"
+    "address": "Address",
+    "desc_info": "Description Info",
+    "tech_info": "Specification Info"
   },
   "userProfile": {
     "firstName": "First name",
@@ -409,7 +438,10 @@
       "409": "Category is existed"
     },
     "location": {
-      "505": "New province existed in database"
+      "504": "Location not found",
+      "505": "Province existed",
+      "506": "District existed",
+      "507": "Ward existed"
     }
   }
 }

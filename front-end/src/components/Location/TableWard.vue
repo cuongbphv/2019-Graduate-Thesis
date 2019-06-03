@@ -22,35 +22,50 @@
       </el-table-column>
       <el-table-column :label="$t('table.header.ward')" align="center" prop="name" sortable="custom">
         <template slot-scope="scope">
-          <!--        <template v-if="scope.row.edit">-->
-          <!--          <el-input v-model="scope.row.name" class="edit-input" size="small" />-->
-          <!--          <el-button-->
-          <!--            class="cancel-btn"-->
-          <!--            size="small"-->
-          <!--            icon="el-icon-refresh"-->
-          <!--            type="warning"-->
-          <!--            @click="cancelEdit(scope.row)"-->
-          <!--          />-->
-          <!--        </template>-->
-          <span>{{ scope.row.name }}</span>
+          <template v-if="scope.row.edit">
+            <el-input v-model="scope.row.name" class="edit-input" size="small" />
+          </template>
+          <span v-else>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.header.type')" align="center" prop="type" sortable="custom">
         <template slot-scope="scope">
-          <el-tag>{{ scope.row.type }}</el-tag>
+          <template v-if="scope.row.edit">
+            <el-input v-model="scope.row.type" class="edit-input" size="small" />
+          </template>
+          <el-tag v-else>{{ scope.row.type }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
-        <template>
+        <template slot-scope="scope">
           <el-button
+            v-if="!scope.row.edit"
             type="primary"
             icon="el-icon-edit"
             circle
+            @click="editWard(scope.row)"
           />
           <el-button
+            v-if="scope.row.edit"
+            type="primary"
+            icon="el-icon-check"
+            circle
+            @click="confirmUpdateWard(scope.row)"
+          />
+          <el-button
+            v-if="scope.row.edit"
+            class="cancel-btn"
+            size="small"
+            icon="el-icon-refresh"
+            type="warning"
+            @click="cancelEdit(scope.row)"
+          />
+          <el-button
+            v-if="!scope.row.edit"
             type="danger"
             icon="el-icon-delete"
             circle
+            @click="deleteWard(scope.row.id)"
           />
         </template>
       </el-table-column>
@@ -66,9 +81,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Pagination from '@/components/Pagination'
 import { compareExpression } from '@/utils'
+import { Status } from '@/utils/constants'
+import { showMessageAfterCallAPI } from '@/utils/message'
 export default {
   name: 'TableDistrict',
   components: {
@@ -104,7 +121,9 @@ export default {
         searchKey: '',
         ascSort: false,
         sortKey: 'name'
-      }
+      },
+      originalWard: {},
+      wardIds: {}
     }
   },
   computed: {
@@ -128,18 +147,7 @@ export default {
     this.getList()
   },
   methods: {
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row)
-        })
-      } else {
-        this.$refs.multipleTable.clearSelection()
-      }
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-    },
+    ...mapActions('location', ['updateWard', 'deleteWards']),
     handlePagination({ page, limit }) {
       this.listQuery.pageNumber = page
       this.listQuery.pageSize = limit
@@ -157,6 +165,69 @@ export default {
       const start = (this.listQuery.pageNumber - 1) * this.listQuery.pageSize
       this.listWards.sort(compareExpression(this.listQuery.sortKey, this.listQuery.ascSort))
       this.tableData = this.listWards.slice(start, start + this.listQuery.pageSize)
+    },
+    editWard(row) {
+      row.edit = !row.edit
+      this.originalWard[row.id] = {
+        name: row.name,
+        type: row.type
+      }
+    },
+    cancelEdit(row) {
+      row.name = this.originalWard[row.id].name
+      row.type = this.originalWard[row.id].type
+      row.edit = false
+      this.$message({
+        message: this.$t('message.location.ward_restore'),
+        type: 'info'
+      })
+    },
+    confirmUpdateWard(row) {
+      row.edit = !row.edit
+      this.updateWard({
+        id: row.id,
+        provinceId: this.provinceId,
+        districtId: this.districtId,
+        name: row.name,
+        type: row.type
+      }).then(res => {
+        if (res.status === Status.SUCCESS) {
+          this.$message({
+            message: this.$t('message.location.update_ward_success'),
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: this.$t('errors.location.' + res.status),
+            type: 'error'
+          })
+        }
+      })
+    },
+    deleteWard(id) {
+      this.$confirm(this.$t('message.confirm_delete'), this.$t('label.warning'), {
+        confirmButtonText: this.$t('button.confirm'),
+        cancelButtonText: this.$t('button.cancel'),
+        type: 'warning'
+      }).then(() => {
+        this.deleteWards({
+          provinceId: this.provinceId,
+          districtId: this.districtId,
+          ids: id
+        }).then((res) => {
+          showMessageAfterCallAPI(res, 'message.location.delete_ward_success')
+          this.$emit('reloadList')
+        })
+      }).catch(() => {})
+    },
+    handleSelectionChange(rows) {
+      if (rows.length > 0) {
+        // eslint-disable-next-line
+        let ids = {}
+        ids[this.listQuery.pageNumber] = rows.map(district => district.id)
+        this.districtIds = Object.assign({}, this.districtIds, ids)
+        this.$emit('keepListIdToDelete', this.districtIds)
+      }
     }
   }
 }

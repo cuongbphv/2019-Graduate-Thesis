@@ -1,11 +1,36 @@
 <template>
   <div class="navbar">
+
+    <div v-if="device === 'mobile'" id="sideNavigation" class="sidenav">
+      <el-menu
+        default-active="2"
+        class="el-menu-vertical-demo"
+        :background-color="variables.menuBg"
+        :text-color="variables.menuText"
+        :active-text-color="variables.menuActiveText"
+        style="border-right: 0;"
+      >
+        <el-menu-item index="2">
+          <i class="el-icon-menu" />
+          <span>Navigator Two</span>
+        </el-menu-item>
+        <el-menu-item index="4">
+          <i class="el-icon-setting" />
+          <span>Navigator Four</span>
+        </el-menu-item>
+        <el-menu-item index="5" @click="closeNav()">
+          <i class="el-icon-close" />
+          <span>Đóng</span>
+        </el-menu-item>
+      </el-menu>
+    </div>
+
     <div class="row menu">
       <div class="column-left">
         <hamburger
           v-if="device === 'mobile'"
-          :toggle-click="toggleSideBar"
-          :is-active="sidebar.opened"
+          id="hamburger"
+          :is-active="opened"
           class="hamburger-container"
         />
         <router-link to="/"><img src="../../../assets/logo.png" alt="No logo"></router-link>
@@ -70,6 +95,23 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import Hamburger from '@/components/Hamburger'
 import SearchBar from '@/components/Layout/Home/SearchBar'
 import Login from '@/components/Auth/LoginModal'
+import variables from '@/styles/variables.scss'
+
+window.addEventListener('click', function(e) {
+  const hamburger = document.getElementById('hamburger')
+  const sideBar = document.getElementById('sideNavigation')
+  // check element available or not
+  if (hamburger === null || hamburger === undefined || sideBar === null || sideBar === undefined) return
+  // check click into hamburger icon
+  if (hamburger.contains(e.target)) {
+    sideBar.style.width = '210px'
+    return
+  }
+  // if click outside sidebar area
+  if (!sideBar.contains(e.target)) {
+    sideBar.style.width = '0px'
+  }
+})
 
 export default {
   name: 'NavBar',
@@ -80,12 +122,18 @@ export default {
   },
   data() {
     return {
-      isVisible: false
+      isVisible: false,
+      opened: false
     }
   },
   computed: {
     ...mapState('profile', ['profile']),
-    ...mapGetters('layout', ['sidebar', 'device'])
+    ...mapGetters('layout', ['sidebar', 'device']),
+    variables() {
+      return variables
+    }
+  },
+  created() {
   },
   methods: {
     ...mapActions('layout', ['toggleSideBar']),
@@ -97,12 +145,37 @@ export default {
     },
     handleLoginModal() {
       this.isVisible = !this.isVisible
+    },
+    openNav() {
+      this.opened = true
+      document.getElementById('sideNavigation').style.width = '210px'
+    },
+    closeNav() {
+      this.opened = false
+      document.getElementById('sideNavigation').style.width = '0px'
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0;
+  left: 0;
+  background-color: #304156;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+}
+
 .column-left {
   float: left;
   width: 30%;

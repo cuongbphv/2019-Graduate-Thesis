@@ -38,6 +38,23 @@ export default class CommonModelMap {
     return snakeCaseKeys(param)
   }
 
+  static toUpdateDistrictParam(param) {
+    if (Object.keys(param).length > 0) {
+      param.slug = toSlug(param.name)
+      delete param._hash
+      delete param.wards
+    }
+    return snakeCaseKeys(param)
+  }
+
+  static toUpdateWardParam(param) {
+    if (Object.keys(param).length > 0) {
+      param.slug = toSlug(param.name)
+      delete param._hash
+    }
+    return snakeCaseKeys(param)
+  }
+
   static toListDistrictParam(param) {
     if (param.length > 0) {
       param.map(district => {

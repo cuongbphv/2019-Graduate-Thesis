@@ -1,6 +1,5 @@
 <template>
-  <div :class="classObj" class="app-wrapper">
-    <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
+  <div class="home-layout">
     <div class="sticky-nav">
       <contact-bar />
       <nav-bar />
@@ -23,7 +22,7 @@ import { ContactBar, NavBar, HomeFooter } from '@/components/Layout/Home/index'
 import AppMain from '@/components/Layout/AppMain/AppMain'
 import ResizeMixin from '@/mixins/ResizeHandler'
 import BackToTop from '@/components/BackToTop'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   name: 'HomeLayout',
   components: {
@@ -35,26 +34,11 @@ export default {
   },
   mixins: [ResizeMixin],
   computed: {
-    ...mapGetters('layout', ['sidebar', 'device']),
-    classObj() {
-      return {
-        hideSidebar: !this.sidebar.opened,
-        openSidebar: this.sidebar.opened,
-        withoutAnimation: this.sidebar.withoutAnimation,
-        mobile: this.device === 'mobile'
-      }
-    }
+    ...mapGetters('layout', ['device'])
   },
   created() {
-    if (this.$route.query.token) {
-      console.log(this.$route.query.token)
-    }
   },
   methods: {
-    ...mapActions('layout', ['closeSideBar']),
-    handleClickOutside() {
-      this.closeSideBar({ withoutAnimation: false })
-    }
   }
 }
 </script>
@@ -65,24 +49,5 @@ export default {
     position: sticky;
     top: 0;
     z-index: 5;
-  }
-  .app-wrapper {
-    @include clearfix;
-    position: relative;
-    height: 100%;
-    width: 100%;
-    &.mobile.openSidebar{
-      position: fixed;
-      top: 0;
-    }
-  }
-  .drawer-bg {
-    background: #000;
-    opacity: 0.3;
-    width: 100%;
-    top: 0;
-    height: 100%;
-    position: absolute;
-    z-index: 999;
   }
 </style>

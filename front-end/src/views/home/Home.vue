@@ -99,7 +99,7 @@ export default {
   }
   .main-container {
     position: absolute;
-    margin: 10px 40px;
+    margin: 10px 40px !important;
   }
   .time {
     font-size: 13px;

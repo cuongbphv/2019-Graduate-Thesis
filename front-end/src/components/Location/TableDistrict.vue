@@ -22,41 +22,57 @@
       </el-table-column>
       <el-table-column :label="$t('table.header.district')" align="center" prop="name" sortable="custom">
         <template slot-scope="scope">
-          <!--        <template v-if="scope.row.edit">-->
-          <!--          <el-input v-model="scope.row.name" class="edit-input" size="small" />-->
-          <!--          <el-button-->
-          <!--            class="cancel-btn"-->
-          <!--            size="small"-->
-          <!--            icon="el-icon-refresh"-->
-          <!--            type="warning"-->
-          <!--            @click="cancelEdit(scope.row)"-->
-          <!--          />-->
-          <!--        </template>-->
-          <span>{{ scope.row.name }}</span>
+          <template v-if="scope.row.edit">
+            <el-input v-model="scope.row.name" class="edit-input" size="small" />
+          </template>
+          <span v-else>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.header.type')" align="center" prop="type" sortable="custom">
         <template slot-scope="scope">
-          <el-tag>{{ scope.row.type }}</el-tag>
+          <template v-if="scope.row.edit">
+            <el-input v-model="scope.row.type" class="edit-input" size="small" />
+          </template>
+          <el-tag v-else>{{ scope.row.type }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
+            v-if="!scope.row.edit"
             type="info"
             icon="el-icon-info"
             circle
             @click="handleLoadListWards(scope.row)"
           />
           <el-button
+            v-if="!scope.row.edit"
             type="primary"
             icon="el-icon-edit"
             circle
+            @click="editDistrict(scope.row)"
           />
           <el-button
+            v-if="scope.row.edit"
+            type="primary"
+            icon="el-icon-check"
+            circle
+            @click="confirmUpdateDistrict(scope.row)"
+          />
+          <el-button
+            v-if="scope.row.edit"
+            class="cancel-btn"
+            size="small"
+            icon="el-icon-refresh"
+            type="warning"
+            @click="cancelEdit(scope.row)"
+          />
+          <el-button
+            v-if="!scope.row.edit"
             type="danger"
             icon="el-icon-delete"
             circle
+            @click="deleteDistrict(scope.row.id)"
           />
         </template>
       </el-table-column>
@@ -72,9 +88,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Pagination from '@/components/Pagination'
 import { compareExpression } from '@/utils'
+import { Status } from '@/utils/constants'
+import { showMessageAfterCallAPI } from '@/utils/message'
 
 export default {
   name: 'TableDistrict',
@@ -107,7 +125,9 @@ export default {
         searchKey: '',
         ascSort: false,
         sortKey: 'name'
-      }
+      },
+      originalDistrict: {},
+      districtIds: {}
     }
   },
   computed: {
@@ -131,18 +151,7 @@ export default {
     this.getList()
   },
   methods: {
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row)
-        })
-      } else {
-        this.$refs.multipleTable.clearSelection()
-      }
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-    },
+    ...mapActions('location', ['updateDistrict', 'deleteDistricts']),
     handleLoadListWards(row) {
       this.$emit('handleLoadListWards', { id: row.id, name: row.name })
       this.$emit('keepDistrictPaging', this.listQuery)
@@ -164,6 +173,62 @@ export default {
       const start = (this.listQuery.pageNumber - 1) * this.listQuery.pageSize
       this.listDistricts.sort(compareExpression(this.listQuery.sortKey, this.listQuery.ascSort))
       this.tableData = this.listDistricts.slice(start, start + this.listQuery.pageSize)
+    },
+    editDistrict(row) {
+      row.edit = !row.edit
+      this.originalDistrict[row.id] = {
+        name: row.name,
+        type: row.type
+      }
+    },
+    cancelEdit(row) {
+      row.name = this.originalDistrict[row.id].name
+      row.type = this.originalDistrict[row.id].type
+      row.edit = false
+      this.$message({
+        message: this.$t('message.location.district_restore'),
+        type: 'info'
+      })
+    },
+    confirmUpdateDistrict(row) {
+      row.edit = !row.edit
+      this.updateDistrict({
+        id: row.id,
+        provinceId: this.provinceId,
+        name: row.name,
+        type: row.type
+      }).then(res => {
+        if (res.status === Status.SUCCESS) {
+          this.$message({
+            message: this.$t('message.location.update_district_success'),
+            type: 'success'
+          })
+        }
+      })
+    },
+    deleteDistrict(id) {
+      this.$confirm(this.$t('message.confirm_delete'), this.$t('label.warning'), {
+        confirmButtonText: this.$t('button.confirm'),
+        cancelButtonText: this.$t('button.cancel'),
+        type: 'warning'
+      }).then(() => {
+        this.deleteDistricts({
+          provinceId: this.provinceId,
+          ids: id
+        }).then((res) => {
+          showMessageAfterCallAPI(res, 'message.location.delete_district_success')
+          this.$emit('reloadList')
+        })
+      }).catch(() => {})
+    },
+    handleSelectionChange(rows) {
+      if (rows.length > 0) {
+        // eslint-disable-next-line
+        let ids = {}
+        ids[this.listQuery.pageNumber] = rows.map(district => district.id)
+        this.districtIds = Object.assign({}, this.districtIds, ids)
+        this.$emit('keepListIdToDelete', this.districtIds)
+      }
     }
   }
 }

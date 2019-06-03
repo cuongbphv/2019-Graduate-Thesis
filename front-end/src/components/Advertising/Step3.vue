@@ -1,6 +1,6 @@
 <template>
   <div class="step3">
-    <h3>Tải lên hình ảnh về sản phẩm</h3>
+    <h3>{{ $t('advertising.step3') }}</h3>
 
     <el-upload
       class="upload-form"
@@ -16,20 +16,20 @@
       multiple
     >
       <i class="el-icon-upload" />
-      <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
-      <div v-if="fileList.length === 0" slot="tip" class="el-upload__tip">(*) Bạn cần đăng ít nhất một hình về sản phẩm</div>
+      <div class="el-upload__text">{{ $t('advertising.drop') }} <em>{{ $t('advertising.click') }}</em></div>
+      <div v-if="fileList.length === 0" slot="tip" class="el-upload__tip">{{ $t('advertising.image_required') }}</div>
     </el-upload>
 
     <div class="el-alert--warning">
-      <p><b>Để bán nhanh hơn:</b></p>
+      <p><b>{{ $t('advertising.quick') }}</b></p>
       <ul>
-        <li>Xoay camera khổ ngang để hình hiển thị đẹp hơn</li>
-        <li>Chụp từ nhiều góc của sản phẩm (mặt trước, sau, bên)</li>
+        <li>{{ $t('advertising.rotate') }}</li>
+        <li>{{ $t('advertising.more_view') }}</li>
       </ul>
-      <p><b>Không nên</b></p>
+      <p><b>{{ $t('advertising.not') }}</b></p>
       <ul>
-        <li>Sử dụng hình ảnh trùng lặp hoặc lấy từ Internet</li>
-        <li> Chèn số điện thoại/email/logo vào hình</li>
+        <li>{{ $t('advertising.internet') }}</li>
+        <li>{{ $t('advertising.insert_phone') }}</li>
       </ul>
     </div>
 

@@ -35,8 +35,8 @@ const loadListLocation = ({ commit }, query) => {
   })
 }
 
-const addNewProvince = ({ commit }, province) => {
-  const param = Location.toProvinceParam(province)
+const addNewProvince = ({ commit }, params) => {
+  const param = Location.toProvinceParam(params)
   return location.addNewProvince(param).then(res => {
     return res
   }).catch(error => {
@@ -51,58 +51,65 @@ const updateProvince = ({ commit }, params) => {
   })
 }
 
-const addNewDistrict = ({ commit }, province) => {
-  const param = Location.toListDistrictParam(province)
+const addNewDistrict = ({ commit }, params) => {
+  const param = Location.toListDistrictParam(params)
   return location.addNewDistrict(param).then(res => {
     if (res.status === Status.SUCCESS) {
-      commit('ADD_NEW_DISTRICT', res.data)
+      return res
     }
   }).catch(error => {
     throw error
   })
 }
 
-const addNewWard = ({ commit }, province) => {
-  const param = Location.toListWardParam(province)
+const updateDistrict = ({ commit }, params) => {
+  const param = Location.toUpdateDistrictParam(params)
+  return location.updateDistrict(params.id, param).then(res => {
+    return res
+  })
+}
+
+const addNewWard = ({ commit }, params) => {
+  const param = Location.toListWardParam(params)
   return location.addNewWard(param).then(res => {
     if (res.status === Status.SUCCESS) {
-      commit('ADD_NEW_WARD', res.data)
+      return res
     }
   }).catch(error => {
     throw error
   })
 }
 
-const deleteProvinces = ({ commit }, ids) => {
-  return location.deleteProvinces(ids).then(res => {
-    if (res.status === Status.SUCCESS) {
-      console.info(res)
-    }
+const updateWard = ({ commit }, params) => {
+  const param = Location.toUpdateWardParam(params)
+  return location.updateWard(params.id, param).then(res => {
+    return res
+  })
+}
+
+const deleteProvinces = ({ commit }, params) => {
+  return location.deleteProvinces(params).then(res => {
+    return res
   }).catch(error => {
     throw error
   })
 }
 
 const deleteDistricts = ({ commit }, params) => {
-  return location.addNewProvince(params).then(res => {
-    if (res.status === Status.SUCCESS) {
-      console.info(res)
-    }
+  return location.deleteDistricts(params).then(res => {
+    return res
   }).catch(error => {
     throw error
   })
 }
 
-// const deleteWards = ({ commit }, ids) => {
-//   const param = CommonModelMap.toParam(province)
-//   return location.addNewDistrict(param).then(res => {
-//     if (res.status === Status.SUCCESS) {
-//       commit('ADD_NEW_DISTRICT', res.data)
-//     }
-//   }).catch(error => {
-//     throw error
-//   })
-// }
+const deleteWards = ({ commit }, params) => {
+  return location.deleteWards(params).then(res => {
+    return res
+  }).catch(error => {
+    throw error
+  })
+}
 
 export default {
   importLocationData,
@@ -112,6 +119,9 @@ export default {
   addNewDistrict,
   addNewWard,
   updateProvince,
+  updateDistrict,
+  updateWard,
   deleteProvinces,
-  deleteDistricts
+  deleteDistricts,
+  deleteWards
 }

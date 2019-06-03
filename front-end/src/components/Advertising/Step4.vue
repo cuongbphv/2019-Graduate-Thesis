@@ -1,6 +1,6 @@
 <template>
   <div class="step4">
-    <h3>{{ $t('advertising.additional_info') }}</h3>
+    <h3>{{ $t('advertising.step4') }}</h3>
     <el-radio-group v-model="advertisingType" size="small">
       <el-radio :label="1" border>{{ $t('advertising.sell') }}</el-radio>
       <el-radio :label="2" border>{{ $t('advertising.buy') }}</el-radio>

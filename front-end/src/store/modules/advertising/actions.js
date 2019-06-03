@@ -53,10 +53,22 @@ const getPagingNewClassifiedAds = ({ commit }, params) => {
   })
 }
 
+const fullTextSearch = ({ commit }, params) => {
+  const param = CommonModelMap.toParam(params)
+  return advertising.fullTextSearch(param).then(res => {
+    if (res.status === Status.SUCCESS) {
+      commit('FULL_TEXT_SEARCH', res.data)
+    }
+  }).catch(error => {
+    throw error
+  })
+}
+
 export default {
   removeTempImage,
   uploadTempImage,
   addNewAdvertising,
   getClassifiedAdsDetail,
-  getPagingNewClassifiedAds
+  getPagingNewClassifiedAds,
+  fullTextSearch
 }

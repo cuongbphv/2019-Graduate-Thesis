@@ -5,29 +5,62 @@
         <el-col class="left" :sm="6" :md="5" :lg="5">
           <h3><i class="el-icon-s-operation" />&nbsp; Bộ lọc tìm kiếm</h3>
           <div class="search-group">
-            <h4>Tìm theo danh mục</h4>
-            <el-checkbox-group v-model="checkList">
-              <el-checkbox label="Option A" />
-              <el-checkbox label="Option B" />
-              <el-checkbox label="Option C" />
-            </el-checkbox-group>
-            <el-button type="default">Thêm <i class="el-icon-arrow-down" /></el-button>
+            <h4 v-if="listBreadCrumb.length === 0">Tìm theo danh mục</h4>
+            <el-breadcrumb class="breadcrumb" separator="/">
+              <el-breadcrumb-item v-if="listBreadCrumb.length > 0">
+                <a href="javascript:void(0)" @click="handleLoadListCategory(null)">{{ $t('label.category') }}</a>
+              </el-breadcrumb-item>
+              <el-breadcrumb-item
+                v-for="item in listBreadCrumb"
+                :key="item.id"
+              >
+                <a href="javascript:void(0)" @click="handleBreadCrumbClick(item)">{{ item.name }}</a>
+              </el-breadcrumb-item>
+            </el-breadcrumb>
+            <!--<el-checkbox-group v-model="checkedCategory" :min="0" :max="1">-->
+            <!--<el-checkbox-->
+            <!--v-for="(cate, cateIndex) in listCategory"-->
+            <!--v-show="(cateIndex < displayLimit) || expandCate"-->
+            <!--:key="cate.id"-->
+            <!--:label="cate.name"-->
+            <!--/>-->
+            <!--</el-checkbox-group>-->
+            <p
+              v-for="(cate, cateIndex) in listCategory"
+              v-show="(cateIndex < displayLimit) || expandCate"
+              :key="cate.id"
+              style="margin-top: 5px; margin-bottom: 5px"
+              @click="selectCategory(cate)"
+            > <a>{{ cate.name }}</a> </p>
+            <el-button type="default" @click="expandCate = !expandCate"> {{ expandCate?'Thu Gọn':'Thêm' }}
+              <i v-if="!expandCate" class="el-icon-arrow-down" />
+              <i v-else class="el-icon-arrow-up" />
+            </el-button>
           </div>
           <div class="search-group">
-            <h4>Tìm theo danh mục</h4>
-            <el-checkbox-group v-model="checkList">
-              <el-checkbox label="Option A" />
-              <el-checkbox label="Option B" />
-              <el-checkbox label="Option C" />
+            <h4>Tìm theo địa điểm</h4>
+            <el-checkbox-group v-model="checkedLocation">
+              <el-checkbox
+                v-for="(loc, locIndex) in listLocation"
+                v-show="(locIndex < displayLimit) || expandLoc"
+                :key="loc.id"
+                :label="loc.name"
+              />
             </el-checkbox-group>
-            <el-button type="default">Thêm <i class="el-icon-arrow-down" /></el-button>
+            <el-button type="default" @click="expandLoc = !expandLoc"> {{ expandLoc?'Thu Gọn':'Thêm' }} <i class="el-icon-arrow-down" /></el-button>
           </div>
-          <div class="search-group">
-            <h4>Tìm theo danh mục</h4>
+          <div
+            v-for="meta in metadataTemplate"
+            :key="meta.slug"
+            class="search-group"
+          >
+            <h4> {{ meta.label }}</h4>
             <el-checkbox-group v-model="checkList">
-              <el-checkbox label="Option A" />
-              <el-checkbox label="Option B" />
-              <el-checkbox label="Option C" />
+              <el-checkbox
+                v-for="metaOption in meta.options"
+                :key="metaOption.value"
+                :label="metaOption.label"
+              />
             </el-checkbox-group>
             <el-button type="default">Thêm <i class="el-icon-arrow-down" /></el-button>
           </div>
@@ -75,16 +108,16 @@
           </el-row>
 
           <section class="content">
-            <div v-for="o in 10" :key="o">
-              <search-item />
+            <div v-for="adsItem in searchResult.content" :key="adsItem.id">
+              <search-item ads="adsItem" />
             </div>
           </section>
 
           <pagination
-            v-show="searchQuery.total > 0"
-            :total="searchQuery.total"
-            :page.sync="searchQuery.page"
-            :limit.sync="searchQuery.limit"
+            v-show="searchResult.totalRecord > 0"
+            :total="searchResult.totalRecord"
+            :page.sync="searchResult.pageNumber - 1"
+            :limit.sync="searchResult.pageSize"
             @pagination="handleSearch"
           />
         </el-col>
@@ -97,6 +130,7 @@
 import { Money } from 'v-money'
 import { SearchItem } from '@/components/Advertising'
 import Pagination from '@/components/Pagination'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'SearchPage',
   components: {
@@ -107,12 +141,40 @@ export default {
   data() {
     return {
       searchQuery: {
-        minPrice: 0,
-        maxPrice: 0,
-        page: 1,
-        limit: 20,
-        total: 30
+        searchKey: 'mio',
+        categoryId: '5cd2ee51e3e36a044830e7e7',
+        pageNumber: '1',
+        pageSize: '10',
+        sortKey: 'createdDate',
+        ascSort: false,
+        minPrice: '0',
+        maxPrice: '1000000000000',
+        mau_sac: '#484556,#abcxyz'
+        // metadata: [
+        //   {
+        //     label: 'hihi',
+        //     slug: 'color',
+        //     selectionType: 'single',
+        //     type: 'color',
+        //     value: 'value'
+        //   },
+        //   {
+        //     label: 'huhu',
+        //     slug: 'kolor',
+        //     selectionType: 'single',
+        //     type: 'text',
+        //     value: 'zalue'
+        //   }
+        // ]
       },
+      listBreadCrumb: [],
+      listMetadata: [],
+      metadataTemplate: [],
+      checkedCategory: {},
+      checkedLocation: [],
+      displayLimit: 7,
+      expandCate: false,
+      expandLoc: false,
       checkList: ['Option A'],
       money: {
         decimal: '.',
@@ -124,8 +186,74 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters('category', ['listCategory', 'metadata']),
+    ...mapGetters('location', ['listLocation', 'listDistrictByProvinceId', 'listWardByDistrictId']),
+    ...mapGetters('advertising', ['searchResult'])
+  },
+  watch: {
+    listCategory: function(newVal) {
+      let allMeta = []
+      for (const key in this.listMetadata) {
+        if (this.listMetadata.hasOwnProperty(key)) {
+          allMeta = [...allMeta, ...this.listMetadata[key]]
+        }
+      }
+
+      this.metadataTemplate = allMeta
+
+      this.postMetadata = allMeta.map(obj => {
+        const x = Object.assign({}, obj)
+        x.value = ''
+        delete x.options
+        return x
+      })
+    },
+    metadata: function(newVal) {
+      console.log('before', this.listMetadata)
+      this.listMetadata.push(newVal)
+      console.log('after', this.listMetadata)
+    }
+  },
+  created() {
+    this.handleLoadListCategory()
+    this.handleLoadListLocation()
+    this.fullTextSearch(this.searchQuery)
+  },
   methods: {
+    ...mapActions('category', ['getListCategory', 'getMetadataByCategoryId']),
+    ...mapActions('location', ['loadListLocation']),
+    ...mapActions('advertising', ['fullTextSearch']),
     handleSearch() {
+    },
+    handleLoadListCategory(parentId) {
+      if (parentId === null) {
+        this.listBreadCrumb = []
+        this.listMetadata = []
+      }
+      this.getListCategory({
+        searchKey: this.searchKey,
+        parentId: parentId
+      }).then(() => {
+      })
+    },
+    handleLoadListLocation() {
+      this.loadListLocation({ searchKey: '' }).then(() => {
+      })
+    },
+    selectCategory(item) {
+      this.getMetadataByCategoryId(item.id).then(() => {
+        this.listBreadCrumb.push(item)
+        this.handleLoadListCategory(item.id)
+      })
+    },
+    handleBreadCrumbClick(item) {
+      const index = this.listBreadCrumb.findIndex(element => {
+        return element.id === item.id
+      })
+      this.listBreadCrumb = Object.assign([], this.listBreadCrumb.slice(0, index + 1))
+      this.listMetadata = Object.assign([], this.listMetadata.slice(0, index + 1))
+      this.handleLoadListCategory(item.id)
     }
   }
 }
@@ -193,6 +321,11 @@ export default {
         .content {
           margin: 15px auto;
         }
+      }
+    }
+    .breadcrumb {
+      a {
+        padding-left: 0 !important;
       }
     }
   }

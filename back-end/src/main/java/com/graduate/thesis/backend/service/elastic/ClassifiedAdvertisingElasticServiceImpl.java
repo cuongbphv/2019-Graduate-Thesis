@@ -1,5 +1,7 @@
 package com.graduate.thesis.backend.service.elastic;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -14,12 +16,14 @@ import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -49,99 +53,163 @@ public class ClassifiedAdvertisingElasticServiceImpl implements ClassifiedAdvert
     }
 
     @Override
-    public ClassifiedAdvertisingPagingResponse fullTextSearch(String categoryId, String searchKey, List<AdsMetadata> filterData, int pageNumber, int pageSize) {
+    public ClassifiedAdvertisingPagingResponse fullTextSearch(
+            String categoryId, String searchKey, Map<String,String> filterData, int pageNumber,
+            int pageSize, String sortCase, boolean ascSort, double minPrice, double maxPrice) {
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
 
 
-        boolQueryBuilder.should(
-                QueryBuilders
-                        .matchQuery("additionalInfo.title", searchKey)
-                        .boost(5));
-
-        boolQueryBuilder.should(
-                QueryBuilders
-                        .nestedQuery(
-                                "metadata",
-                                QueryBuilders.matchQuery("metadata.value", searchKey).boost(4),
-                                ScoreMode.None)
-        );
+        if(searchKey != null && !searchKey.isEmpty()) {
 
 
-        boolQueryBuilder.should(
-                QueryBuilders
-                        .matchQuery("additionalInfo.description", searchKey)
-                        .boost(3));
+            boolQueryBuilder.should(
+                    QueryBuilders
+                            .matchQuery("additionalInfo.title", searchKey)
+                            .boost(5));
 
-        boolQueryBuilder.should(
-                QueryBuilders
-                        .multiMatchQuery(searchKey,
-                                "address.province.name",
-                                "address.district.name",
-                                "address.ward.name")
-                        .boost(2)
-        );
-
-        boolQueryBuilder.should(
-                QueryBuilders
-                        .multiMatchQuery(searchKey,
-                                "author.firstName",
-                                "author.lastName")
-                        .boost(1)
-        );
+            boolQueryBuilder.should(
+                    QueryBuilders
+                            .nestedQuery(
+                                    "metadata",
+                                    QueryBuilders.matchQuery("metadata.value", searchKey).boost(4),
+                                    ScoreMode.None)
+            );
 
 
-        boolQueryBuilder.filter(
-                QueryBuilders.termsQuery("breadcrumbs", categoryId)
-        );
+            boolQueryBuilder.should(
+                    QueryBuilders
+                            .matchQuery("additionalInfo.description", searchKey)
+                            .boost(3));
+
+            boolQueryBuilder.should(
+                    QueryBuilders
+                            .multiMatchQuery(searchKey,
+                                    "address.province.name",
+                                    "address.district.name",
+                                    "address.ward.name")
+                            .boost(2)
+            );
+
+            boolQueryBuilder.should(
+                    QueryBuilders
+                            .multiMatchQuery(searchKey,
+                                    "author.firstName",
+                                    "author.lastName")
+                            .boost(1)
+            );
+
+            boolQueryBuilder.minimumShouldMatch(1);
+        }
+
+
+        if(categoryId != null && !categoryId.isEmpty()) {
+            boolQueryBuilder.filter(
+                    QueryBuilders.termsQuery("breadcrumbs", categoryId)
+            );
+        }
 
 
         boolQueryBuilder.filter(
                 QueryBuilders
                         .rangeQuery("additionalInfo.price")
-                        .gte(0).lte(300000000)
+                        .gte(minPrice).lte(maxPrice)
         );
 
 
-        for(AdsMetadata metadata : filterData){
+//        for(AdsMetadata metadata : filterData){
+//
+//            if(metadata.getType().equals("text") || metadata.getType().equals("color")){
+//                boolQueryBuilder.filter(
+//                        QueryBuilders
+//                                .nestedQuery(
+//                                        "metadata",
+//                                        QueryBuilders.matchQuery("metadata.value" ,metadata.getValue()),
+//                                        ScoreMode.None)
+//                );
+//            }
+//            else if(metadata.getType().equals("range")){
+//                boolQueryBuilder.filter(
+//                        QueryBuilders
+//                                .nestedQuery(
+//                                        "metadata",
+//                                        QueryBuilders.rangeQuery("metadata.value")
+//                                                .gte(Double.parseDouble(metadata.getValue().split("-")[0]))
+//                                                .lte(Double.parseDouble(metadata.getValue().split("-")[1])),
+//                                        ScoreMode.None)
+//                );
+//            }
 
-            if(metadata.getType().equals("text") || metadata.getType().equals("color")){
-                boolQueryBuilder.filter(
-                        QueryBuilders
-                                .nestedQuery(
-                                        "metadata",
-                                        QueryBuilders.matchQuery("metadata.value" ,metadata.getValue()),
-                                        ScoreMode.None)
-                );
-            }
-            else if(metadata.getType().equals("range")){
+        filterData.forEach((key, value) -> {
+
+            key = key.replaceAll("_", "-");
+
+            if(value.contains("-")) {
                 boolQueryBuilder.filter(
                         QueryBuilders
                                 .nestedQuery(
                                         "metadata",
                                         QueryBuilders.rangeQuery("metadata.value")
-                                                .gte(Double.parseDouble(metadata.getValue().split("-")[0]))
-                                                .lte(Double.parseDouble(metadata.getValue().split("-")[1])),
+                                                .gte(Double.parseDouble(value.split("-")[0]))
+                                                .lte(Double.parseDouble(value.split("-")[1])),
                                         ScoreMode.None)
                 );
             }
+            else if(value.contains(",")){
 
+                boolQueryBuilder.filter(
+                        QueryBuilders
+                                .nestedQuery(
+                                        "metadata",
+                                        QueryBuilders.matchQuery("metadata.value", value),
+                                        ScoreMode.None)
+                );
+
+                boolQueryBuilder.should(
+                        QueryBuilders
+                                .nestedQuery(
+                                        "metadata",
+                                        QueryBuilders.matchQuery("metadata.value", value),
+                                        ScoreMode.Total)
+                );
+
+//                List<String> values = Lists.newArrayList(Splitter.on(",").split(value));
+//
+//                boolQueryBuilder.filter(
+//                        QueryBuilders
+//                                .nestedQuery(
+//                                        "metadata",
+//                                        QueryBuilders.termsQuery("metadata.value", values),
+//                                        ScoreMode.None)
+//                );
+            }
+            else {
+                boolQueryBuilder.filter(
+                        QueryBuilders
+                                .nestedQuery(
+                                        "metadata",
+                                        QueryBuilders.matchQuery("metadata.value", value),
+                                        ScoreMode.None)
+                );
+            }
 
             boolQueryBuilder.filter(
                     QueryBuilders
                             .nestedQuery(
                                     "metadata",
-                                    QueryBuilders.matchQuery("metadata.slug" ,metadata.getSlug()),
+                                    QueryBuilders.matchQuery("metadata.slug" ,key),
                                     ScoreMode.None)
             );
-        }
+        });
 
+
+        FieldSortBuilder sortTerm = SortBuilders.fieldSort(sortCase).order(ascSort ? SortOrder.ASC : SortOrder.DESC);
 
         searchSourceBuilder
                 .query(boolQueryBuilder)
-                .sort(SortBuilders.fieldSort("createdDate").order(SortOrder.DESC))
+                .sort(sortTerm)
                 .sort(SortBuilders.fieldSort("_score").order(SortOrder.DESC))
                 .from(pageNumber * pageSize)
                 .size(pageSize);
@@ -155,14 +223,14 @@ public class ClassifiedAdvertisingElasticServiceImpl implements ClassifiedAdvert
 
         ClassifiedAdvertisingElasticPagingResponse queryResult = advertisingElasticRepository.executeSearch(jsonPretty);
 
-        List<ClassifiedAdvertising> classifiedAdvertisingList = queryResult.getItems()
+        List<ClassifiedAdvertising> classifiedAdvertisingList = queryResult.getContent()
                 .stream()
                 .map(ClassifiedAdvertising::new)
                 .collect(Collectors.toList());
 
         ClassifiedAdvertisingPagingResponse response = new ClassifiedAdvertisingPagingResponse();
         response.setTotalRecord(queryResult.getTotalRecord());
-        response.setItems(classifiedAdvertisingList);
+        response.setContent(classifiedAdvertisingList);
         response.setPageNumber(pageNumber + 1);
         response.setPageSize(pageSize);
 

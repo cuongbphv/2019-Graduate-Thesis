@@ -3,6 +3,7 @@ package com.graduate.thesis.backend;
 import com.graduate.thesis.backend.config.FileStorageProperties;
 import com.graduate.thesis.backend.model.request.advertising.AdsMetadata;
 import com.graduate.thesis.backend.model.response.AddressResponse;
+import com.graduate.thesis.backend.model.response.ClassifiedAdvertisingPagingResponse;
 import com.graduate.thesis.backend.repository.aggregation.AddressAggregation;
 import com.graduate.thesis.backend.repository.aggregation.CategoryAggregation;
 import com.graduate.thesis.backend.service.elastic.ClassifiedAdvertisingElasticService;
@@ -46,11 +47,14 @@ public class Application implements CommandLineRunner {
 
 //        classifiedAdvertisingElasticService.delete("5ce441a8e3e36a1bf8b36c46");
 
-        classifiedAdvertisingElasticService.fullTextSearch(
-                "5cd2e54fe3e36a044830e7dd",
-                "xe",
-                new ArrayList<AdsMetadata>(),
-                0,
-                10);
+//        ClassifiedAdvertisingPagingResponse ahi =
+//                classifiedAdvertisingElasticService.fullTextSearch(
+//                "",
+//                "mio",
+//                new ArrayList<AdsMetadata>(),
+//                0,
+//                10);
+//
+//        System.out.println(ahi);
     }
 }

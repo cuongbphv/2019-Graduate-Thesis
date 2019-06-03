@@ -20,5 +20,5 @@ public class ClassifiedAdvertisingElasticPagingResponse {
 
     private long totalRecord;
 
-    List<ClassifiedAdvertisingElastic> items;
+    List<ClassifiedAdvertisingElastic> content;
 }

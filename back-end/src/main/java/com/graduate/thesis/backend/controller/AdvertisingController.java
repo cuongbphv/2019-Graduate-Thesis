@@ -6,8 +6,10 @@ import com.graduate.thesis.backend.entity.ClassifiedAdvertising;
 import com.graduate.thesis.backend.entity.UserProfile;
 import com.graduate.thesis.backend.entity.elastic.ClassifiedAdvertisingElastic;
 import com.graduate.thesis.backend.exception.ApplicationException;
+import com.graduate.thesis.backend.model.request.advertising.AdsMetadata;
 import com.graduate.thesis.backend.model.request.advertising.NewAdvertisingRequest;
 import com.graduate.thesis.backend.model.response.AddressResponse;
+import com.graduate.thesis.backend.model.response.ClassifiedAdvertisingPagingResponse;
 import com.graduate.thesis.backend.model.response.NewAdsPagingResponse;
 import com.graduate.thesis.backend.model.response.RestAPIResponse;
 import com.graduate.thesis.backend.model.response.advertising.NewAds;
@@ -70,6 +72,53 @@ public class AdvertisingController extends AbstractBasedAPI {
 
     @Autowired
     ClassifiedAdvertisingElasticService classifiedAdvertisingElasticService;
+
+
+    @GetMapping(Constant.FULL_TEXT_SEARCH)
+    public ResponseEntity<RestAPIResponse> fullTextSearch(
+            @RequestParam("search_key") String searchKey,
+            @RequestParam(value = "category_id", required = false, defaultValue = "") String categoryId,
+            @RequestParam(value = "sort_key", required = false, defaultValue = "createdDate") String sortKey,
+            @RequestParam(value = "asc_sort", required = false, defaultValue = "false") boolean ascSort,
+            @RequestParam("page_size") int pageSize,
+            @RequestParam("page_number") int pageNumber,
+            @RequestParam("min_price") double minPrice,
+            @RequestParam("max_price") double maxPrice,
+            @RequestParam Map<String, String> metadata
+    ){
+
+//        List<AdsMetadata> adsMetadata = new ArrayList<>();
+//
+//        if(adsMetadata == null){
+//            adsMetadata = new ArrayList<>();
+//        }
+
+        metadata.remove("search_key");
+        metadata.remove("category_id");
+        metadata.remove("sort_key");
+        metadata.remove("asc_sort");
+        metadata.remove("page_size");
+        metadata.remove("page_number");
+        metadata.remove("min_price");
+        metadata.remove("max_price");
+
+        ClassifiedAdvertisingPagingResponse result =
+                classifiedAdvertisingElasticService.fullTextSearch(
+                        categoryId,
+                        searchKey,
+                        metadata,
+                        pageNumber - 1,
+                        pageSize,
+                        sortKey,
+                        ascSort,
+                        minPrice,
+                        maxPrice
+                        );
+
+        return responseUtil.successResponse(result);
+
+    }
+
 
     @PostMapping()
     public ResponseEntity<RestAPIResponse> createNewAdvertising (

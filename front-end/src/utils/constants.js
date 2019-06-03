@@ -26,6 +26,7 @@ const API = {
   NEW_ADVERTISING: '/advertising/new',
   UPLOAD_TEMP_IMAGE: '/advertising/upload_temp_image',
   REMOVE_TEMP_IMAGE: '/advertising/remove_temp_image',
+  FULL_TEXT_SEARCH: '/advertising/search',
   // ROLE_PERMISSION APIs
   ROLE: '/role',
   PERMISSION: '/permission'

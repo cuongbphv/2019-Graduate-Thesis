@@ -108,7 +108,7 @@ public class ClassifiedAdvertisingElasticRepository {
                 ClassifiedAdvertisingElastic source = (ClassifiedAdvertisingElastic) hit.source;
                 classifiedAdvertisingElasticList.add(source);
             }
-            response.setItems(classifiedAdvertisingElasticList);
+            response.setContent(classifiedAdvertisingElasticList);
 
         } catch (Exception ex) {
             LOGGER.error("Classified Ads Repo, executeSearch(), e", ex);

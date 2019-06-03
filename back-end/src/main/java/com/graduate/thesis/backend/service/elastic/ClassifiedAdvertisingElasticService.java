@@ -7,6 +7,7 @@ import com.graduate.thesis.backend.model.request.advertising.AdsMetadata;
 import com.graduate.thesis.backend.model.response.ClassifiedAdvertisingPagingResponse;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Huy Pham
@@ -23,8 +24,12 @@ public interface ClassifiedAdvertisingElasticService {
     ClassifiedAdvertisingPagingResponse fullTextSearch(
             String categoryId,
             String searchKey,
-            List<AdsMetadata> filterData,
+            Map<String,String> filterData,
             int pageNumber,
-            int pageSize
+            int pageSize,
+            String sortCase,
+            boolean ascSort,
+            double minPrice,
+            double maxPrice
     );
 }

@@ -3,6 +3,7 @@ package com.graduate.thesis.backend;
 import com.graduate.thesis.backend.config.FileStorageProperties;
 import com.graduate.thesis.backend.model.request.advertising.AdsMetadata;
 import com.graduate.thesis.backend.model.response.AddressResponse;
+import com.graduate.thesis.backend.model.response.ClassifiedAdvertisingPagingResponse;
 import com.graduate.thesis.backend.repository.aggregation.AddressAggregation;
 import com.graduate.thesis.backend.repository.aggregation.CategoryAggregation;
 import com.graduate.thesis.backend.service.elastic.ClassifiedAdvertisingElasticService;

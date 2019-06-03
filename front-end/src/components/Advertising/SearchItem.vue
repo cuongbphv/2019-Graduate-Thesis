@@ -117,6 +117,5 @@ export default {
     article a p, article a h2 {
       width: 100%;
     }
-
   }
 </style>

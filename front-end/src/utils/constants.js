@@ -24,6 +24,7 @@ const API = {
   // ADVERTISING APIs
   ADVERTISING: '/advertising',
   NEW_ADVERTISING: '/advertising/new',
+  USER_HISTORY_ADS: '/advertising/me',
   UPLOAD_TEMP_IMAGE: '/advertising/upload_temp_image',
   REMOVE_TEMP_IMAGE: '/advertising/remove_temp_image',
   FULL_TEXT_SEARCH: '/advertising/search',

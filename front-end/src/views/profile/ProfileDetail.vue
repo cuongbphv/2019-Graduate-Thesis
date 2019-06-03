@@ -39,16 +39,16 @@
           <el-col class="right" :xs="24" :md="14" :lg="14">
             <el-row>
               <ul class="nav">
-                <li>
+                <li :class="{'is-active' : routerName === 'history'}">
                   <a @click="handleClickRouter('history')">Lịch sử</a>
                 </li>
-                <li>
+                <li :class="{'is-active' : routerName === 'info'}">
                   <a @click="handleClickRouter('info')">Thông tin</a>
                 </li>
-                <li>
+                <li :class="{'is-active' : routerName === 'settings'}">
                   <a @click="handleClickRouter('settings')">Cài đặt</a>
                 </li>
-                <li>
+                <li :class="{'is-active' : routerName === 'address'}">
                   <a @click="handleClickRouter('address')">Địa chỉ</a>
                 </li>
                 <li>Cửa hàng</li>
@@ -99,7 +99,8 @@ export default {
       imagecropperShow: false,
       imagecropperKey: 0,
       image: 'https://image.noelshack.com/fichiers/2017/38/2/1505775062-1505606859-portrait-1961529-960-720.jpg',
-      profileId: this.$route.params.id
+      profileId: this.$route.params.id,
+      routerName: 'history'
     }
   },
   computed: {
@@ -132,6 +133,7 @@ export default {
       })
     },
     handleClickRouter(name) {
+      this.routerName = name
       this.$router.push(name)
       scrollTo(100)
     }
@@ -283,7 +285,7 @@ export default {
       text-transform: uppercase;
       font-weight: 500;
       color: #888;
-      .router-link-active {
+      &.is-active {
         color: #42b1fa;
         border-bottom: 2px solid #42b1fa;
       }

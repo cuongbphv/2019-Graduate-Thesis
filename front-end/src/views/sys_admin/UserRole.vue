@@ -132,15 +132,6 @@ export default {
   components: { Pagination },
   directives: { waves },
   filters: {
-    statusFilter(status) {
-      const statusMap = {
-        3: 'warning',
-        2: 'info',
-        1: 'primary',
-        0: 'danger'
-      }
-      return statusMap[status] || statusMap[2]
-    },
     providerFilter(provider) {
       const providerMap = {
         'google': 'danger',

@@ -11,6 +11,12 @@ export default {
   getNewClassifiedAds(params) {
     return Api.get(API.NEW_ADVERTISING, { params: params }).then(res => res.data)
   },
+  getUserHistoryClassifiedAds(params) {
+    return Api.get(API.USER_HISTORY_ADS, { params: params }).then(res => res.data)
+  },
+  changeStatusAds(id, status) {
+    return Api.put(API.ADVERTISING + '/' + id + '?status=' + status).then(res => res.data)
+  },
   uploadTempImage(params) {
     return Api.post(API.UPLOAD_TEMP_IMAGE, params).then(res => res.data)
   },

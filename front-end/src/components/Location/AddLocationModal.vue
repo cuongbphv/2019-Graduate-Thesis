@@ -394,9 +394,20 @@ export default {
           showMessageAfterCallAPI(res, 'message.location.add_province_success')
         })
       } else if (this.localMode.mode === 'district') {
-        this.addNewDistrict(this.districts)
+        this.addNewDistrict({
+          provinceId: this.addMode.id,
+          districts: this.districts
+        }).then(res => {
+          showMessageAfterCallAPI(res, 'message.location.add_district_success')
+        })
       } else if (this.localMode.mode === 'ward') {
-        this.addNewWard(this.wards)
+        this.addNewWard({
+          provinceId: this.addMode.proId,
+          districtId: this.addMode.id,
+          wards: this.wards
+        }).then(res => {
+          showMessageAfterCallAPI(res, 'message.location.add_ward_success')
+        })
       }
     }
   }

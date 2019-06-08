@@ -1,8 +1,8 @@
 <template>
   <div class="step6">
     <div class="el-alert--success">
-      <h3><b>Bạn đã tạo thành công tin rao vặt</b></h3>
-      <h4>Vào xem <router-link :to="'/advertising/' + classifiedAdsId">tin rao vặt</router-link> vừa đăng ngay bây giờ</h4>
+      <h3><b>{{ $t('advertising.created_success') }}</b></h3>
+      <h4>{{ $t('advertising.goto') }} <router-link :to="'/advertising/' + classifiedAdsId">{{ $t('advertising.post') }}</router-link> {{ $t('advertising.now') }}</h4>
     </div>
   </div>
 </template>

@@ -12,6 +12,12 @@ const state = {
     content: [],
     totalPages: 0,
     totalElements: 0
+  },
+  searchResult: {
+    content: [],
+    totalRecord: 0,
+    pageSize: 10,
+    pageNumber: 1
   }
 }
 

@@ -1,5 +1,7 @@
 package com.graduate.thesis.backend.model.request.location;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +12,11 @@ import java.util.List;
  */
 @Getter
 @Setter
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class NewDistrictRequest {
     private String provinceId;
+    private String type;
+    private String slug;
+    private String name;
     private List<DistrictRequest> districts;
 }

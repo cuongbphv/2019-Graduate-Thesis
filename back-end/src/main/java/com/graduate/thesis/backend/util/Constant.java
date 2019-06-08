@@ -41,6 +41,7 @@ public interface Constant {
     String ADVERTISING_API = API_PREFIX + "/advertising";
     String UPLOAD_TEMP_IMAGE = "/upload_temp_image";
     String REMOVE_TEMP_IMAGE = "/remove_temp_image";
+    String FULL_TEXT_SEARCH = "/search";
 
     //USER
     String USER_API = API_PREFIX + "/user";

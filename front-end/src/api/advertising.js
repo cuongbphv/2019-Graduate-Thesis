@@ -22,5 +22,8 @@ export default {
   },
   removeTempImage(params) {
     return Api.delete(API.REMOVE_TEMP_IMAGE, { params: params }).then(res => res.data)
+  },
+  fullTextSearch(params) {
+    return Api.get(API.FULL_TEXT_SEARCH, { params: params }).then(res => res.data)
   }
 }

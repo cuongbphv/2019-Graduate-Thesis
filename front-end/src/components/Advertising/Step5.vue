@@ -1,6 +1,6 @@
 <template>
   <div class="step5">
-    <h3>Xem lại tin đăng</h3>
+    <h3>{{ $t('advertising.step5') }}</h3>
 
     <el-form :model="localData" label-position="left" label-width="120px">
       <el-row>

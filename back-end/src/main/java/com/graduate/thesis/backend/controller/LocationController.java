@@ -96,11 +96,11 @@ public class LocationController extends AbstractBasedAPI {
             @RequestParam("search_key") String searchKey,
             @RequestParam("sort_key") int sortKey,
             @RequestParam("asc_sort") boolean ascSort,
-            @RequestParam("page_size") int pageSize,
-            @RequestParam("page_number") int pageNumber
+            @RequestParam("page_number") int pageNumber,
+            @RequestParam("page_size") int pageSize
     ) {
 
-        Page<Location> locations = locationService.getPagingLocation(searchKey, sortKey, ascSort, pageSize, pageNumber);
+        Page<Location> locations = locationService.getPagingLocation(searchKey, sortKey, ascSort, pageNumber, pageSize);
 
         return responseUtil.successResponse(locations);
     }
@@ -120,14 +120,19 @@ public class LocationController extends AbstractBasedAPI {
             @RequestBody NewProvinceRequest newProvinceRequest
     ) {
 
-        List<Location> locations = locationService.findByIdOrName(
+        Location province = locationService.findByIdOrName(
                 newProvinceRequest.getId(), newProvinceRequest.getName());
 
-        if (locations.size() > 0) {
-            throw new ApplicationException(APIStatus.ERR_LOCATION_EXISTED);
+        // case new location
+        if (province == null) {
+            province = new Location();
+        } else { // case id or name existed in database
+            // case province deleted => can override and change status
+            if (province.getStatus() == Constant.Status.ACTIVE.getValue()) {
+                throw new ApplicationException(APIStatus.ERR_LOCATION_EXISTED);
+            }
         }
 
-        Location province = new Location();
         province.setId(newProvinceRequest.getId());
         province.setCode(newProvinceRequest.getId());
         province.setName(newProvinceRequest.getName());
@@ -218,22 +223,17 @@ public class LocationController extends AbstractBasedAPI {
 
         Location location = locationService.findByIdAndStatus(
                 newDistrictRequest.getProvinceId(), Constant.Status.ACTIVE.getValue());
-
         if (location == null) {
             throw new ApplicationException(APIStatus.ERR_LOCATION_EXISTED);
         }
 
-        List<District> existedDistricts = location.getDistricts();
-
+        List<District> districts = location.getDistricts();
         for(DistrictRequest district : newDistrictRequest.getDistricts()) {
-            if (existedDistricts.stream()
-                    .filter(existedDistrict ->
-                            existedDistrict.getId().equals(district.getId())
-                                    && existedDistrict.getSlug().equals(district.getSlug()))
-                    .collect(Collectors.toList()).size() > 0)
-                continue;
+            // check if district have same id or same name and status
+            District newDistrict = validateDistrict(district, districts);
+            // in case district existed in database
+            if (district == null) continue;
             // set data to new district
-            District newDistrict = new District();
             newDistrict.setId(district.getId());
             newDistrict.setCode(district.getId());
             newDistrict.setType(district.getName());
@@ -264,10 +264,57 @@ public class LocationController extends AbstractBasedAPI {
             }
 
             newDistrict.setWards(newWards);
-            existedDistricts.add(newDistrict);
+            districts.add(newDistrict);
         }
 
-        location.setDistricts(existedDistricts);
+        location.setDistricts(districts);
+        locationService.saveLocation(location);
+        return responseUtil.successResponse("OK");
+    }
+
+    @PutMapping(Constant.DISTRICT_API + Constant.WITHIN_ID)
+    public ResponseEntity<RestAPIResponse> updateProvinceById(
+            @PathVariable("id") String districtId,
+            @RequestBody NewDistrictRequest req
+    ) {
+
+        boolean isExisted = false;
+
+        Location province = locationService.findByLocationId(req.getProvinceId());
+
+        if (province == null) throw new ApplicationException(APIStatus.ERR_LOCATION_NOT_FOUND);
+
+        for (District district: province.getDistricts()) {
+            if (district.getId().equals(districtId)) {
+                district.setName(req.getName());
+                district.setSlug(req.getSlug());
+                district.setType(req.getType());
+                isExisted = true;
+            }
+        }
+
+        if (!isExisted) throw new ApplicationException(APIStatus.ERR_DISTRICT_NOT_FOUND);
+
+        locationService.saveLocation(province);
+        return responseUtil.successResponse("OK");
+    }
+
+    @DeleteMapping(Constant.DISTRICT_API)
+    public ResponseEntity<RestAPIResponse> deleteDistrictByIds (
+            @RequestParam("district_ids") String districtIds,
+            @RequestParam("province_id") String provinceId
+    ) {
+
+        Location location = locationService.findByLocationId(provinceId);
+        if (location == null) throw new ApplicationException(APIStatus.ERR_LOCATION_NOT_FOUND);
+
+        List<District> districts = location.getDistricts();
+        List<String> listDistrictIds = Lists.newArrayList(Splitter.on(",").split(districtIds));
+        for(District district : districts) {
+            if (listDistrictIds.contains(district.getId())) {
+                district.setStatus(Constant.Status.DELETE.getValue());
+            }
+        }
 
         locationService.saveLocation(location);
 
@@ -298,15 +345,10 @@ public class LocationController extends AbstractBasedAPI {
         List<Ward> wards = district.getWards();
 
         // map wards
-        List<Ward> newWards = new ArrayList<>();
         for (WardRequest ward : newWardRequest.getWards()) {
-            if (wards.stream()
-                    .filter(existedWard ->
-                            existedWard.getId().equals(ward.getId())
-                                    && existedWard.getSlug().equals(ward.getSlug()))
-                    .collect(Collectors.toList()).size() > 0)
-                continue;
-            Ward newWard = new Ward();
+            Ward newWard = validateWard(ward, wards);
+            // in case district existed in database
+            if (newWard == null) continue;
             newWard.setId(ward.getId());
             newWard.setName(ward.getName());
             newWard.setType(ward.getType());
@@ -317,37 +359,96 @@ public class LocationController extends AbstractBasedAPI {
             newWard.setPath(ward.getName() + ", " + district.getName() + ", " + location.getName());
             newWard.setPath(ward.getNameWithType() + ", " + district.getNameWithType() + ", " + location.getNameWithType());
             newWard.setStatus(Constant.Status.ACTIVE.getValue());
-            newWards.add(newWard);
+            wards.add(newWard);
         }
 
-        district.setWards(newWards);
-
+        district.setWards(wards);
         locationService.saveLocation(location);
 
         return responseUtil.successResponse("OK");
     }
 
-    @DeleteMapping(Constant.DISTRICT_API)
-    public ResponseEntity<RestAPIResponse> deleteDistrictByIds (
-            @RequestParam("district_ids") String districtIds,
-            @RequestParam("province_id") String provinceId
+    @PutMapping(Constant.WARD_API + Constant.WITHIN_ID)
+    public ResponseEntity<RestAPIResponse> updateWardById(
+            @PathVariable("id") String wardId,
+            @RequestBody NewWardRequest req
     ) {
 
-        Location location = locationService.findByLocationId(provinceId);
+        boolean isExisted = false;
 
-        List<District> districts = location.getDistricts();
-        List<District> newDistricts = new ArrayList<>();
+        Location province = locationService.findByLocationId(req.getProvinceId());
 
-        for(District district : districts) {
-            if (!district.getId().equals(districtIds)) {
-                newDistricts.add(district);
+        if (province == null) throw new ApplicationException(APIStatus.ERR_LOCATION_NOT_FOUND);
+
+        for (District district: province.getDistricts()) {
+            if (district.getId().equals(req.getDistrictId())) {
+                for (Ward ward : district.getWards()) {
+                    if (ward.getId().equals(wardId)) {
+                        ward.setName(req.getName());
+                        ward.setSlug(req.getSlug());
+                        ward.setType(req.getType());
+                        isExisted = true;
+                    }
+                }
             }
         }
 
-        location.setDistricts(newDistricts);
-        locationService.saveLocation(location);
+        if (!isExisted) throw new ApplicationException(APIStatus.ERR_WARD_NOT_FOUND);
 
+        locationService.saveLocation(province);
         return responseUtil.successResponse("OK");
+    }
+
+    @DeleteMapping(Constant.WARD_API)
+    public ResponseEntity<RestAPIResponse> deleteWardByIds (
+            @RequestParam("ward_ids") String wardIds,
+            @RequestParam("province_id") String provinceId,
+            @RequestParam("district_id") String districtId
+    ) {
+
+        Location location = locationService.findByLocationId(provinceId);
+        if (location == null) throw new ApplicationException(APIStatus.ERR_LOCATION_NOT_FOUND);
+
+        List<District> districts = location.getDistricts();
+        for(District district : districts) {
+            if (district.getId().equals(districtId)) {
+                List<String> listWardIds = Lists.newArrayList(Splitter.on(",").split(wardIds));
+                for(Ward ward : district.getWards()) {
+                    if (listWardIds.contains(ward.getId())) {
+                        district.setStatus(Constant.Status.DELETE.getValue());
+                    }
+                }
+            }
+        }
+
+        locationService.saveLocation(location);
+        return responseUtil.successResponse("OK");
+    }
+
+    private District validateDistrict(DistrictRequest districtReq, List<District> districts) {
+        for (District district : districts) {
+            // case existed district
+            if (districtReq.getId().equals(district.getId())) {
+                if (district.getStatus() == Constant.Status.ACTIVE.getValue()) {
+                    return null;
+                }
+                return district;
+            }
+        }
+        return new District();
+    }
+
+    private Ward validateWard(WardRequest wardReq, List<Ward> wards) {
+        for (Ward ward : wards) {
+            // case existed district
+            if (wardReq.getId().equals(ward.getId())) {
+                if (ward.getStatus() == Constant.Status.ACTIVE.getValue()) {
+                    return null;
+                }
+                return ward;
+            }
+        }
+        return new Ward();
     }
 
     private List<Location> handleJsonProvinceData(JSONObject jsonData) {

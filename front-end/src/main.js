@@ -17,6 +17,7 @@ import './icons' // icon
 import './errorLog' // error log
 import './permission' // permission control
 import * as filters from './filters' // global filters
+import InfiniteLoading from 'vue-infinite-loading'
 
 library.add(faFacebook, faGoogle, faLinkedin, faGithub)
 
@@ -26,6 +27,24 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size
   i18n: (key, value) => i18n.t(key, value)
+})
+
+Vue.use(InfiniteLoading, {
+  props: {
+    spinner: 'default'
+    /* other props need to configure */
+  },
+  system: {
+    throttleLimit: 500
+    /* other settings need to configure */
+  },
+  slots: {
+    // keep default styles
+    noResults: '',
+
+    // remove default styles
+    noMore: ''
+  }
 })
 
 // register global utility filters.

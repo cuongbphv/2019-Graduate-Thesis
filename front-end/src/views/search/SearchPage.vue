@@ -32,37 +32,68 @@
               style="margin-top: 5px; margin-bottom: 5px"
               @click="selectCategory(cate)"
             > <a>{{ cate.name }}</a> </p>
-            <el-button type="default" @click="expandCate = !expandCate"> {{ expandCate?'Thu Gọn':'Thêm' }}
+            <el-button v-show="(displayLimit < listCategory.length)" type="default" @click="expandCate = !expandCate"> {{ expandCate?'Thu Gọn':'Thêm' }}
               <i v-if="!expandCate" class="el-icon-arrow-down" />
               <i v-else class="el-icon-arrow-up" />
             </el-button>
           </div>
           <div class="search-group">
             <h4>Tìm theo địa điểm</h4>
-            <el-checkbox-group v-model="checkedLocation">
-              <el-checkbox
+            <el-radio-group v-model="checkedProvince">
+              <el-radio
                 v-for="(loc, locIndex) in listLocation"
                 v-show="(locIndex < displayLimit) || expandLoc"
                 :key="loc.id"
-                :label="loc.name"
-              />
-            </el-checkbox-group>
-            <el-button type="default" @click="expandLoc = !expandLoc"> {{ expandLoc?'Thu Gọn':'Thêm' }} <i class="el-icon-arrow-down" /></el-button>
+                :label="loc.id"
+              > <p>{{ loc.name }}</p>
+                <el-radio-group v-if="checkedProvince === loc.id" v-model="checkedDistrict">
+                  <el-radio
+                    v-for="(dic, dicIndex) in loc.districts"
+                    v-show="(dicIndex < displayLimit) || expandDist"
+                    :key="dic.id"
+                    :label="dic.id"
+                  >
+                    <p>{{ dic.nameWithType }}</p>
+                    <el-radio-group v-if="checkedDistrict === dic.id" v-model="checkedWard">
+                      <el-radio
+                        v-for="(ward, wardIndex) in dic.wards"
+                        v-show="(wardIndex < displayLimit) || expandWard"
+                        :key="ward.id"
+                        :label="ward.id"
+                      >
+                        <p>{{ ward.nameWithType }}</p>
+                      </el-radio>
+                    </el-radio-group>
+                    <el-button v-if="checkedDistrict === dic.id" v-model="checkedWard" type="default" style="display: block" @click="expandWard = !expandWard"> {{ expandWard?'Thu Gọn':'Thêm' }}
+                      <i v-if="!expandWard" class="el-icon-arrow-down" />
+                      <i v-else class="el-icon-arrow-up" />
+                    </el-button>
+                  </el-radio>
+                </el-radio-group>
+                <el-button v-if="checkedProvince === loc.id" v-model="checkedDistrict" type="default" style="display: block" @click="expandDist = !expandDist"> {{ expandDist?'Thu Gọn':'Thêm' }}
+                  <i v-if="!expandDist" class="el-icon-arrow-down" />
+                  <i v-else class="el-icon-arrow-up" />
+                </el-button>
+              </el-radio>
+            </el-radio-group>
+            <el-button type="default" style="display: block" @click="expandLoc = !expandLoc"> {{ expandLoc?'Thu Gọn':'Thêm' }}
+              <i v-if="!expandLoc" class="el-icon-arrow-down" />
+              <i v-else class="el-icon-arrow-up" />
+            </el-button>
           </div>
           <div
-            v-for="meta in metadataTemplate"
+            v-for="(meta, index) in metadataTemplate"
             :key="meta.slug"
             class="search-group"
           >
             <h4> {{ meta.label }}</h4>
-            <el-checkbox-group v-model="checkList">
+            <el-checkbox-group v-model="postMetadata[index].value">
               <el-checkbox
                 v-for="metaOption in meta.options"
                 :key="metaOption.value"
-                :label="metaOption.label"
-              />
+                :label="metaOption.value"
+              > {{ metaOption.label }} </el-checkbox>
             </el-checkbox-group>
-            <el-button type="default">Thêm <i class="el-icon-arrow-down" /></el-button>
           </div>
           <div class="search-group">
             <h4>Tìm theo giá</h4>
@@ -85,31 +116,35 @@
             </el-row>
           </div>
           <div class="button-group">
-            <el-button type="warning" size="medium">Đặt lại</el-button>
-            <el-button type="primary" size="medium">Tìm kiếm</el-button>
+            <el-button type="warning" size="medium" @click="resetFilter">Đặt lại</el-button>
+            <el-button type="primary" size="medium" @click="applyFilter">Áp dụng</el-button>
           </div>
         </el-col>
         <el-col class="right" :sm="18" :md="19" :lg="19">
           <el-row>
             <el-col :md="16" :lg="16">
-              <h4>20 result for keyword "adidas"</h4>
+              <h4 v-if="searchQuery.searchKey !== ''"> {{ searchResult.totalRecord }} kết quả cho từ khóa {{ searchQuery.searchKey }}</h4>
+              <h4 v-else />
             </el-col>
             <el-col :md="8" :lg="8" style="text-align: right">
-              <el-dropdown split-button type="default" style="text-align: center;">
-                Sort
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>Action 1</el-dropdown-item>
-                  <el-dropdown-item>Action 2</el-dropdown-item>
-                  <el-dropdown-item>Action 3</el-dropdown-item>
-                  <el-dropdown-item>Action 4</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+              <!--<el-dropdown split-button type="default" style="text-align: center;" @change="sortChange">-->
+              <!--Sort-->
+              <!--<el-dropdown-menu slot="dropdown">-->
+              <!--<el-dropdown-item command="createdDate">By Date</el-dropdown-item>-->
+              <!--<el-dropdown-item command="_score">By Matching Percent</el-dropdown-item>-->
+              <!--</el-dropdown-menu>-->
+              <!--</el-dropdown>-->
+              <span>Sort By: </span>
+              <el-select v-model="searchQuery.sortKey" placeholder="Select sort type" @change="sortChange">
+                <el-option value="createdDate" label="Date">Date</el-option>
+                <el-option value="_score" label="Matching Percent">Matching Percent</el-option>
+              </el-select>
             </el-col>
           </el-row>
 
           <section class="content">
             <div v-for="adsItem in searchResult.content" :key="adsItem.id">
-              <search-item ads="adsItem" />
+              <search-item :ads="adsItem" />
             </div>
           </section>
 
@@ -141,40 +176,33 @@ export default {
   data() {
     return {
       searchQuery: {
-        searchKey: 'mio',
-        categoryId: '5cd2ee51e3e36a044830e7e7',
+        searchKey: this.$route.query.keyword || '',
+        categoryId: '',
         pageNumber: '1',
         pageSize: '10',
         sortKey: 'createdDate',
         ascSort: false,
         minPrice: '0',
-        maxPrice: '1000000000000',
-        mau_sac: '#484556,#abcxyz'
-        // metadata: [
-        //   {
-        //     label: 'hihi',
-        //     slug: 'color',
-        //     selectionType: 'single',
-        //     type: 'color',
-        //     value: 'value'
-        //   },
-        //   {
-        //     label: 'huhu',
-        //     slug: 'kolor',
-        //     selectionType: 'single',
-        //     type: 'text',
-        //     value: 'zalue'
-        //   }
-        // ]
+        maxPrice: '1000000000'
       },
       listBreadCrumb: [],
       listMetadata: [],
       metadataTemplate: [],
-      checkedCategory: {},
-      checkedLocation: [],
+      postMetadata: [],
+      checkedCategory: {
+        id: ''
+      },
+      checkedProvince: '',
+      checkedDistrict: '',
+      checkedWard: '',
       displayLimit: 7,
+      metadataLimit: 4,
+      showWard: false,
+      showDist: false,
       expandCate: false,
       expandLoc: false,
+      expandDist: false,
+      expandWard: false,
       checkList: ['Option A'],
       money: {
         decimal: '.',
@@ -204,21 +232,26 @@ export default {
 
       this.postMetadata = allMeta.map(obj => {
         const x = Object.assign({}, obj)
-        x.value = ''
+        x.value = []
         delete x.options
         return x
       })
     },
     metadata: function(newVal) {
-      console.log('before', this.listMetadata)
       this.listMetadata.push(newVal)
-      console.log('after', this.listMetadata)
+    },
+    checkedDistrict: function(newVal) {
+      this.checkedWard = ''
+      this.expandWard = false
+    },
+    checkedProvince: function(newVal) {
+      this.checkedDistrict = ''
+      this.expandDist = false
     }
   },
   created() {
     this.handleLoadListCategory()
     this.handleLoadListLocation()
-    this.fullTextSearch(this.searchQuery)
   },
   methods: {
     ...mapActions('category', ['getListCategory', 'getMetadataByCategoryId']),
@@ -236,10 +269,16 @@ export default {
         parentId: parentId
       }).then(() => {
       })
+      this.resetSearchQuery()
+      this.handleFullTextSearch(parentId)
     },
     handleLoadListLocation() {
       this.loadListLocation({ searchKey: '' }).then(() => {
       })
+    },
+    handleFullTextSearch(catId) {
+      this.searchQuery.categoryId = catId || this.searchQuery.categoryId
+      this.fullTextSearch(this.searchQuery)
     },
     selectCategory(item) {
       this.getMetadataByCategoryId(item.id).then(() => {
@@ -254,6 +293,54 @@ export default {
       this.listBreadCrumb = Object.assign([], this.listBreadCrumb.slice(0, index + 1))
       this.listMetadata = Object.assign([], this.listMetadata.slice(0, index + 1))
       this.handleLoadListCategory(item.id)
+    },
+    resetSearchQuery() {
+      // reset metadata
+      this.postMetadata.forEach(function(element) {
+        element.value = []
+      })
+      const defaultSearchQuery =
+        {
+          searchKey: this.$route.query.keyword || '',
+          categoryId: '',
+          locationId: '',
+          pageNumber: '1',
+          pageSize: '10',
+          sortKey: 'createdDate',
+          ascSort: false,
+          minPrice: '0',
+          maxPrice: '1000000000'
+        }
+
+      for (const key of Object.keys(this.searchQuery)) {
+        if (defaultSearchQuery.hasOwnProperty(key)) {
+          defaultSearchQuery[key] = this.searchQuery[key]
+        }
+      }
+      this.searchQuery = Object.assign({}, defaultSearchQuery)
+      console.log('search query', this.searchQuery)
+    },
+    applyFilter() {
+      const tempMeta = this.postMetadata.filter(function(element) {
+        return element.value.length !== 0
+      })
+      tempMeta.forEach((element) => {
+        this.searchQuery[element.slug.replace(/-/g, '_')] = element.value.join(',')
+      })
+      this.searchQuery['locationId'] = this.checkedWard || this.checkedDistrict || this.checkedProvince || ''
+      this.handleFullTextSearch()
+    },
+    resetFilter() {
+      // reset location
+      this.checkedProvince = ''
+      this.checkedDistrict = ''
+      this.checkedWard = ''
+      this.searchQuery.locationId = ''
+      this.resetSearchQuery()
+      this.applyFilter()
+    },
+    sortChange() {
+      this.handleFullTextSearch()
     }
   }
 }
@@ -303,6 +390,12 @@ export default {
         }
         /deep/ .el-checkbox-group {
           .el-checkbox {
+            display: flex;
+            padding: 5px 0;
+          }
+        }
+        /deep/ .el-radio-group {
+          .el-radio {
             display: flex;
             padding: 5px 0;
           }

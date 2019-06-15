@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ClassifiedAdvertisingPagingResponse {
 
-    List<ClassifiedAdvertising> content;
+    List<ClassifiedAdvertisingElastic> content;
 
     private long totalRecord;
 

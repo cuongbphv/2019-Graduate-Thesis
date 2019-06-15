@@ -74,6 +74,9 @@ public class AdvertisingController extends AbstractBasedAPI {
     RoleService roleService;
 
     @Autowired
+    NotificationService notificationService;
+
+    @Autowired
     ClassifiedAdvertisingElasticService classifiedAdvertisingElasticService;
 
 
@@ -87,6 +90,7 @@ public class AdvertisingController extends AbstractBasedAPI {
             @RequestParam("page_number") int pageNumber,
             @RequestParam("min_price") double minPrice,
             @RequestParam("max_price") double maxPrice,
+            @RequestParam(value = "location_id", required = false, defaultValue = "") String locationId,
             @RequestParam Map<String, String> metadata
     ){
 
@@ -104,11 +108,13 @@ public class AdvertisingController extends AbstractBasedAPI {
         metadata.remove("page_number");
         metadata.remove("min_price");
         metadata.remove("max_price");
+        metadata.remove("location_id");
 
         ClassifiedAdvertisingPagingResponse result =
                 classifiedAdvertisingElasticService.fullTextSearch(
                         categoryId,
                         searchKey,
+                        locationId,
                         metadata,
                         pageNumber - 1,
                         pageSize,
@@ -149,7 +155,7 @@ public class AdvertisingController extends AbstractBasedAPI {
         classifiedAdvertising.setAdditionalInfo(reqModel.getAdditionalInfo());
         classifiedAdvertising.setBreadcrumbs(reqModel.getBreadcrumbs());
         classifiedAdvertising.setMetadata(reqModel.getMetadata());
-        classifiedAdvertising.setCreatedDate(plus1Day(new Date()));
+        classifiedAdvertising.setCreatedDate(new Date());
 		classifiedAdvertising.setModifiedDate(new Date());
         // just for new after that will update pending status, after previewer confirm switch to active status
         classifiedAdvertising.setStatus(Constant.Status.PENDING.getValue());
@@ -157,6 +163,14 @@ public class AdvertisingController extends AbstractBasedAPI {
         ClassifiedAdvertising createdAds = classifiedAdvertisingService.save(classifiedAdvertising);
 
         indexAds(createdAds);
+
+        Notification notification = new Notification();
+        notification.setCreatedDate(new Date());
+        notification.setSenderId(userPrincipal.getId());
+        notification.setType(Notification.Type.NEW_POST);
+        notification.setData(createdAds);
+
+        notificationService.save(notification);
 
         return responseUtil.successResponse(createdAds);
     }

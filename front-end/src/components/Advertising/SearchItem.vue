@@ -1,14 +1,14 @@
 <template>
   <article>
-    <a target="_blank" href="https://sitechop.com/posts/12-speeding-up-your-website">
+    <a :href="'/advertising/' + ads.id">
       <div class="postImg">
-        <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png">
+        <img :src="ads.images[0].url" :alt="ads.additionalInfo.title">
       </div>
       <div class="postCont">
-        <h3>Speeding Up Your Website 101</h3>
-        <span>by John Doe- 23 mins ago</span>
-        <h1>1.500.000 đ</h1>
-        <p class="address">Ward 1 | Thu Duc District | Ho Chi Minh City</p>
+        <h3>{{ ads.additionalInfo.title }}</h3>
+        <span>by {{ ads.author.lastName + ' ' + ads.author.firstName }} - {{ timeSince(ads.createdDate) }} trước</span>
+        <h1> {{ formatPrice(ads.additionalInfo.price) }} đ</h1>
+        <p class="address"> {{ ads.address.ward.nameWithType }} | {{ ads.address.district.nameWithType }} | {{ ads.address.province.nameWithType }}</p>
         <el-rate
           v-model="value2"
           :colors="colors"
@@ -41,6 +41,42 @@ export default {
     return {
       value2: null,
       colors: ['#99A9BF', '#F7BA2A', '#FF9900'] // same as { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
+    }
+  },
+  methods: {
+    handleSwitchToDetailPage() {
+      if (this.ads.id) {
+        this.$router.push({ path: '/ad?keyword=' + this.keyword })
+      }
+    },
+    formatPrice(value) {
+      const val = (value / 1).toFixed(0).replace('.', ',')
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+    },
+    timeSince(dateStr) {
+      const date = new Date(dateStr)
+      const seconds = Math.floor((new Date() - date) / 1000)
+      let interval = Math.floor(seconds / 31536000)
+      if (interval > 1) {
+        return interval + ' năm'
+      }
+      interval = Math.floor(seconds / 2592000)
+      if (interval > 1) {
+        return interval + ' tháng'
+      }
+      interval = Math.floor(seconds / 86400)
+      if (interval > 1) {
+        return interval + ' ngày'
+      }
+      interval = Math.floor(seconds / 3600)
+      if (interval > 1) {
+        return interval + ' giờ'
+      }
+      interval = Math.floor(seconds / 60)
+      if (interval > 1) {
+        return interval + ' phút'
+      }
+      return Math.floor(seconds) + ' giây'
     }
   }
 }

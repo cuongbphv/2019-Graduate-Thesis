@@ -3,16 +3,7 @@ import getters from './getters'
 import mutations from './mutations'
 
 const state = {
-  profile: {
-    avatarUrl: '',
-    following: 0,
-    followedBy: 0
-  },
-  viewProfile: {
-    avatarUrl: '',
-    following: 0,
-    followedBy: 0
-  }
+  messages: []
 }
 export default {
   namespaced: true,

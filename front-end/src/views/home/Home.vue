@@ -52,6 +52,8 @@
 <script>
 import { About, Category } from '@/components/Layout/Home/index'
 import { mapActions, mapGetters } from 'vuex'
+import { Stomp } from '@stomp/stompjs'
+import * as SockJS from 'sockjs-client'
 export default {
   name: 'Home',
   components: {
@@ -64,7 +66,8 @@ export default {
       query: {
         pageNumber: 1,
         pageSize: 4
-      }
+      },
+      socketUrl: 'http://localhost:8080/socket'
     }
   },
   computed: {
@@ -74,12 +77,44 @@ export default {
     const token = new URL(window.location.href).searchParams.get('token')
     if (token) {
       this.loginOAuth2(token).then(() => {
-        this.initData()
+        this.initData().then(() => {
+        })
       })
     }
   },
   created() {
     // this.getPagingNewClassifiedAds(this.query)
+    const ws = new SockJS(this.socketUrl)
+    this.stompClient = Stomp.over(ws)
+    const that = this
+    this.stompClient.connect({}, function() {
+      that.stompClient.subscribe('/user/5cae4c886bf46d0b5453a66f/queue/notification', (message) => {
+        if (message.body) {
+          const body = JSON.parse(message.body)
+          switch (body.type) {
+            case 'NEW_POST':
+              alert(body)
+              break
+            case 'MESSAGE':
+            default:
+            // code block
+          }
+        }
+      })
+      // Tell your username to the server
+      // that.stompClient.send('/app/chat.create',
+      //   {},
+      //   JSON.stringify({ userId: '5cae4c886bf46d0b5453a66f' })
+      // )
+      // that.stompClient.send('/app/chat.sendMessage/5cfc2bf2d1ac505b8c860320',
+      //   {},
+      //   JSON.stringify({
+      //     senderId: '5cae4c886bf46d0b5453a66f',
+      //     content: 'ditmemay'
+      //   })
+      //   // '5cae4c886bf46d0b5453a66f'
+      // )
+    })
   },
   methods: {
     ...mapActions('auth', ['loginOAuth2']),

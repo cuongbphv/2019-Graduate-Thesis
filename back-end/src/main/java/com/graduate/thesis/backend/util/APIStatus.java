@@ -24,6 +24,8 @@ public enum APIStatus {
     //USER_ROLE_PERMISSION
     ERR_USER_NOT_FOUND(404, "User not found"),
     ERR_USER_PROFILE_NOT_FOUND(404, "User Profile Not Found"),
+    ERR_USER_USER_IS_FOLLOWED(207, "You have followed this user"),
+    ERR_USER_USER_IS_NOT_FOLLOWED(208, "You have not followed this user yet"),
     ERR_USER_PROFILE_EXISTED(409, "User Profile Have Existed"),
     ERR_USER_ROLE_NOT_FOUND(404, "User Role Not Found"),
     ERR_USER_INCORRECT_PASSWORD(401, "Password is incorrect"),
@@ -44,6 +46,10 @@ public enum APIStatus {
     //CATEGORY
     ERR_CATEGORY_EXISTED(409, "Category is existed"),
     ERR_CATEGORY_NOT_FOUND(404, "Category not found"),
+
+    //CHAT
+    ERR_CONVERSATION_EXISTED(409, "Conversation is existed"),
+    ERR_CONVERSATION_NOT_EXISTED(404, "Conversation not found"),
 
     //ADDRESS
     ERR_ADDRESS_NOT_FOUND(404, "Address not found for this user"),

@@ -59,10 +59,17 @@ public interface Constant {
     String AVATAR =  "/avatar";
     String SETTINGS =  "/settings";
     String PERSONAL_PERMISSION = "/permissions";
+    String FOLLOW = "/follow";
 
     // Address APIs
     String ADDRESS_API = API_PREFIX + "/address";
 
+    // Notification APIs
+    String NOTIFICATION_API = API_PREFIX + "/notifications";
+
+    // Chat APIs
+    String CHAT_API = API_PREFIX + "/chats";
+    String MESSAGE = "/messages";
 
     //FILE
     String FILE = API_PREFIX + "/files";

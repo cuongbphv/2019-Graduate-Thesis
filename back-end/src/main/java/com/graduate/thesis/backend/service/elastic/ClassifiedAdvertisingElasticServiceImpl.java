@@ -54,7 +54,7 @@ public class ClassifiedAdvertisingElasticServiceImpl implements ClassifiedAdvert
 
     @Override
     public ClassifiedAdvertisingPagingResponse fullTextSearch(
-            String categoryId, String searchKey, Map<String,String> filterData, int pageNumber,
+            String categoryId, String searchKey, String locationId, Map<String,String> filterData, int pageNumber,
             int pageSize, String sortCase, boolean ascSort, double minPrice, double maxPrice) {
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
@@ -118,6 +118,28 @@ public class ClassifiedAdvertisingElasticServiceImpl implements ClassifiedAdvert
                         .gte(minPrice).lte(maxPrice)
         );
 
+        if(locationId != null && !locationId.isEmpty()){
+
+            if(locationId.length() == 2){
+                boolQueryBuilder.filter(
+                        QueryBuilders
+                                .termQuery("address.province.id", locationId)
+                );
+            }
+            else if(locationId.length() == 3){
+                boolQueryBuilder.filter(
+                        QueryBuilders
+                                .termQuery("address.district.id", locationId)
+                );
+            }
+            else if(locationId.length() == 5){
+                boolQueryBuilder.filter(
+                        QueryBuilders
+                                .termQuery("address.ward.id", locationId)
+                );
+            }
+        }
+
 
 //        for(AdsMetadata metadata : filterData){
 //
@@ -146,7 +168,8 @@ public class ClassifiedAdvertisingElasticServiceImpl implements ClassifiedAdvert
 
             key = key.replaceAll("_", "-");
 
-            if(value.contains("-")) {
+            if (value.contains("-")) {
+
                 boolQueryBuilder.filter(
                         QueryBuilders
                                 .nestedQuery(
@@ -163,17 +186,17 @@ public class ClassifiedAdvertisingElasticServiceImpl implements ClassifiedAdvert
                         QueryBuilders
                                 .nestedQuery(
                                         "metadata",
-                                        QueryBuilders.matchQuery("metadata.value", value),
+                                        QueryBuilders.matchQuery("metadata.value", value.replaceAll(",", " ")),
                                         ScoreMode.None)
                 );
 
-                boolQueryBuilder.should(
-                        QueryBuilders
-                                .nestedQuery(
-                                        "metadata",
-                                        QueryBuilders.matchQuery("metadata.value", value),
-                                        ScoreMode.Total)
-                );
+//                boolQueryBuilder.should(
+//                        QueryBuilders
+//                                .nestedQuery(
+//                                        "metadata",
+//                                        QueryBuilders.matchQuery("metadata.value", value.replaceAll(",", " ")),
+//                                        ScoreMode.Total)
+//                );
 
 //                List<String> values = Lists.newArrayList(Splitter.on(",").split(value));
 //
@@ -205,12 +228,22 @@ public class ClassifiedAdvertisingElasticServiceImpl implements ClassifiedAdvert
         });
 
 
-        FieldSortBuilder sortTerm = SortBuilders.fieldSort(sortCase).order(ascSort ? SortOrder.ASC : SortOrder.DESC);
+        if(!sortCase.equals("_score")) {
+            FieldSortBuilder sortTerm = SortBuilders.fieldSort(sortCase).order(ascSort ? SortOrder.ASC : SortOrder.DESC);
+            searchSourceBuilder
+                    .sort(sortTerm)
+                    .sort(SortBuilders.fieldSort("createdDate").order(SortOrder.DESC))
+                    .sort(SortBuilders.fieldSort("_score").order(SortOrder.DESC));
+        }
+        else {
+            FieldSortBuilder sortTerm = SortBuilders.fieldSort(sortCase).order(ascSort ? SortOrder.ASC : SortOrder.DESC);
+            searchSourceBuilder
+                    .sort(SortBuilders.fieldSort("_score").order(SortOrder.DESC))
+                    .sort(SortBuilders.fieldSort("createdDate").order(SortOrder.DESC));
+        }
 
         searchSourceBuilder
                 .query(boolQueryBuilder)
-                .sort(sortTerm)
-                .sort(SortBuilders.fieldSort("_score").order(SortOrder.DESC))
                 .from(pageNumber * pageSize)
                 .size(pageSize);
 
@@ -223,14 +256,14 @@ public class ClassifiedAdvertisingElasticServiceImpl implements ClassifiedAdvert
 
         ClassifiedAdvertisingElasticPagingResponse queryResult = advertisingElasticRepository.executeSearch(jsonPretty);
 
-        List<ClassifiedAdvertising> classifiedAdvertisingList = queryResult.getContent()
-                .stream()
-                .map(ClassifiedAdvertising::new)
-                .collect(Collectors.toList());
+//        List<ClassifiedAdvertising> classifiedAdvertisingList = queryResult.getContent()
+//                .stream()
+//                .map(ClassifiedAdvertising::new)
+//                .collect(Collectors.toList());
 
         ClassifiedAdvertisingPagingResponse response = new ClassifiedAdvertisingPagingResponse();
         response.setTotalRecord(queryResult.getTotalRecord());
-        response.setContent(classifiedAdvertisingList);
+        response.setContent(queryResult.getContent());
         response.setPageNumber(pageNumber + 1);
         response.setPageSize(pageSize);
 

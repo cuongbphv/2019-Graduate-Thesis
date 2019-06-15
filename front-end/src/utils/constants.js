@@ -5,6 +5,7 @@ const API = {
   CHANGE_PASSWORD: '/user/password',
   SYS_ADMIN_LIST_USER: '/user/list',
   PROFILE: '/profile',
+  FOLLOW: '/follow',
   UPDATE_PERSONAL_PERMISSION: '/profile/permissions',
   // Location APIs
   LOCATION: '/location',
@@ -30,7 +31,10 @@ const API = {
   FULL_TEXT_SEARCH: '/advertising/search',
   // ROLE_PERMISSION APIs
   ROLE: '/role',
-  PERMISSION: '/permission'
+  PERMISSION: '/permission',
+  // CHAT
+  CHAT: '/chats',
+  MESSAGE: '/messages'
 }
 
 const Status = {

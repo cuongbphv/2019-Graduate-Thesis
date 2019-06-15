@@ -18,4 +18,8 @@ public interface UserProfileService {
     Optional<UserProfile> findActiveByUserId(String userId);
 
     void deleteByUserId(String id);
+
+    void followUser(String userId,String followedUserId);
+
+    void unFollowUser(String userId,String followedUserId);
 }

@@ -50,8 +50,10 @@
               </div>
             </el-col>
             <el-col :xs="18" :sm="20" :md="21">
-              <h3 v-if="i18n.locale === 'vi'">{{ author.lastName + ' ' + author.firstName }}</h3>
-              <h3 v-if="i18n.locale === 'en'">{{ author.firstName + ' ' + author.lastName }}</h3>
+              <a :href="'/profile/' + author.userId">
+                <h3 v-if="i18n.locale === 'vi'">{{ author.lastName + ' ' + author.firstName }}</h3>
+                <h3 v-if="i18n.locale === 'en'">{{ author.firstName + ' ' + author.lastName }}</h3>
+              </a>
               <p>Ngày tham gia: {{ author.createdDate | formatDate(author.createdDate) }}</p>
               <div class="author-action">
                 <el-row>
@@ -75,8 +77,8 @@
             <h3>Thông số kỹ thuật</h3>
             <el-col v-for="item in metadata" :key="item.id" style="margin-bottom: 20px;" :md="12">
               <span>{{ item.label }}</span> :
+              <span style="font-style: italic; font-weight: 600;">{{ item.value }}</span>
               <div v-if="item.value.startsWith('#')" :style="{'background': item.value, 'width': '20px', 'height': '10px', 'display': 'inline-block'}" />
-              <span v-else style="font-style: italic; font-weight: 600;">{{ item.value }}</span>
             </el-col>
           </el-row>
         </div>

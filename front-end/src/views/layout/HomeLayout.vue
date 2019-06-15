@@ -23,6 +23,8 @@ import { ContactBar, NavBar, HomeFooter } from '@/components/Layout/Home/index'
 import AppMain from '@/components/Layout/AppMain/AppMain'
 import ResizeMixin from '@/mixins/ResizeHandler'
 import BackToTop from '@/components/BackToTop'
+import { Stomp } from '@stomp/stompjs'
+import * as SockJS from 'sockjs-client'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'HomeLayout',
@@ -34,6 +36,11 @@ export default {
     BackToTop
   },
   mixins: [ResizeMixin],
+  data() {
+    return {
+      socketUrl: 'http://localhost:8080/socket'
+    }
+  },
   computed: {
     ...mapGetters('layout', ['sidebar', 'device']),
     classObj() {
@@ -49,11 +56,32 @@ export default {
     if (this.$route.query.token) {
       console.log(this.$route.query.token)
     }
+    this.subscribeMessage()
   },
   methods: {
     ...mapActions('layout', ['closeSideBar']),
     handleClickOutside() {
       this.closeSideBar({ withoutAnimation: false })
+    },
+    subscribeMessage() {
+      const ws = new SockJS(this.socketUrl)
+      this.stompClient = Stomp.over(ws)
+      const that = this
+      this.stompClient.connect({}, function() {
+        that.stompClient.subscribe('/user/5cae4c886bf46d0b5453a66f/queue/notification', (message) => {
+          if (message.body) {
+            const body = JSON.parse(message.body)
+            switch (body.type) {
+              case 'NEW_POST':
+                console.log(body)
+                break
+              case 'MESSAGE':
+              default:
+              // code block
+            }
+          }
+        })
+      })
     }
   }
 }

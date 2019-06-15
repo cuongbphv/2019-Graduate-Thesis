@@ -30,6 +30,10 @@
                 <p class="desc-stat">Uploads</p>
               </el-col>
             </el-row>
+            <el-row class="stats">
+              <el-button v-if="profile.followedBy.includes(userId)" type="danger" icon="el-icon-close-notification" round @click="handleUnFollowUser(profileId)">Unfollow</el-button>
+              <el-button v-else type="success" round icon="el-icon-bell" @click="handleFollowUser(profileId)">Follow</el-button>
+            </el-row>
             <p class="desc"> {{ profile.description }} </p>
             <!--          <div class="social">-->
             <!--            <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'facebook' }" />-->
@@ -38,7 +42,7 @@
           </el-col>
           <el-col class="right" :xs="24" :md="14" :lg="14">
             <el-row>
-              <ul class="nav">
+              <ul v-if="userId === profileId" class="nav">
                 <li :class="{'is-active' : routerName === 'history'}">
                   <a @click="handleClickRouter('history')">Lịch sử</a>
                 </li>
@@ -85,7 +89,7 @@
 <script>
 import ImageCropper from '@/components/ImageCropper'
 import PanThumb from '@/components/PanThumb'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { scrollTo } from '@/utils/scrollTo'
 
 export default {
@@ -104,7 +108,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('profile', ['profile']),
+    ...mapGetters('profile', ['profile', 'currentProfile', 'userId']),
     cachedViews() {
       return this.$store.state.tagsView.cachedViews
     },
@@ -112,11 +116,27 @@ export default {
       return this.$route.fullPath
     }
   },
-  created: function() {
+  watch: {
+    '$route.params.id': function(id) {
+      this.profileId = id
+      this.handleGetProfile()
+    }
+  },
+  mounted: function() {
     this.handleGetProfile()
   },
   methods: {
-    ...mapActions('profile', ['getProfile']),
+    ...mapActions('profile', ['getProfile', 'followUser', 'unFollowUser']),
+    handleUnFollowUser(id) {
+      this.unFollowUser(id).then(() => {
+        this.handleGetProfile()
+      })
+    },
+    handleFollowUser(id) {
+      this.followUser(id).then(() => {
+        this.handleGetProfile()
+      })
+    },
     cropSuccess(resData) {
       this.imagecropperShow = false
       this.imagecropperKey = this.imagecropperKey + 1

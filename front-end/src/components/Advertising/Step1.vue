@@ -138,6 +138,9 @@ export default {
     } else {
       this.loadListCategory(this.selectedCategoryId)
     }
+    setInterval(function() {
+      console.log('post meta', this.postMetadata)
+    }, 10)
   },
   methods: {
     ...mapActions('category', ['getListCategory', 'getMetadataByCategoryId']),

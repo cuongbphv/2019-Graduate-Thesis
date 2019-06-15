@@ -12,14 +12,7 @@ export default {
     return Api.get(API.GET_LIST_LOCATION, { params: params }).then(res => res.data)
   },
   addNewProvince(params) {
-    console.info(params)
     return Api.post(API.PROVINCE, params).then(res => res.data)
-  },
-  addNewDistrict(params) {
-    return Api.post(API.DISTRICT, params).then(res => res.data)
-  },
-  addNewWard(params) {
-    return Api.post(API.WARD, params).then(res => res.data)
   },
   updateProvince(id, params) {
     return Api.put(API.PROVINCE + '/' + id, params).then(res => res.data)
@@ -31,15 +24,33 @@ export default {
       }
     }).then(res => res.data)
   },
+  addNewDistrict(params) {
+    return Api.post(API.DISTRICT, params).then(res => res.data)
+  },
+  updateDistrict(id, params) {
+    return Api.put(API.DISTRICT + '/' + id, params).then(res => res.data)
+  },
   deleteDistricts(params) {
     return Api.delete(API.DISTRICT, {
       params: {
-        province_ids: params.provinceId,
-        ids: params.ids.join(',')
+        province_id: params.provinceId,
+        district_ids: Array.isArray(params.ids) && params.ids.join(',') || params.ids
       }
     }).then(res => res.data)
   },
+  addNewWard(params) {
+    return Api.post(API.WARD, params).then(res => res.data)
+  },
+  updateWard(id, params) {
+    return Api.put(API.WARD + '/' + id, params).then(res => res.data)
+  },
   deleteWards(params) {
-    return Api.delete(API.WARD, { params: params }).then(res => res.data)
+    return Api.delete(API.WARD, {
+      params: {
+        province_id: params.provinceId,
+        district_id: params.districtId,
+        ward_ids: Array.isArray(params.ids) && params.ids.join(',') || params.ids
+      }
+    }).then(res => res.data)
   }
 }

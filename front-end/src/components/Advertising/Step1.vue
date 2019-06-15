@@ -1,6 +1,6 @@
 <template>
   <div class="step1">
-    <h1>Lựa chọn danh mục tin đăng</h1>
+    <h1>{{ $t('advertising.step1') }}</h1>
 
     <div class="select-category">
       <div class="search-form">
@@ -9,9 +9,9 @@
             <md-input
               v-model="searchKey"
               icon="search"
-              placeholder="Nhập khu vực tìm kiếm"
+              :placeholder="$t('advertising.category')"
               @keyup.enter.native="loadListCategory(selectedCategoryId)"
-            >Tìm kiếm</md-input>
+            >{{ $t('advertising.search') }}</md-input>
           </el-form-item>
         </el-form>
       </div>

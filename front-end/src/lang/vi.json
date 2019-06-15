@@ -314,9 +314,20 @@
     "info_delete": "Vui lòng chọn đối tượng muốn xóa",
     "keep_data": "Bạn có muốn giữ dữ liệu bạn đã chọn trước đó không?",
     "location": {
-      "add_province_success": "Thêm tỉnh mới thành công",
+      "upload_success": "Tải lên dữ liệu địa điểm thành công",
+      "upload_exceed": "Xóa tập tin đã tải lên để tải tập tin mới",
+      "add_province_success": "Thêm tỉnh, thành phố mới thành công",
+      "add_district_success": "Thêm quận, huyện mới thành công",
+      "add_ward_success": "Thêm xã, phường mới thành công",
       "province_restore": "Thông tin tỉnh đã được khôi phục như cũ",
-      "update_province_success": "Cập nhật thông tin tỉnh thành công"
+      "update_province_success": "Cập nhật thông tin tỉnh thành công",
+      "district_restore": "Thông tin quận huyện đã được khôi phục như cũ",
+      "update_district_success": "Cập nhật thông tin quận huyện thành công",
+      "ward_restore": "Thông tin huyện xã đã được khôi phục như cũ",
+      "update_ward_success": "Cập nhật thông tin huyện xã thành công",
+      "delete_province_success": "Xóa tỉnh, thành phố thành công",
+      "delete_district_success": "Xóa quận, huyện thành công",
+      "delete_ward_success": "Xóa xã, phường thành công"
     },
     "update_metadata_success": "Cập nhật metadata thành công",
     "update_filter_success": "Cập nhật lọc thành công",
@@ -337,7 +348,6 @@
     "update_personal_permission_success": "Cập nhật quyền truy cập cá nhân thành công"
   },
   "advertising": {
-    "additional_info": "Nhập thông tin bổ sung cho tin rao vặt",
     "title": "Tiêu đề",
     "title_placeholder": "Nhập tiêu đề",
     "description": "Mô tả",
@@ -359,13 +369,32 @@
     "min_price": "Giá tối thiểu",
     "max_price": "Giá tối đa",
     "list_image": "Danh sách hình",
+    "step1": "Lựa chọn danh mục tin đăng",
     "step2": "Chọn khu vực tỉnh, thành phố",
+    "step3": "Tải lên hình ảnh về sản phẩm",
+    "step4": "Nhập thông tin bổ sung cho tin rao vặt",
+    "step5": "Xem lại tin đăng",
+    "image_required": "(*) Bạn cần đăng ít nhất một hình về sản phẩm",
+    "quick": "Để bán nhanh hơn:",
+    "rotate": "Xoay camera khổ ngang để hình hiển thị đẹp hơn",
+    "more_view": "Chụp từ nhiều góc của sản phẩm (mặt trước, sau, bên)",
+    "not": "Không nên",
+    "internet": "Sử dụng hình ảnh trùng lặp hoặc lấy từ Internet",
+    "insert_phone": "Chèn số điện thoại/email/logo vào hình",
+    "created_success": "Bạn đã tạo thành công tin rao vặt",
+    "watch": "Vào xem",
+    "post": "tin rao vặt",
+    "now": "vừa đăng ngay bây giờ",
+    "drop": "Thả tập tin ảnh ở đây hoặc",
+    "click": "nhấn để tải lên",
     "new_location": "Chọn địa chỉ mới",
     "exist_location": "Địa chỉ có sẵn",
     "search": "Tìm kiếm",
     "search_placeholder": "Nhập khu vực tìm kiếm",
     "category_sub": "Danh mục con",
-    "address": "Địa chỉ"
+    "address": "Địa chỉ",
+    "desc_info": "Thông tin mô tả",
+    "tech_info": "Thông số kỹ thuật"
   },
   "userProfile": {
     "firstName": "Tên",
@@ -409,7 +438,10 @@
       "409": "Đã tồn tại danh mục này"
     },
     "location": {
-      "505": "Tỉnh đã tồn tại trong cơ sở dữ liệu"
+      "504": "Địa điểm không tìm thấy",
+      "505": "Tỉnh, thành phố đã tồn tại",
+      "506": "Quận, huyện đã tồn tại",
+      "507": "Xã, phường đã tồn tại"
     }
   }
 }

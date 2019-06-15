@@ -35,6 +35,8 @@ public enum APIStatus {
     // LOCATION
     ERR_LOCATION_NOT_FOUND(504, "Location not found"),
     ERR_LOCATION_EXISTED(505, "Location has existed"),
+    ERR_DISTRICT_NOT_FOUND(506, "District not found"),
+    ERR_WARD_NOT_FOUND(507, "Ward not found"),
 
     //FILE
     ERR_FILE_NOT_FOUND(888, "File not found"),

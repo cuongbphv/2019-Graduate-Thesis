@@ -86,7 +86,12 @@
       </el-dialog>
     </div>
 
-    <add-location-modal :visible="addDialogVisible" :add-mode="addMode" @closeModal="handleCloseModal" />
+    <add-location-modal
+      :visible="addDialogVisible"
+      :add-mode="addMode"
+      @closeModal="handleCloseModal"
+      @reloadList="handleReloadList"
+    />
 
     <el-breadcrumb separator="/" style="margin-bottom: 15px; font-weight: 500;">
       <el-breadcrumb-item v-if="mode === 'district' || mode === 'ward'">
@@ -106,24 +111,30 @@
       :search-key="searchKey"
       @handleLoadListDistricts="showTableDistrict"
       @keepProvincePaging="saveProvincePagingStatus"
-      @keepListIdToDelete="handleDeleteProvince"
+      @keepListIdToDelete="handleKeepIdsToDelete"
     />
 
     <table-district
       v-else-if="mode === 'district'"
+      :key="districtKey"
       :province-id="provinceId"
       :paging="tempPaging.districtPaging"
       :search-key="searchKey"
       @handleLoadListWards="showTableWard"
       @keepDistrictPaging="saveDistrictPagingStatus"
+      @keepListIdToDelete="handleKeepIdsToDelete"
+      @reloadList="handleReloadList"
     />
 
     <table-ward
       v-else-if="mode === 'ward'"
+      :key="wardKey"
       :province-id="provinceId"
       :district-id="districtId"
       :paging="tempPaging.wardPaging"
       :search-key="searchKey"
+      @keepListIdToDelete="handleKeepIdsToDelete"
+      @reloadList="handleReloadList"
     />
 
   </div>
@@ -139,6 +150,8 @@ import waves from '@/directive/waves'
 import { API } from '@/utils/constants'
 import { getToken } from '@/utils/auth'
 import { mapActions } from 'vuex'
+import { Status } from '../../../utils/constants'
+import { showMessageAfterCallAPI } from '../../../utils/message'
 
 export default {
   name: 'Location',
@@ -156,6 +169,8 @@ export default {
       districtId: '00',
       provinceName: '',
       districtName: '',
+      districtKey: 0,
+      wardKey: 0,
       addMode: {},
       fileList: [],
       dialogVisible: false,
@@ -167,7 +182,7 @@ export default {
           pageSize: 10,
           searchKey: '',
           ascSort: true,
-          sortKey: 1
+          sortKey: 2
         },
         districtPaging: {
           pageNumber: 1,
@@ -195,7 +210,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('location', ['loadListPagingLocation', 'deleteProvinces']),
+    ...mapActions('location', ['loadListPagingLocation', 'deleteProvinces', 'deleteDistricts', 'deleteWards']),
     // Handle fo import database
     openImportDialog() {
       this.dialogVisible = true
@@ -230,13 +245,13 @@ export default {
       this.loadListPagingLocation(this.tempPaging.provincePaging)
       this.fileList = []
       this.$message({
-        message: 'Upload location data successfully',
+        message: this.$t('message.location.upload_success'),
         type: 'success'
       })
     },
     handleOnExceed(file, fileList) {
       this.$message({
-        message: 'Remove uploaded file to upload new file',
+        message: this.$t('message.location.upload_exceed'),
         type: 'error'
       })
     },
@@ -267,7 +282,7 @@ export default {
     saveDistrictPagingStatus(paging) {
       this.tempPaging.districtPaging = Object.assign({}, paging)
     },
-    handleDeleteProvince(ids) {
+    handleKeepIdsToDelete(ids) {
       let allIds = []
       for (const key in ids) {
         if (ids.hasOwnProperty(key)) {
@@ -284,8 +299,34 @@ export default {
           type: 'warning'
         }).then(() => {
           if (this.mode === 'province') {
-            this.deleteProvinces(this.deletedIds).then(() => {
-              this.loadListPagingLocation(this.tempPaging.provincePaging)
+            this.deleteProvinces(this.deletedIds).then((res) => {
+              if (res.status === Status.SUCCESS) {
+                this.loadListPagingLocation(this.tempPaging.provincePaging)
+              }
+              showMessageAfterCallAPI(res, 'message.location.delete_province_success')
+            })
+          } else if (this.mode === 'district') {
+            this.deleteDistricts({
+              provinceId: this.provinceId,
+              ids: this.deletedIds
+            }).then((res) => {
+              if (res.status === Status.SUCCESS) {
+                this.loadListPagingLocation(this.tempPaging.provincePaging)
+                this.districtKey++
+              }
+              showMessageAfterCallAPI(res, 'message.location.delete_district_success')
+            })
+          } else if (this.mode === 'ward') {
+            this.deleteWards({
+              provinceId: this.provinceId,
+              districtId: this.districtId,
+              ids: this.deletedIds
+            }).then((res) => {
+              if (res.status === Status.SUCCESS) {
+                this.loadListPagingLocation(this.tempPaging.provincePaging)
+                this.wardKey++
+              }
+              showMessageAfterCallAPI(res, 'message.location.delete_ward_success')
             })
           }
         }).catch(() => {})
@@ -294,6 +335,15 @@ export default {
           confirmButtonText: 'OK'
         })
       }
+    },
+    handleReloadList() {
+      this.loadListPagingLocation(this.tempPaging.provincePaging).then(() => {
+        if (this.mode === 'district') {
+          this.districtKey++
+        } else if (this.mode === 'ward') {
+          this.wardKey++
+        }
+      })
     }
   }
 }

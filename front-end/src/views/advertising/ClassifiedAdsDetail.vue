@@ -2,7 +2,7 @@
   <div class="classified-ads-detail-container">
     <header>
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/home' }">Trang chủ</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/home' }">{{ $t('navbar.home') }}</el-breadcrumb-item>
         <el-breadcrumb-item
           v-for="item in classifiedAds.breadcrumbs"
           :key="item.id"
@@ -14,11 +14,27 @@
       <article>
         <el-row>
           <el-col class="carousel-left" :xs="0" :sm="8" :md="6">
-            <el-upload action="" :file-list="images" list-type="picture-card" />
+            <div>
+              <ul class="el-upload-list el-upload-list--picture-card">
+                <li
+                  v-for="(item, index) in images"
+                  :key="item.uid"
+                  class="el-upload-list__item"
+                  :class="{'is-active': index === imageIndex}"
+                  @click="handleChangeCarousel(index)"
+                >
+                  <el-image :src="item.url" class="el-upload-list__item-thumbnail">
+                    <div slot="error" class="image-slot">
+                      <i class="el-icon-picture-outline" />
+                    </div>
+                  </el-image>
+                </li>
+              </ul>
+            </div>
           </el-col>
 
           <el-col class="carousel-right" :xs="24" :sm="16" :md="18">
-            <el-carousel :interval="5000" arrow="always">
+            <el-carousel ref="carousel" :interval="5000" arrow="always" @change="handleChangeCarousel">
               <el-carousel-item v-for="item in images" :key="item.uid">
                 <img :src="item.url" alt="No image">
               </el-carousel-item>
@@ -68,13 +84,13 @@
         </div>
         <el-divider />
         <div class="description">
-          <h3>Thông tin mô tả</h3>
+          <h3>{{ $t('advertising.desc_info') }}</h3>
           <div style="white-space: pre-line;">{{ additionalInfo.description }}</div>
         </div>
         <el-divider />
         <div class="metadata">
           <el-row>
-            <h3>Thông số kỹ thuật</h3>
+            <h3>{{ $t('advertising.tech_info') }}</h3>
             <el-col v-for="item in metadata" :key="item.id" style="margin-bottom: 20px;" :md="12">
               <span>{{ item.label }}</span> :
               <span style="font-style: italic; font-weight: 600;">{{ item.value }}</span>
@@ -103,7 +119,8 @@ export default {
       author: {},
       address: {},
       metadata: [],
-      i18n: i18n
+      i18n: i18n,
+      imageIndex: 0
     }
   },
   computed: {
@@ -122,7 +139,11 @@ export default {
   created() {
   },
   methods: {
-    ...mapActions('advertising', ['getClassifiedAdsDetail'])
+    ...mapActions('advertising', ['getClassifiedAdsDetail']),
+    handleChangeCarousel(index) {
+      this.imageIndex = index
+      this.$refs.carousel.activeIndex = index
+    }
   }
 }
 </script>
@@ -152,24 +173,13 @@ export default {
       height: 400px;
       overflow-y: auto;
 
-      /deep/ .el-upload-list__item {
+      .el-upload-list__item {
         border-radius: 0;
-
-        .el-upload-list__item-status-label {
-          display: none;
+        border: none;
+        cursor: pointer;
+        &.is-active {
+          border: 2px solid #42b1fa !important;
         }
-        .el-icon-close-tip {
-          display: none;
-        }
-        .el-icon-close {
-          display: none;
-        }
-        .el-upload-list__item-actions{
-          display: none;
-        }
-      }
-      /deep/ .el-upload--picture-card {
-        display: none;
       }
     }
     .carousel-right {

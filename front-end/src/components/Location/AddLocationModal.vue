@@ -392,6 +392,18 @@ export default {
       if (this.localMode.mode === 'province') {
         this.addNewProvince(this.province).then(res => {
           showMessageAfterCallAPI(res, 'message.location.add_province_success')
+          this.$emit('reloadList')
+          this.province = {
+            id: '',
+            name: '',
+            slug: '',
+            type: '',
+            nameWithType: '',
+            districts: []
+          }
+          this.districts = []
+          this.wards = []
+          this.dialogVisible = false
         })
       } else if (this.localMode.mode === 'district') {
         this.addNewDistrict({
@@ -399,6 +411,10 @@ export default {
           districts: this.districts
         }).then(res => {
           showMessageAfterCallAPI(res, 'message.location.add_district_success')
+          this.$emit('reloadList')
+          this.districts = []
+          this.wards = []
+          this.dialogVisible = false
         })
       } else if (this.localMode.mode === 'ward') {
         this.addNewWard({
@@ -407,6 +423,9 @@ export default {
           wards: this.wards
         }).then(res => {
           showMessageAfterCallAPI(res, 'message.location.add_ward_success')
+          this.$emit('reloadList')
+          this.wards = []
+          this.dialogVisible = false
         })
       }
     }

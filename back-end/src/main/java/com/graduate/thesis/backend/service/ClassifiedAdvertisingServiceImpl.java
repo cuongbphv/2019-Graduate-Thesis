@@ -133,7 +133,11 @@ public class ClassifiedAdvertisingServiceImpl implements ClassifiedAdvertisingSe
             content.add(ads);
         }
 
-        return new PageImpl<>(content, new PageRequest(pageNumber - 1, pageSize), content.size());
+        Pageable pageable = new PageRequest(pageNumber - 1, pageSize);
+        int start = pageable.getPageNumber() * pageable.getPageSize();
+        int end = (start + pageable.getPageSize()) > content.size() ? content.size() : (start + pageable.getPageSize());
+
+        return new PageImpl<>(content.subList(start, end), pageable, content.size());
     }
 
     @Override

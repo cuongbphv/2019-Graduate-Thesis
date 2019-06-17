@@ -76,7 +76,7 @@
                   </el-col>
                 </el-form-item>
               </el-col>
-              <el-col :md="{span: 8, offset: 2}" :lg="{span: 8, offset: 2}">
+              <el-col v-if="subMeta.type === 'color'" :md="{span: 8, offset: 2}" :lg="{span: 8, offset: 2}">
                 <el-form-item :label="$t('label.value')">
                   <el-input v-if="subMeta.type === 'text'" v-model="subOption.value" />
                   <el-color-picker v-if="subMeta.type === 'color'" v-model="subOption.value" />

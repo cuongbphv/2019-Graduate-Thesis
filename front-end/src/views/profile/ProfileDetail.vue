@@ -13,16 +13,18 @@
               </pan-thumb>
               <!--            <div class="active"></div>-->
             </div>
-            <h4 class="name"> {{ profile.firstName + ' ' + profile.lastName }}</h4>
+            <h4 class="name"> {{ profile.firstName + ' ' + (profile.lastName || ' ') }}</h4>
             <p class="info"> Personal User </p>
             <p class="info">{{ profile.email }}</p>
             <el-row class="stats">
               <el-col class="stat" :md="8">
-                <p class="number-stat">{{ profile.followedBy.length || 0 }}</p>
+                <p v-if="profile.followedBy" class="number-stat">{{ profile.followedBy.length }}</p>
+                <p v-else class="number-stat">0</p>
                 <p class="desc-stat">Followers</p>
               </el-col>
               <el-col class="stat" :md="8">
-                <p class="number-stat">{{ profile.following.length || 0 }}</p>
+                <p v-if="profile.following" class="number-stat">{{ profile.following.length }}</p>
+                <p v-else class="number-stat">0</p>
                 <p class="desc-stat">Following</p>
               </el-col>
               <el-col class="stat" :md="8">
@@ -31,7 +33,7 @@
               </el-col>
             </el-row>
             <el-row class="stats">
-              <el-button v-if="profile.followedBy.includes(userId)" type="danger" icon="el-icon-close-notification" round @click="handleUnFollowUser(profileId)">Unfollow</el-button>
+              <el-button v-if="profile.followedBy && profile.followedBy.includes(userId)" type="danger" icon="el-icon-close-notification" round @click="handleUnFollowUser(profileId)">Unfollow</el-button>
               <el-button v-else type="success" round icon="el-icon-bell" @click="handleFollowUser(profileId)">Follow</el-button>
             </el-row>
             <p class="desc"> {{ profile.description }} </p>

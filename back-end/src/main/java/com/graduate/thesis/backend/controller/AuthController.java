@@ -1,6 +1,7 @@
 package com.graduate.thesis.backend.controller;
 
 import com.graduate.thesis.backend.entity.UserAccount;
+import com.graduate.thesis.backend.entity.UserProfile;
 import com.graduate.thesis.backend.exception.ApplicationException;
 import com.graduate.thesis.backend.exception.BadRequestException;
 import com.graduate.thesis.backend.model.request.LoginRequest;
@@ -9,6 +10,7 @@ import com.graduate.thesis.backend.model.response.AuthResponse;
 import com.graduate.thesis.backend.repository.UserAccountRepository;
 import com.graduate.thesis.backend.security.AuthProvider;
 import com.graduate.thesis.backend.security.TokenProvider;
+import com.graduate.thesis.backend.service.UserProfileService;
 import com.graduate.thesis.backend.util.APIStatus;
 import com.graduate.thesis.backend.util.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +20,13 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.Date;
 
 import static com.graduate.thesis.backend.security.SecurityConstants.USER_ROLE_ID;
 
@@ -39,6 +44,9 @@ public class AuthController extends AbstractBasedAPI{
 
     @Autowired
     private UserAccountRepository userAccountRepository;
+
+    @Autowired
+    private UserProfileService userProfileService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -83,9 +91,18 @@ public class AuthController extends AbstractBasedAPI{
         user.setProvider(AuthProvider.local);
         user.setRoleId(USER_ROLE_ID);
         user.setStatus(1);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
         UserAccount result = userAccountRepository.save(user);
+
+        UserProfile userProfile = new UserProfile();
+        userProfile.setUserId(user.getId());
+        userProfile.setFirstName(user.getPhone());
+        userProfile.setCreatedDate(new Date());
+        userProfile.setModifiedDate(new Date());
+        userProfile.setStatus(1);
+        userProfileService.save(userProfile);
+
 
         return responseUtil.successResponse(result);
     }

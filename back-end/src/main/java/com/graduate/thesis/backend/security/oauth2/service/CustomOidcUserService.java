@@ -3,6 +3,7 @@ package com.graduate.thesis.backend.security.oauth2.service;
 import com.graduate.thesis.backend.entity.Permission;
 import com.graduate.thesis.backend.entity.Role;
 import com.graduate.thesis.backend.entity.UserAccount;
+import com.graduate.thesis.backend.entity.UserProfile;
 import com.graduate.thesis.backend.exception.OAuth2AuthenticationProcessingException;
 import com.graduate.thesis.backend.repository.PermissionRepository;
 import com.graduate.thesis.backend.repository.RoleRepository;
@@ -11,6 +12,7 @@ import com.graduate.thesis.backend.repository.UserAccountRepository;
 import com.graduate.thesis.backend.security.oauth2.user.UserPrincipal;
 import com.graduate.thesis.backend.security.oauth2.user.OAuth2UserInfo;
 import com.graduate.thesis.backend.security.oauth2.user.OAuth2UserInfoFactory;
+import com.graduate.thesis.backend.service.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +46,9 @@ public class CustomOidcUserService extends OidcUserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private UserProfileService userProfileService;
 
     @Autowired
     private PermissionRepository permissionRepository;
@@ -120,7 +126,19 @@ public class CustomOidcUserService extends OidcUserService {
         user.setRoleId(USER_ROLE_ID);
         user.setStatus(1);
         // user.setImageUrl(oAuth2UserInfo.getImageUrl());
-        return userRepository.save(user);
+
+
+        UserAccount createdUser = userRepository.save(user);
+
+        UserProfile userProfile = new UserProfile();
+        userProfile.setUserId(createdUser.getId());
+        userProfile.setFirstName(oAuth2UserInfo.getName());
+        userProfile.setCreatedDate(new Date());
+        userProfile.setModifiedDate(new Date());
+        userProfile.setStatus(1);
+        userProfileService.save(userProfile);
+
+        return createdUser;
     }
 
     private UserAccount updateExistingUser(UserAccount existingUser, OAuth2UserInfo oAuth2UserInfo) {

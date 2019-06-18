@@ -93,7 +93,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         HttpMethod.GET, "/api/v1/category")
                 .permitAll()
-                .antMatchers("/api/v1/auth/register/**", "/api/v1/auth/login/**",
+                .antMatchers("/api/v1/auth/register/**", "/api/v1/auth/login/**", "/api/v1/auth/otp/**",
                         "/auth/**", "/oauth2/**", "/login/**","/api/v1/files/**","/socket/**")
                 .permitAll()
                 .anyRequest()

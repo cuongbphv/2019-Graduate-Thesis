@@ -48,10 +48,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                         new UsernameNotFoundException("User not found with phone : " + phone)
                 );
 
-        if (user.getStatus() == Constant.Status.PENDING.getValue()) {
-            throw new ApplicationException(APIStatus.ERR_USER_NOT_CONFIRM_OTP);
-        }
-
 //        return UserPrincipal.create(user);
         List<GrantedAuthority> authorities = new ArrayList<>();
 

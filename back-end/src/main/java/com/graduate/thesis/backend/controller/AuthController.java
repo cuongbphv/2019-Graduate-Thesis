@@ -61,6 +61,15 @@ public class AuthController extends AbstractBasedAPI{
 
         try {
 
+            UserAccount user = userAccountRepository.findByPhone(loginRequest.getPhone())
+                    .orElseThrow(() ->
+                            new ApplicationException(APIStatus.ERR_USER_NOT_FOUND)
+                    );
+
+            if (user.getStatus() == Constant.Status.PENDING.getValue()) {
+                throw new ApplicationException(APIStatus.ERR_USER_NOT_CONFIRM_OTP);
+            }
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getPhone(),

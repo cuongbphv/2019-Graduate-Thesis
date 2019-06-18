@@ -202,8 +202,8 @@ export default {
             if (res.status === Status.SUCCESS) {
               this.isVisible = false
               showSuccess('message.login_success')
-              this.initData().then((authorities) => {
-                this.loadRoutesByAuthorities(authorities)
+              this.initData().then((data) => {
+                this.loadRoutesByAuthorities(data.authorities)
               })
             } else {
               this.loading = false
@@ -253,8 +253,8 @@ export default {
           }).then(() => {
             this.isVisible = false
             this.$emit('closeLoginModal', '')
-            this.initData().then((authorities) => {
-              this.loadRoutesByAuthorities(authorities)
+            this.initData().then((data) => {
+              this.loadRoutesByAuthorities(data.authorities)
             })
           })
         } else {

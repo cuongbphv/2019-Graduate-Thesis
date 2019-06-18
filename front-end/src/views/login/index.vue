@@ -159,7 +159,6 @@ export default {
       },
       passwordType: 'password',
       loading: false,
-      isVisible: false,
       title: 'Login',
       mode: 'login'
     }
@@ -196,10 +195,19 @@ export default {
           }
           this.loginLocal(params).then(res => {
             if (res.status === Status.SUCCESS) {
-              this.isVisible = false
               showSuccess('message.login_success')
-              this.initData().then((authorities) => {
-                this.loadRoutesByAuthorities(authorities)
+              this.initData().then((data) => {
+                this.loadRoutesByAuthorities(data.authorities).then(() => {
+                  if (data.role.name === 'SYS_ADMIN') {
+                    this.$router.push('role')
+                  } else if (data.role.name === 'ADMIN') {
+                    this.$router.push('dashboard')
+                  } else if (data.role.name === 'MODERATOR') {
+                    this.$router.push('dashboard')
+                  } else if (data.role.name === 'USER') {
+                    this.$router.push('home')
+                  }
+                })
               })
             } else {
               this.loading = false
@@ -247,10 +255,19 @@ export default {
             phone: this.loginForm.phone,
             password: this.loginForm.password
           }).then(() => {
-            this.isVisible = false
             this.$emit('closeLoginModal', '')
-            this.initData().then((authorities) => {
-              this.loadRoutesByAuthorities(authorities)
+            this.initData().then((data) => {
+              this.loadRoutesByAuthorities(data.authorities).then(() => {
+                if (data.role.name === 'SYS_ADMIN') {
+                  this.$router.push('role')
+                } else if (data.role.name === 'ADMIN') {
+                  this.$router.push('dashboard')
+                } else if (data.role.name === 'MODERATOR') {
+                  this.$router.push('dashboard')
+                } else if (data.role.name === 'USER') {
+                  this.$router.push('home')
+                }
+              })
             })
           })
         } else {

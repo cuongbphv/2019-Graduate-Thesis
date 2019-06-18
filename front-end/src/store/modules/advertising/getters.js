@@ -14,9 +14,14 @@ const searchState = state => {
   return state.searchState
 }
 
+const topCategoryPost = state => {
+  return state.topCategoryPost
+}
+
 export default {
   topPagingNewClassifiedAds,
   listPagingClassifiedAds,
   searchResult,
-  searchState
+  searchState,
+  topCategoryPost
 }

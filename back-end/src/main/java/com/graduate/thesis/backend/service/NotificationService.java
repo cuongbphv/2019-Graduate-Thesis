@@ -13,7 +13,7 @@ public interface NotificationService {
 
     String NOTIFICATION_DESTINATION = "/queue/notification";
 
-    void broadCastToUsers(NotificationResponse message, List<String> userIds);
+    void broadCastToUsers(NotificationResponse message);
 
     Notification save(Notification conversation);
 

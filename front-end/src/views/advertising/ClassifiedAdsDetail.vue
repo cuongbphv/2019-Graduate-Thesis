@@ -101,18 +101,26 @@
           </el-row>
         </div>
       </article>
-      <aside>aside</aside>
+      <aside>
+        <div v-for="adsItem in topCategoryPost" :key="adsItem.id">
+          <search-item v-if="adsItem.id !== classifiedAdsId" :ads="adsItem" :mode="'topPost'" />
+        </div>
+      </aside>
     </main>
     <!--    <footer>footer</footer>-->
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import i18n from '@/lang'
+import SearchItem from '../../components/Advertising/SearchItem'
 
 export default {
   name: 'ClassifiedAdsDetail',
+  components: {
+    SearchItem
+  },
   data() {
     return {
       classifiedAdsId: '',
@@ -122,11 +130,21 @@ export default {
       address: {},
       metadata: [],
       i18n: i18n,
-      imageIndex: 0
+      imageIndex: 0,
+      searchQuery: {
+        categoryId: '',
+        pageNumber: 1,
+        pageSize: 5,
+        sortKey: 'createdDate',
+        ascSort: false,
+        minPrice: '0',
+        maxPrice: '10000000000'
+      }
     }
   },
   computed: {
-    ...mapState('advertising', ['classifiedAds'])
+    ...mapState('advertising', ['classifiedAds']),
+    ...mapGetters('advertising', ['topCategoryPost'])
   },
   mounted() {
     this.classifiedAdsId = this.$route.params.id
@@ -136,15 +154,21 @@ export default {
       this.additionalInfo = Object.assign({}, this.classifiedAds.detail.additionalInfo)
       this.author = Object.assign({}, this.classifiedAds.author)
       this.address = Object.assign({}, this.classifiedAds.address)
+      this.handleGetTopCategoryPost()
     })
   },
   created() {
   },
   methods: {
-    ...mapActions('advertising', ['getClassifiedAdsDetail']),
+    ...mapActions('advertising', ['getClassifiedAdsDetail', 'getTopCategoryPost']),
     handleChangeCarousel(index) {
       this.imageIndex = index
       this.$refs.carousel.activeIndex = index
+    },
+    handleGetTopCategoryPost() {
+      this.searchQuery.categoryId = this.classifiedAds.breadcrumbs[this.classifiedAds.breadcrumbs.length - 2].id
+      this.getTopCategoryPost(this.searchQuery).then(() => {
+      })
     }
   }
 }

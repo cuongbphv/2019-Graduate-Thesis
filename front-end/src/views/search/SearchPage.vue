@@ -270,9 +270,9 @@ export default {
     ...mapActions('category', ['getListCategory', 'getMetadataByCategoryId']),
     ...mapActions('location', ['loadListLocation']),
     ...mapActions('advertising', ['fullTextSearch', 'saveSearchState']),
-    handlePageChange(pagnation) {
-      this.searchQuery.pageNumber = pagnation.page
-      this.searchQuery.pageSize = pagnation.limit
+    handlePageChange(pagination) {
+      this.searchQuery.pageNumber = pagination.page
+      this.searchQuery.pageSize = pagination.limit
       this.handleFullTextSearch()
     },
     handleLoadListCategory(parentId) {

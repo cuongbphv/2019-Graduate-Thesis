@@ -18,6 +18,7 @@ import './errorLog' // error log
 import './permission' // permission control
 import * as filters from './filters' // global filters
 import InfiniteLoading from 'vue-infinite-loading'
+import Toasted from 'vue-toasted'
 
 library.add(faFacebook, faGoogle, faLinkedin, faGithub)
 
@@ -46,7 +47,7 @@ Vue.use(InfiniteLoading, {
     noMore: ''
   }
 })
-
+Vue.use(Toasted)
 // register global utility filters.
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

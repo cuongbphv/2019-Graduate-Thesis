@@ -14,29 +14,31 @@
               <!--            <div class="active"></div>-->
             </div>
             <h4 class="name"> {{ profile.firstName + ' ' + (profile.lastName || ' ') }}</h4>
-            <p class="info"> Personal User </p>
+            <!--<p class="info"> Personal User </p>-->
             <p class="info">{{ profile.email }}</p>
             <el-row class="stats">
-              <el-col class="stat" :md="8">
+              <el-col class="stat" :md="12">
                 <p v-if="profile.followedBy" class="number-stat">{{ profile.followedBy.length }}</p>
                 <p v-else class="number-stat">0</p>
-                <p class="desc-stat">Followers</p>
+                <p class="desc-stat">Được theo dõi</p>
               </el-col>
-              <el-col class="stat" :md="8">
+              <el-col class="stat" :md="12">
                 <p v-if="profile.following" class="number-stat">{{ profile.following.length }}</p>
                 <p v-else class="number-stat">0</p>
-                <p class="desc-stat">Following</p>
+                <p class="desc-stat">Đang theo dõi</p>
               </el-col>
-              <el-col class="stat" :md="8">
-                <p class="number-stat">38</p>
-                <p class="desc-stat">Uploads</p>
-              </el-col>
+              <!--<el-col class="stat" :md="8">-->
+              <!--<p class="number-stat">38</p>-->
+              <!--<p class="desc-stat">Uploads</p>-->
+              <!--</el-col>-->
             </el-row>
-            <el-row class="stats">
+            <el-row v-if="profile.userId !== userId" class="stats">
               <el-button v-if="profile.followedBy && profile.followedBy.includes(userId)" type="danger" icon="el-icon-close-notification" round @click="handleUnFollowUser(profileId)">Unfollow</el-button>
-              <el-button v-else type="success" round icon="el-icon-bell" @click="handleFollowUser(profileId)">Follow</el-button>
+              <el-button v-if="profile.followedBy && !profile.followedBy.includes(userId) && profile.userId !== userId" type="success" round icon="el-icon-bell" @click="handleFollowUser(profileId)">Follow</el-button>
+              <el-button v-if="profile.userId !== userId" type="primary" icon="el-icon-chat-dot-round" round @click="handleOpenChatModal()">Chat</el-button>
             </el-row>
             <p class="desc"> {{ profile.description }} </p>
+            <chat-popup :recipient="profile" :visible="chatPopupVisible" @closeChatModal="handleCloseChatModal" />
             <!--          <div class="social">-->
             <!--            <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'facebook' }" />-->
             <!--            <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'google' }" />-->
@@ -93,12 +95,14 @@ import ImageCropper from '@/components/ImageCropper'
 import PanThumb from '@/components/PanThumb'
 import { mapActions, mapGetters } from 'vuex'
 import { scrollTo } from '@/utils/scrollTo'
+import ChatPopup from '../chat/ChatPopup'
 
 export default {
   name: 'ProfileDetail',
   components: {
     ImageCropper,
-    PanThumb
+    PanThumb,
+    ChatPopup
   },
   data() {
     return {
@@ -106,7 +110,8 @@ export default {
       imagecropperKey: 0,
       image: 'https://image.noelshack.com/fichiers/2017/38/2/1505775062-1505606859-portrait-1961529-960-720.jpg',
       profileId: this.$route.params.id,
-      routerName: 'history'
+      routerName: 'history',
+      chatPopupVisible: false
     }
   },
   computed: {
@@ -158,6 +163,12 @@ export default {
       this.routerName = name
       this.$router.push(name)
       scrollTo(100)
+    },
+    handleCloseChatModal() {
+      this.chatPopupVisible = false
+    },
+    handleOpenChatModal() {
+      this.chatPopupVisible = true
     }
   }
 }

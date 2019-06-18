@@ -27,6 +27,10 @@ const FULL_TEXT_SEARCH = (state, payload) => {
   state.searchResult.pageNumber = payload.pageNumber
 }
 
+const TOP_CATEGORY_POST = (state, payload) => {
+  state.topCategoryPost = Object.assign([], payload.content)
+}
+
 const SAVE_SEARCH_STATE = (state, payload) => {
   state.searchState = Object.assign({}, payload)
 }
@@ -36,5 +40,6 @@ export default {
   GET_CLASSIFIED_ADVERTISING_DETAIL_BY_ID,
   GET_PAGING_NEW_CLASSIFIED_ADVERTISING,
   FULL_TEXT_SEARCH,
-  SAVE_SEARCH_STATE
+  SAVE_SEARCH_STATE,
+  TOP_CATEGORY_POST
 }

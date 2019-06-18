@@ -20,7 +20,8 @@ const state = {
     pageNumber: 1
   },
   searchState: {
-  }
+  },
+  topCategoryPost: []
 }
 
 export default {

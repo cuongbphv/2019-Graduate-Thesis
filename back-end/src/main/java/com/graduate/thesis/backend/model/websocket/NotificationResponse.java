@@ -1,5 +1,6 @@
 package com.graduate.thesis.backend.model.websocket;
 
+import com.graduate.thesis.backend.entity.Notification;
 import com.graduate.thesis.backend.entity.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,19 +21,15 @@ public class NotificationResponse {
 
     private String id;
 
-    private UserProfile user;
-
     private UserProfile sender;
 
     private Object data;
 
     private Date createdDate;
 
-    private Type type;
+    private Notification.Type type;
 
-    public enum Type {
-        NEW_POST,
-        FOLLOW
-    }
+    private Notification.Status status;
+
 
 }

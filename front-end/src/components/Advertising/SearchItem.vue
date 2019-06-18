@@ -1,6 +1,6 @@
 <template>
   <article>
-    <a :href="'/advertising/' + ads.id">
+    <a target="_blank" :href="'/advertising/' + ads.id">
       <div class="postImg">
         <img :src="ads.images[0].url" :alt="ads.additionalInfo.title">
       </div>
@@ -8,12 +8,13 @@
         <h3>{{ ads.additionalInfo.title }}</h3>
         <span>by {{ ads.author.lastName + ' ' + ads.author.firstName }} - {{ timeSince(ads.createdDate) }} trước</span>
         <h1> {{ formatPrice(ads.additionalInfo.price) }} đ</h1>
-        <p class="address"> {{ ads.address.ward.nameWithType }} | {{ ads.address.district.nameWithType }} | {{ ads.address.province.nameWithType }}</p>
+        <p v-if="mode !== 'topPost'" class="address"> {{ ads.address.ward.nameWithType }} | {{ ads.address.district.nameWithType }} | {{ ads.address.province.nameWithType }}</p>
         <el-rate
+          v-if="mode !== 'topPost'"
           v-model="value2"
           :colors="colors"
         />
-        <el-row style="margin-top: 10px">
+        <el-row v-if="mode !== 'topPost'" style="margin-top: 10px">
           <el-tooltip content="Bookmark" effect="dark" placement="bottom">
             <el-button type="success" icon="el-icon-paperclip" circle />
           </el-tooltip>
@@ -35,6 +36,10 @@ export default {
       default: () => {
         return {}
       }
+    },
+    mode: {
+      type: String,
+      default: 'search'
     }
   },
   data() {

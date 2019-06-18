@@ -397,7 +397,8 @@
     "category_sub": "Sub Category",
     "address": "Address",
     "desc_info": "Description Info",
-    "tech_info": "Specification Info"
+    "tech_info": "Specification Info",
+    "goto": "Go to"
   },
   "userProfile": {
     "firstName": "First name",

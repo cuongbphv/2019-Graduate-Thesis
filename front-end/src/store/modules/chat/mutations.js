@@ -23,10 +23,14 @@ const MESSAGE_HISTORY = (state, payload) => {
   state.messages = Object.assign([], payload.sort(compare))
 }
 
+const UPDATE_MESSAGE_STATUS = (state, payload) => {
+}
+
 export default {
   CREATE_CONVERSATION,
   GET_ALL_CONVERSATION,
   GET_CONVERSATION_BY_ID,
   ADD_MESSAGE,
-  MESSAGE_HISTORY
+  MESSAGE_HISTORY,
+  UPDATE_MESSAGE_STATUS
 }

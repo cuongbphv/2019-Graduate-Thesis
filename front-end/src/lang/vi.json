@@ -397,7 +397,8 @@
     "category_sub": "Danh mục con",
     "address": "Địa chỉ",
     "desc_info": "Thông tin mô tả",
-    "tech_info": "Thông số kỹ thuật"
+    "tech_info": "Thông số kỹ thuật",
+    "goto": "Đi đến"
   },
   "userProfile": {
     "firstName": "Tên",

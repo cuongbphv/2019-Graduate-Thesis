@@ -73,7 +73,7 @@ export default {
   computed: {
     ...mapGetters('advertising', ['topPagingNewClassifiedAds'])
   },
-  beforeCreate() {
+  created() {
     const token = new URL(window.location.href).searchParams.get('token')
     if (token) {
       this.loginOAuth2(token).then(() => {
@@ -81,8 +81,6 @@ export default {
         })
       })
     }
-  },
-  created() {
     // this.getPagingNewClassifiedAds(this.query)
     const ws = new SockJS(this.socketUrl)
     this.stompClient = Stomp.over(ws)

@@ -6,9 +6,24 @@ const register = ({ commit }, params) => {
   return auth.register(params).then(res => {
     if (res.status === Status.SUCCESS) {
       commit('REGISTER', res.data)
-      return res.data
     }
-    // this.$message.error(this.$t('status.' + res.status))
+    return res
+  }).catch(error => {
+    throw error
+  })
+}
+
+const submitOTP = ({ commit }, params) => {
+  return auth.submitOTP(params).then(res => {
+    return res
+  }).catch(error => {
+    throw error
+  })
+}
+
+const sendOTP = ({ commit }, params) => {
+  return auth.sendOTP(params).then(res => {
+    return res
   }).catch(error => {
     throw error
   })
@@ -20,6 +35,7 @@ const loginLocal = ({ commit }, user) => {
       setToken(res.data)
       commit('LOGIN_LOCAL', res.data)
     }
+    return res
   }).catch(error => {
     throw error
   })
@@ -37,6 +53,8 @@ const clear = ({ commit }) => {
 }
 export default {
   register,
+  submitOTP,
+  sendOTP,
   loginLocal,
   loginOAuth2,
   clear

@@ -83,6 +83,10 @@ const fullTextSearch = ({ commit }, params) => {
   })
 }
 
+const saveSearchState = ({ commit }, state) => {
+  commit('SAVE_SEARCH_STATE', state)
+}
+
 export default {
   removeTempImage,
   uploadTempImage,
@@ -91,5 +95,6 @@ export default {
   getClassifiedAdsDetail,
   getPagingNewClassifiedAds,
   getPagingUserHistoryClassifiedAds,
-  fullTextSearch
+  fullTextSearch,
+  saveSearchState
 }

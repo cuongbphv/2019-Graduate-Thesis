@@ -92,9 +92,11 @@
           <el-row>
             <h3>{{ $t('advertising.tech_info') }}</h3>
             <el-col v-for="item in metadata" :key="item.id" style="margin-bottom: 20px;" :md="12">
-              <span>{{ item.label }}</span> :
-              <span style="font-style: italic; font-weight: 600;">{{ item.value }}</span>
-              <div v-if="item.value.startsWith('#')" :style="{'background': item.value, 'width': '20px', 'height': '10px', 'display': 'inline-block'}" />
+              <template v-if="item.value || item.valueLabel || item.enValueLabel">
+                <span>{{ item.label }}</span> :
+                <span style="font-weight: 600;">{{ item.valueLabel || item.enValueLabel }} </span>
+                <div v-if="item.value.startsWith('#')" :style="{'background': item.value, 'width': '20px', 'height': '10px', 'display': 'inline-block'}" />
+              </template>
             </el-col>
           </el-row>
         </div>

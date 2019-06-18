@@ -209,6 +209,15 @@ export const allRoutes = [
           skip: true
         }
       },
+      {
+        path: '/category/:id',
+        component: () => import('@/views/category/Category'),
+        name: 'CategoryPage',
+        meta: {
+          title: 'category-page',
+          skip: true
+        }
+      },
       profileRouter,
       advertisingRouter
     ]

@@ -26,10 +26,11 @@ const API = {
   // ADVERTISING APIs
   ADVERTISING: '/advertising',
   NEW_ADVERTISING: '/advertising/new',
-  USER_HISTORY_ADS: '/advertising/me',
+  USER_HISTORY_ADS: '/advertising/history',
   UPLOAD_TEMP_IMAGE: '/advertising/upload_temp_image',
   REMOVE_TEMP_IMAGE: '/advertising/remove_temp_image',
   FULL_TEXT_SEARCH: '/advertising/search',
+  TOP_CATEGORY_POST: '/advertising/top_category_post',
   // ROLE_PERMISSION APIs
   ROLE: '/role',
   PERMISSION: '/permission',

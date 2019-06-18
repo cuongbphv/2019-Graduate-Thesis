@@ -24,7 +24,7 @@
               <div v-if="conversation.lastMessage" class="chat_people">
                 <template v-for="user in conversation.members">
                   <div v-if="user.userId !== userId" :key="user.id" class="chat_img"> <img :src="user.avatarUrl" alt="sunil"> </div>
-                  <div v-if="user.userId !== userId" :key="user.userId" :class="{ unread: conversation.lastMessage.status !== 'SEEN' }" class="chat_ib">
+                  <div v-if="user.userId !== userId" :key="user.userId" :class="{ unread: (conversation.lastMessage.status !== 'SEEN' && conversation.lastMessage.senderId !== userId)}" class="chat_ib">
                     <h5> {{ user.firstName + ' ' + user.lastName }}
                       <span class="chat_date">{{ formatDate(conversation.lastMessage.createdDate) }}</span>
                     </h5>
@@ -63,8 +63,8 @@
           </div>
           <div class="type_msg">
             <div class="input_msg_write">
-              <el-input v-model="messageTemplate" type="text" class="write_msg" placeholder="Type a message" />
-              <el-button class="msg_send_btn" @click="sendMessage"><i class="el-icon-position" /></el-button>
+              <el-input v-model="messageTemplate" type="text" class="write_msg" placeholder="Nhập tin nhắn" />
+              <el-button :disabled="!messageTemplate" class="msg_send_btn" icon="el-icon-position" @click="sendMessage" />
             </div>
           </div>
         </div>
@@ -110,7 +110,7 @@ export default {
   mounted() {
   },
   methods: {
-    ...mapActions('chat', ['getAllConversationByUserId', 'getConversationById', 'addMessage', 'getMessageHistory']),
+    ...mapActions('chat', ['getAllConversationByUserId', 'getConversationById', 'addMessage', 'getMessageHistory', 'updateMessageStatus']),
     getAllConversation() {
       this.getAllConversationByUserId({ userId: this.userId, size: this.conversationSize }).then(data => {
         this.conversations = Object.assign([], data)
@@ -125,8 +125,14 @@ export default {
       })
     },
     getMessages(conversationId, callback) {
+      const that = this
       this.getMessageHistory({ id: conversationId, size: this.messageSize })
         .then(() => {
+          const msg = Object.assign({}, that.messageHistory[that.messageHistory.length - 1])
+          msg.status = 'SEEN'
+          if (msg.senderId !== that.userId) {
+            that.updateMsgStatus(conversationId, msg)
+          }
           !!callback && callback()
         })
     },
@@ -139,6 +145,14 @@ export default {
       const that = this
       this.addMessage(params).then(() => {
         that.messageTemplate = ''
+      })
+    },
+    updateMsgStatus(conversationId, message) {
+      const params = {
+        conversationId: conversationId,
+        message: message
+      }
+      this.updateMessageStatus(params).then(() => {
       })
     },
     selectConversation(conversation) {
@@ -183,10 +197,18 @@ export default {
             const body = JSON.parse(message.body)
             switch (body.type) {
               case 'CONVERSATION':
+                that.getAllConversationByUserId({ userId: that.userId, size: that.conversationSize }).then(data => {
+                  that.conversations = Object.assign([], data)
+                })
                 break
               case 'MESSAGE':
                 if (body.conversationId === that.selectedConversationId) {
                   that.messageHistory.push(body.data)
+                  if (body.data.senderId !== that.userId) {
+                    const msg = Object.assign({}, body.data)
+                    msg.status = 'SEEN'
+                    that.updateMsgStatus(body.conversationId, msg)
+                  }
                 }
                 that.handleUpdateConversationWithNewMessage(body.conversationId, body.data)
                 setTimeout(that.scrollChatToBottom, 500)
@@ -365,20 +387,22 @@ export default {
     min-height: 48px;
     width: 100%;
   }
-
-  .type_msg {border-top: 1px solid #c4c4c4;position: relative;}
+  .write_msg{
+    padding-right: 50px;
+  }
+  .type_msg {border-top: 1px solid #c4c4c4;position: relative; margin-bottom: 1rem}
   .msg_send_btn {
     background: #05728f none repeat scroll 0 0;
     border: medium none;
     border-radius: 50%;
     color: #fff;
     cursor: pointer;
-    font-size: 17px;
+    /*font-size: 17px;*/
     height: 33px;
     position: absolute;
     right: 0;
-    top: 11px;
-    width: 33px;
+    top: 0;
+    width: 33px!important;
   }
   .messaging { padding: 0 0 50px 0;}
   .msg_history {

@@ -41,9 +41,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('layout', ['device'])
+    ...mapGetters('layout', ['device']),
+    ...mapGetters('profile', ['userId'])
   },
-  created() {
+  mounted() {
+    console.log('userId', this.userId)
     this.subscribeMessage()
   },
   methods: {
@@ -56,11 +58,22 @@ export default {
       this.stompClient = Stomp.over(ws)
       const that = this
       this.stompClient.connect({}, function() {
-        that.stompClient.subscribe('/user/5cae4c886bf46d0b5453a66f/queue/notification', (message) => {
+        that.stompClient.subscribe(`/user/${that.userId}/queue/notification`, (message) => {
           if (message.body) {
             const body = JSON.parse(message.body)
             switch (body.type) {
               case 'NEW_POST':
+                that.$toasted.show(`${body.sender.firstName} ${body.sender.lastName} vừa đăng tin mới:
+                ${body.data.additionalData.title}`, {
+                  position: 'bottom-left',
+                  duration: 3000,
+                  action: {
+                    text: 'Xem',
+                    onClick: (e, toastObject) => {
+                      that.$router.push('/advertising/' + body.data.id)
+                      toastObject.goAway(0)
+                    }
+                  }})
                 console.log(body)
                 break
               case 'MESSAGE':

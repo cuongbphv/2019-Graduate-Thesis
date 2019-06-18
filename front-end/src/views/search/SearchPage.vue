@@ -8,7 +8,7 @@
             <h4 v-if="listBreadCrumb.length === 0">Tìm theo danh mục</h4>
             <el-breadcrumb class="breadcrumb" separator="/">
               <el-breadcrumb-item v-if="listBreadCrumb.length > 0">
-                <a href="javascript:void(0)" @click="handleLoadListCategory(null)">{{ $t('label.category') }}</a>
+                <a href="javascript:void(0)" @click="handleLoadListCategory(categoryId || null)">{{ $t('label.category') }}</a>
               </el-breadcrumb-item>
               <el-breadcrumb-item
                 v-for="item in listBreadCrumb"
@@ -90,8 +90,8 @@
             <el-checkbox-group v-model="postMetadata[index].value">
               <el-checkbox
                 v-for="metaOption in meta.options"
-                :key="metaOption.value"
-                :label="metaOption.value"
+                :key="metaOption.label"
+                :label="metaOption.label"
               > {{ metaOption.label }} </el-checkbox>
             </el-checkbox-group>
           </div>
@@ -151,9 +151,9 @@
           <pagination
             v-show="searchResult.totalRecord > 0"
             :total="searchResult.totalRecord"
-            :page.sync="searchResult.pageNumber - 1"
+            :page="searchResult.pageNumber"
             :limit.sync="searchResult.pageSize"
-            @pagination="handleSearch"
+            @pagination="handlePageChange"
           />
         </el-col>
       </el-row>
@@ -173,13 +173,19 @@ export default {
     Money,
     Pagination
   },
+  props: {
+    categoryId: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       searchQuery: {
         searchKey: this.$route.query.keyword || '',
         categoryId: '',
-        pageNumber: '1',
-        pageSize: '10',
+        pageNumber: 1,
+        pageSize: 10,
         sortKey: 'createdDate',
         ascSort: false,
         minPrice: '0',
@@ -189,9 +195,6 @@ export default {
       listMetadata: [],
       metadataTemplate: [],
       postMetadata: [],
-      checkedCategory: {
-        id: ''
-      },
       checkedProvince: '',
       checkedDistrict: '',
       checkedWard: '',
@@ -203,7 +206,6 @@ export default {
       expandLoc: false,
       expandDist: false,
       expandWard: false,
-      checkList: ['Option A'],
       money: {
         decimal: '.',
         thousands: ',',
@@ -217,7 +219,7 @@ export default {
   computed: {
     ...mapGetters('category', ['listCategory', 'metadata']),
     ...mapGetters('location', ['listLocation', 'listDistrictByProvinceId', 'listWardByDistrictId']),
-    ...mapGetters('advertising', ['searchResult'])
+    ...mapGetters('advertising', ['searchResult', 'searchState'])
   },
   watch: {
     listCategory: function(newVal) {
@@ -247,17 +249,31 @@ export default {
     checkedProvince: function(newVal) {
       this.checkedDistrict = ''
       this.expandDist = false
+    },
+    categoryId: function(newVal) {
+      this.searchQuery.categoryId = newVal
     }
   },
-  created() {
-    this.handleLoadListCategory()
+  mounted() {
+    if (this.categoryId) {
+      this.getMetadataByCategoryId(this.categoryId).then(() => {
+        this.handleLoadListCategory(this.categoryId)
+      })
+    } else {
+      if (this.listMetadata.length === 0) {
+        this.handleLoadListCategory()
+      }
+    }
     this.handleLoadListLocation()
   },
   methods: {
     ...mapActions('category', ['getListCategory', 'getMetadataByCategoryId']),
     ...mapActions('location', ['loadListLocation']),
-    ...mapActions('advertising', ['fullTextSearch']),
-    handleSearch() {
+    ...mapActions('advertising', ['fullTextSearch', 'saveSearchState']),
+    handlePageChange(pagination) {
+      this.searchQuery.pageNumber = pagination.page
+      this.searchQuery.pageSize = pagination.limit
+      this.handleFullTextSearch()
     },
     handleLoadListCategory(parentId) {
       if (parentId === null) {
@@ -278,9 +294,11 @@ export default {
     },
     handleFullTextSearch(catId) {
       this.searchQuery.categoryId = catId || this.searchQuery.categoryId
+      this.saveState()
       this.fullTextSearch(this.searchQuery)
     },
     selectCategory(item) {
+      this.searchQuery.pageNumber = 1
       this.getMetadataByCategoryId(item.id).then(() => {
         this.listBreadCrumb.push(item)
         this.handleLoadListCategory(item.id)
@@ -328,6 +346,7 @@ export default {
         this.searchQuery[element.slug.replace(/-/g, '_')] = element.value.join(',')
       })
       this.searchQuery['locationId'] = this.checkedWard || this.checkedDistrict || this.checkedProvince || ''
+      console.log('stt', this.searchState)
       this.handleFullTextSearch()
     },
     resetFilter() {
@@ -341,6 +360,30 @@ export default {
     },
     sortChange() {
       this.handleFullTextSearch()
+    },
+    saveState() {
+      const state = {}
+      state.searchQuery = this.searchQuery
+      state.listBreadCrumb = this.listBreadCrumb
+      state.listMetadata = this.listMetadata
+      state.metadataTemplate = this.metadataTemplate
+      state.postMetadata = this.postMetadata
+      state.checkedProvince = this.checkedProvince
+      state.checkedDistrict = this.checkedDistrict
+      state.checkedWard = this.checkedWard
+      this.saveSearchState(state)
+    },
+    loadState() {
+      if (Object.keys(this.searchState).length !== 0) {
+        this.searchQuery = this.searchState.searchQuery
+        this.listBreadCrumb = this.searchState.listBreadCrumb
+        this.listMetadata = this.searchState.listMetadata
+        this.metadataTemplate = this.searchState.metadataTemplate
+        this.postMetadata = this.searchState.postMetadata
+        this.checkedProvince = this.searchState.checkedProvince
+        this.checkedDistrict = this.searchState.checkedDistrict
+        this.checkedWard = this.searchState.checkedWard
+      }
     }
   }
 }

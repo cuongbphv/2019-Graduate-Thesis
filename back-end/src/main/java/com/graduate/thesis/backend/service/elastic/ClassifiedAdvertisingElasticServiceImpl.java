@@ -14,6 +14,7 @@ import com.graduate.thesis.backend.model.response.ClassifiedAdvertisingPagingRes
 import com.graduate.thesis.backend.repository.elastic.ClassifiedAdvertisingElasticRepository;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
@@ -74,7 +75,16 @@ public class ClassifiedAdvertisingElasticServiceImpl implements ClassifiedAdvert
                     QueryBuilders
                             .nestedQuery(
                                     "metadata",
-                                    QueryBuilders.matchQuery("metadata.value", searchKey).boost(4),
+                                    QueryBuilders.matchQuery("metadata.valueLabel", searchKey).boost(3),
+                                    ScoreMode.None)
+            );
+
+
+            boolQueryBuilder.should(
+                    QueryBuilders
+                            .nestedQuery(
+                                    "metadata",
+                                    QueryBuilders.matchQuery("metadata.enValueLabel", searchKey).boost(3),
                                     ScoreMode.None)
             );
 
@@ -82,7 +92,7 @@ public class ClassifiedAdvertisingElasticServiceImpl implements ClassifiedAdvert
             boolQueryBuilder.should(
                     QueryBuilders
                             .matchQuery("additionalInfo.description", searchKey)
-                            .boost(3));
+                            .boost(4));
 
             boolQueryBuilder.should(
                     QueryBuilders
@@ -168,25 +178,29 @@ public class ClassifiedAdvertisingElasticServiceImpl implements ClassifiedAdvert
 
             key = key.replaceAll("_", "-");
 
-            if (value.contains("-")) {
+//            if (value.contains("-")) {
+//
+//                boolQueryBuilder.filter(
+//                        QueryBuilders
+//                                .nestedQuery(
+//                                        "metadata",
+//                                        QueryBuilders.rangeQuery("metadata.value")
+//                                                .gte(Double.parseDouble(value.split("-")[0]))
+//                                                .lte(Double.parseDouble(value.split("-")[1])),
+//                                        ScoreMode.None)
+//                );
+//            }
+//            else
+            if(value.contains(",")){
 
                 boolQueryBuilder.filter(
                         QueryBuilders
                                 .nestedQuery(
                                         "metadata",
-                                        QueryBuilders.rangeQuery("metadata.value")
-                                                .gte(Double.parseDouble(value.split("-")[0]))
-                                                .lte(Double.parseDouble(value.split("-")[1])),
-                                        ScoreMode.None)
-                );
-            }
-            else if(value.contains(",")){
-
-                boolQueryBuilder.filter(
-                        QueryBuilders
-                                .nestedQuery(
-                                        "metadata",
-                                        QueryBuilders.matchQuery("metadata.value", value.replaceAll(",", " ")),
+                                        QueryBuilders
+                                                .matchQuery("metadata.valueLabel",
+                                                        value.replaceAll(",", " "))
+                                                .operator(Operator.AND),
                                         ScoreMode.None)
                 );
 
@@ -213,7 +227,8 @@ public class ClassifiedAdvertisingElasticServiceImpl implements ClassifiedAdvert
                         QueryBuilders
                                 .nestedQuery(
                                         "metadata",
-                                        QueryBuilders.matchQuery("metadata.value", value),
+                                        QueryBuilders.matchQuery("metadata.valueLabel", value)
+                                                .operator(Operator.AND),
                                         ScoreMode.None)
                 );
             }

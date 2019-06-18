@@ -63,7 +63,7 @@ const getPagingNewClassifiedAds = ({ commit }, params) => {
 
 const getPagingUserHistoryClassifiedAds = ({ commit }, params) => {
   const param = CommonModelMap.toParam(params)
-  return advertising.getUserHistoryClassifiedAds(param).then(res => {
+  return advertising.getUserHistoryClassifiedAds(param, params.userId).then(res => {
     if (res.status === Status.SUCCESS) {
       commit('GET_PAGING_NEW_CLASSIFIED_ADVERTISING', res.data)
     }
@@ -83,6 +83,21 @@ const fullTextSearch = ({ commit }, params) => {
   })
 }
 
+const getTopCategoryPost = ({ commit }, params) => {
+  const param = CommonModelMap.toParam(params)
+  return advertising.getTopCategoryPost(param).then(res => {
+    if (res.status === Status.SUCCESS) {
+      commit('TOP_CATEGORY_POST', res.data)
+    }
+  }).catch(error => {
+    throw error
+  })
+}
+
+const saveSearchState = ({ commit }, state) => {
+  commit('SAVE_SEARCH_STATE', state)
+}
+
 export default {
   removeTempImage,
   uploadTempImage,
@@ -91,5 +106,7 @@ export default {
   getClassifiedAdsDetail,
   getPagingNewClassifiedAds,
   getPagingUserHistoryClassifiedAds,
-  fullTextSearch
+  fullTextSearch,
+  saveSearchState,
+  getTopCategoryPost
 }

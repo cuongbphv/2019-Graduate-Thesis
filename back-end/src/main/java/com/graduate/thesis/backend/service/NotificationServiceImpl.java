@@ -3,6 +3,7 @@ package com.graduate.thesis.backend.service;
 import com.graduate.thesis.backend.entity.Notification;
 import com.graduate.thesis.backend.model.websocket.NotificationResponse;
 import com.graduate.thesis.backend.repository.NotificationRepository;
+import com.graduate.thesis.backend.repository.aggregation.NotificationAggregation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -23,10 +24,13 @@ public class NotificationServiceImpl implements NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
 
-    @Override
-    public void broadCastToUsers(NotificationResponse message, List<String> userIds) {
+    @Autowired
+    NotificationAggregation notificationAggregation;
 
-        for(String userId : userIds) {
+    @Override
+    public void broadCastToUsers(NotificationResponse message) {
+
+        for(String userId : message.getSender().getFollowedBy()) {
             simpMessagingTemplate.convertAndSendToUser(
                     userId, NOTIFICATION_DESTINATION, message);
         }
@@ -44,7 +48,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public NotificationResponse getNotificationResponseById(String id) {
-        return null;
+        return notificationAggregation.getNotificationDataById(id);
     }
 
     @Override

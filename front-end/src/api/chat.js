@@ -2,12 +2,8 @@ import Api from '@/api/api'
 import { API } from '@/utils/constants'
 
 export default {
-  createNewConversation(userId) {
-    return Api.post(API.CHAT, {
-      params: {
-        user_id: userId
-      }
-    }).then(res => res.data)
+  createNewConversation(param) {
+    return Api.post(API.CHAT, param).then(res => res.data)
   },
   getAllConversationByUserId(userId, size) {
     return Api.get(API.CHAT, {
@@ -30,5 +26,9 @@ export default {
         size: size
       }
     }).then(res => res.data)
+  },
+  updateMessageStatus(message, conversationId) {
+    return Api.put(API.CHAT + `/${conversationId}` + API.MESSAGE, message)
+      .then(res => res.data)
   }
 }

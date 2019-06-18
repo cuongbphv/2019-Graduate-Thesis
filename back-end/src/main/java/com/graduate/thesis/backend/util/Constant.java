@@ -43,6 +43,8 @@ public interface Constant {
     String UPLOAD_TEMP_IMAGE = "/upload_temp_image";
     String REMOVE_TEMP_IMAGE = "/remove_temp_image";
     String FULL_TEXT_SEARCH = "/search";
+    String TOP_CATEGORY_POST = "/top_category_post";
+    String HISTORY = "/history";
 
     //USER
     String USER_API = API_PREFIX + "/user";

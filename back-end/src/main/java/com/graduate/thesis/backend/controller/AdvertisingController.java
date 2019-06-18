@@ -10,6 +10,7 @@ import com.graduate.thesis.backend.model.response.ClassifiedAdvertisingPagingRes
 import com.graduate.thesis.backend.model.response.NewAdsPagingResponse;
 import com.graduate.thesis.backend.model.response.RestAPIResponse;
 import com.graduate.thesis.backend.model.response.advertising.NewAds;
+import com.graduate.thesis.backend.model.websocket.NotificationResponse;
 import com.graduate.thesis.backend.repository.aggregation.AddressAggregation;
 import com.graduate.thesis.backend.repository.aggregation.LocationAggregation;
 import com.graduate.thesis.backend.security.CurrentUser;
@@ -128,6 +129,37 @@ public class AdvertisingController extends AbstractBasedAPI {
 
     }
 
+    @GetMapping(Constant.TOP_CATEGORY_POST)
+    public ResponseEntity<RestAPIResponse> fullTextSearch(
+            @RequestParam(value = "search_key", required = false, defaultValue = "") String searchKey,
+            @RequestParam(value = "category_id", required = false, defaultValue = "") String categoryId,
+            @RequestParam(value = "sort_key", required = false, defaultValue = "createdDate") String sortKey,
+            @RequestParam(value = "asc_sort", required = false, defaultValue = "false") boolean ascSort,
+            @RequestParam("page_size") int pageSize,
+            @RequestParam("page_number") int pageNumber,
+            @RequestParam("min_price") double minPrice,
+            @RequestParam("max_price") double maxPrice
+    ){
+
+        Map<String, String> metadata = new HashMap<>();
+
+        ClassifiedAdvertisingPagingResponse result =
+                classifiedAdvertisingElasticService.fullTextSearch(
+                        categoryId,
+                        searchKey,
+                        null,
+                        metadata,
+                        pageNumber - 1,
+                        pageSize,
+                        sortKey,
+                        ascSort,
+                        minPrice,
+                        maxPrice
+                );
+
+        return responseUtil.successResponse(result);
+
+    }
 
     @PostMapping()
     public ResponseEntity<RestAPIResponse> createNewAdvertising (
@@ -161,16 +193,6 @@ public class AdvertisingController extends AbstractBasedAPI {
         classifiedAdvertising.setStatus(Constant.Status.PENDING.getValue());
 
         ClassifiedAdvertising createdAds = classifiedAdvertisingService.save(classifiedAdvertising);
-
-        indexAds(createdAds);
-
-        Notification notification = new Notification();
-        notification.setCreatedDate(new Date());
-        notification.setSenderId(userPrincipal.getId());
-        notification.setType(Notification.Type.NEW_POST);
-        notification.setData(createdAds);
-
-        notificationService.save(notification);
 
         return responseUtil.successResponse(createdAds);
     }
@@ -207,6 +229,29 @@ public class AdvertisingController extends AbstractBasedAPI {
                 classifiedAdvertising.setStatus(status);
             }
             classifiedAdvertisingService.save(classifiedAdvertising);
+            if(status == Constant.Status.ACTIVE.getValue()){
+
+                indexAds(classifiedAdvertising);
+
+                UserProfile userProfile = userProfileService.findByUserId(classifiedAdvertising.getAuthorId()).get();
+
+                Notification notification = new Notification();
+                notification.setCreatedDate(new Date());
+                notification.setSenderId(userProfile.getId());
+                notification.setType(Notification.Type.NEW_POST);
+                notification.setData(classifiedAdvertising);
+
+                notificationService.save(notification);
+
+                NotificationResponse notificationResponse = new NotificationResponse();
+                notificationResponse.setCreatedDate(notification.getCreatedDate());
+                notificationResponse.setType(notification.getType());
+                notificationResponse.setStatus(notification.getStatus());
+                notificationResponse.setSender(userProfile);
+                notificationResponse.setData(notification.getData());
+
+                notificationService.broadCastToUsers(notificationResponse);
+            }
 
             return responseUtil.successResponse(classifiedAdvertising);
         }
@@ -296,7 +341,7 @@ public class AdvertisingController extends AbstractBasedAPI {
         return responseUtil.successResponse(response);
     }
 
-    @GetMapping(value = Constant.CURRENT_USER)
+    @GetMapping(value = Constant.HISTORY + Constant.WITHIN_ID)
     public ResponseEntity<RestAPIResponse> getUserHistoryClassifiedAdsPaging (
             @CurrentUser UserPrincipal userPrincipal,
             @RequestParam(value = "page_number", defaultValue = "1") int pageNumber,
@@ -304,10 +349,11 @@ public class AdvertisingController extends AbstractBasedAPI {
             @RequestParam(value = "search_key", defaultValue = "") String searchKey,
             @RequestParam(value = "asc_sort", defaultValue = "true") boolean ascSort,
             @RequestParam(value = "status", defaultValue = "-1") int status,
-            @RequestParam(value = "category_id", defaultValue = "") String categoryId
+            @RequestParam(value = "category_id", defaultValue = "") String categoryId,
+            @PathVariable("id") String userId
     ) {
 
-        UserAccount userAccount = userAccountService.findActiveUserById(userPrincipal.getId());
+        UserAccount userAccount = userAccountService.findActiveUserById(userId);
 
         if (userAccount == null) {
             throw new ApplicationException(APIStatus.ERR_USER_NOT_FOUND);

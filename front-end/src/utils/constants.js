@@ -1,6 +1,7 @@
 const API = {
   LOGIN: '/auth/login',
   REGISTER: '/auth/register',
+  OTP: '/auth/otp',
   INIT_DATA: '/user/me',
   CHANGE_PASSWORD: '/user/password',
   SYS_ADMIN_LIST_USER: '/user/list',

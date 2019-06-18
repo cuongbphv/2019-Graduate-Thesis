@@ -23,6 +23,7 @@ public interface Constant {
     String AUTH_API = API_PREFIX + "/auth";
     String REGISTRY_API =  "/register";
     String LOGIN_API =  "/login";
+    String SUBMIT_OTP_API = "/otp";
 
     // Category APIs
     String CATEGORY_API = API_PREFIX + "/category";

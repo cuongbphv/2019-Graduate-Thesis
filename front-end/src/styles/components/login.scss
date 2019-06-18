@@ -154,13 +154,13 @@ $dark_gray: #889aa4;
   .additional {
     line-height: 20px;
     color: #fff;
-    a {
-      float: right;
-      margin-right: 12px;
-    }
-    /deep/ .el-checkbox {
+    .left {
       margin-left: 12px;
       color: #fff;
+    }
+    .right {
+      float: right;
+      margin-right: 12px;
     }
   }
 }

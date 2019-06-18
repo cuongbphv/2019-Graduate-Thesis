@@ -3,11 +3,14 @@ package com.graduate.thesis.backend.security.oauth2.service;
 import com.graduate.thesis.backend.entity.Permission;
 import com.graduate.thesis.backend.entity.Role;
 import com.graduate.thesis.backend.entity.UserAccount;
+import com.graduate.thesis.backend.exception.ApplicationException;
 import com.graduate.thesis.backend.exception.ResourceNotFoundException;
 import com.graduate.thesis.backend.repository.PermissionRepository;
 import com.graduate.thesis.backend.repository.RoleRepository;
 import com.graduate.thesis.backend.repository.UserAccountRepository;
 import com.graduate.thesis.backend.security.oauth2.user.UserPrincipal;
+import com.graduate.thesis.backend.util.APIStatus;
+import com.graduate.thesis.backend.util.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -44,6 +47,10 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found with phone : " + phone)
                 );
+
+        if (user.getStatus() == Constant.Status.PENDING.getValue()) {
+            throw new ApplicationException(APIStatus.ERR_USER_NOT_CONFIRM_OTP);
+        }
 
 //        return UserPrincipal.create(user);
         List<GrantedAuthority> authorities = new ArrayList<>();

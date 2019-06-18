@@ -38,6 +38,8 @@ public class UserAccount implements Serializable {
 
     private List<String> personalPermissions;
 
+    private String otp;
+
     private int status;
 
 }

@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { showSuccess } from '../../../utils/message'
 export default {
   name: 'Information',
@@ -95,7 +95,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('profile', ['profile'])
+    ...mapGetters('profile', ['profile'])
   },
   watch: {
     profileForm: {
@@ -105,8 +105,10 @@ export default {
       deep: true
     }
   },
-  created: function() {
-    this.profileForm = Object.assign({}, this.profile)
+  mounted: function() {
+    this.getProfile(this.profileId).then(() => {
+      this.profileForm = Object.assign({}, this.profile)
+    })
   },
   methods: {
     ...mapActions('profile', ['updateProfile', 'getProfile']),

@@ -68,6 +68,7 @@ export default {
   data() {
     return {
       listUserClassifiedAds: [],
+      profileId: this.$route.params.id,
       listQuery: {
         pageNumber: 1,
         pageSize: 10,
@@ -127,6 +128,7 @@ export default {
     ...mapActions('location', ['loadListLocation']),
     ...mapActions('category', ['getListCategory']),
     getList() {
+      this.listQuery.userId = this.profileId
       this.getPagingUserHistoryClassifiedAds(this.listQuery).then(() => {
         this.listUserClassifiedAds = [...this.listPagingClassifiedAds]
       })

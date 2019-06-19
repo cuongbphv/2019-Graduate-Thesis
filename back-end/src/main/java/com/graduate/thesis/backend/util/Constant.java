@@ -23,6 +23,7 @@ public interface Constant {
     String AUTH_API = API_PREFIX + "/auth";
     String REGISTRY_API =  "/register";
     String LOGIN_API =  "/login";
+    String SUBMIT_OTP_API = "/otp";
 
     // Category APIs
     String CATEGORY_API = API_PREFIX + "/category";
@@ -42,6 +43,8 @@ public interface Constant {
     String UPLOAD_TEMP_IMAGE = "/upload_temp_image";
     String REMOVE_TEMP_IMAGE = "/remove_temp_image";
     String FULL_TEXT_SEARCH = "/search";
+    String TOP_CATEGORY_POST = "/top_category_post";
+    String HISTORY = "/history";
 
     //USER
     String USER_API = API_PREFIX + "/user";
@@ -59,10 +62,17 @@ public interface Constant {
     String AVATAR =  "/avatar";
     String SETTINGS =  "/settings";
     String PERSONAL_PERMISSION = "/permissions";
+    String FOLLOW = "/follow";
 
     // Address APIs
     String ADDRESS_API = API_PREFIX + "/address";
 
+    // Notification APIs
+    String NOTIFICATION_API = API_PREFIX + "/notifications";
+
+    // Chat APIs
+    String CHAT_API = API_PREFIX + "/chats";
+    String MESSAGE = "/messages";
 
     //FILE
     String FILE = API_PREFIX + "/files";

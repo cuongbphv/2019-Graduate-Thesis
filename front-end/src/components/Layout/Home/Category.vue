@@ -23,7 +23,7 @@
           :lg="4"
         >
           <el-tooltip :content="cat.description || defaultDescription" placement="top" effect="light">
-            <a class="category-item">
+            <a class="category-item" :href="'/category/' + cat.id">
               <img
                 :src="cat.image || defaultCatImg"
                 :alt="cat.slug"

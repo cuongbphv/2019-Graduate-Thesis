@@ -33,22 +33,24 @@
         />
       </el-form-item>
 
-      <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
-        <el-input
-          v-model="loginForm.password"
-          :type="passwordType"
-          :placeholder="$t('login.password')"
-          name="password"
-          auto-complete="on"
-          @keyup.enter.native="handleLoginLocal"
-        />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
-      </el-form-item>
+      <transition name="fade-transform" mode="out-in">
+        <el-form-item v-if="checkMoreMode(['login', 'register'])" prop="password">
+          <span class="svg-container">
+            <svg-icon icon-class="password" />
+          </span>
+          <el-input
+            v-model="loginForm.password"
+            :type="passwordType"
+            :placeholder="$t('login.password')"
+            name="password"
+            auto-complete="on"
+            @keyup.enter.native="handleLoginLocal"
+          />
+          <span class="show-pwd" @click="showPwd">
+            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          </span>
+        </el-form-item>
+      </transition>
 
       <transition name="fade-transform" mode="out-in">
         <el-form-item v-if="checkMode('register')" prop="confirmPassword">
@@ -69,9 +71,23 @@
         </el-form-item>
       </transition>
 
+      <transition name="fade-transform" mode="out-in">
+        <el-form-item v-if="checkMode('otp')" prop="otp">
+          <span class="svg-container">
+            <svg-icon icon-class="otp" />
+          </span>
+          <el-input
+            v-model="loginForm.otp"
+            type="text"
+            :placeholder="$t('login.otp')"
+            name="otp"
+          />
+        </el-form-item>
+      </transition>
+
       <div class="additional">
-        <el-checkbox>{{ $t('login.rememberMe') }}</el-checkbox>
-        <a href="#">{{ $t('login.forgotPassword') }}</a>
+        <a class="left" href="javascript:void(0);" @click="switchMode('send_otp')">{{ $t('login.getOtp') }}</a>
+        <a class="right" href="javascript:void(0);">{{ $t('login.forgotPassword') }}</a>
       </div>
 
       <div class="button_group">
@@ -80,6 +96,12 @@
         </el-button>
         <el-button v-if="checkMode('register')" :loading="loading" type="primary" @click.native.prevent="handleRegister">
           {{ $t('button.signUp') }}
+        </el-button>
+        <el-button v-if="checkMode('send_otp')" :loading="loading" type="primary" @click.native.prevent="handleGetOTP">
+          {{ $t('button.send_code') }}
+        </el-button>
+        <el-button v-if="checkMode('otp')" :loading="loading" type="primary" @click.native.prevent="handleOTP">
+          {{ $t('button.submit') }}
         </el-button>
       </div>
 
@@ -90,7 +112,7 @@
         </strong>
       </h5>
 
-      <h5 v-if="checkMode('register')">
+      <h5 v-if="checkMoreMode(['register', 'otp', 'send_otp'])">
         {{ $t('login.haveAccount') }}&nbsp;
         <strong>
           <a href="#" @click="switchMode('login')">{{ $t('button.logIn') }}</a>
@@ -104,6 +126,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { showSuccess } from '@/utils/message'
+import { Status } from '@/utils/constants'
 export default {
   name: 'Login',
   props: {
@@ -117,10 +140,12 @@ export default {
       loginForm: {
         phone: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        otp: ''
       },
       loginRules: {
         phone: [{ required: true, message: this.$t('validator.required'), trigger: 'blur' }],
+        otp: [{ required: true, message: this.$t('validator.required'), trigger: 'blur' }],
         password: [{ required: true, trigger: 'blur', validator: (rule, value, callback) => {
           if (value.length < 6) {
             callback(new Error(this.$t('validator.password.max_length', { 'max_length': 6 })))
@@ -150,7 +175,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('auth', ['register', 'loginLocal', 'loginOAuth2']),
+    ...mapActions('auth', ['register', 'loginLocal', 'loginOAuth2', 'submitOTP', 'sendOTP']),
     ...mapActions('profile', ['initData']),
     ...mapActions('permission', ['loadRoutesByAuthorities']),
     handleDrag() {
@@ -173,19 +198,26 @@ export default {
             phone: this.loginForm.phone,
             password: this.loginForm.password
           }
-          this.loginLocal(params).then(() => {
-            this.loading = false
-            this.isVisible = false
-            showSuccess('message.login_success')
-            this.initData().then((authorities) => {
-              this.loadRoutesByAuthorities(authorities)
-            })
+          this.loginLocal(params).then(res => {
+            if (res.status === Status.SUCCESS) {
+              this.isVisible = false
+              showSuccess('message.login_success')
+              this.initData().then((data) => {
+                this.loadRoutesByAuthorities(data.authorities)
+              })
+            } else {
+              this.loading = false
+              this.$message({
+                message: this.$t('errors.' + res.status),
+                type: 'error'
+              })
+            }
           })
         }
       })
     },
     handleLoginOAuth2(type) {
-      window.open('http://localhost:8080/oauth2/authorize/' + type + '?redirect_uri=http://localhost:4040/#/home', '_blank')
+      window.open('http://localhost:8080/oauth2/authorize/' + type + '?redirect_uri=http://localhost:4040/#/home', '_self')
     },
     handleRegister() {
       this.$refs.loginForm.validate(valid => {
@@ -195,17 +227,58 @@ export default {
             phone: this.loginForm.phone,
             password: this.loginForm.password
           }
-          this.register(params).then((data) => {
-            this.loading = false
-            if (data) {
-              this.loginLocal(params).then(() => {
-                this.isVisible = false
-                this.$emit('closeLoginModal', '')
-                this.initData().then((authorities) => {
-                  this.loadRoutesByAuthorities(authorities)
-                })
+          this.register(params).then((res) => {
+            if (res.status === Status.SUCCESS) {
+              this.mode = 'otp'
+            } else {
+              this.$message({
+                message: this.$t('errors.' + res.status),
+                type: 'error'
               })
             }
+            this.loading = false
+          })
+        }
+      })
+    },
+    handleOTP() {
+      this.submitOTP({
+        phone: this.loginForm.phone,
+        otp: this.loginForm.otp
+      }).then(res => {
+        if (res.status === Status.SUCCESS) {
+          this.loginLocal({
+            phone: this.loginForm.phone,
+            password: this.loginForm.password
+          }).then(() => {
+            this.isVisible = false
+            this.$emit('closeLoginModal', '')
+            this.initData().then((data) => {
+              this.loadRoutesByAuthorities(data.authorities)
+            })
+          })
+        } else {
+          this.$message({
+            message: this.$t('errors.' + res.status),
+            type: 'error'
+          })
+        }
+      })
+    },
+    handleGetOTP() {
+      this.sendOTP({
+        phone: this.loginForm.phone
+      }).then(res => {
+        if (res.status === Status.SUCCESS) {
+          this.mode = 'otp'
+          this.$message({
+            message: this.$t('message.send_otp_success'),
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: this.$t('errors.' + res.status),
+            type: 'error'
           })
         }
       })
@@ -215,6 +288,9 @@ export default {
     },
     checkMode(mode) {
       return this.mode === mode
+    },
+    checkMoreMode(mode) {
+      return mode.includes(this.mode)
     }
   }
 }

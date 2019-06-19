@@ -17,6 +17,8 @@ public class AdsMetadata {
 
     private String label;
 
+    private String enLabel;
+
     private String slug;
 
     private String selectionType;
@@ -24,4 +26,9 @@ public class AdsMetadata {
     private String type;
 
     private String value;
+
+    private String valueLabel;
+
+    private String enValueLabel;
+
 }

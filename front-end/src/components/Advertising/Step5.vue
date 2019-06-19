@@ -122,7 +122,7 @@
         <el-col :md="24" :lg="24">
           <el-form-item :label="item.label" prop="title">
             <el-input
-              v-model="item.value"
+              v-model="item.valueLabel"
               :placeholder="$t('validator.missing_data')"
               disabled
             />

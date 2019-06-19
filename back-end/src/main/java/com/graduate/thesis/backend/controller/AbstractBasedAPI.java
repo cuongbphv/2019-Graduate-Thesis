@@ -19,15 +19,4 @@ public abstract class AbstractBasedAPI {
     @Autowired
     protected ResponseUtil responseUtil;
 
-    /*
-     *For fixing mongodb Date
-     */
-    protected Date plus1Day(Date date){
-
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        c.add(Calendar.DATE, 1);
-
-        return c.getTime();
-    }
 }

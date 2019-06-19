@@ -66,8 +66,10 @@
               </div>
             </el-col>
             <el-col :xs="18" :sm="20" :md="21">
-              <h3 v-if="i18n.locale === 'vi'">{{ author.lastName + ' ' + author.firstName }}</h3>
-              <h3 v-if="i18n.locale === 'en'">{{ author.firstName + ' ' + author.lastName }}</h3>
+              <a :href="'/profile/' + author.userId">
+                <h3 v-if="i18n.locale === 'vi'">{{ author.lastName + ' ' + author.firstName }}</h3>
+                <h3 v-if="i18n.locale === 'en'">{{ author.firstName + ' ' + author.lastName }}</h3>
+              </a>
               <p>Ngày tham gia: {{ author.createdDate | formatDate(author.createdDate) }}</p>
               <div class="author-action">
                 <el-row>
@@ -90,25 +92,35 @@
           <el-row>
             <h3>{{ $t('advertising.tech_info') }}</h3>
             <el-col v-for="item in metadata" :key="item.id" style="margin-bottom: 20px;" :md="12">
-              <span>{{ item.label }}</span> :
-              <div v-if="item.value.startsWith('#')" :style="{'background': item.value, 'width': '20px', 'height': '10px', 'display': 'inline-block'}" />
-              <span v-else style="font-style: italic; font-weight: 600;">{{ item.value }}</span>
+              <template v-if="item.value || item.valueLabel || item.enValueLabel">
+                <span>{{ item.label }}</span> :
+                <span style="font-weight: 600;">{{ item.valueLabel || item.enValueLabel }} </span>
+                <div v-if="item.value.startsWith('#')" :style="{'background': item.value, 'width': '20px', 'height': '10px', 'display': 'inline-block'}" />
+              </template>
             </el-col>
           </el-row>
         </div>
       </article>
-      <aside>aside</aside>
+      <aside>
+        <div v-for="adsItem in topCategoryPost" :key="adsItem.id">
+          <search-item v-if="adsItem.id !== classifiedAdsId" :ads="adsItem" :mode="'topPost'" />
+        </div>
+      </aside>
     </main>
     <!--    <footer>footer</footer>-->
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import i18n from '@/lang'
+import SearchItem from '../../components/Advertising/SearchItem'
 
 export default {
   name: 'ClassifiedAdsDetail',
+  components: {
+    SearchItem
+  },
   data() {
     return {
       classifiedAdsId: '',
@@ -118,11 +130,21 @@ export default {
       address: {},
       metadata: [],
       i18n: i18n,
-      imageIndex: 0
+      imageIndex: 0,
+      searchQuery: {
+        categoryId: '',
+        pageNumber: 1,
+        pageSize: 5,
+        sortKey: 'createdDate',
+        ascSort: false,
+        minPrice: '0',
+        maxPrice: '10000000000'
+      }
     }
   },
   computed: {
-    ...mapState('advertising', ['classifiedAds'])
+    ...mapState('advertising', ['classifiedAds']),
+    ...mapGetters('advertising', ['topCategoryPost'])
   },
   mounted() {
     this.classifiedAdsId = this.$route.params.id
@@ -132,15 +154,21 @@ export default {
       this.additionalInfo = Object.assign({}, this.classifiedAds.detail.additionalInfo)
       this.author = Object.assign({}, this.classifiedAds.author)
       this.address = Object.assign({}, this.classifiedAds.address)
+      this.handleGetTopCategoryPost()
     })
   },
   created() {
   },
   methods: {
-    ...mapActions('advertising', ['getClassifiedAdsDetail']),
+    ...mapActions('advertising', ['getClassifiedAdsDetail', 'getTopCategoryPost']),
     handleChangeCarousel(index) {
       this.imageIndex = index
       this.$refs.carousel.activeIndex = index
+    },
+    handleGetTopCategoryPost() {
+      this.searchQuery.categoryId = this.classifiedAds.breadcrumbs[this.classifiedAds.breadcrumbs.length - 2].id
+      this.getTopCategoryPost(this.searchQuery).then(() => {
+      })
     }
   }
 }

@@ -7,6 +7,11 @@ const state = {
     avatarUrl: '',
     following: 0,
     followedBy: 0
+  },
+  viewProfile: {
+    avatarUrl: '',
+    following: 0,
+    followedBy: 0
   }
 }
 export default {

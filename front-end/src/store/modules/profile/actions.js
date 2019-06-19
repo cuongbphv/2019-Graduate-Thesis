@@ -60,10 +60,34 @@ const updateSettings = ({ commit }, params) => {
   })
 }
 
+const followUser = ({ commit }, id) => {
+  return profile.followUser(id).then((res) => {
+    if (res.status === Status.SUCCESS) {
+      commit('FOLLOW_USER', res.data)
+      return res.data
+    }
+  }).catch(error => {
+    throw error
+  })
+}
+
+const unFollowUser = ({ commit }, id) => {
+  return profile.unFollowUser(id).then((res) => {
+    if (res.status === Status.SUCCESS) {
+      commit('UNFOLLOW_USER', res.data)
+      return res.data
+    }
+  }).catch(error => {
+    throw error
+  })
+}
+
 export default {
   initData,
   createProfile,
   updateProfile,
   getProfile,
-  updateSettings
+  updateSettings,
+  followUser,
+  unFollowUser
 }

@@ -3,45 +3,48 @@
     <div class="main-container">
       <category />
 
-      <div class="search-trending">
-        <div class="header">
-          <h6>Tìm kiếm hàng đầu</h6>
-        </div>
-        <div class="body">
-          <el-row>
-            <el-col v-for="(o, index) in 4" :key="o" :span="5" :offset="index > 0 ? 1 : 0">
-              <el-card shadow="hover" :body-style="{ padding: '0px' }">
-                <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image" alt="No image">
-                <div style="padding: 14px;">
-                  <span>Yummy hamburger</span>
-                  <div class="bottom clearfix">
-                    <el-button type="text" class="button">Operating</el-button>
-                  </div>
-                </div>
-              </el-card>
-            </el-col>
-          </el-row>
-        </div>
-      </div>
+      <!--<div class="search-trending">-->
+      <!--<div class="header">-->
+      <!--<h6>Tìm kiếm hàng đầu</h6>-->
+      <!--</div>-->
+      <!--<div class="body">-->
+      <!--<el-row>-->
+      <!--<el-col v-for="(o, index) in 4" :key="o" :span="5" :offset="index > 0 ? 1 : 0">-->
+      <!--<el-card shadow="hover" :body-style="{ padding: '0px' }">-->
+      <!--<img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image" alt="No image">-->
+      <!--<div style="padding: 14px;">-->
+      <!--<span>Yummy hamburger</span>-->
+      <!--<div class="bottom clearfix">-->
+      <!--<el-button type="text" class="button">Operating</el-button>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--</el-card>-->
+      <!--</el-col>-->
+      <!--</el-row>-->
+      <!--</div>-->
+      <!--</div>-->
 
       <div class="search-trending">
         <div class="header">
           <h6>Tin mới nhất</h6>
         </div>
-        <div class="body">
-          <el-row>
-            <el-col v-for="(item, index) in topPagingNewClassifiedAds" :key="item.classifiedAdsId" :span="5" :offset="index > 0 ? 1 : 0">
-              <el-card shadow="hover" :body-style="{ padding: '0px' }">
-                <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image" alt="No image">
-                <div style="padding: 14px;">
-                  <span>Yummy hamburger</span>
-                  <div class="bottom clearfix">
-                    <el-button type="text" class="button">Operating</el-button>
-                  </div>
-                </div>
-              </el-card>
-            </el-col>
-          </el-row>
+        <!--<div class="body">-->
+        <!--<el-row>-->
+        <!--<el-col v-for="adsItem in topCategoryPost" :key="adsItem.id" :span="5" :offset="index > 0 ? 1 : 0">-->
+        <!--<el-card shadow="hover" :body-style="{ padding: '0px' }">-->
+        <!--<img :src="adsItem.images[0].url" class="image" alt="No image">-->
+        <!--<div style="padding: 14px;">-->
+        <!--<span>{{ adsItem.additionalInfo.title }}</span>-->
+        <!--<div class="bottom clearfix">-->
+        <!--<el-button type="text" class="button">Xem tin</el-button>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</el-card>-->
+        <!--</el-col>-->
+        <!--</el-row>-->
+        <!--</div>-->
+        <div v-for="adsItem in topCategoryPost" :key="adsItem.id">
+          <search-item v-if="adsItem.id !== classifiedAdsId" style="width: 70%; display: inline-block" :ads="adsItem" />
         </div>
       </div>
     </div>
@@ -52,39 +55,84 @@
 <script>
 import { About, Category } from '@/components/Layout/Home/index'
 import { mapActions, mapGetters } from 'vuex'
+// import { Stomp } from '@stomp/stompjs'
+// import * as SockJS from 'sockjs-client'
+import SearchItem from '../../components/Advertising/SearchItem'
 export default {
   name: 'Home',
   components: {
     // eslint-disable-next-line
     About,
-    Category
+    Category,
+    SearchItem
   },
   data() {
     return {
       query: {
         pageNumber: 1,
         pageSize: 4
+      },
+      socketUrl: 'http://localhost:8080/socket',
+      searchQuery: {
+        pageNumber: 1,
+        pageSize: 5,
+        sortKey: 'createdDate',
+        ascSort: false,
+        minPrice: '0',
+        maxPrice: '10000000000'
       }
     }
   },
   computed: {
-    ...mapGetters('advertising', ['topPagingNewClassifiedAds'])
+    ...mapGetters('advertising', ['topPagingNewClassifiedAds', 'topCategoryPost'])
   },
-  beforeCreate() {
+  created() {
     const token = new URL(window.location.href).searchParams.get('token')
     if (token) {
       this.loginOAuth2(token).then(() => {
-        this.initData()
+        this.initData().then(() => {
+        })
       })
     }
-  },
-  created() {
+    this.getTopCategoryPost(this.searchQuery).then(() => {
+    })
     // this.getPagingNewClassifiedAds(this.query)
+    // const ws = new SockJS(this.socketUrl)
+    // this.stompClient = Stomp.over(ws)
+    // const that = this
+    // this.stompClient.connect({}, function() {
+    //   that.stompClient.subscribe('/user/5cae4c886bf46d0b5453a66f/queue/notification', (message) => {
+    //     if (message.body) {
+    //       const body = JSON.parse(message.body)
+    //       switch (body.type) {
+    //         case 'NEW_POST':
+    //           alert(body)
+    //           break
+    //         case 'MESSAGE':
+    //         default:
+    //         // code block
+    //       }
+    //     }
+    //   })
+    // Tell your username to the server
+    // that.stompClient.send('/app/chat.create',
+    //   {},
+    //   JSON.stringify({ userId: '5cae4c886bf46d0b5453a66f' })
+    // )
+    // that.stompClient.send('/app/chat.sendMessage/5cfc2bf2d1ac505b8c860320',
+    //   {},
+    //   JSON.stringify({
+    //     senderId: '5cae4c886bf46d0b5453a66f',
+    //     content: 'ditmemay'
+    //   })
+    //   // '5cae4c886bf46d0b5453a66f'
+    // )
+    // })
   },
   methods: {
     ...mapActions('auth', ['loginOAuth2']),
     ...mapActions('profile', ['initData']),
-    ...mapActions('advertising', ['getPagingNewClassifiedAds'])
+    ...mapActions('advertising', ['getPagingNewClassifiedAds', 'getTopCategoryPost'])
   }
 }
 </script>

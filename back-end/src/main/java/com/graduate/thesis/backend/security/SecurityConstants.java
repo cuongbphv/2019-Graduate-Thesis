@@ -20,4 +20,10 @@ public class SecurityConstants {
 
     public static final String USER_ROLE_ID = "5c9bbbe605f5f129bd02cc83";
 
+    // OTP
+    public static final String OTP_URL = "https://sms4api.com/api/send";
+    public static final String API_ID = "6de872fd-f89c-41e3-bb83-ca47344d947f";
+    public static final String SECRET_KEY = "21f955e9d3";
+    public static final String SMS_4_API = OTP_URL + "/" + SECRET_KEY + "/" + API_ID;
+
 }

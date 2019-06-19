@@ -200,6 +200,24 @@ export const allRoutes = [
           skip: true
         }
       },
+      {
+        path: '/chat',
+        component: () => import('@/views/chat/Chat'),
+        name: 'Chat',
+        meta: {
+          title: 'chat-page',
+          skip: true
+        }
+      },
+      {
+        path: '/category/:id',
+        component: () => import('@/views/category/Category'),
+        name: 'CategoryPage',
+        meta: {
+          title: 'category-page',
+          skip: true
+        }
+      },
       profileRouter,
       advertisingRouter
     ]

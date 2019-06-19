@@ -11,8 +11,8 @@ export default {
   getNewClassifiedAds(params) {
     return Api.get(API.NEW_ADVERTISING, { params: params }).then(res => res.data)
   },
-  getUserHistoryClassifiedAds(params) {
-    return Api.get(API.USER_HISTORY_ADS, { params: params }).then(res => res.data)
+  getUserHistoryClassifiedAds(params, userId) {
+    return Api.get(API.USER_HISTORY_ADS + `/${userId}`, { params: params }).then(res => res.data)
   },
   changeStatusAds(id, status) {
     return Api.put(API.ADVERTISING + '/' + id + '?status=' + status).then(res => res.data)
@@ -25,5 +25,8 @@ export default {
   },
   fullTextSearch(params) {
     return Api.get(API.FULL_TEXT_SEARCH, { params: params }).then(res => res.data)
+  },
+  getTopCategoryPost(params) {
+    return Api.get(API.TOP_CATEGORY_POST, { params: params }).then(res => res.data)
   }
 }

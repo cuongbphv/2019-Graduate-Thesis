@@ -18,7 +18,10 @@ const state = {
     totalRecord: 0,
     pageSize: 10,
     pageNumber: 1
-  }
+  },
+  searchState: {
+  },
+  topCategoryPost: []
 }
 
 export default {

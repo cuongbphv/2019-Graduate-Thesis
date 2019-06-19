@@ -71,8 +71,8 @@ public class ProfileController extends AbstractBasedAPI {
         profile.setDescription(profileRequest.getDescription());
         profile.setAvatarUrl(profileRequest.getAvatarUrl());
 
-        profile.setCreatedDate(plus1Day(new Date()));
-        profile.setModifiedDate(plus1Day(new Date()));
+        profile.setCreatedDate(new Date());
+        profile.setModifiedDate(new Date());
         profile.setStatus(Constant.Status.ACTIVE.getValue());
 
         if(profileRequest.getDob() != null && !profileRequest.getDob().trim().isEmpty()) {
@@ -81,7 +81,7 @@ public class ProfileController extends AbstractBasedAPI {
                 Date dob = new SimpleDateFormat("yyyy-MM-dd", new Locale("vi", "VN"))
                         .parse(profileRequest.getDob());
 
-                profile.setDob(plus1Day(dob));
+                profile.setDob(dob);
 
             } catch (ParseException e) {
                 LOGGER.error("Could not parse DoB " + profileRequest.getDob(), e.getMessage());
@@ -111,14 +111,14 @@ public class ProfileController extends AbstractBasedAPI {
         profile.setDescription(profileRequest.getDescription());
         profile.setGender(profileRequest.getGender());
         profile.setSocialLink(profileRequest.getSocialLink());
-        profile.setModifiedDate(plus1Day(new Date()));
+        profile.setModifiedDate(new Date());
 
         if(profileRequest.getDob() != null && !profileRequest.getDob().trim().isEmpty()) {
             try {
                 Date dob = new SimpleDateFormat("yyyy-MM-dd", new Locale("vi", "VN"))
                         .parse(profileRequest.getDob());
 
-                profile.setDob(plus1Day(dob));
+                profile.setDob(dob);
 
             } catch (ParseException e) {
                 LOGGER.error("Could not parse DoB", e.getMessage());
@@ -225,5 +225,27 @@ public class ProfileController extends AbstractBasedAPI {
         return responseUtil.successResponse(profile);
     }
 
+
+    @RequestMapping(value = Constant.WITHIN_ID + Constant.FOLLOW, method = RequestMethod.POST)
+    public ResponseEntity<RestAPIResponse> followUser(
+            @CurrentUser UserPrincipal currentUser,
+            @PathVariable("id") String id
+    )  {
+
+        userProfileService.followUser(currentUser.getId(), id);
+
+        return responseUtil.successResponse("OK");
+    }
+
+    @RequestMapping(value = Constant.WITHIN_ID + Constant.FOLLOW, method = RequestMethod.DELETE)
+    public ResponseEntity<RestAPIResponse> unFollowUser(
+            @CurrentUser UserPrincipal currentUser,
+            @PathVariable("id") String id
+    )  {
+
+        userProfileService.unFollowUser(currentUser.getId(), id);
+
+        return responseUtil.successResponse("OK");
+    }
 }
 

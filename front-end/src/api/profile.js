@@ -16,5 +16,11 @@ export default {
   },
   updateSettings(params) {
     return Api.put(API.PROFILE + '/settings', params).then(res => res.data)
+  },
+  followUser(id) {
+    return Api.post(API.PROFILE + '/' + id + API.FOLLOW).then(res => res.data)
+  },
+  unFollowUser(id) {
+    return Api.delete(API.PROFILE + '/' + id + API.FOLLOW).then(res => res.data)
   }
 }

@@ -17,6 +17,8 @@ import './icons' // icon
 import './errorLog' // error log
 import './permission' // permission control
 import * as filters from './filters' // global filters
+import InfiniteLoading from 'vue-infinite-loading'
+import Toasted from 'vue-toasted'
 
 library.add(faFacebook, faGoogle, faLinkedin, faGithub)
 
@@ -28,6 +30,24 @@ Vue.use(Element, {
   i18n: (key, value) => i18n.t(key, value)
 })
 
+Vue.use(InfiniteLoading, {
+  props: {
+    spinner: 'default'
+    /* other props need to configure */
+  },
+  system: {
+    throttleLimit: 500
+    /* other settings need to configure */
+  },
+  slots: {
+    // keep default styles
+    noResults: '',
+
+    // remove default styles
+    noMore: ''
+  }
+})
+Vue.use(Toasted)
 // register global utility filters.
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

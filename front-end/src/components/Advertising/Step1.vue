@@ -39,15 +39,24 @@
             :key="item.slug"
           >
             <el-form-item :label="item.label">
-              <el-col :md="11" :lg="11">
-                <el-select v-model="postMetadata[index].value" style="width: 100%" placeholder="Select Options">
-                  <el-option v-for="option in item.options" :key="option.value" :label="option.label" :value="option.value" />
+              <el-col :id="'select-value-' + index" :md="11" :lg="11">
+                <el-select v-model="postMetadata[index].valueLabel" style="width: 100%" placeholder="Select Options" @change="selectMetadata(postMetadata[index].valueLabel, item)">
+                  <el-option v-for="option in item.options" :key="option.label" :label="option.label" :value="option.label" />
                 </el-select>
               </el-col>
-              <el-col :md="{span: 11, offset: 2}" :lg="{span: 11, offset: 2}">
-                <el-input v-if="item.type === 'text'" v-model="postMetadata[index].value" />
-                <el-color-picker v-if="item.type === 'color'" v-model="postMetadata[index].value" />
+              <el-col v-if="item.type === 'color'" :id="'input-value-' + index" class="hide-toggle" :md="{span: 11}" :lg="{span: 11}">
+                <el-col :md="{span: 21}" :lg="{span: 21}">
+                  <el-input v-model="postMetadata[index].valueLabel" />
+                </el-col>
+                <el-col :md="{span: 3}" :lg="{span: 3}">
+                  <el-color-picker v-if="item.type === 'color'" v-model="postMetadata[index].value" />
+                </el-col>
               </el-col>
+              <el-col v-else :id="'input-value-' + index" class="hide-toggle" :md="{span: 11}" :lg="{span: 11}">
+                <el-input v-model="postMetadata[index].valueLabel" />
+              </el-col>
+              <el-button :id="'select-button-' + index" class="hide-toggle" style="margin-left: 10px" @click="toggleInput(index, $event)">Chọn</el-button>
+              <el-button :id="'input-button-' + index" @click="toggleInput(index, $event)">Nhập</el-button>
             </el-form-item>
           </el-row>
         </el-form>
@@ -108,6 +117,8 @@ export default {
         this.postMetadata = allMeta.map(obj => {
           const x = Object.assign({}, obj)
           x.value = ''
+          x.valueLabel = ''
+          x.enValueLabel = ''
           delete x.options
           return x
         })
@@ -181,7 +192,27 @@ export default {
           listMetadata: this.listMetadata,
           postMetadata: this.postMetadata
         })
+        console.log('metadata', this.postMetadata)
       }
+    },
+    selectMetadata(data, metaItem) {
+      const index = metaItem.options.findIndex(function(element) {
+        return element.label === data
+      })
+      const option = metaItem.options[index]
+      if (option.enLabel) {
+        this.postMetadata[index].enValueLabel = option.enLabel
+      }
+    },
+    toggleInput(index) {
+      const input = this.$el.querySelector('#input-value-' + index)
+      const select = this.$el.querySelector('#select-value-' + index)
+      const selectBtn = this.$el.querySelector('#select-button-' + index)
+      const inputBtn = this.$el.querySelector('#input-button-' + index)
+      input.classList.toggle('hide-toggle')
+      select.classList.toggle('hide-toggle')
+      selectBtn.classList.toggle('hide-toggle')
+      inputBtn.classList.toggle('hide-toggle')
     }
   }
 }
@@ -195,6 +226,10 @@ export default {
   h3 {
     text-align: center;
     font-weight: bold;
+  }
+
+  .hide-toggle{
+    display: none;
   }
 
   .search-form {

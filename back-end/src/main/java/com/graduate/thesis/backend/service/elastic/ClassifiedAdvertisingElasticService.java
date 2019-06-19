@@ -24,6 +24,7 @@ public interface ClassifiedAdvertisingElasticService {
     ClassifiedAdvertisingPagingResponse fullTextSearch(
             String categoryId,
             String searchKey,
+            String locationId,
             Map<String,String> filterData,
             int pageNumber,
             int pageSize,

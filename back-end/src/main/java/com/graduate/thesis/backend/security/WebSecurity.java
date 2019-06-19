@@ -91,10 +91,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                         "/**/*.js")
                 .permitAll()
                 .antMatchers(
-                        HttpMethod.GET, "/api/v1/category")
+                        HttpMethod.GET, "/api/v1/category/**", "/api/v1/advertising/**", "/api/v1/location/**")
                 .permitAll()
-                .antMatchers("/api/v1/auth/register/**", "/api/v1/auth/login/**",
-                        "/auth/**", "/oauth2/**", "/login/**","/api/v1/files/**")
+                .antMatchers("/api/v1/auth/register/**", "/api/v1/auth/login/**", "/api/v1/auth/otp/**",
+                        "/auth/**", "/oauth2/**", "/login/**","/api/v1/files/**","/socket/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -185,6 +185,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4040"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTION"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

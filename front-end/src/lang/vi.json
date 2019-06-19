@@ -103,13 +103,13 @@
     "confirmPassword": "Xác nhận mật khẩu",
     "connectWith": "Kết nối với",
     "or": "hoặc",
-    "rememberMe": "Nhớ tài khoản",
+    "getOtp": "Lấy mã OTP",
     "forgotPassword": "Quên mật khẩu?",
     "dontHaveAccount": "Chưa có tài khoản?",
     "haveAccount": "Đã có tài khoản?",
     "any": "any",
     "thirdparty": "Đăng nhập với",
-    "thirdpartyTips": "Can not be simulated on local, so please combine you own business simulation! ! !"
+    "otp": "Mã OTP"
   },
   "button": {
     "logIn": "Đăng nhập",
@@ -130,7 +130,9 @@
     "continue": "Tiếp tục",
     "post": "Đăng bài",
     "new_role": "Vai trò mới",
-    "load_more": "Tải thêm"
+    "load_more": "Tải thêm",
+    "submit": "Xác nhận",
+    "send_code": "Gửi mã"
   },
   "documentation": {
     "documentation": "Documentation",
@@ -345,7 +347,8 @@
     "delete_role_success": "Xóa vai trò thành công",
     "update_role_success": "Cập nhật vai trò và quyền vai trò thành công",
     "create_role_success": "Tạo vai trò và quyền vai trò thành công",
-    "update_personal_permission_success": "Cập nhật quyền truy cập cá nhân thành công"
+    "update_personal_permission_success": "Cập nhật quyền truy cập cá nhân thành công",
+    "send_otp_success": "Gửi mã OTP thành công"
   },
   "advertising": {
     "title": "Tiêu đề",
@@ -394,7 +397,8 @@
     "category_sub": "Danh mục con",
     "address": "Địa chỉ",
     "desc_info": "Thông tin mô tả",
-    "tech_info": "Thông số kỹ thuật"
+    "tech_info": "Thông số kỹ thuật",
+    "goto": "Đi đến"
   },
   "userProfile": {
     "firstName": "Tên",
@@ -430,6 +434,14 @@
     "400": "Giá trị nhập sai, vui lòng kiểm tra và thử lại",
     "401": "Bạn cần đăng nhập trước",
     "403": "Bạn không có quyền truy cập vào tài nguyên này",
+    "414": "Không tìm thấy người dùng",
+    "415": "Không tìm thấy hồ sơ người dùng",
+    "416": "Số điện thoại đã được sử dụng",
+    "417": "Số điện thoại hoặc mật khẩu không đúng",
+    "420": "Người dùng chưa xác nhận mã OTP",
+    "421": "Sai mã OTP",
+    "422": "Lỗi trong quá trình gửi mã OTP",
+    "423": "Người dùng đã kích hoạt",
     "500": "Lỗi server, vui lòng liên hệ để được hỗ trợ",
     "metadata": {
       "404": "Không tìm thấy danh mục này"

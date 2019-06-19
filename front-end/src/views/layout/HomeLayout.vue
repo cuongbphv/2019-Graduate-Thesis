@@ -22,7 +22,9 @@ import { ContactBar, NavBar, HomeFooter } from '@/components/Layout/Home/index'
 import AppMain from '@/components/Layout/AppMain/AppMain'
 import ResizeMixin from '@/mixins/ResizeHandler'
 import BackToTop from '@/components/BackToTop'
-import { mapGetters } from 'vuex'
+import { Stomp } from '@stomp/stompjs'
+import * as SockJS from 'sockjs-client'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'HomeLayout',
   components: {
@@ -33,12 +35,55 @@ export default {
     BackToTop
   },
   mixins: [ResizeMixin],
-  computed: {
-    ...mapGetters('layout', ['device'])
+  data() {
+    return {
+      socketUrl: 'http://localhost:8080/socket'
+    }
   },
-  created() {
+  computed: {
+    ...mapGetters('layout', ['device']),
+    ...mapGetters('profile', ['userId'])
+  },
+  mounted() {
+    console.log('userId', this.userId)
+    this.subscribeMessage()
   },
   methods: {
+    ...mapActions('layout', ['closeSideBar']),
+    handleClickOutside() {
+      this.closeSideBar({ withoutAnimation: false })
+    },
+    subscribeMessage() {
+      const ws = new SockJS(this.socketUrl)
+      this.stompClient = Stomp.over(ws)
+      const that = this
+      this.stompClient.connect({}, function() {
+        that.stompClient.subscribe(`/user/${that.userId}/queue/notification`, (message) => {
+          if (message.body) {
+            const body = JSON.parse(message.body)
+            switch (body.type) {
+              case 'NEW_POST':
+                that.$toasted.show(`${body.sender.firstName} ${body.sender.lastName} vừa đăng tin mới:
+                ${body.data.additionalData.title}`, {
+                  position: 'bottom-left',
+                  duration: 3000,
+                  action: {
+                    text: 'Xem',
+                    onClick: (e, toastObject) => {
+                      that.$router.push('/advertising/' + body.data.id)
+                      toastObject.goAway(0)
+                    }
+                  }})
+                console.log(body)
+                break
+              case 'MESSAGE':
+              default:
+              // code block
+            }
+          }
+        })
+      })
+    }
   }
 }
 </script>

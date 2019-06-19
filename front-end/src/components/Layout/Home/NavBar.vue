@@ -140,6 +140,10 @@ export default {
     ...mapActions('auth', ['clear']),
     logout() {
       this.clear().then(() => {
+        const token = new URL(window.location.href).searchParams.get('token')
+        if (token) {
+          this.$router.push('home')
+        }
         location.reload()// In order to re-instantiate the vue-router object to avoid bugs
       })
     },

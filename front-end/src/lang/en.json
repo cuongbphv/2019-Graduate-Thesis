@@ -103,13 +103,13 @@
     "confirmPassword": "Confirm Password",
     "connectWith": "Connect with",
     "or": "or",
-    "rememberMe": "Remember me",
+    "getOtp": "Get OTP Code",
     "forgotPassword": "Forgot password?",
     "dontHaveAccount": "Don't have an account?",
     "haveAccount": "Already have an account?",
     "any": "any",
     "thirdparty": "Or connect with",
-    "thirdpartyTips": "Can not be simulated on local, so please combine you own business simulation! ! !"
+    "otp": "OTP Code"
   },
   "button": {
     "logIn": "Login",
@@ -130,7 +130,9 @@
     "continue": "Continue",
     "post": "Submit",
     "new_role": "New Role",
-    "load_more": "Load More"
+    "load_more": "Load More",
+    "submit": "Submit",
+    "send_code": "Send Code"
   },
   "documentation": {
     "documentation": "Documentation",
@@ -345,7 +347,8 @@
     "delete_role_success": "Delete role successfully",
     "update_role_success": "Update role and role permission successfully",
     "create_role_success": "Create role and role permission successfully",
-    "update_personal_permission_success": "Update personal permission successfully"
+    "update_personal_permission_success": "Update personal permission successfully",
+    "send_otp_success": "Sent OTP successfully"
   },
   "advertising": {
     "title": "Title",
@@ -394,7 +397,8 @@
     "category_sub": "Sub Category",
     "address": "Address",
     "desc_info": "Description Info",
-    "tech_info": "Specification Info"
+    "tech_info": "Specification Info",
+    "goto": "Go to"
   },
   "userProfile": {
     "firstName": "First name",
@@ -430,6 +434,14 @@
     "400": "Invalid value.Check your input and try again",
     "401": "Unauthorize",
     "403": "You do not have permission to access this resource",
+    "414": "User is not found",
+    "415": "User Profile is not found",
+    "416": "Phone already in use",
+    "417": "Phone or password is wrong",
+    "420": "User has not confirmed OTP",
+    "421": "OTP Code is wrong",
+    "422": "Error in sending OTP process",
+    "423": "User is active now",
     "500": "Internal server error, for more detail - contact support",
     "metadata": {
       "404": "Category not found"

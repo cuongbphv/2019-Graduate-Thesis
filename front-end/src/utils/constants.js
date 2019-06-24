@@ -7,6 +7,7 @@ const API = {
   SYS_ADMIN_LIST_USER: '/user/list',
   PROFILE: '/profile',
   FOLLOW: '/follow',
+  RATING: '/rating',
   UPDATE_PERSONAL_PERMISSION: '/profile/permissions',
   // Location APIs
   LOCATION: '/location',

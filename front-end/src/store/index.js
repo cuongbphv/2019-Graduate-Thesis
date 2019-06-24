@@ -7,6 +7,7 @@ import auth from './modules/auth'
 import advertising from './modules/advertising'
 import category from './modules/category'
 import chat from './modules/chat'
+import rating from './modules/rating'
 import layout from './modules/layout'
 import location from './modules/location'
 import permission from './modules/permission'
@@ -23,6 +24,7 @@ export default new Vuex.Store({
     advertising,
     category,
     chat,
+    rating,
     layout,
     location,
     permission,

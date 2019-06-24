@@ -33,4 +33,7 @@ public interface ClassifiedAdvertisingElasticService {
             double minPrice,
             double maxPrice
     );
+
+    List<ClassifiedAdvertisingElastic> getByAuthorId(String authorId);
+
 }

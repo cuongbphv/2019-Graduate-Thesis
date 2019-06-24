@@ -43,9 +43,9 @@
         <!--</el-col>-->
         <!--</el-row>-->
         <!--</div>-->
-        <div v-for="adsItem in topCategoryPost" :key="adsItem.id">
-          <search-item v-if="adsItem.id !== classifiedAdsId" style="width: 70%; display: inline-block" :ads="adsItem" />
-        </div>
+        <template v-for="adsItem in topCategoryPost">
+          <search-item v-if="adsItem.id !== classifiedAdsId" :key="adsItem.id" style="width: 50%; display: inline-block" :ads="adsItem" />
+        </template>
       </div>
     </div>
 
@@ -75,7 +75,7 @@ export default {
       socketUrl: 'http://localhost:8080/socket',
       searchQuery: {
         pageNumber: 1,
-        pageSize: 5,
+        pageSize: 6,
         sortKey: 'createdDate',
         ascSort: false,
         minPrice: '0',

@@ -51,6 +51,9 @@ public interface Constant {
     String CURRENT_USER =  "/me";
     String CHANGE_PASSWORD =  "/password";
 
+    //RATING
+    String RATING = API_PREFIX + "/rating";
+
     // Role APIs
     String ROLE_API = API_PREFIX + "/role";
 

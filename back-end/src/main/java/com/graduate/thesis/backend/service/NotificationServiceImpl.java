@@ -30,9 +30,11 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void broadCastToUsers(NotificationResponse message) {
 
-        for(String userId : message.getSender().getFollowedBy()) {
-            simpMessagingTemplate.convertAndSendToUser(
-                    userId, NOTIFICATION_DESTINATION, message);
+        if( message.getSender().getFollowedBy() != null) {
+            for (String userId : message.getSender().getFollowedBy()) {
+                simpMessagingTemplate.convertAndSendToUser(
+                        userId, NOTIFICATION_DESTINATION, message);
+            }
         }
     }
 

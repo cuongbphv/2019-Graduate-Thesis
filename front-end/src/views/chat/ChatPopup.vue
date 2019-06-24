@@ -14,7 +14,7 @@
         :rows="5"
         placeholder="Nhập nội dung tin nhắn"
       />
-      <el-button type="success" @click="handleSendMsg">Gửi tin nhắn</el-button>
+      <el-button style="margin-top: 1rem; float: right" type="success" @click="handleSendMsg">Gửi tin nhắn</el-button>
     </el-row>
   </el-dialog>
 </template>

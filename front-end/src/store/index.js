@@ -12,6 +12,7 @@ import location from './modules/location'
 import permission from './modules/permission'
 import profile from './modules/profile'
 import address from './modules/address'
+import report from './modules/report'
 import sysAdminUser from './modules/sys-admin-user'
 
 Vue.use(Vuex)
@@ -27,6 +28,7 @@ export default new Vuex.Store({
     location,
     permission,
     profile,
+    report,
     sysAdminUser,
     errorLog,
     tagsView

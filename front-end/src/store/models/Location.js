@@ -1,7 +1,7 @@
 import snakeCaseKeys from 'snakecase-keys'
 import { toSlug } from '@/utils'
 
-export default class CommonModelMap {
+export default class Location {
   constructor(data = {}) {
     Object.keys(data).map(key => {
       this[key] = data[key]

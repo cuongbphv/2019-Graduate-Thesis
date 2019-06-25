@@ -5,6 +5,7 @@
     "management": "Management",
     "location": "Location",
     "category": "Category",
+    "report": "Report",
     "user": "User",
     "role": "Role",
     "access": "Access Permission",
@@ -132,7 +133,10 @@
     "new_role": "New Role",
     "load_more": "Load More",
     "submit": "Submit",
-    "send_code": "Send Code"
+    "send_code": "Send Code",
+    "report": "Report",
+    "block": "Block",
+    "deactive": "Deactive Report"
   },
   "documentation": {
     "documentation": "Documentation",
@@ -188,6 +192,11 @@
       "permission": "Permission",
       "loginAccount": "Login Account",
       "createdDate": "Created Date",
+      "lastReported": "Last Reported Date",
+      "reportedDate": "Reported Date",
+      "userReport": "User Reported",
+      "reason": "Reason",
+      "description": "Description",
       "role": "Role",
       "provider": "Provider",
       "status": "Status",
@@ -260,14 +269,25 @@
     "list_permission": "List Permission",
     "update_role_permission": "Update User Role and Permission",
     "role": "Role",
-    "edit_role": "Edit Role"
+    "edit_role": "Edit Role",
+    "report_modal": "Report",
+    "reason": "Lý do",
+    "reasons": {
+      "cheat": "Cheat",
+      "duplicate": "Duplicate",
+      "sold_out": "Sold out",
+      "not_contact": "Can not contact",
+      "not_true": "Infomation is not true",
+      "other": "Other"
+    }
   },
   "place_holder": {
     "category_description": "Writing a short description for this category",
     "permission_name": "Permission Name",
     "role_name": "Role Name",
     "role_description": "Role Description",
-    "select_role_user": "Select Role User"
+    "select_role_user": "Select Role User",
+    "select_reason": "Select Reason"
   },
   "errorLog": {
     "tips": "Please click the bug icon in the upper right corner",
@@ -348,7 +368,9 @@
     "update_role_success": "Update role and role permission successfully",
     "create_role_success": "Create role and role permission successfully",
     "update_personal_permission_success": "Update personal permission successfully",
-    "send_otp_success": "Sent OTP successfully"
+    "send_otp_success": "Sent OTP successfully",
+    "report_success": "Report this classified advertising successfully",
+    "action_report_success": "Action to report successfully"
   },
   "advertising": {
     "title": "Title",
@@ -454,6 +476,9 @@
       "505": "Province existed",
       "506": "District existed",
       "507": "Ward existed"
-    }
+    },
+    "604": "Classified Advertising not found",
+    "605": "User reported classified advertising before",
+    "606": "Classified Advertising blocked or deleted"
   }
 }

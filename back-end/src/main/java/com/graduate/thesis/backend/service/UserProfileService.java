@@ -1,5 +1,6 @@
 package com.graduate.thesis.backend.service;
 
+import com.graduate.thesis.backend.entity.Rating;
 import com.graduate.thesis.backend.entity.UserProfile;
 
 import java.util.Optional;
@@ -22,4 +23,10 @@ public interface UserProfileService {
     void followUser(String userId,String followedUserId);
 
     void unFollowUser(String userId,String followedUserId);
+
+    void newRating(Rating rating);
+
+    void updateRating(Rating newRating, int oldValue);
+
+    void deleteRating(Rating rating);
 }

@@ -47,7 +47,7 @@ export default {
       listQuery: {
         pageNumber: 1,
         pageSize: 100,
-        ascSort: true,
+        ascSort: false,
         sortKey: 1,
         searchKey: ''
       },

@@ -39,6 +39,14 @@ const profileRouter = {
       meta: {
         permission: 'MANAGE_ACCOUNT_ADDRESS'
       }
+    },
+    {
+      path: 'rating',
+      name: 'Rating',
+      component: () => import('@/views/profile/profile-detail/Rating'),
+      meta: {
+        permission: 'MANAGE_ACCOUNT_ADDRESS'
+      }
     }
   ]
 }

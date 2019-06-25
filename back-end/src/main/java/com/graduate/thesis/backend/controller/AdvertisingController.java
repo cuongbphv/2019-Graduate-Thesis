@@ -538,9 +538,9 @@ public class AdvertisingController extends AbstractBasedAPI {
             int width = srcImage.getWidth(null);
             int height = srcImage.getHeight(null);
 
-            if (width < 500 || height < 750) {
-                throw new ApplicationException(APIStatus.ERR_SMALL_IMAGE);
-            }
+//            if (width < 500 || height < 750) {
+//                throw new ApplicationException(APIStatus.ERR_SMALL_IMAGE);
+//            }
 
             // Draw Watermark
             BufferedImage destImage = new BufferedImage(width, height,

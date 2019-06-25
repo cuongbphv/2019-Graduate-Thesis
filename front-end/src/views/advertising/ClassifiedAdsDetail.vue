@@ -45,7 +45,7 @@
           <h2>{{ additionalInfo.title }}</h2>
           <el-row>
             <div class="price">{{ additionalInfo.price | currency('VNĐ', 0, {symbolOnLeft: false, spaceBetweenAmountAndSymbol: true}) }}</div>
-            <span>-</span>
+            <!--<span>-</span>-->
             <div v-if="additionalInfo.maxPrice" class="price">{{ additionalInfo.maxPrice | currency('VNĐ', 0, {symbolOnLeft: false, spaceBetweenAmountAndSymbol: true}) }}</div>
             <div class="action">
               <el-badge :value="200" :max="10" class="item">
@@ -74,10 +74,11 @@
               <div class="author-action">
                 <el-row>
                   <el-button type="success" icon="el-icon-phone" circle />
-                  <el-button type="info" icon="el-icon-message" circle />
+                  <el-button type="info" icon="el-icon-message" circle @click="handleOpenChatModal" />
                   <el-button type="primary" icon="el-icon-bell" circle />
                   <el-button type="warning" icon="el-icon-warning" circle />
                 </el-row>
+                <chat-popup :recipient="author" :visible="chatPopupVisible" @closeChatModal="handleCloseChatModal" />
               </div>
             </el-col>
           </el-row>
@@ -148,11 +149,13 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 import i18n from '@/lang'
 import SearchItem from '@/components/Advertising/SearchItem'
 import { Status } from '@/utils/constants'
+import ChatPopup from '../chat/ChatPopup'
 
 export default {
   name: 'ClassifiedAdsDetail',
   components: {
-    SearchItem
+    SearchItem,
+    ChatPopup
   },
   data() {
     return {
@@ -164,6 +167,7 @@ export default {
       metadata: [],
       i18n: i18n,
       imageIndex: 0,
+      chatPopupVisible: false,
       searchQuery: {
         categoryId: '',
         pageNumber: 1,
@@ -233,9 +237,15 @@ export default {
       this.$refs.carousel.activeIndex = index
     },
     handleGetTopCategoryPost() {
-      this.searchQuery.categoryId = this.classifiedAds.breadcrumbs[this.classifiedAds.breadcrumbs.length - 2].id
+      this.searchQuery.categoryId = this.classifiedAds.breadcrumbs[0].id
       this.getTopCategoryPost(this.searchQuery).then(() => {
       })
+    },
+    handleCloseChatModal() {
+      this.chatPopupVisible = false
+    },
+    handleOpenChatModal() {
+      this.chatPopupVisible = true
     },
     createReport() {
       this.createNewReport({

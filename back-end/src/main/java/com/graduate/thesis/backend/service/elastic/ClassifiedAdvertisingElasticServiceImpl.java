@@ -285,5 +285,31 @@ public class ClassifiedAdvertisingElasticServiceImpl implements ClassifiedAdvert
         return  response;
     }
 
+    @Override
+    public List<ClassifiedAdvertisingElastic> getByAuthorId(String authorId) {
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+
+        boolQueryBuilder.filter(
+                QueryBuilders
+                        .termQuery("author.userId", authorId)
+        );
+
+        searchSourceBuilder
+                .query(boolQueryBuilder);
+
+        JsonParser parser = new JsonParser();
+        JsonObject json = parser.parse(searchSourceBuilder.toString()).getAsJsonObject();
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String jsonPretty = gson.toJson(json);
+
+        ClassifiedAdvertisingElasticPagingResponse queryResult = advertisingElasticRepository.executeSearch(jsonPretty);
+
+        return queryResult.getContent();
+    }
+
 
 }

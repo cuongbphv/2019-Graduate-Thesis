@@ -279,6 +279,7 @@ export default {
       if (parentId === null) {
         this.listBreadCrumb = []
         this.listMetadata = []
+        this.searchQuery.categoryId = null
       }
       this.getListCategory({
         searchKey: this.searchKey,

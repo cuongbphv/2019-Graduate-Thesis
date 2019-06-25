@@ -34,7 +34,7 @@
             </el-row>
             <el-row v-if="profile.userId !== userId" class="stats">
               <el-button v-if="profile.followedBy && profile.followedBy.includes(userId)" type="danger" icon="el-icon-close-notification" round @click="handleUnFollowUser(profileId)">Unfollow</el-button>
-              <el-button v-if="profile.followedBy && !profile.followedBy.includes(userId) && profile.userId !== userId" type="success" round icon="el-icon-bell" @click="handleFollowUser(profileId)">Follow</el-button>
+              <el-button v-else type="success" round icon="el-icon-bell" @click="handleFollowUser(profileId)">Follow</el-button>
               <el-button v-if="profile.userId !== userId" type="primary" icon="el-icon-chat-dot-round" round @click="handleOpenChatModal()">Chat</el-button>
             </el-row>
             <p class="desc"> {{ profile.description }} </p>
@@ -46,21 +46,22 @@
           </el-col>
           <el-col class="right" :xs="24" :md="14" :lg="14">
             <el-row>
-              <ul v-if="userId === profileId" class="nav">
+              <ul class="nav">
                 <li :class="{'is-active' : routerName === 'history'}">
                   <a @click="handleClickRouter('history')">Lịch sử</a>
                 </li>
-                <li :class="{'is-active' : routerName === 'info'}">
+                <li v-if="userId === profileId" :class="{'is-active' : routerName === 'info'}">
                   <a @click="handleClickRouter('info')">Thông tin</a>
                 </li>
-                <li :class="{'is-active' : routerName === 'settings'}">
+                <li v-if="userId === profileId" :class="{'is-active' : routerName === 'settings'}">
                   <a @click="handleClickRouter('settings')">Cài đặt</a>
                 </li>
-                <li :class="{'is-active' : routerName === 'address'}">
+                <li v-if="userId === profileId" :class="{'is-active' : routerName === 'address'}">
                   <a @click="handleClickRouter('address')">Địa chỉ</a>
                 </li>
-                <li>Cửa hàng</li>
-                <li>Trợ giúp</li>
+                <li :class="{'is-active' : routerName === 'rating'}">
+                  <a @click="handleClickRouter('rating')">Đánh giá</a>
+                </li>
               </ul>
             </el-row>
             <!--<span class="follow">Follow</span>-->

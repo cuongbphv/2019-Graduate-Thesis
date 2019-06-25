@@ -61,6 +61,10 @@ public enum APIStatus {
     //ADDRESS
     ERR_ADDRESS_NOT_FOUND(404, "Address not found for this user"),
 
+    //RATING
+    ERR_RATING_EXISTED(209, "You have rate for this user"),
+    ERR_RATING_NOT_FOUND(404, "Rating not found"),
+
     // Classified Advertising
     ERR_CLASSIFIED_ADVERTISING_NOT_FOUND(604, "Classified Advertising not found"),
     ERR_USER_REPORTED(605, "User reported classified advertising before"),

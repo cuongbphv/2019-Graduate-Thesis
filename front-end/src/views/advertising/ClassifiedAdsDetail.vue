@@ -47,14 +47,14 @@
             <div class="price">{{ additionalInfo.price | currency('VNĐ', 0, {symbolOnLeft: false, spaceBetweenAmountAndSymbol: true}) }}</div>
             <!--<span>-</span>-->
             <div v-if="additionalInfo.maxPrice" class="price">{{ additionalInfo.maxPrice | currency('VNĐ', 0, {symbolOnLeft: false, spaceBetweenAmountAndSymbol: true}) }}</div>
-            <!--<div class="action">-->
-            <!--<el-badge :value="200" :max="99" class="item">-->
-            <!--<el-button size="mini" type="success">Save</el-button>-->
-            <!--</el-badge>-->
-            <!--<el-badge :value="100" :max="10" class="item">-->
-            <!--<el-button size="mini" type="warning">Report</el-button>-->
-            <!--</el-badge>-->
-            <!--</div>-->
+            <div class="action">
+              <el-badge :value="200" :max="10" class="item">
+                <el-button size="mini" type="success">Save</el-button>
+              </el-badge>
+              <el-badge :value="reportModel.number" :max="10" class="item">
+                <el-button size="mini" type="warning" @click="reportDialogShow = true">{{ $t('button.report') }}</el-button>
+              </el-badge>
+            </div>
           </el-row>
         </div>
         <el-divider />
@@ -108,6 +108,38 @@
         </div>
       </aside>
     </main>
+
+    <el-dialog :visible.sync="reportDialogShow" :title="$t('label.report_modal')">
+      <el-form label-width="130px" label-position="left">
+        <el-form-item :label="$t('label.reason')">
+          <el-select
+            v-model="reportModel.reason"
+            :placeholder="$t('place_holder.select_reason')"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in reasons"
+              :key="item.id"
+              :label="$t(item.key)"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('label.description')">
+          <el-input
+            v-model="reportModel.description"
+            type="textarea"
+            :rows="3"
+            :placeholder="$t('label.description')"
+          />
+        </el-form-item>
+      </el-form>
+      <div style="text-align:right;">
+        <el-button type="danger" @click="reportDialogShow = false">{{ $t('button.cancel') }}</el-button>
+        <el-button type="primary" @click="createReport">{{ $t('button.report') }}</el-button>
+      </div>
+    </el-dialog>
+
     <!--    <footer>footer</footer>-->
   </div>
 </template>
@@ -115,7 +147,8 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import i18n from '@/lang'
-import SearchItem from '../../components/Advertising/SearchItem'
+import SearchItem from '@/components/Advertising/SearchItem'
+import { Status } from '@/utils/constants'
 import ChatPopup from '../chat/ChatPopup'
 
 export default {
@@ -143,7 +176,39 @@ export default {
         ascSort: false,
         minPrice: '0',
         maxPrice: '10000000000'
-      }
+      },
+      reportModel: {
+        reason: 0,
+        description: '',
+        number: 0
+      },
+      reasons: [
+        {
+          id: 0,
+          key: 'label.reasons.cheat'
+        },
+        {
+          id: 1,
+          key: 'label.reasons.duplicate'
+        },
+        {
+          id: 2,
+          key: 'label.reasons.sold_out'
+        },
+        {
+          id: 3,
+          key: 'label.reasons.not_contact'
+        },
+        {
+          id: 4,
+          key: 'label.reasons.not_true'
+        },
+        {
+          id: 5,
+          key: 'label.reasons.other'
+        }
+      ],
+      reportDialogShow: false
     }
   },
   computed: {
@@ -159,12 +224,14 @@ export default {
       this.author = Object.assign({}, this.classifiedAds.author)
       this.address = Object.assign({}, this.classifiedAds.address)
       this.handleGetTopCategoryPost()
+      this.getNumberOfReportAds()
     })
   },
   created() {
   },
   methods: {
     ...mapActions('advertising', ['getClassifiedAdsDetail', 'getTopCategoryPost']),
+    ...mapActions('report', ['createNewReport', 'getNumberOfReport']),
     handleChangeCarousel(index) {
       this.imageIndex = index
       this.$refs.carousel.activeIndex = index
@@ -179,6 +246,36 @@ export default {
     },
     handleOpenChatModal() {
       this.chatPopupVisible = true
+    },
+    createReport() {
+      this.createNewReport({
+        classifiedAdsId: this.classifiedAdsId,
+        reason: this.reportModel.reason,
+        description: this.reportModel.description
+      }).then(res => {
+        if (res.status === Status.SUCCESS) {
+          this.$message({
+            message: this.$t('message.report_success'),
+            type: 'success'
+          })
+          this.getNumberOfReportAds()
+        } else {
+          this.$message({
+            message: this.$t('errors.' + res.status),
+            type: 'error'
+          })
+        }
+        this.reportDialogShow = false
+      })
+    },
+    getNumberOfReportAds() {
+      this.getNumberOfReport(this.classifiedAdsId).then(res => {
+        if (res.status === Status.SUCCESS) {
+          this.reportModel.number = res.data
+        } else {
+          this.reportModel.number = 0
+        }
+      })
     }
   }
 }

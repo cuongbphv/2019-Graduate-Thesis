@@ -80,6 +80,8 @@ public class AdvertisingController extends AbstractBasedAPI {
     @Autowired
     ClassifiedAdvertisingElasticService classifiedAdvertisingElasticService;
 
+    @Autowired
+    ReportService reportService;
 
     @GetMapping(Constant.FULL_TEXT_SEARCH)
     public ResponseEntity<RestAPIResponse> fullTextSearch(
@@ -229,6 +231,14 @@ public class AdvertisingController extends AbstractBasedAPI {
                 classifiedAdvertising.setStatus(status);
             }
             classifiedAdvertisingService.save(classifiedAdvertising);
+
+            Report report = reportService.findByClassifiedAdsIdAndStatus(
+                    classifiedAdvertising.getId(), Constant.Status.ACTIVE.getValue());
+            if (report != null) {
+                report.setStatus(Constant.Status.DELETE.getValue());
+                reportService.saveReport(report);
+            }
+
             if(status == Constant.Status.ACTIVE.getValue()){
 
                 indexAds(classifiedAdvertising);

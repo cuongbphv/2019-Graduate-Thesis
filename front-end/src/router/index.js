@@ -10,7 +10,6 @@ import HomeLayout from '@/views/layout/HomeLayout'
 /* Router Modules */
 import profileRouter from './modules/profile'
 import advertisingRouter from './modules/advertising'
-// import managementRouter from './modules/management'
 
 export const allRoutes = [
   {
@@ -156,6 +155,23 @@ export const allRoutes = [
           title: 'advertising',
           icon: 'post',
           permission: 'MANAGE_CLASSIFIED_ADVERTISING'
+        }
+      }
+    ]
+  },
+  {
+    path: '/manage/report',
+    component: Layout,
+    redirect: 'dashboard',
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/management/report/Report'),
+        name: 'Report',
+        meta: {
+          title: 'report',
+          icon: 'report',
+          permission: 'MANAGE_REPORT'
         }
       }
     ]

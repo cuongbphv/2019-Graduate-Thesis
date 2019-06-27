@@ -66,7 +66,9 @@ public enum APIStatus {
     ERR_RATING_NOT_FOUND(404, "Rating not found"),
 
     // Classified Advertising
-    ERR_CLASSIFIED_ADVERTISING_NOT_FOUND(604, "Classified Advertising not found")
+    ERR_CLASSIFIED_ADVERTISING_NOT_FOUND(604, "Classified Advertising not found"),
+    ERR_USER_REPORTED(605, "User reported classified advertising before"),
+    ERR_CLASSIFIED_BLOCKED(606, "Classified Advertising blocked or deleted")
     ;
 
 

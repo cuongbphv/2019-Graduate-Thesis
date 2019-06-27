@@ -38,7 +38,11 @@ const API = {
   PERMISSION: '/permission',
   // CHAT
   CHAT: '/chats',
-  MESSAGE: '/messages'
+  MESSAGE: '/messages',
+  // REPORT
+  REPORT: '/report',
+  REPORT_LIST: '/report/list',
+  NUMBER_OF_REPORT: '/report/number'
 }
 
 const Status = {

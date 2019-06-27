@@ -18,6 +18,7 @@ public interface Constant {
     String GET_LIST = "/list";
     String GET_NEW_ITEM = "/new";
     String GET_TOP_SEARCH = "/trend";
+    String GET_NUMBER_ITEM = "/number";
 
     // Auth APIs
     String AUTH_API = API_PREFIX + "/auth";
@@ -81,6 +82,9 @@ public interface Constant {
     //FILE
     String FILE = API_PREFIX + "/files";
 
+    // REPORT
+    String REPORT_API = API_PREFIX + "/report";
+
     int RANDOM_MIN = 100000;
     int RANDOM_MAX = 999999;
     int DEFAULT_EXPIRE_TIME = 3600000; // miliseconds (1 hour)
@@ -110,6 +114,7 @@ public interface Constant {
 
     enum Status{
 
+        DEACTIVE("DEACTIVE", -1),
         DELETE("DELETE",0),
         ACTIVE("ACTIVE", 1),
         PENDING("PENDING",2),

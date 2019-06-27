@@ -53,6 +53,7 @@ public interface Constant {
 
     //RATING
     String RATING = API_PREFIX + "/rating";
+    String STATISTIC = "/statistic";
 
     // Role APIs
     String ROLE_API = API_PREFIX + "/role";

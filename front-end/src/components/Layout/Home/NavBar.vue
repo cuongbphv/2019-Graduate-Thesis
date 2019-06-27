@@ -67,17 +67,53 @@
           </el-dropdown>
         </div>
         <div v-if="profile.userId">
-          <el-tooltip :content="$t('label.message')" effect="dark" placement="bottom">
-            <el-badge :value="3" class="item">
-              <el-button class="badge" size="medium" icon="el-icon-message" />
-            </el-badge>
-          </el-tooltip>
-          <el-tooltip :content="$t('label.notify')" effect="dark" placement="bottom">
-            <el-badge :value="1" class="item">
-              <el-button class="badge" size="medium" icon="el-icon-bell" />
-            </el-badge>
-          </el-tooltip>
-          <el-tooltip :content="$t('label.create')" effect="dark" placement="bottom">
+          <el-dropdown trigger="click">
+            <el-tooltip :content="$t('label.message')" effect="dark" placement="bottom">
+              <el-badge :value="3" class="item">
+                <el-button class="badge" size="medium" icon="el-icon-message" />
+              </el-badge>
+            </el-tooltip>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>
+                <div style="display: inline-block">
+                  <img src="https://pixel.nymag.com/imgs/daily/vulture/2018/11/02/02-avatar-2.w700.h700.jpg" class="img-rounded">
+                </div>
+                <div style="display: inline-block; margin-left: 5px; width: 300px">
+                  <div class="review-block-name"><a href="#"><b>Huy Phạm</b></a></div>
+                  <div class="review-block-date">Sáng nay đã ăn gì chưa đó?</div>
+                  <div class="review-block-date">25 - 05 - 2019</div>
+                </div>
+              </el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-plus">Action 2</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-plus-outline">Action 3</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-check">Action 4</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-check-outline">Action 5</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <el-dropdown trigger="click">
+            <el-tooltip :content="$t('label.notify')" effect="dark" placement="bottom">
+              <el-badge :value="1" class="item">
+                <el-button class="badge" size="medium" icon="el-icon-bell" />
+              </el-badge>
+            </el-tooltip>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>
+                <div style="display: inline-block">
+                  <img src="https://pixel.nymag.com/imgs/daily/vulture/2018/11/02/02-avatar-2.w700.h700.jpg" class="img-rounded">
+                </div>
+                <div style="display: inline-block; margin-left: 5px;width: 300px">
+                  <div class="review-block-name"><a href="#"><b>Huy Phạm Huy Phạm Huy Phạm Huy Phạm Huy Phạm Huy Phạm Huy Phạm Huy Phạm Huy Phạm Huy Phạm</b></a></div>
+                  <div class="review-block-date">Sáng nay đã ăn gì chưa đó?</div>
+                  <div class="review-block-date">25 - 05 - 2019</div>
+                </div>
+              </el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-plus">Action 2</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-plus-outline">Action 3</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-check">Action 4</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-check-outline">Action 5</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <el-tooltip :content="$t('label.create')" effect="dark" placement="bottom" style="float: left!important;">
             <el-badge class="item">
               <router-link to="/advertising">
                 <el-button class="badge" size="medium" icon="el-icon-edit" />
@@ -191,6 +227,19 @@ export default {
     margin: 0 0 0 30px;
   }
 }
+.img-rounded{
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+.review-block-name{
+  font-size:12px;
+  line-height: 20px;
+}
+.review-block-date{
+  font-size:12px;
+  line-height: 20px;
+}
 .column-center {
   float: left;
   width: 50%;
@@ -200,7 +249,7 @@ export default {
   float: right;
   width: 20%;
   .item {
-    margin-left: -10px;
+    margin-left: 0px;
     padding: 0;
     float: right;
     margin-top: 3px;

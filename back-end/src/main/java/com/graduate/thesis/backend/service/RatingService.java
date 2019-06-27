@@ -19,6 +19,8 @@ public interface RatingService {
 
     Rating findBySenderIdAndRecipientId(String senderId, String recipientId);
 
+    List<Rating> findAllByRecipientId(String recipientId);
+
     void delete(Rating rating);
 
 }

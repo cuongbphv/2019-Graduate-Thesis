@@ -43,6 +43,11 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    public List<Rating> findAllByRecipientId(String recipientId) {
+        return ratingRepository.findByRecipientId(recipientId);
+    }
+
+    @Override
     public void delete(Rating rating) {
         ratingRepository.delete(rating);
     }

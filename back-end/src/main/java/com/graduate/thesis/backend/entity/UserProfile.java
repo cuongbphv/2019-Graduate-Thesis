@@ -70,5 +70,5 @@ public class UserProfile {
 
     private int ratingValue;
 
-    private float ratingAverage;
+    private double ratingAverage;
 }

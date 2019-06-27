@@ -5,6 +5,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author Huy Pham
  */
@@ -16,5 +18,7 @@ public interface RatingRepository extends MongoRepository<Rating, String> {
     Rating findRatingById(String id);
 
     Rating findBySenderIdAndRecipientId(String senderId, String recipientId);
+
+    List<Rating> findByRecipientId(String recipientId);
 
 }

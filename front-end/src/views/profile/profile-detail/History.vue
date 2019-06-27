@@ -38,15 +38,17 @@
       <el-timeline-item :timestamp="item.createdDate | parseTime('{y}-{m}-{d} {h}:{i}')" placement="top">
         <el-card>
           <el-row>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8">
-              <img :src="item.thumbnail.url" alt="No image">
-            </el-col>
-            <el-col :xs="16" :sm="16" :md="16" :lg="16">
-              <h3>{{ item.title }}</h3>
-              <p>{{ $t('advertising.location') }} <el-tag type="info">{{ item.addressResponse.detail ? item.addressResponse.detail + ', ' + item.addressResponse.ward.pathWithType : item.addressResponse.ward.pathWithType }}</el-tag></p>
-              <p>{{ $t('advertising.category') }} <el-tag type="info">{{ item.categoryName }}</el-tag></p>
-              <p>{{ $t('table.header.status') }} <el-tag :type="item.status | statusFilter">{{ mapStatus(item.status) }}</el-tag></p>
-            </el-col>
+            <a :href="'/advertising/' + item.id">
+              <el-col :xs="8" :sm="8" :md="8" :lg="8">
+                <img :src="item.thumbnail.url" alt="No image">
+              </el-col>
+              <el-col :xs="16" :sm="16" :md="16" :lg="16">
+                <h3>{{ item.title }}</h3>
+                <p>{{ $t('advertising.location') }} <el-tag type="info">{{ item.addressResponse.detail ? item.addressResponse.detail + ', ' + item.addressResponse.ward.pathWithType : item.addressResponse.ward.pathWithType }}</el-tag></p>
+                <p>{{ $t('advertising.category') }} <el-tag type="info">{{ item.categoryName }}</el-tag></p>
+                <p>{{ $t('table.header.status') }} <el-tag :type="item.status | statusFilter">{{ mapStatus(item.status) }}</el-tag></p>
+              </el-col>
+            </a>
           </el-row>
         </el-card>
       </el-timeline-item>

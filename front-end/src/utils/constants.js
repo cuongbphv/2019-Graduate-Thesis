@@ -8,6 +8,7 @@ const API = {
   PROFILE: '/profile',
   FOLLOW: '/follow',
   RATING: '/rating',
+  STATISTIC: '/statistic',
   UPDATE_PERSONAL_PERMISSION: '/profile/permissions',
   // Location APIs
   LOCATION: '/location',

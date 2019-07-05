@@ -113,6 +113,9 @@ public class AuthController extends AbstractBasedAPI{
         userProfile.setFirstName(user.getPhone());
         userProfile.setCreatedDate(new Date());
         userProfile.setModifiedDate(new Date());
+        userProfile.setRatingCount(20);
+        userProfile.setRatingValue(60);
+        userProfile.setRatingAverage(3);
         userProfile.setStatus(Constant.Status.PENDING.getValue());
 
         userProfileService.save(userProfile);

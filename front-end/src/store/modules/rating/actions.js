@@ -24,6 +24,17 @@ const getRating = ({ commit }, id) => {
   })
 }
 
+const getAllRating = ({ commit }, id) => {
+  return rating.getAllRating(id).then((res) => {
+    if (res.status === Status.SUCCESS) {
+      commit('GET_ALL_RATING', res.data)
+      return res.data
+    }
+  }).catch(error => {
+    throw error
+  })
+}
+
 const updateRating = ({ commit }, params) => {
   return rating.updateRating(params, params.id).then((res) => {
     if (res.status === Status.SUCCESS) {
@@ -62,5 +73,6 @@ export default {
   getRating,
   updateRating,
   getRatingForUser,
-  deleteRating
+  deleteRating,
+  getAllRating
 }

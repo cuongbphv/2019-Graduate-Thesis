@@ -29,6 +29,7 @@ public interface Constant {
     // Category APIs
     String CATEGORY_API = API_PREFIX + "/category";
     String METADATA =  "/metadata";
+    String METADATAS =  "/metadatas";
     String FILTER = "/filter";
     String IMAGE = "/image";
 
@@ -46,17 +47,26 @@ public interface Constant {
     String FULL_TEXT_SEARCH = "/search";
     String TOP_CATEGORY_POST = "/top_category_post";
     String HISTORY = "/history";
+    String TRADING_STATUS = "/trading_status";
+    String STATUS = "/status";
+    String SAVES = "/saves";
 
     //USER
     String USER_API = API_PREFIX + "/user";
     String CURRENT_USER =  "/me";
     String CHANGE_PASSWORD =  "/password";
+    String BAN =  "/ban";
+    String UNLOCK =  "/unlock";
 
     //RATING
     String RATING = API_PREFIX + "/rating";
+    String STATISTIC = "/statistic";
 
     // Role APIs
     String ROLE_API = API_PREFIX + "/role";
+
+    // Role APIs
+    String STATISTICS_API = API_PREFIX + "/statistics";
 
     // Permission APIs
     String PERMISSION_API = API_PREFIX + "/permission";

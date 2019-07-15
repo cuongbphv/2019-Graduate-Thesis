@@ -55,6 +55,6 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public List<NotificationResponse> getNotificationsByUserId(String userId, int size) {
-        return null;
+        return notificationAggregation.getNotificationDataByUserId(userId,size);
     }
 }

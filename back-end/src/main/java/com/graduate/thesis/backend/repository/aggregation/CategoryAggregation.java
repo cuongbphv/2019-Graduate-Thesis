@@ -1,8 +1,10 @@
 package com.graduate.thesis.backend.repository.aggregation;
 
 import com.graduate.thesis.backend.entity.Category;
+import com.graduate.thesis.backend.entity.model.Metadata;
 import com.graduate.thesis.backend.model.data.IdsResponse;
 import com.graduate.thesis.backend.model.response.CategoryResponse;
+import com.graduate.thesis.backend.repository.aggregation.operation.CustomProjectAggregationOperation;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -103,6 +105,52 @@ public class CategoryAggregation {
         update.set("status", "0");
         mongoTemplate.updateMulti(query, update, Category.class);
 
+    }
+
+    public List<Metadata> getMetadataByCategoryId(String categoryId){
+
+        String graphLookupQuery =
+                "   {\n" +
+                        "      $graphLookup: {\n" +
+                        "         from: \"category\",\n" +
+                        "         startWith: \"$parentId\",\n" +
+                        "         connectFromField: \"parentId\",\n" +
+                        "         connectToField: \"_id\",\n" +
+                        "         as: \"metadatas\",\n" +
+                        "         maxDepth: 10\n" +
+                        "      }\n" +
+                        "  }";
+
+        String addFieldOperator =
+                "{ \"$addFields\": {\n" +
+                        "    \"metadatas\": {\n" +
+                        "      \"$reduce\": {\n" +
+                        "        \"input\": \"$metadatas.metadata\",\n" +
+                        "        \"initialValue\": [],\n" +
+                        "        \"in\": { \"$setUnion\": [ \"$$value\", \"$$this\" ] }\n" +
+                        "      }\n" +
+                        "    }\n" +
+                        "  }}";
+
+        String projectQuery =
+                "{ $project: { _id:0 , metadata: { $ifNull: [ {$setUnion: [ \"$metadatas\", \"$metadata\" ]} , " +
+                        "{$setUnion: [ \"$metadatas\" ]}] }}}";
+
+
+        String unwindOperator =
+                "{$unwind: '$metadata'}";
+
+        String replaceRootOperator =
+                "{$replaceRoot: { newRoot: \"$metadata\"}}";
+
+        return mongoTemplate.aggregate(Aggregation.newAggregation(
+                match(Criteria.where("_id").is(categoryId).and("status").is(1)),
+                new CustomProjectAggregationOperation(graphLookupQuery),
+                new CustomProjectAggregationOperation(addFieldOperator),
+                new CustomProjectAggregationOperation(projectQuery),
+                new CustomProjectAggregationOperation(unwindOperator),
+                new CustomProjectAggregationOperation(replaceRootOperator)
+        ), "category", Metadata.class).getMappedResults();
     }
 
 }

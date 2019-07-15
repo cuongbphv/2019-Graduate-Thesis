@@ -126,7 +126,8 @@ public class UserProfileServiceImpl implements UserProfileService {
             profile.setRatingCount(profile.getRatingCount() + 1);
             profile.setRatingValue(profile.getRatingValue() + rating.getValue());
             if(profile.getRatingCount() > 0) {
-                profile.setRatingAverage(profile.getRatingValue() / profile.getRatingCount());
+                double averageValue = profile.getRatingValue() * 1.0/ profile.getRatingCount();
+                profile.setRatingAverage(averageValue);
             }
             else{
                 profile.setRatingAverage(0);
@@ -147,7 +148,8 @@ public class UserProfileServiceImpl implements UserProfileService {
 
             profile.setRatingValue(profile.getRatingValue() - oldValue + rating.getValue());
             if(profile.getRatingCount() > 0) {
-                profile.setRatingAverage(profile.getRatingValue() / profile.getRatingCount());
+                double averageValue = profile.getRatingValue() * 1.0/ profile.getRatingCount();
+                profile.setRatingAverage(averageValue);
             }
             else{
                 profile.setRatingAverage(0);
@@ -171,7 +173,8 @@ public class UserProfileServiceImpl implements UserProfileService {
             profile.setRatingValue(profile.getRatingValue() - rating.getValue());
 
             if(profile.getRatingCount() > 0) {
-                profile.setRatingAverage(profile.getRatingValue() / profile.getRatingCount());
+                double averageValue = profile.getRatingValue() * 1.0/ profile.getRatingCount();
+                profile.setRatingAverage(averageValue);
             }
             else{
                 profile.setRatingAverage(0);

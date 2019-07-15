@@ -7,6 +7,8 @@ import com.graduate.thesis.backend.model.request.RatingRequest;
 import com.graduate.thesis.backend.model.response.RatingResponse;
 import com.graduate.thesis.backend.model.response.RestAPIResponse;
 import com.graduate.thesis.backend.repository.RatingRepository;
+import com.graduate.thesis.backend.security.CurrentUser;
+import com.graduate.thesis.backend.security.oauth2.user.UserPrincipal;
 import com.graduate.thesis.backend.service.RatingService;
 import com.graduate.thesis.backend.service.UserProfileService;
 import com.graduate.thesis.backend.util.APIStatus;
@@ -33,17 +35,29 @@ public class RatingController extends AbstractBasedAPI {
     UserProfileService userProfileService;
 
     @GetMapping(Constant.WITHIN_ID)
-    public ResponseEntity<RestAPIResponse> getRating(
-            @PathVariable("id") String ratingId
-    ){
+    public ResponseEntity<RestAPIResponse> getCurrentUserRating(
+            @PathVariable("id") String recipientId,
+            @CurrentUser UserPrincipal currentUser
+            ){
 
-        Rating existedRating = ratingService.findById(ratingId);
+        Rating existedRating = ratingService
+                .findBySenderIdAndRecipientId(currentUser.getId(), recipientId);
 
         if(existedRating == null) {
             throw new ApplicationException(APIStatus.ERR_RATING_NOT_FOUND);
         }
 
         return responseUtil.successResponse(existedRating);
+    }
+
+    @GetMapping(Constant.WITHIN_ID + Constant.STATISTIC)
+    public ResponseEntity<RestAPIResponse> getRatingStatistic(
+            @PathVariable("id") String recipientId
+    ){
+
+        List<Rating> ratings = ratingService.findAllByRecipientId(recipientId);
+
+        return responseUtil.successResponse(ratings);
     }
 
     @GetMapping()

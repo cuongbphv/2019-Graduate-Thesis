@@ -4,6 +4,7 @@ import com.graduate.thesis.backend.entity.UserAccount;
 import com.graduate.thesis.backend.model.response.sysAdmin.SysUserResponse;
 import com.graduate.thesis.backend.repository.aggregation.operation.AddFieldOperation;
 import com.graduate.thesis.backend.repository.aggregation.operation.CustomProjectAggregationOperation;
+import com.graduate.thesis.backend.util.Constant;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -11,9 +12,11 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.LookupOperation;
+import org.springframework.data.mongodb.core.aggregation.StringOperators;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
@@ -95,7 +98,7 @@ public class SysAdminUserAggregation {
                     unwind("$profile"),
                     project()
                             .andExclude("_id")
-                            .andInclude("phone", "provider", "roleId", "status", "personalPermissions")
+                            .andInclude("phone", "email", "provider", "roleId", "status", "personalPermissions")
                             .and("id").as("userId")
                             .and("$profile.firstName").as("firstName")
                             .and("$profile.lastName").as("lastName")
@@ -137,5 +140,116 @@ public class SysAdminUserAggregation {
 
         return results.getMappedResults();
     }
+
+
+    public List<SysUserResponse> getPagingUserInAdmin(
+            String searchKey,
+            int sortKey,
+            boolean ascSort,
+            int pageNumber,
+            int pageSize,
+            String roleId,
+            String provider,
+            int status
+    ) {
+
+        AddFieldOperation addField =
+                SysAdminUserAggregation.addField(new Document().append("convertedId", new Document("$toString", "$_id")));
+
+        LookupOperation lookupOperation = LookupOperation.newLookup()
+                .from("user_profile").localField("convertedId").foreignField("userId").as("profile");
+
+        // handle for filter by role or status or provider
+        String matchCondition = "";
+        if (status != -1) {
+            matchCondition += "{ $match: { \"status\" : " + status + " } }";
+        }
+        if (!provider.isEmpty()) {
+            matchCondition += "{ $match: { \"provider\" : \"" + provider + "\" } }";
+        }
+
+        // handle for sort
+        String property = "";
+        switch (sortKey) {
+            case 1:
+                property = "firstName"; break;
+            case 2:
+                property = "lastName"; break;
+            case 3:
+                property = "phone"; break;
+            case 4:
+                property = "provider"; break;
+            case 5:
+                property = "roleId"; break;
+            case 6:
+                property = "status"; break;
+            case 7:
+                property = "createdDate"; break;
+        }
+
+        AggregationResults<SysUserResponse> results;
+
+        List<String> userIds = new ArrayList<>();
+        userIds.add("8976bbe605f5f129bd02cdee");
+        userIds.add("abcdebe605f5f129bd02cdee");
+
+        if (matchCondition.isEmpty()) {
+
+            results = mongoTemplate.aggregate(Aggregation.newAggregation(
+                    SysUserResponse.class,
+                    addField,
+                    lookupOperation,
+                    unwind("$profile"),
+                    project()
+                            .andExclude("_id")
+                            .andInclude("phone", "email", "provider", "roleId", "status", "personalPermissions")
+                            .and("id").as("userId")
+                            .and("$profile.firstName").as("firstName")
+                            .and("$profile.lastName").as("lastName")
+                            .and("$profile.type").as("type")
+                            .and("$profile.createdDate").as("createdDate"),
+                    match(new Criteria().orOperator(
+                            where("firstName").regex(searchKey, "i"),
+                            where("lastName").regex(searchKey, "i"),
+                            where("phone").regex(searchKey, "i")
+                            )),
+                    match(where("roleId").in(userIds)),
+                    match(where("status").gt(Constant.Status.DELETE.getValue())),
+                    sort(ascSort ? Sort.Direction.ASC : Sort.Direction.DESC, property),
+                    skip((long) ((pageNumber - 1) * pageSize)),
+                    limit(pageSize)
+            ), UserAccount.class, SysUserResponse.class);
+
+        } else {
+            results = mongoTemplate.aggregate(Aggregation.newAggregation(
+                    SysUserResponse.class,
+                    addField,
+                    lookupOperation,
+                    unwind("$profile"),
+                    project()
+                            .andExclude("_id")
+                            .andInclude("phone", "provider", "roleId", "status", "personalPermissions")
+                            .and("id").as("userId")
+                            .and("$profile.firstName").as("firstName")
+                            .and("$profile.lastName").as("lastName")
+                            .and("$profile.type").as("type")
+                            .and("$profile.createdDate").as("createdDate"),
+                    match(new Criteria().orOperator(
+                            where("firstName").regex(searchKey, "i"),
+                            where("lastName").regex(searchKey, "i"),
+                            where("phone").regex(searchKey, "i")
+                    )),
+                    match(where("roleId").in(userIds)),
+                    match(where("status").gt(Constant.Status.DELETE.getValue())),
+                    new CustomProjectAggregationOperation(matchCondition), // for case filter by condition
+                    skip((long) ((pageNumber - 1) * pageSize)),
+                    sort(ascSort ? Sort.Direction.ASC : Sort.Direction.DESC, property),
+                    limit(pageSize)
+            ), UserAccount.class, SysUserResponse.class);
+        }
+
+        return results.getMappedResults();
+    }
+
 
 }

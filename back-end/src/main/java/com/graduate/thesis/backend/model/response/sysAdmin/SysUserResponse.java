@@ -21,6 +21,8 @@ public class SysUserResponse {
 
     private String phone;
 
+    private String email;
+
     private String provider;
 
     private String roleId;

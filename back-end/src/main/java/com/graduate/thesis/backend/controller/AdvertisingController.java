@@ -193,7 +193,7 @@ public class AdvertisingController extends AbstractBasedAPI {
 		classifiedAdvertising.setModifiedDate(new Date());
         // just for new after that will update pending status, after previewer confirm switch to active status
         classifiedAdvertising.setStatus(Constant.Status.PENDING.getValue());
-        classifiedAdvertising.setTradeStatus(ClassifiedAdvertising.TradeStatus.AVAILABLE.getValue());
+        classifiedAdvertising.setTradeStatus(ClassifiedAdvertising.TradeStatus.PENDING.getValue());
 
         ClassifiedAdvertising createdAds = classifiedAdvertisingService.save(classifiedAdvertising);
 
@@ -201,6 +201,45 @@ public class AdvertisingController extends AbstractBasedAPI {
     }
 
     @PutMapping(value = Constant.WITHIN_ID)
+    public ResponseEntity<RestAPIResponse> updateAdvertising (
+            @CurrentUser UserPrincipal userPrincipal,
+            @PathVariable("id") String adsId,
+            @RequestBody NewAdvertisingRequest reqModel
+    ) {
+
+        ClassifiedAdvertising classifiedAdvertising =
+                classifiedAdvertisingService.getClassifiedAdsDetailByIdAndAuthor(adsId, userPrincipal.getId());
+
+        if(classifiedAdvertising == null){
+            throw new ApplicationException(APIStatus.ERR_CLASSIFIED_ADVERTISING_NOT_FOUND);
+        }
+
+        classifiedAdvertising.setLocationType(reqModel.getLocationType());
+        if (reqModel.getLocationType() == Constant.LocationType.DATA_ADDRESS.getValue()) {
+            classifiedAdvertising.setProvinceId(reqModel.getProvinceId());
+            classifiedAdvertising.setDistrictId(reqModel.getDistrictId());
+            classifiedAdvertising.setWardId(reqModel.getWardId());
+        } else if (reqModel.getLocationType() == Constant.LocationType.USER_ADDRESS.getValue()) {
+            classifiedAdvertising.setAddressId(reqModel.getAddressId());
+        }
+        classifiedAdvertising.setAuthorId(userPrincipal.getId());
+        classifiedAdvertising.setImages(reqModel.getImages());
+        classifiedAdvertising.setAdditionalInfo(reqModel.getAdditionalInfo());
+        classifiedAdvertising.setBreadcrumbs(reqModel.getBreadcrumbs());
+        classifiedAdvertising.setMetadata(reqModel.getMetadata());
+        classifiedAdvertising.setModifiedDate(new Date());
+        // just for new after that will update pending status, after previewer confirm switch to active status
+        classifiedAdvertising.setStatus(Constant.Status.PENDING.getValue());
+
+        ClassifiedAdvertising updatedAds = classifiedAdvertisingService.save(classifiedAdvertising);
+
+        indexAds(updatedAds);
+
+        return responseUtil.successResponse(updatedAds);
+    }
+
+
+    @PutMapping(value = Constant.WITHIN_ID + Constant.STATUS)
     public ResponseEntity<RestAPIResponse> updateStatusClassifiedAds (
             @CurrentUser UserPrincipal userPrincipal,
             @PathVariable("id") String adsId,
@@ -230,6 +269,9 @@ public class AdvertisingController extends AbstractBasedAPI {
             // update status
             if (classifiedAdvertising.getStatus() != Constant.Status.DELETE.getValue()) {
                 classifiedAdvertising.setStatus(status);
+                if(status == Constant.Status.ACTIVE.getValue()){
+                    classifiedAdvertising.setTradeStatus(ClassifiedAdvertising.TradeStatus.AVAILABLE.getValue());
+                }
             }
             classifiedAdvertisingService.save(classifiedAdvertising);
 
@@ -517,15 +559,15 @@ public class AdvertisingController extends AbstractBasedAPI {
         return responseUtil.successResponse(ads);
     }
 
-    @GetMapping(Constant.SAVES)
+    @GetMapping(Constant.SAVES + Constant.WITHIN_ID)
     public ResponseEntity<RestAPIResponse> getSavedAds(
-            @CurrentUser UserPrincipal currentUser,
+            @PathVariable("id") String userId,
             @RequestParam("page_number") int pageNumber,
             @RequestParam("page_size") int pageSize
     ){
 
         ClassifiedAdvertisingPagingResponse adsPagingResponse =
-                classifiedAdvertisingElasticService.getSavedByUserId(currentUser.getId(),pageNumber, pageSize);
+                classifiedAdvertisingElasticService.getSavedByUserId(userId,pageNumber, pageSize);
 
         return responseUtil.successResponse(adsPagingResponse);
     }

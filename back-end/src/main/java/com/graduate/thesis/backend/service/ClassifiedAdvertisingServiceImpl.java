@@ -186,4 +186,9 @@ public class ClassifiedAdvertisingServiceImpl implements ClassifiedAdvertisingSe
 
         }
     }
+
+    @Override
+    public long countAllPost() {
+        return classifiedAdvertisingRepository.count();
+    }
 }

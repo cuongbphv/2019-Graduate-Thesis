@@ -10,6 +10,7 @@ import com.graduate.thesis.backend.model.request.ChangePasswordRequest;
 import com.graduate.thesis.backend.model.response.CurrentUserResponse;
 import com.graduate.thesis.backend.model.response.RestAPIResponse;
 import com.graduate.thesis.backend.model.response.sysAdmin.PagingResponse;
+import com.graduate.thesis.backend.model.response.sysAdmin.SysUserResponse;
 import com.graduate.thesis.backend.repository.aggregation.SysAdminUserAggregation;
 import com.graduate.thesis.backend.security.CurrentUser;
 import com.graduate.thesis.backend.security.oauth2.user.UserPrincipal;
@@ -117,6 +118,137 @@ public class UserController extends AbstractBasedAPI{
         return responseUtil.successResponse("Change Password Successfully");
     }
 
+    @RequestMapping(value = Constant.WITHIN_ID + Constant.CHANGE_PASSWORD, method = RequestMethod.PUT)
+    public ResponseEntity<RestAPIResponse> adminChangeUserPassword(
+            @CurrentUser UserPrincipal userPrincipal,
+            @PathVariable("id") String userId,
+            @RequestBody @Valid ChangePasswordRequest passwordRequest
+    ) {
+
+        UserAccount adminAccount = userAccountService.findActiveUserById(userPrincipal.getId());
+
+        if (adminAccount == null) {
+            throw new ApplicationException(APIStatus.ERR_USER_NOT_FOUND);
+        }
+
+        Role loginRole = roleService.findByRoleId(adminAccount.getRoleId());
+
+        if (!loginRole.getName().equals(Constant.Role.SYS_ADMIN.getName()) &&
+                !loginRole.getName().equals(Constant.Role.ADMIN.getName())) {
+            throw new ApplicationException(APIStatus.ERR_UNAUTHORIZED);
+        }
+
+
+        UserAccount userAccount = userAccountService.findByUserId(userId);
+        if (userAccount == null) {
+            throw new ApplicationException(APIStatus.ERR_USER_NOT_FOUND);
+        }
+
+        userAccount.setPassword(passwordEncoder.encode(passwordRequest.getNewPassword()));
+
+        userAccountService.save(userAccount);
+
+        return responseUtil.successResponse("Change Password Successfully");
+    }
+
+
+    @RequestMapping(value = Constant.WITHIN_ID + Constant.BAN, method = RequestMethod.PUT)
+    public ResponseEntity<RestAPIResponse> banUser(
+            @CurrentUser UserPrincipal userPrincipal,
+            @PathVariable("id") String userId
+    ) {
+
+        UserAccount adminAccount = userAccountService.findActiveUserById(userPrincipal.getId());
+
+        if (adminAccount == null) {
+            throw new ApplicationException(APIStatus.ERR_USER_NOT_FOUND);
+        }
+
+        Role loginRole = roleService.findByRoleId(adminAccount.getRoleId());
+
+        if (!loginRole.getName().equals(Constant.Role.SYS_ADMIN.getName()) &&
+                !loginRole.getName().equals(Constant.Role.ADMIN.getName())) {
+            throw new ApplicationException(APIStatus.ERR_UNAUTHORIZED);
+        }
+
+
+        UserAccount userAccount = userAccountService.findActiveUserById(userId);
+        if (userAccount == null) {
+            throw new ApplicationException(APIStatus.ERR_USER_NOT_FOUND);
+        }
+
+        userAccount.setStatus(Constant.Status.BLOCK.getValue());
+
+        userAccountService.save(userAccount);
+
+        return responseUtil.successResponse("Banned User Successfully");
+    }
+
+    @RequestMapping(value = Constant.WITHIN_ID + Constant.UNLOCK, method = RequestMethod.PUT)
+    public ResponseEntity<RestAPIResponse> unlockUser(
+            @CurrentUser UserPrincipal userPrincipal,
+            @PathVariable("id") String userId
+    ) {
+
+        UserAccount adminAccount = userAccountService.findActiveUserById(userPrincipal.getId());
+
+        if (adminAccount == null) {
+            throw new ApplicationException(APIStatus.ERR_USER_NOT_FOUND);
+        }
+
+        Role loginRole = roleService.findByRoleId(adminAccount.getRoleId());
+
+        if (!loginRole.getName().equals(Constant.Role.SYS_ADMIN.getName()) &&
+                !loginRole.getName().equals(Constant.Role.ADMIN.getName())) {
+            throw new ApplicationException(APIStatus.ERR_UNAUTHORIZED);
+        }
+
+
+        UserAccount userAccount = userAccountService.findByUserId(userId);
+        if (userAccount == null) {
+            throw new ApplicationException(APIStatus.ERR_USER_NOT_FOUND);
+        }
+
+        userAccount.setStatus(Constant.Status.ACTIVE.getValue());
+
+        userAccountService.save(userAccount);
+
+        return responseUtil.successResponse("Unlock User Successfully");
+    }
+
+
+    @DeleteMapping(value = Constant.WITHIN_ID)
+    public ResponseEntity<RestAPIResponse> deleteUser(
+            @CurrentUser UserPrincipal userPrincipal,
+            @PathVariable("id") String userId
+    ) {
+
+        UserAccount adminAccount = userAccountService.findActiveUserById(userPrincipal.getId());
+
+        if (adminAccount == null) {
+            throw new ApplicationException(APIStatus.ERR_USER_NOT_FOUND);
+        }
+
+        Role loginRole = roleService.findByRoleId(adminAccount.getRoleId());
+
+        if (!loginRole.getName().equals(Constant.Role.SYS_ADMIN.getName()) &&
+                !loginRole.getName().equals(Constant.Role.ADMIN.getName())) {
+            throw new ApplicationException(APIStatus.ERR_UNAUTHORIZED);
+        }
+
+
+        UserAccount userAccount = userAccountService.findActiveUserById(userId);
+        if (userAccount == null) {
+            throw new ApplicationException(APIStatus.ERR_USER_NOT_FOUND);
+        }
+
+        userAccount.setStatus(Constant.Status.DELETE.getValue());
+
+        userAccountService.save(userAccount);
+
+        return responseUtil.successResponse("Delete User Successfully");
+    }
+
     @GetMapping(Constant.GET_LIST)
     public ResponseEntity<RestAPIResponse> getListUserBySysAdmin(
             @CurrentUser UserPrincipal userPrincipal,
@@ -146,6 +278,45 @@ public class UserController extends AbstractBasedAPI{
         response.setContent(sysAdminUserAggregation.getPagingUserInSysAdmin(
                 searchKey, sortKey, ascSort, pageNumber, pageSize, roleId, provider, status));
         response.setTotalElements(userAccountService.countTotalAccount());
+
+        return responseUtil.successResponse(response);
+    }
+
+
+
+    @GetMapping()
+    public ResponseEntity<RestAPIResponse> getListUserByAdmin(
+            @CurrentUser UserPrincipal userPrincipal,
+            @RequestParam(value = "search_key") String searchKey,
+            @RequestParam(value = "sort_key") int sortKey,
+            @RequestParam(value = "asc_sort") boolean ascSort,
+            @RequestParam(value = "page_number") int pageNumber,
+            @RequestParam(value = "page_size") int pageSize,
+            @RequestParam(value = "role_id") String roleId,
+            @RequestParam(value = "provider") String provider,
+            @RequestParam(value = "status") int status
+    ) {
+
+        UserAccount userAccount = userAccountService.findActiveUserById(userPrincipal.getId());
+
+        if (userAccount == null) {
+            throw new ApplicationException(APIStatus.ERR_USER_NOT_FOUND);
+        }
+
+        Role loginRole = roleService.findByRoleId(userAccount.getRoleId());
+
+        if (!loginRole.getName().equals(Constant.Role.ADMIN.getName())) {
+            throw new ApplicationException(APIStatus.ERR_UNAUTHORIZED);
+        }
+
+        PagingResponse response = new PagingResponse();
+
+        List<SysUserResponse> content = new ArrayList<>();
+        content = sysAdminUserAggregation.getPagingUserInAdmin(
+                searchKey, sortKey, ascSort, pageNumber, pageSize, roleId, provider, status);
+
+        response.setContent(content);
+        response.setTotalElements(content.size());
 
         return responseUtil.successResponse(response);
     }

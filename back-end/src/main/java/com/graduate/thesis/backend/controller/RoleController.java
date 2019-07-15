@@ -51,7 +51,8 @@ public class RoleController extends AbstractBasedAPI {
 
         Role loginRole = roleService.findByRoleId(userAccount.getRoleId());
 
-        if (!loginRole.getName().equals(Constant.Role.SYS_ADMIN.getName())) {
+        if (!loginRole.getName().equals(Constant.Role.SYS_ADMIN.getName()) &&
+                !loginRole.getName().equals(Constant.Role.ADMIN.getName())) {
             throw new ApplicationException(APIStatus.ERR_UNAUTHORIZED);
         }
 

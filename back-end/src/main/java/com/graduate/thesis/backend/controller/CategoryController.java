@@ -58,6 +58,16 @@ public class CategoryController extends AbstractBasedAPI {
         return responseUtil.successResponse(category);
     }
 
+    @RequestMapping(value = Constant.WITHIN_ID + Constant.METADATAS, method = RequestMethod.GET)
+    public ResponseEntity<RestAPIResponse> getCategoryMetadata(
+            @PathVariable("id") String categoryId
+    ){
+
+        List<Metadata> catMetadata = categoryAggregation.getMetadataByCategoryId(categoryId);
+
+        return responseUtil.successResponse(catMetadata);
+    }
+
 //    @RequestMapping(method = RequestMethod.GET)
 //    public ResponseEntity<RestAPIResponse> getParentCategory(
 //    ){

@@ -41,4 +41,6 @@ public interface ClassifiedAdvertisingService {
     );
 
     void reIndexProfile(UserProfile userProfile);
+
+    long countAllPost();
 }

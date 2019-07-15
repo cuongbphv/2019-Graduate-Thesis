@@ -91,7 +91,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                         "/**/*.js")
                 .permitAll()
                 .antMatchers(
-                        HttpMethod.GET, "/api/v1/category/**", "/api/v1/advertising/**", "/api/v1/location/**")
+                        HttpMethod.GET, "/api/v1/category/**", "/api/v1/advertising/**", "/api/v1/location/**",
+                        "/api/v1/report/**", "/api/v1/rating/**", "/api/v1/profile/**")
                 .permitAll()
                 .antMatchers("/api/v1/auth/register/**", "/api/v1/auth/login/**", "/api/v1/auth/otp/**",
                         "/auth/**", "/oauth2/**", "/login/**","/api/v1/files/**","/socket/**")

@@ -2,6 +2,7 @@ const CREATE_CONVERSATION = (state, payload) => {
 }
 
 const GET_ALL_CONVERSATION = (state, payload) => {
+  state.conversations = Object.assign([], payload)
 }
 
 const GET_CONVERSATION_BY_ID = (state, payload) => {

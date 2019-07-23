@@ -6,22 +6,24 @@
       </div>
       <div class="postCont">
         <h3>{{ ads.additionalInfo.title }}</h3>
-        <span>by {{ ads.author.lastName + ' ' + ads.author.firstName }} - {{ timeSince(ads.createdDate) }} trước</span>
+        <span> {{ ads.author.lastName + ' ' + ads.author.firstName }} - {{ timeSince(ads.createdDate) }} trước</span>
         <h1> {{ formatPrice(ads.additionalInfo.price) }} đ</h1>
         <p v-if="mode !== 'topPost'" class="address"> {{ ads.address.ward.nameWithType }} | {{ ads.address.district.nameWithType }} | {{ ads.address.province.nameWithType }}</p>
         <el-rate
           v-if="mode !== 'topPost'"
-          v-model="value2"
+          v-model="ads.author.ratingAverage"
+          disabled
           :colors="colors"
+          score-template="{value} / 5"
         />
-        <el-row v-if="mode !== 'topPost'" style="margin-top: 10px">
-          <el-tooltip content="Bookmark" effect="dark" placement="bottom">
-            <el-button type="success" icon="el-icon-paperclip" circle />
-          </el-tooltip>
-          <el-tooltip content="Report" effect="dark" placement="bottom">
-            <el-button type="warning" icon="el-icon-lock" circle />
-          </el-tooltip>
-        </el-row>
+        <!--<el-row v-if="mode !== 'topPost'" style="margin-top: 10px">-->
+        <!--<el-tooltip content="Bookmark" effect="dark" placement="bottom">-->
+        <!--<el-button type="success" icon="el-icon-paperclip" circle />-->
+        <!--</el-tooltip>-->
+        <!--<el-tooltip content="Report" effect="dark" placement="bottom">-->
+        <!--<el-button type="warning" icon="el-icon-lock" circle />-->
+        <!--</el-tooltip>-->
+        <!--</el-row>-->
       </div>
     </a>
   </article>

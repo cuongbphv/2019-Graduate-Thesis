@@ -74,7 +74,8 @@
     "theme": "Theme",
     "clipboardDemo": "Clipboard",
     "i18n": "I18n",
-    "externalLink": "External Link"
+    "externalLink": "External Link",
+    "profileDetail": "Profile"
   },
   "navbar": {
     "logOut": "Log Out",
@@ -136,7 +137,9 @@
     "send_code": "Send Code",
     "report": "Report",
     "block": "Block",
-    "deactive": "Deactive Report"
+    "deactive": "Deactive Report",
+    "save_ads": "Save",
+    "remove_save_ads": "Remove Saved"
   },
   "documentation": {
     "documentation": "Documentation",
@@ -370,7 +373,13 @@
     "update_personal_permission_success": "Update personal permission successfully",
     "send_otp_success": "Sent OTP successfully",
     "report_success": "Report this classified advertising successfully",
-    "action_report_success": "Action to report successfully"
+    "action_report_success": "Action to report successfully",
+    "change_trading_status_success": "Change trading status successfully",
+    "save_ads_success": "Saved classified advertising to saved list",
+    "remove_save_ads_success": "Removed classified advertising from saved list",
+    "delete_user_success": "Delete user successfully",
+    "ban_user_success": "Banned user successfully",
+    "unlock_user_success": "Unlock user successfully"
   },
   "advertising": {
     "title": "Title",
@@ -406,10 +415,10 @@
     "not": "Should not",
     "internet": "Use duplicate images or get from the Internet",
     "insert_phone": "Insert the phone number / email / logo in the picture",
-    "created_success": "You have created classified advertising successfully",
+    "created_success": "You have posted classified advertising successfully",
     "watch": "Go to",
     "post": "post",
-    "now": "you have just created now",
+    "now": "you have just posted now",
     "drop": "Drop file here or",
     "click": "click to upload",
     "new_location": "Choose New Location",

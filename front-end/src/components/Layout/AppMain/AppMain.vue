@@ -22,7 +22,7 @@ export default {
       return this.$route.fullPath
     },
     noTransition() {
-      const exception = ['ProfileDetail', 'ProfileHistory', 'ProfileInformation', 'AccountSetting', 'AddressManagement']
+      const exception = ['ProfileDetail', 'ProfileHistory', 'ProfileInformation', 'AccountSetting', 'AddressManagement', 'Rating', 'Saved']
       return exception.includes(this.$route.name)
     }
   }

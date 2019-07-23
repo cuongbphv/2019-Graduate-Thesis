@@ -171,6 +171,7 @@ export default {
     initData() {
       if (Object.keys(this.location).length > 0) {
         this.localLocation = Object.assign({}, this.location)
+        this.localLocation.locationType = this.location.id ? 2 : 1
         if (this.localLocation.province) {
           this.loadListLocation({
             searchKey: this.searchKey

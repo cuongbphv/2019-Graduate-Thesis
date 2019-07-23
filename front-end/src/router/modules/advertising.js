@@ -14,6 +14,14 @@ const advertisingRouter = {
       }
     },
     {
+      path: 'edit/:id',
+      name: 'EditAdvertising',
+      component: () => import('@/views/advertising/EditAdvertising'),
+      meta: {
+        permission: 'EDIT_CLASSIFIED_ADVERTISING'
+      }
+    },
+    {
       path: ':id',
       name: 'ClassifiedAdsDetail',
       component: () => import('@/views/advertising/ClassifiedAdsDetail'),

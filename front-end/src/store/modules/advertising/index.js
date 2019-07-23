@@ -21,7 +21,8 @@ const state = {
   },
   searchState: {
   },
-  topCategoryPost: []
+  topCategoryPost: [],
+  savedAds: []
 }
 
 export default {

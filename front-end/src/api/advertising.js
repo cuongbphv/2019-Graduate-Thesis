@@ -5,6 +5,9 @@ export default {
   createNewAdvertising(params) {
     return Api.post(API.ADVERTISING, params).then(res => res.data)
   },
+  updateAdvertising(id, body) {
+    return Api.put(API.ADVERTISING + '/' + id, body).then(res => res.data)
+  },
   getAdvertisingDetail(id) {
     return Api.get(API.ADVERTISING + '/' + id).then(res => res.data)
   },
@@ -15,7 +18,7 @@ export default {
     return Api.get(API.USER_HISTORY_ADS + `/${userId}`, { params: params }).then(res => res.data)
   },
   changeStatusAds(id, status) {
-    return Api.put(API.ADVERTISING + '/' + id + '?status=' + status).then(res => res.data)
+    return Api.put(API.ADVERTISING + '/' + id + API.STATUS + '?status=' + status).then(res => res.data)
   },
   uploadTempImage(params) {
     return Api.post(API.UPLOAD_TEMP_IMAGE, params).then(res => res.data)
@@ -28,5 +31,17 @@ export default {
   },
   getTopCategoryPost(params) {
     return Api.get(API.TOP_CATEGORY_POST, { params: params }).then(res => res.data)
+  },
+  changeTradingStatusAds(id, status) {
+    return Api.put(API.ADVERTISING + `/${id}/trading_status`, status).then(res => res.data)
+  },
+  getSaveAds(params, id) {
+    return Api.get(API.ADVERTISING + API.SAVES + `/${id}`, { params: params }).then(res => res.data)
+  },
+  saveAds(id) {
+    return Api.put(API.ADVERTISING + `/${id}` + API.SAVES).then(res => res.data)
+  },
+  removeSaveAds(id) {
+    return Api.delete(API.ADVERTISING + `/${id}` + API.SAVES).then(res => res.data)
   }
 }

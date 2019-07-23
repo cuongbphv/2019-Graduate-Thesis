@@ -74,7 +74,8 @@
     "theme": "Theme",
     "clipboardDemo": "Clipboard",
     "i18n": "I18n",
-    "externalLink": "External Link"
+    "externalLink": "External Link",
+    "profileDetail": "Trang cá nhân"
   },
   "navbar": {
     "logOut": "Đăng xuất",
@@ -136,7 +137,9 @@
     "send_code": "Gửi mã",
     "report": "Báo cáo",
     "block": "Khóa tin",
-    "deactive": "Vô hiệu hóa báo cáo"
+    "deactive": "Vô hiệu hóa báo cáo",
+    "save_ads": "Lưu",
+    "remove_save_ads": "Bỏ lưu"
   },
   "documentation": {
     "documentation": "Documentation",
@@ -370,7 +373,13 @@
     "update_personal_permission_success": "Cập nhật quyền truy cập cá nhân thành công",
     "send_otp_success": "Gửi mã OTP thành công",
     "report_success": "Báo cáo tin rao vặt thành công",
-    "action_report_success": "Thao tác với báo cáo vi phạm thành công"
+    "action_report_success": "Thao tác với báo cáo vi phạm thành công",
+    "change_trading_status_success": "Thay đổi trạng thái thành công",
+    "save_ads_success": "Đã lưu bài viết",
+    "remove_save_ads_success": "Đã bỏ lưu bài viết",
+    "delete_user_success": "Đã xóa người dùng thành công",
+    "ban_user_success": "Đã khóa tài khoản",
+    "unlock_user_success": "Đã mở khóa tài khoản"
   },
   "advertising": {
     "title": "Tiêu đề",
@@ -406,7 +415,7 @@
     "not": "Không nên",
     "internet": "Sử dụng hình ảnh trùng lặp hoặc lấy từ Internet",
     "insert_phone": "Chèn số điện thoại/email/logo vào hình",
-    "created_success": "Bạn đã tạo thành công tin rao vặt",
+    "created_success": "Bạn đã đăng thành công tin rao vặt",
     "watch": "Vào xem",
     "post": "tin rao vặt",
     "now": "vừa đăng ngay bây giờ",

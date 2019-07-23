@@ -34,7 +34,7 @@ router.beforeEach((to, from, next) => {
     }
   } else { /* has no token*/
     // check page user access in white list can access without permission
-    if (whiteListNoToken.indexOf(to.path) !== -1 || to.meta.skip) {
+    if (whiteListNoToken.indexOf(to.path) !== -1 || to.meta.skip || to.path.startsWith('/profile/')) {
       next() // ok go to page
     } else { // else go to login and keep url to redirect after login
       next(`/login?redirect=${to.path}`)

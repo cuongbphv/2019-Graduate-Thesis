@@ -8,7 +8,7 @@
             <h4 v-if="listBreadCrumb.length === 0">Tìm theo danh mục</h4>
             <el-breadcrumb class="breadcrumb" separator="/">
               <el-breadcrumb-item v-if="listBreadCrumb.length > 0">
-                <a href="javascript:void(0)" @click="handleLoadListCategory(categoryId || null)">{{ $t('label.category') }}</a>
+                <a href="javascript:void(0)" @click="handleLoadListCategory(categoryId || null, 'root')">{{ $t('label.category') }}</a>
               </el-breadcrumb-item>
               <el-breadcrumb-item
                 v-for="item in listBreadCrumb"
@@ -134,10 +134,13 @@
               <!--<el-dropdown-item command="_score">By Matching Percent</el-dropdown-item>-->
               <!--</el-dropdown-menu>-->
               <!--</el-dropdown>-->
-              <span>Sort By: </span>
+              <span>Sắp xếp:  </span>
               <el-select v-model="searchQuery.sortKey" placeholder="Select sort type" @change="sortChange">
-                <el-option value="createdDate" label="Date">Date</el-option>
-                <el-option value="_score" label="Matching Percent">Matching Percent</el-option>
+                <el-option value="createdDate" label="Ngày đăng">Ngày đăng</el-option>
+                <el-option value="author.ratingAverage" label="Đánh giá">Đánh giá</el-option>
+                <el-option value="priceIncrease" label="Giá tăng dần">Giá tăng dần</el-option>
+                <el-option value="priceDecrease" label="Giá giảm dần">Giá giảm dần</el-option>
+                <el-option value="_score" label="Độ chính xác">Độ chính xác</el-option>
               </el-select>
             </el-col>
           </el-row>
@@ -217,22 +220,23 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('category', ['listCategory', 'metadata']),
+    ...mapGetters('category', ['listCategory', 'metadata', 'metadatas']),
     ...mapGetters('location', ['listLocation', 'listDistrictByProvinceId', 'listWardByDistrictId']),
     ...mapGetters('advertising', ['searchResult', 'searchState'])
   },
   watch: {
     listCategory: function(newVal) {
-      let allMeta = []
-      for (const key in this.listMetadata) {
-        if (this.listMetadata.hasOwnProperty(key)) {
-          allMeta = [...allMeta, ...this.listMetadata[key]]
-        }
-      }
+      // let allMeta = []
+      // for (const key in this.listMetadata) {
+      //   if (this.listMetadata.hasOwnProperty(key)) {
+      //     allMeta = [...allMeta, ...this.listMetadata[key]]
+      //   }
+      // }
 
-      this.metadataTemplate = allMeta
+      // this.metadataTemplate = allMeta
+      this.metadataTemplate = this.listMetadata
 
-      this.postMetadata = allMeta.map(obj => {
+      this.postMetadata = this.listMetadata.map(obj => {
         const x = Object.assign({}, obj)
         x.value = []
         delete x.options
@@ -241,6 +245,9 @@ export default {
     },
     metadata: function(newVal) {
       this.listMetadata.push(newVal)
+    },
+    metadatas: function(newVal) {
+      this.listMetadata = Object.assign([], newVal)
     },
     checkedDistrict: function(newVal) {
       this.checkedWard = ''
@@ -256,7 +263,7 @@ export default {
   },
   mounted() {
     if (this.categoryId) {
-      this.getMetadataByCategoryId(this.categoryId).then(() => {
+      this.getMetadatasByCategoryId(this.categoryId).then(() => {
         this.handleLoadListCategory(this.categoryId)
       })
     } else {
@@ -267,7 +274,7 @@ export default {
     this.handleLoadListLocation()
   },
   methods: {
-    ...mapActions('category', ['getListCategory', 'getMetadataByCategoryId']),
+    ...mapActions('category', ['getListCategory', 'getMetadataByCategoryId', 'getMetadatasByCategoryId']),
     ...mapActions('location', ['loadListLocation']),
     ...mapActions('advertising', ['fullTextSearch', 'saveSearchState']),
     handlePageChange(pagination) {
@@ -275,11 +282,14 @@ export default {
       this.searchQuery.pageSize = pagination.limit
       this.handleFullTextSearch()
     },
-    handleLoadListCategory(parentId) {
+    handleLoadListCategory(parentId, pos) {
       if (parentId === null) {
         this.listBreadCrumb = []
         this.listMetadata = []
         this.searchQuery.categoryId = null
+      }
+      if (pos === 'root') {
+        this.listBreadCrumb = []
       }
       this.getListCategory({
         searchKey: this.searchKey,
@@ -300,7 +310,7 @@ export default {
     },
     selectCategory(item) {
       this.searchQuery.pageNumber = 1
-      this.getMetadataByCategoryId(item.id).then(() => {
+      this.getMetadatasByCategoryId(item.id).then(() => {
         this.listBreadCrumb.push(item)
         this.handleLoadListCategory(item.id)
       })
@@ -310,7 +320,8 @@ export default {
         return element.id === item.id
       })
       this.listBreadCrumb = Object.assign([], this.listBreadCrumb.slice(0, index + 1))
-      this.listMetadata = Object.assign([], this.listMetadata.slice(0, index + 1))
+      // this.listMetadata = Object.assign([], this.listMetadata.slice(0, index + 1))
+      this.getMetadatasByCategoryId(item.id)
       this.handleLoadListCategory(item.id)
     },
     resetSearchQuery() {
@@ -360,6 +371,7 @@ export default {
       this.applyFilter()
     },
     sortChange() {
+      this.searchQuery.ascSort = this.searchQuery.sortKey === 'priceIncrease'
       this.handleFullTextSearch()
     },
     saveState() {

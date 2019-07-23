@@ -27,6 +27,7 @@ export default {
   },
   data() {
     return {
+      profileUserId: this.$route.params.id,
       queryParam: {
         pageNumber: 0,
         pageSize: 10
@@ -42,6 +43,7 @@ export default {
   methods: {
     ...mapActions('advertising', ['getSavedAds', 'removeSaveAds']),
     getSavedPost() {
+      this.queryParam.id = this.profileUserId
       this.getSavedAds(this.queryParam).then(() => {
       })
     },

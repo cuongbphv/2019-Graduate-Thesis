@@ -38,15 +38,15 @@
             v-for="(item, index) in metadataTemplate"
             :key="item.slug"
           >
-            <el-form-item :label="item.label">
+            <el-form-item v-if="item.slug" :label="item.label">
               <el-col :id="'select-value-' + index" :md="11" :lg="11">
-                <el-select v-model="postMetadata[index].valueLabel" style="width: 100%" placeholder="Select Options" @change="selectMetadata(postMetadata[index].valueLabel, item)">
+                <el-select v-model="postMetadata[index].valueLabel" style="width: 100%" placeholder="Chọn giá trị" @change="selectMetadata(postMetadata[index].valueLabel, item)">
                   <el-option v-for="option in item.options" :key="option.label" :label="option.label" :value="option.label" />
                 </el-select>
               </el-col>
               <el-col v-if="item.type === 'color'" :id="'input-value-' + index" class="hide-toggle" :md="{span: 11}" :lg="{span: 11}">
                 <el-col :md="{span: 21}" :lg="{span: 21}">
-                  <el-input v-model="postMetadata[index].valueLabel" />
+                  <el-input v-model="postMetadata[index].valueLabel" placeholder="Nhập giá trị" />
                 </el-col>
                 <el-col :md="{span: 3}" :lg="{span: 3}">
                   <el-color-picker v-if="item.type === 'color'" v-model="postMetadata[index].value" />
@@ -58,6 +58,34 @@
               <el-button :id="'select-button-' + index" class="hide-toggle" style="margin-left: 10px" @click="toggleInput(index, $event)">Chọn</el-button>
               <el-button :id="'input-button-' + index" @click="toggleInput(index, $event)">Nhập</el-button>
             </el-form-item>
+          </el-row>
+          <template
+            v-for="(item, index) in postMetadata"
+            style="margin-top: 1rem"
+          >
+            <el-row v-if="!item.slug" :key="item._hash">
+              <!--<el-col :id="'select-value-' + index" :md="11" :lg="11">-->
+              <!--<el-select v-model="postMetadata[index].valueLabel" style="width: 100%" placeholder="Select Options" @change="selectMetadata(postMetadata[index].valueLabel, item)">-->
+              <!--<el-option v-for="option in item.options" :key="option.label" :label="option.label" :value="option.label" />-->
+              <!--</el-select>-->
+              <!--</el-col>-->
+              <el-col :md="{span: 3}" :lg="{span: 3}">
+                <el-input v-model="postMetadata[index].label" placeholder="Nhập tên" />
+              </el-col>
+              <el-col :md="{span: 9}" :lg="{span: 9}" style="margin-left: 1.8rem; ">
+                <el-input v-model="postMetadata[index].valueLabel" placeholder="Nhập giá trị" />
+              </el-col>
+            </el-row>
+          </template>
+          <el-row style="margin-top: 1rem">
+            <el-tooltip :content="$t('label.add_new_options')" style="margin-bottom: 1rem" effect="dark" placement="bottom">
+              <el-button
+                type="primary"
+                size="small"
+                icon="el-icon-plus"
+                @click="addMetadata()"
+              >{{ $t('button.add') }}</el-button>
+            </el-tooltip>
           </el-row>
         </el-form>
       </div>
@@ -72,6 +100,7 @@
 <script>
 import MdInput from '@/components/MDinput'
 import { mapActions, mapGetters } from 'vuex'
+import { uuidv4 } from '@/utils'
 
 export default {
   name: 'Step1',
@@ -99,22 +128,23 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('category', ['listCategory', 'metadata'])
+    ...mapGetters('category', ['listCategory', 'metadata', 'metadatas'])
   },
   watch: {
     listCategory: function(newVal) {
       this.showMetadata = newVal.length === 0
       if (this.showMetadata) {
-        let allMeta = []
-        for (const key in this.listMetadata) {
-          if (this.listMetadata.hasOwnProperty(key)) {
-            allMeta = [...allMeta, ...this.listMetadata[key]]
-          }
-        }
+        // let allMeta = []
+        // for (const key in this.listMetadata) {
+        //   if (this.listMetadata.hasOwnProperty(key)) {
+        //     allMeta = [...allMeta, ...this.listMetadata[key]]
+        //   }
+        // }
 
-        this.metadataTemplate = allMeta
+        // this.metadataTemplate = allMeta
+        this.metadataTemplate = this.listMetadata
 
-        this.postMetadata = allMeta.map(obj => {
+        this.postMetadata = this.listMetadata.map(obj => {
           const x = Object.assign({}, obj)
           x.value = ''
           x.valueLabel = ''
@@ -130,6 +160,9 @@ export default {
     },
     metadata: function(newVal) {
       this.listMetadata.push(newVal)
+    },
+    metadatas: function(newVal) {
+      this.listMetadata = Object.assign([], newVal)
     }
   },
   created() {
@@ -137,21 +170,27 @@ export default {
       this.showMetadata = true
       this.selectedCategoryId = this.category.breadCrumb[this.category.breadCrumb.length - 1].id
       this.listBreadCrumb = this.category.breadCrumb
-      this.listMetadata = this.category.listMetadata
-      let allMeta = []
-      for (const key in this.listMetadata) {
-        if (this.listMetadata.hasOwnProperty(key)) {
-          allMeta = [...allMeta, ...this.listMetadata[key]]
-        }
-      }
-      this.metadataTemplate = allMeta
       this.postMetadata = this.category.postMetadata
+      if (this.category.listMetadata) {
+        this.listMetadata = this.category.listMetadata
+        this.metadataTemplate = this.listMetadata
+      } else {
+        this.getMetadatasByCategoryId(this.selectedCategoryId).then(() => {
+          this.metadataTemplate = this.listMetadata
+        })
+      }
+      // let allMeta = []
+      // for (const key in this.listMetadata) {
+      //   if (this.listMetadata.hasOwnProperty(key)) {
+      //     allMeta = [...allMeta, ...this.listMetadata[key]]
+      //   }
+      // }
     } else {
       this.loadListCategory(this.selectedCategoryId)
     }
   },
   methods: {
-    ...mapActions('category', ['getListCategory', 'getMetadataByCategoryId']),
+    ...mapActions('category', ['getListCategory', 'getMetadataByCategoryId', 'getMetadatasByCategoryId']),
     loadListCategory(parentId) {
       if (parentId === null) {
         this.listBreadCrumb = []
@@ -164,10 +203,12 @@ export default {
       })
     },
     selectCategory(item) {
-      this.getMetadataByCategoryId(item.id)
-      this.selectedCategoryId = item.id
-      this.listBreadCrumb.push(item)
-      this.loadListCategory(item.id)
+      // this.getMetadataByCategoryId(item.id)
+      this.getMetadatasByCategoryId(item.id).then(() => {
+        this.selectedCategoryId = item.id
+        this.listBreadCrumb.push(item)
+        this.loadListCategory(item.id)
+      })
     },
     handleBreadCrumbClick(item) {
       const index = this.listBreadCrumb.findIndex(element => {
@@ -176,6 +217,17 @@ export default {
       this.listBreadCrumb = Object.assign([], this.listBreadCrumb.slice(0, index + 1))
       this.listMetadata = Object.assign([], this.listMetadata.slice(0, index + 1))
       this.loadListCategory(item.id)
+    },
+    addMetadata() {
+      this.postMetadata.push({
+        _hash: uuidv4(),
+        type: 'other',
+        label: '',
+        valueLabel: ''
+      })
+      this.metadataTemplate.push({
+        _hash: uuidv4()
+      })
     },
     changeStep(action) {
       if (action === 'next') {

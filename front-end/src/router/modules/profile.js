@@ -47,6 +47,14 @@ const profileRouter = {
       meta: {
         permission: 'MANAGE_ACCOUNT_ADDRESS'
       }
+    },
+    {
+      path: 'saved',
+      name: 'Saved',
+      component: () => import('@/views/profile/profile-detail/Saved'),
+      meta: {
+        permission: 'MANAGE_ACCOUNT_ADDRESS'
+      }
     }
   ]
 }

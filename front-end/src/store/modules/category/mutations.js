@@ -23,8 +23,12 @@ const GET_LIST_CATEGORY = (state, payload) => {
 const GET_METADATA = (state, payload) => {
   state.metadata = Object.assign([], payload)
 }
+const GET_METADATAS = (state, payload) => {
+  state.metadatas = Object.assign([], payload)
+}
 export default {
   GET_PAGING_CATEGORY,
   GET_LIST_CATEGORY,
-  GET_METADATA
+  GET_METADATA,
+  GET_METADATAS
 }

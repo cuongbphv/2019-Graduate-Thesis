@@ -83,7 +83,7 @@
             <el-row :key="rating.id">
               <el-col :md="6">
                 <img :src="rating.sender.avatarUrl" class="img-rounded">
-                <div class="review-block-name"><a href="#"><b>{{ rating.sender.lastName + ' ' + rating.sender.firstName }}</b></a></div>
+                <div class="review-block-name"><a href="#"><b>{{ (rating.sender.lastName || '') + ' ' + rating.sender.firstName }}</b></a></div>
                 <div class="review-block-date">{{ formatDate(rating.createdDate) }}</div>
               </el-col>
               <el-col :md="18">

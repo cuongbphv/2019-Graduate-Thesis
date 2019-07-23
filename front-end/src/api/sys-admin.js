@@ -5,6 +5,9 @@ export default {
   getListUserPaging(params) {
     return Api.get(API.SYS_ADMIN_LIST_USER, { params: params }).then(res => res.data)
   },
+  getListUserExceptAdminPaging(params) {
+    return Api.get(API.ADMIN_LIST_USER, { params: params }).then(res => res.data)
+  },
   updatePersonalPermission(params) {
     return Api.put(API.UPDATE_PERSONAL_PERMISSION, params).then(res => res.data)
   }

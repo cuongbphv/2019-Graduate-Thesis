@@ -50,6 +50,8 @@ export default {
   },
   methods: {
     ...mapActions('layout', ['closeSideBar']),
+    ...mapActions('chat', ['getAllConversationByUserId']),
+    ...mapActions('notification', ['getNotifications']),
     handleClickOutside() {
       this.closeSideBar({ withoutAnimation: false })
     },
@@ -58,15 +60,24 @@ export default {
       this.stompClient = Stomp.over(ws)
       const that = this
       this.stompClient.connect({}, function() {
+        if (that.userId) {
+          that.getAllConversationByUserId({ userId: that.userId, size: 10 })
+          that.getNotifications({ userId: that.userId, size: 10 })
+        }
+        that.stompClient.subscribe(`/user/${that.userId}/queue/chat`, (message) => {
+          that.getAllConversationByUserId({ userId: that.userId, size: 10 })
+        })
         that.stompClient.subscribe(`/user/${that.userId}/queue/notification`, (message) => {
+          that.getNotifications({ userId: that.userId, size: 10 })
           if (message.body) {
             const body = JSON.parse(message.body)
+            console.log('body', body)
             switch (body.type) {
               case 'NEW_POST':
                 that.$toasted.show(`${body.sender.firstName} ${body.sender.lastName} vừa đăng tin mới:
-                ${body.data.additionalData.title}`, {
+                ${body.data.additionalInfo.title}`, {
                   position: 'bottom-left',
-                  duration: 3000,
+                  duration: 5000,
                   action: {
                     text: 'Xem',
                     onClick: (e, toastObject) => {

@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"graduate_thesis_v1.user_account"},{"v":2,"key":{"userId":1},"name":"userId","ns":"graduate_thesis_v1.user_account"}],"uuid":"262e8c4342154d3099af5d04ec7a1401"}

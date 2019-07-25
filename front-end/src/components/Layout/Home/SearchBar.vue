@@ -121,7 +121,7 @@ export default {
         }
 
         &:hover {
-          background-color: rgba(0, 150, 136, 0.8);
+          background-color: #F6B402;
         }
       }
     }

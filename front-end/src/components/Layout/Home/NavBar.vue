@@ -209,8 +209,12 @@ export default {
       })).length
     }
   },
+  watch: {
+    userId: function(newVal) {
+      this.getAccount()
+    }
+  },
   mounted() {
-    this.getAccount()
   },
   methods: {
     ...mapActions('layout', ['toggleSideBar']),

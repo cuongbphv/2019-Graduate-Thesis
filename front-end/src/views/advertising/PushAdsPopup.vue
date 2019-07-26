@@ -59,6 +59,7 @@ export default {
   },
   methods: {
     ...mapActions('advertising', ['pushAdvertising']),
+    ...mapActions('payment', ['getAccount']),
     handlePushAds() {
       const params = {
         id: this.adsId,
@@ -71,6 +72,7 @@ export default {
         } else {
           showError('message.push_error')
         }
+        this.getAccount()
       })
     },
     handleClose() {

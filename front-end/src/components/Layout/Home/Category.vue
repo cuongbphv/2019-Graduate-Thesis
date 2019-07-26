@@ -72,11 +72,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import url('https://fonts.googleapis.com/css?family=Mitr&display=swap');
-
   .category {
     position: relative;
-    font-family: 'Mitr', sans-serif;
   }
 
   /deep/ .el-divider {
@@ -100,7 +97,7 @@ export default {
   .category-item{
     display: block;
     text-align: center;
-    padding: 1rem;
+    padding: 2rem;
 
     &:hover{
       color: #F6B402;

@@ -36,7 +36,9 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
-  background: #F5F5F5;
+  /*background: #F4F4F4;*/
+  background: url("~@/assets/background.jpg") center center fixed;
+  background-size: cover;
 }
 </style>
 

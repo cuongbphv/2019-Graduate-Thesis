@@ -99,7 +99,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   @import "../../styles/mixin.scss";
   .sticky-nav {
     position: sticky;

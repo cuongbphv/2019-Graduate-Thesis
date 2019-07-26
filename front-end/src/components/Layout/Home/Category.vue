@@ -1,7 +1,8 @@
 <template>
   <section class="category">
     <div class="container">
-      <div class="category-title">Rao vặt vui, mua may bán đắt cùng BeeMarket</div>
+      <div class="category-title">Hãy tham gia cộng đồng Bee-er, rao vặt chưa bao giờ đơn giản đến thế!</div>
+      <el-divider><i class="el-icon-star-on" /></el-divider>
       <!--<div class="category-area">-->
       <!--<div class="category-col">-->
       <!--&lt;!&ndash;<div class="category-col-panel">&ndash;&gt;-->
@@ -70,47 +71,57 @@ export default {
 }
 </script>
 
-<style lang="scss"  scoped>
+<style lang="scss" scoped>
+  @import url('https://fonts.googleapis.com/css?family=Mitr&display=swap');
+
   .category {
     position: relative;
+    font-family: 'Mitr', sans-serif;
+  }
+
+  /deep/ .el-divider {
+    margin: 10px 0 0 0;
   }
 
   .category .container {
     background: #fff;
-    padding: 20px
+    padding: 20px;
   }
 
   .category-title {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 26px;
     text-align: center;
-    color: #ff6f00;
+    color: #F6B402;
     margin-bottom: 15px;
     font-weight: 500;
   }
 
   .category-item{
-    margin-bottom: 1.5rem;
     display: block;
     text-align: center;
+    padding: 1rem;
 
     &:hover{
-      color: blue;
+      color: #F6B402;
       cursor: pointer;
       opacity: 0.7;
+      box-shadow: 0 5px 35px 0 rgba(0,0,0,.1);
+      border-radius: 10px;
     }
 
     &:first-child{
-      margin-top: 2rem;
+      margin-top: 1rem;
     }
 
     p{
       margin-top: 0.5rem;
+      font-size: 15px;
     }
 
     .category-img {
-      width: 100px;
-      height: 100px;
+      width: 80px;
+      height: 80px;
       border-radius: 10%;
     }
   }

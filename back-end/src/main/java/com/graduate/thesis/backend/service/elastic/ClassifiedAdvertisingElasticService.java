@@ -38,4 +38,6 @@ public interface ClassifiedAdvertisingElasticService {
 
     ClassifiedAdvertisingPagingResponse getSavedByUserId(String userId, int pageNumber, int pageSize);
 
+    List<ClassifiedAdvertisingElastic> getPushPost(String categoryId);
+
 }

@@ -307,4 +307,38 @@ public class ClassifiedAdvertisingElasticServiceImpl implements ClassifiedAdvert
     }
 
 
+    @Override
+    public List<ClassifiedAdvertisingElastic> getPushPost(String categoryId) {
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+
+        boolQueryBuilder.filter(
+                QueryBuilders
+                .rangeQuery("topPostExpiryDate")
+                .timeZone("+07:00")
+                .gte("now")
+        );
+
+        if(categoryId != null && !categoryId.isEmpty()) {
+            boolQueryBuilder.filter(
+                    QueryBuilders.termsQuery("breadcrumbs", categoryId)
+            );
+        }
+
+        searchSourceBuilder
+                .query(boolQueryBuilder);
+
+        JsonParser parser = new JsonParser();
+        JsonObject json = parser.parse(searchSourceBuilder.toString()).getAsJsonObject();
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String jsonPretty = gson.toJson(json);
+
+        ClassifiedAdvertisingElasticPagingResponse queryResult = advertisingElasticRepository.executeSearch(jsonPretty);
+
+        return queryResult.getContent();
+    }
+
 }

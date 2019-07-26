@@ -17,6 +17,7 @@ import address from './modules/address'
 import report from './modules/report'
 import sysAdminUser from './modules/sys-admin-user'
 import user from './modules/user'
+import payment from './modules/payment'
 
 Vue.use(Vuex)
 
@@ -36,6 +37,7 @@ export default new Vuex.Store({
     report,
     sysAdminUser,
     user,
+    payment,
     errorLog,
     tagsView
   },

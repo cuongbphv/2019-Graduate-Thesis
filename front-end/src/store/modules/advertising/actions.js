@@ -145,6 +145,26 @@ const removeSaveAds = ({ commit }, id) => {
   })
 }
 
+const pushAdvertising = ({ commit }, params) => {
+  return advertising.pushAdvertising(params.id, params.period).then(res => {
+    if (res.status === Status.SUCCESS) {
+      return res.data.id
+    }
+  }).catch(error => {
+    throw error
+  })
+}
+
+const getPushPost = ({ commit }, categoryId) => {
+  return advertising.getPushPost({ category_id: categoryId }).then(res => {
+    if (res.status === Status.SUCCESS) {
+      commit('PUSH_POST', res.data)
+    }
+  }).catch(error => {
+    throw error
+  })
+}
+
 export default {
   removeTempImage,
   uploadTempImage,
@@ -160,5 +180,7 @@ export default {
   changeTradingStatusAds,
   getSavedAds,
   saveAds,
-  removeSaveAds
+  removeSaveAds,
+  pushAdvertising,
+  getPushPost
 }

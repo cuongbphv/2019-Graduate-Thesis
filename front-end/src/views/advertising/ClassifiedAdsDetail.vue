@@ -48,12 +48,14 @@
             <!--<span>-</span>-->
             <div v-if="additionalInfo.maxPrice" class="price">{{ additionalInfo.maxPrice | currency('VNĐ', 0, {symbolOnLeft: false, spaceBetweenAmountAndSymbol: true}) }}</div>
             <div class="action">
+              <el-button v-if="author.userId === userId" type="warning" icon="el-icon-upload2" @click="handleOpenPushModal">Đẩy tin</el-button>
               <el-select v-if="author.userId === userId" v-model="tradingStatus" :disabled="tradingStatus === 0" clearable placeholder="Select" @change="handleTradingSelection">
                 <el-option
                   v-for="item in tradingStatusOption"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
+                  :disabled="item.value === 0"
                 />
               </el-select>
               <el-badge v-if="author.userId !== userId" :value="saves.length" :max="10" class="item">
@@ -88,6 +90,7 @@
                   <el-button type="warning" icon="el-icon-warning" circle />
                 </el-row>
                 <chat-popup :recipient="author" :visible="chatPopupVisible" @closeChatModal="handleCloseChatModal" />
+                <push-ads-popup :ads-id="classifiedAdsId" :visible="pushAdsPopupVisible" @closePushAdsModal="handleClosePushModal" />
               </div>
             </el-col>
           </el-row>
@@ -160,12 +163,14 @@ import SearchItem from '@/components/Advertising/SearchItem'
 import { Status } from '@/utils/constants'
 import ChatPopup from '../chat/ChatPopup'
 import { showSuccess } from '../../utils/message'
+import PushAdsPopup from './PushAdsPopup'
 
 export default {
   name: 'ClassifiedAdsDetail',
   components: {
     SearchItem,
-    ChatPopup
+    ChatPopup,
+    PushAdsPopup
   },
   data() {
     return {
@@ -178,6 +183,7 @@ export default {
       i18n: i18n,
       imageIndex: 0,
       chatPopupVisible: false,
+      pushAdsPopupVisible: false,
       searchQuery: {
         categoryId: '',
         pageNumber: 1,
@@ -267,7 +273,7 @@ export default {
   },
   methods: {
     ...mapActions('advertising', ['getClassifiedAdsDetail', 'getTopCategoryPost',
-      'changeTradingStatusAds', 'saveAds', 'removeSaveAds']),
+      'changeTradingStatusAds', 'saveAds', 'removeSaveAds', 'pushAdvertising']),
     ...mapActions('report', ['createNewReport', 'getNumberOfReport']),
     handleChangeCarousel(index) {
       this.imageIndex = index
@@ -283,6 +289,12 @@ export default {
     },
     handleOpenChatModal() {
       this.chatPopupVisible = true
+    },
+    handleClosePushModal() {
+      this.pushAdsPopupVisible = false
+    },
+    handleOpenPushModal() {
+      this.pushAdsPopupVisible = true
     },
     handleTradingSelection() {
       this.changeTradingStatusAds({ id: this.classifiedAdsId, status: this.tradingStatus })

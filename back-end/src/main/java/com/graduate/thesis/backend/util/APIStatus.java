@@ -23,6 +23,7 @@ public enum APIStatus {
 
     //USER_ROLE_PERMISSION
     ERR_USER_NOT_FOUND(414, "User not found"),
+    ERR_BALANCE_NOT_ENOUGH(419, "Balance not enough"),
     ERR_USER_PROFILE_NOT_FOUND(415, "User Profile Not Found"),
     ERR_PHONE_IN_USE(416, "Phone already in use"),
     ERR_USER_INCORRECT_PASSWORD(417, "Password or phone is incorrect"),

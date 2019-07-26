@@ -43,6 +43,10 @@ const GET_SAVED_ADS = (state, payload) => {
   state.savedAds = Object.assign([], payload)
 }
 
+const PUSH_POST = (state, payload) => {
+  state.pushPost = Object.assign({}, payload)
+}
+
 export default {
   CREATE_NEW_CLASSIFIED_ADVERTISING,
   UPDATE_CLASSIFIED_ADVERTISING,
@@ -51,5 +55,6 @@ export default {
   FULL_TEXT_SEARCH,
   SAVE_SEARCH_STATE,
   TOP_CATEGORY_POST,
-  GET_SAVED_ADS
+  GET_SAVED_ADS,
+  PUSH_POST
 }

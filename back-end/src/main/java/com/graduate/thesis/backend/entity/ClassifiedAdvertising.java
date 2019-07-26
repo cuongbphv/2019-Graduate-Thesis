@@ -56,6 +56,8 @@ public class ClassifiedAdvertising {
 
     private int tradeStatus; // 0: pending, 1: available, 2: sell, 3: hide
 
+    private Date topPostExpiryDate;
+
     private int status;
 
     public enum TradeStatus {

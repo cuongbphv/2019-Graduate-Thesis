@@ -226,6 +226,24 @@ export const allRoutes = [
         }
       },
       {
+        path: '/payment',
+        component: () => import('@/views/payment/Payment'),
+        name: 'Payment',
+        meta: {
+          title: 'payment-page',
+          skip: true
+        }
+      },
+      {
+        path: '/payment/confirm',
+        component: () => import('@/views/payment/PaymentConfirm'),
+        name: 'PaymentConfirm',
+        meta: {
+          title: 'payment-confirm-page',
+          skip: true
+        }
+      },
+      {
         path: '/category/:id',
         component: () => import('@/views/category/Category'),
         name: 'CategoryPage',

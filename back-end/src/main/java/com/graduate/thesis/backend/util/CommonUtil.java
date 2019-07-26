@@ -4,6 +4,7 @@ package com.graduate.thesis.backend.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Random;
@@ -62,6 +63,23 @@ public class CommonUtil {
             return "";
         }
         return fileName.substring(lastIndexOf + 1);
+    }
+
+    public static String getBaseURL(HttpServletRequest request) {
+        String scheme = request.getScheme();
+        String serverName = request.getServerName();
+        int serverPort = request.getServerPort();
+        String contextPath = request.getContextPath();
+        StringBuffer url =  new StringBuffer();
+        url.append(scheme).append("://").append(serverName);
+        if ((serverPort != 80) && (serverPort != 443)) {
+            url.append(":").append(serverPort);
+        }
+        url.append(contextPath);
+        if(url.toString().endsWith("/")){
+            url.append("/");
+        }
+        return url.toString();
     }
 
 }

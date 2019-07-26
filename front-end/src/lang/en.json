@@ -379,7 +379,11 @@
     "remove_save_ads_success": "Removed classified advertising from saved list",
     "delete_user_success": "Delete user successfully",
     "ban_user_success": "Banned user successfully",
-    "unlock_user_success": "Unlock user successfully"
+    "unlock_user_success": "Unlock user successfully",
+    "pay_success": "Payment complete",
+    "pay_error": "Payment error",
+    "push_success": "Push post successfully",
+    "push_error": "Push post error"
   },
   "advertising": {
     "title": "Title",

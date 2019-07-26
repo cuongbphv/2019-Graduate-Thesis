@@ -53,6 +53,8 @@ public class ClassifiedAdvertisingElastic {
 
     private int tradeStatus;
 
+    private Date topPostExpiryDate;
+
     private int status;
 }
 

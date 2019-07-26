@@ -146,8 +146,11 @@
           </el-row>
 
           <section class="content">
+            <div v-if="pushPost">
+              <search-item :ads="pushPost" :hot="true" />
+            </div>
             <div v-for="adsItem in searchResult.content" :key="adsItem.id">
-              <search-item :ads="adsItem" />
+              <search-item v-if="adsItem.id !== pushPost.id" :ads="adsItem" />
             </div>
           </section>
 
@@ -222,7 +225,7 @@ export default {
   computed: {
     ...mapGetters('category', ['listCategory', 'metadata', 'metadatas']),
     ...mapGetters('location', ['listLocation', 'listDistrictByProvinceId', 'listWardByDistrictId']),
-    ...mapGetters('advertising', ['searchResult', 'searchState'])
+    ...mapGetters('advertising', ['searchResult', 'searchState', 'pushPost'])
   },
   watch: {
     listCategory: function(newVal) {
@@ -276,7 +279,7 @@ export default {
   methods: {
     ...mapActions('category', ['getListCategory', 'getMetadataByCategoryId', 'getMetadatasByCategoryId']),
     ...mapActions('location', ['loadListLocation']),
-    ...mapActions('advertising', ['fullTextSearch', 'saveSearchState']),
+    ...mapActions('advertising', ['fullTextSearch', 'saveSearchState', 'getPushPost']),
     handlePageChange(pagination) {
       this.searchQuery.pageNumber = pagination.page
       this.searchQuery.pageSize = pagination.limit
@@ -307,6 +310,7 @@ export default {
       this.searchQuery.categoryId = catId || this.searchQuery.categoryId
       this.saveState()
       this.fullTextSearch(this.searchQuery)
+      this.getPushPost(this.searchQuery.categoryId)
     },
     selectCategory(item) {
       this.searchQuery.pageNumber = 1

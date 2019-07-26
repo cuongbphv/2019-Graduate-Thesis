@@ -32,6 +32,9 @@ export default {
   getTopCategoryPost(params) {
     return Api.get(API.TOP_CATEGORY_POST, { params: params }).then(res => res.data)
   },
+  getPushPost(params) {
+    return Api.get(API.PUSH_POST, { params: params }).then(res => res.data)
+  },
   changeTradingStatusAds(id, status) {
     return Api.put(API.ADVERTISING + `/${id}/trading_status`, status).then(res => res.data)
   },
@@ -43,5 +46,8 @@ export default {
   },
   removeSaveAds(id) {
     return Api.delete(API.ADVERTISING + `/${id}` + API.SAVES).then(res => res.data)
+  },
+  pushAdvertising(id, period) {
+    return Api.put(API.ADVERTISING + '/' + id + `/push?period=${period}`).then(res => res.data)
   }
 }

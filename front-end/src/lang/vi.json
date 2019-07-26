@@ -379,7 +379,11 @@
     "remove_save_ads_success": "Đã bỏ lưu bài viết",
     "delete_user_success": "Đã xóa người dùng thành công",
     "ban_user_success": "Đã khóa tài khoản",
-    "unlock_user_success": "Đã mở khóa tài khoản"
+    "unlock_user_success": "Đã mở khóa tài khoản",
+    "pay_success": "Thanh toán thành công",
+    "pay_error": "Đã xảy ra lỗi khi thanh toán",
+    "push_success": "Đẩy tin thành công",
+    "push_error": "Đẩy tin thất bại"
   },
   "advertising": {
     "title": "Tiêu đề",

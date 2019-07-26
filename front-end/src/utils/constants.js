@@ -30,6 +30,8 @@ const API = {
   METADATA: '/metadata',
   METADATAS: '/metadatas',
   FILTER: '/filter',
+  PAYMENT: '/payment',
+  CONVERT: '/convert',
   // ADDRESS APIs
   ADDRESS: '/address',
   // ADVERTISING APIs
@@ -42,6 +44,7 @@ const API = {
   SAVES: '/saves',
   STATUS: '/status',
   TOP_CATEGORY_POST: '/advertising/top_category_post',
+  PUSH_POST: '/advertising/push_post',
   // ROLE_PERMISSION APIs
   ROLE: '/role',
   PERMISSION: '/permission',

@@ -26,6 +26,10 @@ const classifiedAds = state => {
   return state.classifiedAds
 }
 
+const pushPost = state => {
+  return state.pushPost
+}
+
 export default {
   topPagingNewClassifiedAds,
   listPagingClassifiedAds,
@@ -33,5 +37,6 @@ export default {
   searchState,
   topCategoryPost,
   savedAds,
-  classifiedAds
+  classifiedAds,
+  pushPost
 }

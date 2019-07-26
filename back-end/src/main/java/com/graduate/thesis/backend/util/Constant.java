@@ -46,6 +46,7 @@ public interface Constant {
     String REMOVE_TEMP_IMAGE = "/remove_temp_image";
     String FULL_TEXT_SEARCH = "/search";
     String TOP_CATEGORY_POST = "/top_category_post";
+    String PUSH_POST = "/push_post";
     String HISTORY = "/history";
     String TRADING_STATUS = "/trading_status";
     String STATUS = "/status";
@@ -93,6 +94,11 @@ public interface Constant {
 
     // REPORT
     String REPORT_API = API_PREFIX + "/report";
+
+    String PAYMENT_API = API_PREFIX + "/payment";
+    String SUCCESS =  "/success";
+    String CANCEL =  "/cancel";
+    String PUSH =  "/push";
 
     int RANDOM_MIN = 100000;
     int RANDOM_MAX = 999999;

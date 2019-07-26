@@ -1,7 +1,7 @@
 <template>
   <div class="home-layout">
     <div class="sticky-nav">
-      <contact-bar />
+      <!--<contact-bar />-->
       <nav-bar />
     </div>
     <app-main />
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { ContactBar, NavBar, HomeFooter } from '@/components/Layout/Home/index'
+import { NavBar, HomeFooter } from '@/components/Layout/Home/index'
 import AppMain from '@/components/Layout/AppMain/AppMain'
 import ResizeMixin from '@/mixins/ResizeHandler'
 import BackToTop from '@/components/BackToTop'
@@ -28,7 +28,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'HomeLayout',
   components: {
-    ContactBar,
+    // ContactBar,
     NavBar,
     AppMain,
     HomeFooter,

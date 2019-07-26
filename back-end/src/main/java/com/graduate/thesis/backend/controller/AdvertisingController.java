@@ -83,6 +83,12 @@ public class AdvertisingController extends AbstractBasedAPI {
     @Autowired
     ReportService reportService;
 
+    @Autowired
+    AccountService accountService;
+
+    @Autowired
+    PaymentService paymentService;
+
     @GetMapping(Constant.FULL_TEXT_SEARCH)
     public ResponseEntity<RestAPIResponse> fullTextSearch(
             @RequestParam("search_key") String searchKey,
@@ -163,6 +169,27 @@ public class AdvertisingController extends AbstractBasedAPI {
 
     }
 
+    @GetMapping(Constant.PUSH_POST)
+    public ResponseEntity<RestAPIResponse> getPushPost(
+            @RequestParam(value = "category_id", required = false, defaultValue = "") String categoryId
+    ){
+
+        List<ClassifiedAdvertisingElastic> result = classifiedAdvertisingElasticService.getPushPost(categoryId);
+
+        if(result == null || result.size() == 0){
+            return null;
+        }
+
+        return responseUtil.successResponse(getRandomElement(result));
+
+    }
+
+    public ClassifiedAdvertisingElastic getRandomElement(List<ClassifiedAdvertisingElastic> list)
+    {
+        Random rand = new Random();
+        return list.get(rand.nextInt(list.size()));
+    }
+
     @PostMapping()
     public ResponseEntity<RestAPIResponse> createNewAdvertising (
             @CurrentUser UserPrincipal userPrincipal,
@@ -238,6 +265,62 @@ public class AdvertisingController extends AbstractBasedAPI {
         return responseUtil.successResponse(updatedAds);
     }
 
+    @PutMapping(value = Constant.WITHIN_ID + Constant.PUSH)
+    public ResponseEntity<RestAPIResponse> registerTopPost (
+            @CurrentUser UserPrincipal userPrincipal,
+            @PathVariable("id") String adsId,
+            @RequestParam("period") int period
+    ) {
+
+        ClassifiedAdvertising classifiedAdvertising =
+                classifiedAdvertisingService.getClassifiedAdsDetailByIdAndAuthor(adsId, userPrincipal.getId());
+
+        if(classifiedAdvertising == null){
+            throw new ApplicationException(APIStatus.ERR_CLASSIFIED_ADVERTISING_NOT_FOUND);
+        }
+
+        int cost = 0;
+        switch (period){
+            case 1:
+                cost = 5; break;
+            case 3:
+                cost = 10; break;
+            case 5:
+                cost = 15; break;
+        }
+
+        Account account = accountService.findByUserId(userPrincipal.getId());
+
+        if(account == null){
+            throw new ApplicationException(APIStatus.ERR_USER_NOT_FOUND);
+        }
+
+        if(account.getBalance() < cost){
+            throw new ApplicationException(APIStatus.ERR_BALANCE_NOT_ENOUGH);
+        }
+
+        Date date = new Date();
+        date.setDate(date.getDate() + period);
+
+        classifiedAdvertising.setTopPostExpiryDate(date);
+        account.setBalance(account.getBalance() - cost);
+
+        Payment payment = new Payment();
+        payment.setBeeCoin(cost);
+        payment.setUserId(userPrincipal.getId());
+        payment.setContent(classifiedAdvertising.getAdditionalInfo().getTitle());
+        payment.setStatus("success");
+        payment.setType("push");
+        payment.setCreatedDate(new Date());
+
+        paymentService.save(payment);
+        accountService.save(account);
+        ClassifiedAdvertising updatedAds = classifiedAdvertisingService.save(classifiedAdvertising);
+
+        indexAds(updatedAds);
+
+        return responseUtil.successResponse(updatedAds);
+    }
 
     @PutMapping(value = Constant.WITHIN_ID + Constant.STATUS)
     public ResponseEntity<RestAPIResponse> updateStatusClassifiedAds (
@@ -779,6 +862,9 @@ public class AdvertisingController extends AbstractBasedAPI {
         elasticModal.setModifiedDate(classifiedAdvertising.getModifiedDate());
         elasticModal.setTradeStatus(classifiedAdvertising.getTradeStatus());
         elasticModal.setStatus(classifiedAdvertising.getStatus());
+        if(classifiedAdvertising.getTopPostExpiryDate() != null) {
+            elasticModal.setTopPostExpiryDate(classifiedAdvertising.getTopPostExpiryDate());
+        }
 
         classifiedAdvertisingElasticService.index(elasticModal);
 

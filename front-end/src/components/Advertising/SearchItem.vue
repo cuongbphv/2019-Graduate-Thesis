@@ -5,7 +5,10 @@
         <img :src="ads.images[0].url" :alt="ads.additionalInfo.title">
       </div>
       <div class="postCont">
-        <h3>{{ ads.additionalInfo.title }}</h3>
+        <div style="position: relative">
+          <h3 style="display: inline-block">{{ ads.additionalInfo.title }}</h3>
+          <img v-if="hot" src="https://png.pngtree.com/svg/20170218/4b2cce929d.png" alt="" width="50px" style="position: absolute; top:150%; right: 10%">
+        </div>
         <span> {{ ads.author.lastName + ' ' + ads.author.firstName }} - {{ timeSince(ads.createdDate) }} trước</span>
         <h1> {{ formatPrice(ads.additionalInfo.price) }} đ</h1>
         <p v-if="mode !== 'topPost'" class="address"> {{ ads.address.ward.nameWithType }} | {{ ads.address.district.nameWithType }} | {{ ads.address.province.nameWithType }}</p>
@@ -42,6 +45,10 @@ export default {
     mode: {
       type: String,
       default: 'search'
+    },
+    hot: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

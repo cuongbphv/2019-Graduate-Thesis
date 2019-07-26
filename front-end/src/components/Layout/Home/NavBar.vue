@@ -139,6 +139,13 @@
               </router-link>
             </el-badge>
           </el-tooltip>
+          <el-tooltip content="Bee Coin" effect="dark" placement="bottom" style="float: left!important;">
+            <el-badge :value="account||0" class="item">
+              <router-link to="/payment">
+                <el-button class="badge" size="medium" icon="el-icon-bank-card" />
+              </router-link>
+            </el-badge>
+          </el-tooltip>
         </div>
       </div>
     </div>
@@ -187,6 +194,7 @@ export default {
     ...mapGetters('layout', ['sidebar', 'device']),
     ...mapGetters('chat', ['conversations']),
     ...mapGetters('notification', ['notifications']),
+    ...mapGetters('payment', ['account']),
     variables() {
       return variables
     },
@@ -201,11 +209,13 @@ export default {
       })).length
     }
   },
-  created() {
+  mounted() {
+    this.getAccount()
   },
   methods: {
     ...mapActions('layout', ['toggleSideBar']),
     ...mapActions('auth', ['clear']),
+    ...mapActions('payment', ['getAccount']),
     logout() {
       this.clear().then(() => {
         const token = new URL(window.location.href).searchParams.get('token')

@@ -10,7 +10,6 @@ import HomeLayout from '@/views/layout/HomeLayout'
 /* Router Modules */
 import profileRouter from './modules/profile'
 import advertisingRouter from './modules/advertising'
-// import managementRouter from './modules/management'
 
 export const allRoutes = [
   {
@@ -161,6 +160,23 @@ export const allRoutes = [
     ]
   },
   {
+    path: '/manage/report',
+    component: Layout,
+    redirect: 'dashboard',
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/management/report/Report'),
+        name: 'Report',
+        meta: {
+          title: 'report',
+          icon: 'report',
+          permission: 'MANAGE_REPORT'
+        }
+      }
+    ]
+  },
+  {
     path: '/manage/user',
     component: Layout,
     redirect: 'dashboard',
@@ -206,6 +222,24 @@ export const allRoutes = [
         name: 'Chat',
         meta: {
           title: 'chat-page',
+          skip: true
+        }
+      },
+      {
+        path: '/payment',
+        component: () => import('@/views/payment/Payment'),
+        name: 'Payment',
+        meta: {
+          title: 'payment-page',
+          skip: true
+        }
+      },
+      {
+        path: '/payment/confirm',
+        component: () => import('@/views/payment/PaymentConfirm'),
+        name: 'PaymentConfirm',
+        meta: {
+          title: 'payment-confirm-page',
           skip: true
         }
       },

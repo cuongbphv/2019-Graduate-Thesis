@@ -22,7 +22,7 @@ export default {
       return this.$route.fullPath
     },
     noTransition() {
-      const exception = ['ProfileDetail', 'ProfileHistory', 'ProfileInformation', 'AccountSetting', 'AddressManagement']
+      const exception = ['ProfileDetail', 'ProfileHistory', 'ProfileInformation', 'AccountSetting', 'AddressManagement', 'Rating', 'Saved']
       return exception.includes(this.$route.name)
     }
   }
@@ -36,7 +36,9 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
-  background: #F5F5F5;
+  /*background: #F4F4F4;*/
+  background: url("~@/assets/background.jpg") center center fixed;
+  background-size: cover;
 }
 </style>
 

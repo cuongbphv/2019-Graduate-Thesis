@@ -38,7 +38,7 @@
       </el-table-column>
       <el-table-column :label="$t('table.header.loginAccount')" align="center" prop="3" sortable="custom" width="200">
         <template slot-scope="scope">
-          <span>{{ scope.row.phone }}</span>
+          <span>{{ scope.row.phone || scope.row.email }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.header.createdDate')" align="center" prop="7" sortable="custom">
@@ -211,8 +211,9 @@ export default {
     }
   },
   created() {
-    this.getListRoles()
-    this.getList()
+    this.getListRoles().then(() => {
+      this.getList()
+    })
   },
   methods: {
     ...mapActions('sysAdminUser', ['getListUserPaging']),
@@ -220,9 +221,7 @@ export default {
     getList() {
       this.listLoading = true
       this.getListUserPaging(this.listQuery).then(() => {
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
+        this.listLoading = false
       })
     },
     mapStatus(status) {
@@ -235,9 +234,9 @@ export default {
     },
     mapName(firstName, lastName) {
       if (i18n.locale === 'vi') {
-        return lastName + ' ' + firstName
+        return (lastName || '') + ' ' + firstName
       } else if (i18n.locale === 'en') {
-        return firstName + ' ' + lastName
+        return firstName + ' ' + (lastName || '')
       }
     },
     mapRole(roleId) {

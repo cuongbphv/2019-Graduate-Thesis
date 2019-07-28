@@ -4,8 +4,12 @@ const listCategory = state => {
 const metadata = state => {
   return state.metadata
 }
+const metadatas = state => {
+  return state.metadatas
+}
 
 export default {
   listCategory,
-  metadata
+  metadata,
+  metadatas
 }

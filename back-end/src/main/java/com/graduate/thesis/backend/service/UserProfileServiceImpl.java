@@ -1,10 +1,12 @@
 package com.graduate.thesis.backend.service;
 
+import com.graduate.thesis.backend.entity.Rating;
 import com.graduate.thesis.backend.entity.UserProfile;
 import com.graduate.thesis.backend.exception.ApplicationException;
 import com.graduate.thesis.backend.repository.UserProfileRepository;
 import com.graduate.thesis.backend.util.APIStatus;
 import com.graduate.thesis.backend.util.Constant;
+import jdk.nashorn.internal.runtime.options.Option;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +24,15 @@ public class UserProfileServiceImpl implements UserProfileService {
     @Autowired
     UserProfileRepository userProfileRepository;
 
+    @Autowired
+    ClassifiedAdvertisingService classifiedAdvertisingService;
+
 
     @Override
     public UserProfile save(UserProfile userProfile) {
+
+        classifiedAdvertisingService.reIndexProfile(userProfile);
+
         return userProfileRepository.save(userProfile);
     }
 
@@ -104,5 +112,76 @@ public class UserProfileServiceImpl implements UserProfileService {
 
         userProfileRepository.save(userProfile);
         userProfileRepository.save(followedProfile);
+    }
+
+    @Override
+    public void newRating(Rating rating) {
+
+        Optional<UserProfile> userProfile = findActiveByUserId(rating.getRecipientId());
+
+        if(userProfile.isPresent()){
+
+            UserProfile profile = userProfile.get();
+
+            profile.setRatingCount(profile.getRatingCount() + 1);
+            profile.setRatingValue(profile.getRatingValue() + rating.getValue());
+            if(profile.getRatingCount() > 0) {
+                double averageValue = profile.getRatingValue() * 1.0/ profile.getRatingCount();
+                profile.setRatingAverage(averageValue);
+            }
+            else{
+                profile.setRatingAverage(0);
+            }
+
+            save(profile);
+        }
+    }
+
+    @Override
+    public void updateRating(Rating rating, int oldValue) {
+
+        Optional<UserProfile> userProfile = findActiveByUserId(rating.getRecipientId());
+
+        if(userProfile.isPresent()){
+
+            UserProfile profile = userProfile.get();
+
+            profile.setRatingValue(profile.getRatingValue() - oldValue + rating.getValue());
+            if(profile.getRatingCount() > 0) {
+                double averageValue = profile.getRatingValue() * 1.0/ profile.getRatingCount();
+                profile.setRatingAverage(averageValue);
+            }
+            else{
+                profile.setRatingAverage(0);
+            }
+
+            save(profile);
+        }
+
+    }
+
+    @Override
+    public void deleteRating(Rating rating) {
+
+        Optional<UserProfile> userProfile = findActiveByUserId(rating.getRecipientId());
+
+        if(userProfile.isPresent()){
+
+            UserProfile profile = userProfile.get();
+
+            profile.setRatingCount(profile.getRatingCount() - 1);
+            profile.setRatingValue(profile.getRatingValue() - rating.getValue());
+
+            if(profile.getRatingCount() > 0) {
+                double averageValue = profile.getRatingValue() * 1.0/ profile.getRatingCount();
+                profile.setRatingAverage(averageValue);
+            }
+            else{
+                profile.setRatingAverage(0);
+            }
+
+            save(profile);
+        }
+
     }
 }

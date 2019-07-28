@@ -18,6 +18,7 @@ public interface Constant {
     String GET_LIST = "/list";
     String GET_NEW_ITEM = "/new";
     String GET_TOP_SEARCH = "/trend";
+    String GET_NUMBER_ITEM = "/number";
 
     // Auth APIs
     String AUTH_API = API_PREFIX + "/auth";
@@ -28,6 +29,7 @@ public interface Constant {
     // Category APIs
     String CATEGORY_API = API_PREFIX + "/category";
     String METADATA =  "/metadata";
+    String METADATAS =  "/metadatas";
     String FILTER = "/filter";
     String IMAGE = "/image";
 
@@ -44,15 +46,28 @@ public interface Constant {
     String REMOVE_TEMP_IMAGE = "/remove_temp_image";
     String FULL_TEXT_SEARCH = "/search";
     String TOP_CATEGORY_POST = "/top_category_post";
+    String PUSH_POST = "/push_post";
     String HISTORY = "/history";
+    String TRADING_STATUS = "/trading_status";
+    String STATUS = "/status";
+    String SAVES = "/saves";
 
     //USER
     String USER_API = API_PREFIX + "/user";
     String CURRENT_USER =  "/me";
     String CHANGE_PASSWORD =  "/password";
+    String BAN =  "/ban";
+    String UNLOCK =  "/unlock";
+
+    //RATING
+    String RATING = API_PREFIX + "/rating";
+    String STATISTIC = "/statistic";
 
     // Role APIs
     String ROLE_API = API_PREFIX + "/role";
+
+    // Role APIs
+    String STATISTICS_API = API_PREFIX + "/statistics";
 
     // Permission APIs
     String PERMISSION_API = API_PREFIX + "/permission";
@@ -76,6 +91,14 @@ public interface Constant {
 
     //FILE
     String FILE = API_PREFIX + "/files";
+
+    // REPORT
+    String REPORT_API = API_PREFIX + "/report";
+
+    String PAYMENT_API = API_PREFIX + "/payment";
+    String SUCCESS =  "/success";
+    String CANCEL =  "/cancel";
+    String PUSH =  "/push";
 
     int RANDOM_MIN = 100000;
     int RANDOM_MAX = 999999;
@@ -106,6 +129,7 @@ public interface Constant {
 
     enum Status{
 
+        DEACTIVE("DEACTIVE", -1),
         DELETE("DELETE",0),
         ACTIVE("ACTIVE", 1),
         PENDING("PENDING",2),

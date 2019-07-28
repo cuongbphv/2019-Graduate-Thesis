@@ -80,18 +80,18 @@
           </template>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.header.filter')" align="center" min-width="100px">
-        <template slot-scope="scope">
-          <template>
-            <el-button
-              type="primary"
-              icon="el-icon-edit"
-              circle
-              @click="handleOpenFilterModal(scope.row)"
-            />
-          </template>
-        </template>
-      </el-table-column>
+      <!--<el-table-column :label="$t('table.header.filter')" align="center" min-width="100px">-->
+      <!--<template slot-scope="scope">-->
+      <!--<template>-->
+      <!--<el-button-->
+      <!--type="primary"-->
+      <!--icon="el-icon-edit"-->
+      <!--circle-->
+      <!--@click="handleOpenFilterModal(scope.row)"-->
+      <!--/>-->
+      <!--</template>-->
+      <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

@@ -66,4 +66,9 @@ public class UserProfile {
 
     private List<String> following;
 
+    private int ratingCount;
+
+    private int ratingValue;
+
+    private double ratingAverage;
 }

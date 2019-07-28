@@ -31,6 +31,15 @@ const getMetadataByCategoryId = ({ commit }, id) => {
     throw error
   })
 }
+const getMetadatasByCategoryId = ({ commit }, id) => {
+  return category.getMetadatas(id).then(res => {
+    if (res.status === Status.SUCCESS) {
+      commit('GET_METADATAS', res.data)
+    }
+  }).catch(error => {
+    throw error
+  })
+}
 const deleteCategoryByIds = ({ commit }, ids) => {
   return category.deleteCategory(ids).then(res => {
     if (res.status === Status.SUCCESS) {
@@ -44,5 +53,6 @@ export default {
   loadListPagingCategory,
   getListCategory,
   getMetadataByCategoryId,
-  deleteCategoryByIds
+  deleteCategoryByIds,
+  getMetadatasByCategoryId
 }

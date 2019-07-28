@@ -14,6 +14,21 @@ const getListUserPaging = ({ commit }, params) => {
     throw error
   })
 }
+
+const getListUserExceptAdminPaging = ({ commit }, params) => {
+  const param = CommonModelMap.toParam(params)
+  return sysAdmin.getListUserExceptAdminPaging(param).then(res => {
+    if (res.status === Status.SUCCESS) {
+      if (res.data) {
+        commit('ADMIN_GET_LIST_USER', res.data)
+      }
+    }
+  }).catch(error => {
+    throw error
+  })
+}
+
 export default {
-  getListUserPaging
+  getListUserPaging,
+  getListUserExceptAdminPaging
 }

@@ -51,3 +51,9 @@ elastic:
   classified-ads:
     index: classified_ads
     type: _doc
+
+paypal:
+  mode: sandbox
+  client:
+    app: ASoF7q9YPCI2fyHttVrXdfY4HSo5hKnYAAxa5rBx0nLTo7Lk7qtjgxxOcNAfll_IdYqp8OocwgYd10uH
+    secret: EApvJLujsBNu2Q6jrpwv_820XFEGkWcGCuk68ImnGbqk7PwAKGz3wRJcasqpo_AHS081PGt4MH_vwhmy

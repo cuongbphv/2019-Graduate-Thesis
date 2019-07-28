@@ -16,4 +16,6 @@ public interface UserAccountService {
 
     long countTotalAccount();
 
+    long countUser();
+
 }

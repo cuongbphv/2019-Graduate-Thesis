@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"graduate_thesis_v1.category"},{"v":2,"key":{"slug":1},"name":"slug","ns":"graduate_thesis_v1.category"}],"uuid":"e9683e2e1e294829b2326843bec2f8d5"}

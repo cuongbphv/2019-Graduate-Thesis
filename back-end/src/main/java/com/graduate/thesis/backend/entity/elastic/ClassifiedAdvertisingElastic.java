@@ -45,9 +45,15 @@ public class ClassifiedAdvertisingElastic {
 
     private List<AdsMetadata> metadata;
 
+    private List<String> saves;
+
     private Date createdDate;
 
     private Date modifiedDate;
+
+    private int tradeStatus;
+
+    private Date topPostExpiryDate;
 
     private int status;
 }

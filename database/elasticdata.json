@@ -1,0 +1,1273 @@
+{
+  "took" : 1,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 5,
+    "successful" : 5,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 12,
+    "max_score" : 1.0,
+    "hits" : [
+      {
+        "_index" : "classified_ads",
+        "_type" : "_doc",
+        "_id" : "5d0981e3aecbaa6d347bd762",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "5d0981e3aecbaa6d347bd762",
+          "author" : {
+            "id" : "5d0971acaecbaa9348e27947",
+            "userId" : "5d0971acaecbaa9348e27946",
+            "firstName" : "Thanh",
+            "lastName" : "Trần",
+            "gender" : 1,
+            "dob" : "2019-04-08T00:00:00+0700",
+            "avatarUrl" : "http://localhost:8080/api/v1/files/user_avatar_5d0971acaecbaa9348e27946.png",
+            "description" : "User Test 2",
+            "type" : 0,
+            "status" : 1,
+            "createdDate" : "2019-06-19T06:20:12+0700",
+            "modifiedDate" : "2019-06-19T06:20:36+0700",
+            "followedBy" : [ ],
+            "ratingCount" : 3,
+            "ratingValue" : 11,
+            "ratingAverage" : 3.6666666666666665
+          },
+          "locationType" : 2,
+          "address" : {
+            "id" : "5d097bc9aecbaa9348e2794f",
+            "province" : {
+              "id" : "70",
+              "name" : "Bình Phước",
+              "slug" : "binh-phuoc",
+              "type" : "tinh",
+              "nameWithType" : "Tỉnh Bình Phước",
+              "code" : "70",
+              "status" : 1
+            },
+            "district" : {
+              "id" : "693",
+              "name" : "Bù Đốp",
+              "type" : "huyen",
+              "slug" : "bu-dop",
+              "nameWithType" : "Huyện Bù Đốp",
+              "path" : "Bù Đốp, Bình Phước",
+              "pathWithType" : "Huyện Bù Đốp, Tỉnh Bình Phước",
+              "code" : "693",
+              "parentCode" : "70",
+              "status" : 1
+            },
+            "ward" : {
+              "id" : "25309",
+              "name" : "Hưng Phước",
+              "type" : "xa",
+              "slug" : "hung-phuoc",
+              "nameWithType" : "Xã Hưng Phước",
+              "path" : "Hưng Phước, Bù Đốp, Bình Phước",
+              "pathWithType" : "Xã Hưng Phước, Huyện Bù Đốp, Tỉnh Bình Phước",
+              "code" : "25309",
+              "parentCode" : "693",
+              "status" : 1
+            },
+            "detail" : "53 Thôn 3"
+          },
+          "images" : [
+            {
+              "name" : "vay1.jpg",
+              "uid" : 1560904106568,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_f80299fbdc0b43b1ba4e6ed8819d32b05d0971acaecbaa9348e27946.jpg",
+              "size" : 52784,
+              "status" : "success"
+            },
+            {
+              "name" : "vay2.png",
+              "uid" : 1560904111539,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_eeac839e9f4a4bd6b19154313f0634cd5d0971acaecbaa9348e27946.png",
+              "size" : 225383,
+              "status" : "success"
+            }
+          ],
+          "additionalInfo" : {
+            "title" : "Váy mới mặc vài lần",
+            "description" : "Mùa hè năm nay, ngoài việc F5 cho mình những kiểu trang phục mát mẻ như váo hai dây, áo trễ vai, quần sooc,…thì trong tủ đồ của các nàng cũng không thể thiếu những kiểu chân váy với nhiều kiểu dáng, màu sắc khác nhau.",
+            "adsType" : 1,
+            "maxPrice" : 0,
+            "price" : 350000
+          },
+          "breadcrumbs" : [
+            "5d097562aecbaa9348e27949"
+          ],
+          "metadata" : [
+            {
+              "label" : "Màu Sắc",
+              "enLabel" : "Color",
+              "slug" : "mau-sac",
+              "selectionType" : "single",
+              "type" : "color",
+              "value" : "",
+              "valueLabel" : "Hồng",
+              "enValueLabel" : "Pink"
+            },
+            {
+              "label" : "Người dùng",
+              "enLabel" : "User",
+              "slug" : "nguoi-dung",
+              "selectionType" : "single",
+              "type" : "text",
+              "value" : "",
+              "valueLabel" : "Nữ",
+              "enValueLabel" : ""
+            }
+          ],
+          "createdDate" : "2019-06-19T07:29:23+0700",
+          "modifiedDate" : "2019-06-19T07:29:23+0700",
+          "status" : 1
+        }
+      },
+      {
+        "_index" : "classified_ads",
+        "_type" : "_doc",
+        "_id" : "5d09829aaecbaa6d347bd764",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "5d09829aaecbaa6d347bd764",
+          "author" : {
+            "id" : "5d096e3faecbaa9348e27943",
+            "userId" : "5d096e3faecbaa9348e27942",
+            "firstName" : "Tươi",
+            "lastName" : "Trần",
+            "gender" : 2,
+            "dob" : "2019-06-01T00:00:00+0700",
+            "avatarUrl" : "http://localhost:8080/api/v1/files/user_avatar_5d096e3faecbaa9348e27942.png",
+            "description" : "User Test 1",
+            "type" : 0,
+            "status" : 1,
+            "createdDate" : "2019-06-19T06:05:35+0700",
+            "modifiedDate" : "2019-06-22T15:14:21+0700",
+            "following" : [
+              "5d0971acaecbaa9348e27946"
+            ],
+            "ratingCount" : 0,
+            "ratingValue" : 0,
+            "ratingAverage" : 0.0
+          },
+          "locationType" : 2,
+          "address" : {
+            "id" : "5d09823eaecbaa6d347bd763",
+            "province" : {
+              "id" : "89",
+              "name" : "An Giang",
+              "slug" : "an-giang",
+              "type" : "tinh",
+              "nameWithType" : "Tỉnh An Giang",
+              "code" : "89",
+              "status" : 1
+            },
+            "district" : {
+              "id" : "892",
+              "name" : "Châu Thành",
+              "type" : "huyen",
+              "slug" : "chau-thanh",
+              "nameWithType" : "Huyện Châu Thành",
+              "path" : "Châu Thành, An Giang",
+              "pathWithType" : "Huyện Châu Thành, Tỉnh An Giang",
+              "code" : "892",
+              "parentCode" : "89",
+              "status" : 1
+            },
+            "ward" : {
+              "id" : "30607",
+              "name" : "Bình Hòa",
+              "type" : "xa",
+              "slug" : "binh-hoa",
+              "nameWithType" : "Xã Bình Hòa",
+              "path" : "Bình Hòa, Châu Thành, An Giang",
+              "pathWithType" : "Xã Bình Hòa, Huyện Châu Thành, Tỉnh An Giang",
+              "code" : "30607",
+              "parentCode" : "892",
+              "status" : 1
+            },
+            "detail" : "23 Vinh Hòa"
+          },
+          "images" : [
+            {
+              "name" : "na1.jpg",
+              "uid" : 1560904304662,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_0821f4fbdbc04ebc83954efeb58964b85d096e3faecbaa9348e27942.jpg",
+              "size" : 84072,
+              "status" : "success"
+            },
+            {
+              "name" : "na2.jpg",
+              "uid" : 1560904309496,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_5c1284276c4e498e927c3d5d546c7b725d096e3faecbaa9348e27942.jpg",
+              "size" : 56458,
+              "status" : "success"
+            }
+          ],
+          "additionalInfo" : {
+            "title" : "Set đen dành cho nam",
+            "description" : "Chất liệu tốt, màu sắc nổi bật",
+            "adsType" : 1,
+            "maxPrice" : 0,
+            "price" : 1000000
+          },
+          "breadcrumbs" : [
+            "5d097562aecbaa9348e27949"
+          ],
+          "metadata" : [
+            {
+              "label" : "Màu Sắc",
+              "enLabel" : "Color",
+              "slug" : "mau-sac",
+              "selectionType" : "single",
+              "type" : "color",
+              "value" : "",
+              "valueLabel" : "Tím",
+              "enValueLabel" : ""
+            },
+            {
+              "label" : "Người dùng",
+              "enLabel" : "User",
+              "slug" : "nguoi-dung",
+              "selectionType" : "single",
+              "type" : "text",
+              "value" : "",
+              "valueLabel" : "Nam",
+              "enValueLabel" : "Men"
+            }
+          ],
+          "createdDate" : "2019-06-19T07:32:26+0700",
+          "modifiedDate" : "2019-06-19T07:32:26+0700",
+          "tradeStatus" : 0,
+          "status" : 1
+        }
+      },
+      {
+        "_index" : "classified_ads",
+        "_type" : "_doc",
+        "_id" : "5d097dc9aecbaa6d347bd75d",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "5d097dc9aecbaa6d347bd75d",
+          "author" : {
+            "id" : "5d0971acaecbaa9348e27947",
+            "userId" : "5d0971acaecbaa9348e27946",
+            "firstName" : "Thanh",
+            "lastName" : "Trần",
+            "gender" : 1,
+            "dob" : "2019-04-08T00:00:00+0700",
+            "avatarUrl" : "http://localhost:8080/api/v1/files/user_avatar_5d0971acaecbaa9348e27946.png",
+            "description" : "User Test 2",
+            "type" : 0,
+            "status" : 1,
+            "createdDate" : "2019-06-19T06:20:12+0700",
+            "modifiedDate" : "2019-06-19T06:20:36+0700",
+            "followedBy" : [ ],
+            "ratingCount" : 3,
+            "ratingValue" : 11,
+            "ratingAverage" : 3.6666666666666665
+          },
+          "locationType" : 2,
+          "address" : {
+            "id" : "5d097bc9aecbaa9348e2794f",
+            "province" : {
+              "id" : "70",
+              "name" : "Bình Phước",
+              "slug" : "binh-phuoc",
+              "type" : "tinh",
+              "nameWithType" : "Tỉnh Bình Phước",
+              "code" : "70",
+              "status" : 1
+            },
+            "district" : {
+              "id" : "693",
+              "name" : "Bù Đốp",
+              "type" : "huyen",
+              "slug" : "bu-dop",
+              "nameWithType" : "Huyện Bù Đốp",
+              "path" : "Bù Đốp, Bình Phước",
+              "pathWithType" : "Huyện Bù Đốp, Tỉnh Bình Phước",
+              "code" : "693",
+              "parentCode" : "70",
+              "status" : 1
+            },
+            "ward" : {
+              "id" : "25309",
+              "name" : "Hưng Phước",
+              "type" : "xa",
+              "slug" : "hung-phuoc",
+              "nameWithType" : "Xã Hưng Phước",
+              "path" : "Hưng Phước, Bù Đốp, Bình Phước",
+              "pathWithType" : "Xã Hưng Phước, Huyện Bù Đốp, Tỉnh Bình Phước",
+              "code" : "25309",
+              "parentCode" : "693",
+              "status" : 1
+            },
+            "detail" : "53 Thôn 3"
+          },
+          "images" : [
+            {
+              "name" : "xm1.jpg",
+              "uid" : 1560903025615,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_1de38e4caa5d42e1a1ca664a764906905d0971acaecbaa9348e27946.jpg",
+              "size" : 50553,
+              "status" : "success"
+            },
+            {
+              "name" : "xm2.jpg",
+              "uid" : 1560903033980,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_8544cadb6c944b41ace8288a88c45f085d0971acaecbaa9348e27946.jpg",
+              "size" : 27891,
+              "status" : "success"
+            },
+            {
+              "name" : "xm3.jpg",
+              "uid" : 1560903036982,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_79441acec02041c78552c5fa443e5b445d0971acaecbaa9348e27946.jpg",
+              "size" : 50309,
+              "status" : "success"
+            }
+          ],
+          "additionalInfo" : {
+            "title" : "Yamaha Novou 4 đời 2009 BSTP . Xe Chính Chủ",
+            "description" : "Tôi cần bán lại chiếc xe Yamaha Novou 4 mua năm 2009 BSTP , xe chính chủ , tôi đang đứng tên , tôi chỉ sử dụng đi chợ rồi dựng 1 chỗ , tôi thay nhớt thường xuyên và giữ kỹ nên xe mới và ngon lành lắm , hình sao là xe như vậy , tôi chưa sửa chửa lần nào hết , máy móc Zin 100% , ai cần tôi để lại 9 triệu 500 , sẽ công chứng sang tên liền cho người mua sau khi mua xe tại nhà tôi , ( hẽm 92 XVNT P21 Q bình thạnh ) Thu 56 tuổi",
+            "adsType" : 1,
+            "maxPrice" : 0,
+            "price" : 9500000
+          },
+          "breadcrumbs" : [
+            "5cd2e54fe3e36a044830e7dd",
+            "5cd2e7c6e3e36a044830e7de",
+            "5cd2ee11e3e36a044830e7e6"
+          ],
+          "metadata" : [
+            {
+              "label" : "Màu sắc",
+              "enLabel" : "Color",
+              "slug" : "mau-sac",
+              "selectionType" : "multiple",
+              "type" : "color",
+              "value" : "",
+              "valueLabel" : "Xanh Lá",
+              "enValueLabel" : "Green"
+            },
+            {
+              "label" : "Động cơ",
+              "slug" : "dong-co",
+              "selectionType" : "single",
+              "type" : "text",
+              "value" : "",
+              "valueLabel" : "2 kỳ",
+              "enValueLabel" : ""
+            },
+            {
+              "label" : "Dung tích xi lanh",
+              "slug" : "dung-tich-xi-lanh",
+              "selectionType" : "single",
+              "type" : "text",
+              "value" : "",
+              "valueLabel" : "110 cc",
+              "enValueLabel" : ""
+            },
+            {
+              "label" : "Số km đã đi",
+              "slug" : "so-km-da-di",
+              "selectionType" : "single",
+              "type" : "text",
+              "value" : "",
+              "valueLabel" : "< 5000",
+              "enValueLabel" : ""
+            }
+          ],
+          "createdDate" : "2019-06-19T07:11:53+0700",
+          "modifiedDate" : "2019-06-19T07:11:53+0700",
+          "status" : 1
+        }
+      },
+      {
+        "_index" : "classified_ads",
+        "_type" : "_doc",
+        "_id" : "5d097eddaecbaa6d347bd75e",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "5d097eddaecbaa6d347bd75e",
+          "author" : {
+            "id" : "5d0971acaecbaa9348e27947",
+            "userId" : "5d0971acaecbaa9348e27946",
+            "firstName" : "Thanh",
+            "lastName" : "Trần",
+            "gender" : 1,
+            "dob" : "2019-04-08T00:00:00+0700",
+            "avatarUrl" : "http://localhost:8080/api/v1/files/user_avatar_5d0971acaecbaa9348e27946.png",
+            "description" : "User Test 2",
+            "type" : 0,
+            "status" : 1,
+            "createdDate" : "2019-06-19T06:20:12+0700",
+            "modifiedDate" : "2019-06-19T06:20:36+0700",
+            "followedBy" : [ ],
+            "ratingCount" : 3,
+            "ratingValue" : 11,
+            "ratingAverage" : 3.6666666666666665
+          },
+          "locationType" : 1,
+          "address" : {
+            "id" : "06",
+            "province" : {
+              "id" : "06",
+              "name" : "Bắc Kạn",
+              "slug" : "bac-kan",
+              "type" : "tinh",
+              "nameWithType" : "Tỉnh Bắc Kạn",
+              "code" : "06",
+              "status" : 1
+            },
+            "district" : {
+              "id" : "058",
+              "name" : "Bắc Kạn",
+              "type" : "thanh-pho",
+              "slug" : "bac-kan",
+              "nameWithType" : "Thành Phố Bắc Kạn",
+              "path" : "Bắc Kạn, Bắc Kạn",
+              "pathWithType" : "Thành Phố Bắc Kạn, Tỉnh Bắc Kạn",
+              "code" : "058",
+              "parentCode" : "06",
+              "status" : 1
+            },
+            "ward" : {
+              "id" : "01840",
+              "name" : "Đức Xuân",
+              "type" : "phuong",
+              "slug" : "duc-xuan",
+              "nameWithType" : "Phường Đức Xuân",
+              "path" : "Đức Xuân, Bắc Kạn, Bắc Kạn",
+              "pathWithType" : "Phường Đức Xuân, Thành Phố Bắc Kạn, Tỉnh Bắc Kạn",
+              "code" : "01840",
+              "parentCode" : "058",
+              "status" : 1
+            }
+          },
+          "images" : [
+            {
+              "name" : "ot1.jpg",
+              "uid" : 1560903308398,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_60e6cd689ff242a8951399c593eea32a5d0971acaecbaa9348e27946.jpg",
+              "size" : 78356,
+              "status" : "success"
+            },
+            {
+              "name" : "ot3.jpg",
+              "uid" : 1560903312778,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_ea672ebc05df487cb8148aa85bf1eb045d0971acaecbaa9348e27946.jpg",
+              "size" : 129374,
+              "status" : "success"
+            }
+          ],
+          "additionalInfo" : {
+            "title" : "Tin bán chuyên đăng hôm qua KIA OPTIMA",
+            "description" : """
+Kia Sedona 2019 với những tính năng đột phá. 
+Có 6 màu cho khách hàng lựa chọn: Trắng, bạc, xanh, đen, đỏ, vàng, vàng cát, nâu. 
+Các tính năng được nâng cấp bao gồm:
+- Phanh tay điện tử, Auto hold.
+- Tăng thêm 7 mã lực so với bản cũ.
+- Mở cửa trượt bên ngoài bằng nút bấm.
+- Hộp số tự động 8 cấp.
+- Cụm galang được thiết kế mới.
+- Đèn trước sau full led.
+- DVD điều khiển bằng giọng nói.
+- Lên xuống kính Auto 4 cửa chống kẹt.
+- Sạc không dây.
+- Ghế phụ chỉnh điện 8 hướng, điều hòa 3 vùng độc lập.. Vv. V. 
+- KIA Sedona Luxury (máy dầu) giá 1129tr —> trả trước 298tr.
+- KIA Sedona Platinum D giá 1209tr (máy dầu) —> trả trước 318tr
+- Kia Sedona Platinum G giá 1429tr (máy xăng) —> trả trước 373tr
+Giá trả trước đã bao gồm ra giấy tờ và lăn bánh! 
+Tặng camera hành trình trước/sau trị giá 14tr đồng. 
+Hỗ trợ trả góp tới 85% giá trị xe, lãi suất thấp, thủ tục xét duyệt nhanh. 
+Dịch vụ bảo hành.
++ Bảo hành 3 năm không giới hạn số km.
++ Đặt lịch hẹn bảo dưỡng. 
+Mọi thông tin về xe xin hãy liên hệ để được tư vấn tốt . Xin cảm ơn.
+""",
+            "adsType" : 1,
+            "maxPrice" : 0,
+            "price" : 789000000
+          },
+          "breadcrumbs" : [
+            "5cd2e54fe3e36a044830e7dd",
+            "5cd2ec2fe3e36a044830e7df",
+            "5cd2edede3e36a044830e7e3"
+          ],
+          "metadata" : [
+            {
+              "label" : "Màu sắc",
+              "enLabel" : "Color",
+              "slug" : "mau-sac",
+              "selectionType" : "multiple",
+              "type" : "color",
+              "value" : "",
+              "valueLabel" : "Đỏ",
+              "enValueLabel" : ""
+            },
+            {
+              "label" : "Động cơ",
+              "slug" : "dong-co",
+              "selectionType" : "single",
+              "type" : "text",
+              "value" : "",
+              "valueLabel" : "4 kỳ",
+              "enValueLabel" : ""
+            },
+            {
+              "label" : "Hộp số",
+              "slug" : "hop-so",
+              "selectionType" : "single",
+              "type" : "text",
+              "value" : "",
+              "valueLabel" : "Số sàn",
+              "enValueLabel" : ""
+            },
+            {
+              "label" : "Nhiên liệu",
+              "slug" : "nhien-lieu",
+              "selectionType" : "single",
+              "type" : "text",
+              "value" : "",
+              "valueLabel" : "Dầu",
+              "enValueLabel" : ""
+            },
+            {
+              "label" : "Số km đã đi",
+              "slug" : "so-km-da-di",
+              "selectionType" : "single",
+              "type" : "text",
+              "value" : "",
+              "valueLabel" : "50000 - 100000",
+              "enValueLabel" : ""
+            }
+          ],
+          "createdDate" : "2019-06-19T07:16:29+0700",
+          "modifiedDate" : "2019-06-19T07:16:29+0700",
+          "status" : 1
+        }
+      },
+      {
+        "_index" : "classified_ads",
+        "_type" : "_doc",
+        "_id" : "5d098350aecbaa6d347bd765",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "5d098350aecbaa6d347bd765",
+          "author" : {
+            "id" : "5d096e3faecbaa9348e27943",
+            "userId" : "5d096e3faecbaa9348e27942",
+            "firstName" : "Tươi",
+            "lastName" : "Trần",
+            "gender" : 2,
+            "dob" : "2019-06-01T00:00:00+0700",
+            "avatarUrl" : "http://localhost:8080/api/v1/files/user_avatar_5d096e3faecbaa9348e27942.png",
+            "description" : "User Test 1",
+            "type" : 0,
+            "status" : 1,
+            "createdDate" : "2019-06-19T06:05:35+0700",
+            "modifiedDate" : "2019-06-22T15:14:21+0700",
+            "following" : [ ],
+            "ratingCount" : 0,
+            "ratingValue" : 0,
+            "ratingAverage" : 0.0
+          },
+          "locationType" : 1,
+          "address" : {
+            "id" : "06",
+            "province" : {
+              "id" : "06",
+              "name" : "Bắc Kạn",
+              "slug" : "bac-kan",
+              "type" : "tinh",
+              "nameWithType" : "Tỉnh Bắc Kạn",
+              "code" : "06",
+              "status" : 1
+            },
+            "district" : {
+              "id" : "062",
+              "name" : "Ngân Sơn",
+              "type" : "huyen",
+              "slug" : "ngan-son",
+              "nameWithType" : "Huyện Ngân Sơn",
+              "path" : "Ngân Sơn, Bắc Kạn",
+              "pathWithType" : "Huyện Ngân Sơn, Tỉnh Bắc Kạn",
+              "code" : "062",
+              "parentCode" : "06",
+              "status" : 1
+            },
+            "ward" : {
+              "id" : "01945",
+              "name" : "Cốc Đán",
+              "type" : "xa",
+              "slug" : "coc-dan",
+              "nameWithType" : "Xã Cốc Đán",
+              "path" : "Cốc Đán, Ngân Sơn, Bắc Kạn",
+              "pathWithType" : "Xã Cốc Đán, Huyện Ngân Sơn, Tỉnh Bắc Kạn",
+              "code" : "01945",
+              "parentCode" : "062",
+              "status" : 1
+            }
+          },
+          "images" : [
+            {
+              "name" : "dc1.jpg",
+              "uid" : 1560904491526,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_e3ab793b4c444aa2ac8245e5470f86fc5d096e3faecbaa9348e27942.jpg",
+              "size" : 238817,
+              "status" : "success"
+            },
+            {
+              "name" : "dc2.jpg",
+              "uid" : 1560904495599,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_2300969283de47a79d8d7c512456d2e65d096e3faecbaa9348e27942.jpg",
+              "size" : 142700,
+              "status" : "success"
+            }
+          ],
+          "additionalInfo" : {
+            "title" : "Xe điều khiển từ xa nhiều mẫu mã, màu sắc",
+            "description" : "Xe dùng bộ điều khiển từ xa, an toàn cho bé",
+            "adsType" : 1,
+            "maxPrice" : 0,
+            "price" : 250000
+          },
+          "breadcrumbs" : [
+            "5d097a7caecbaa9348e2794d"
+          ],
+          "metadata" : [
+            {
+              "label" : "Độ tuổi",
+              "enLabel" : "Age",
+              "slug" : "do-tuoi",
+              "selectionType" : "single",
+              "type" : "text",
+              "value" : "",
+              "valueLabel" : "Từ 5 tuổi",
+              "enValueLabel" : "Electric"
+            },
+            {
+              "label" : "Loại đồ chơi",
+              "enLabel" : "Type",
+              "slug" : "loai-do-choi",
+              "selectionType" : "single",
+              "type" : "text",
+              "value" : "",
+              "valueLabel" : "Điện tử",
+              "enValueLabel" : "From 3 - 5"
+            }
+          ],
+          "createdDate" : "2019-06-19T07:35:28+0700",
+          "modifiedDate" : "2019-06-19T07:35:28+0700",
+          "status" : 1
+        }
+      },
+      {
+        "_index" : "classified_ads",
+        "_type" : "_doc",
+        "_id" : "5d09854eaecbaa45ac2c6a73",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "5d09854eaecbaa45ac2c6a73",
+          "author" : {
+            "id" : "5d096e3faecbaa9348e27943",
+            "userId" : "5d096e3faecbaa9348e27942",
+            "firstName" : "Tươi",
+            "lastName" : "Trần",
+            "gender" : 2,
+            "dob" : "2019-06-01T00:00:00+0700",
+            "avatarUrl" : "http://localhost:8080/api/v1/files/user_avatar_5d096e3faecbaa9348e27942.png",
+            "description" : "User Test 1",
+            "type" : 0,
+            "status" : 1,
+            "createdDate" : "2019-06-19T06:05:35+0700",
+            "modifiedDate" : "2019-06-22T15:14:21+0700",
+            "following" : [ ],
+            "ratingCount" : 0,
+            "ratingValue" : 0,
+            "ratingAverage" : 0.0
+          },
+          "locationType" : 1,
+          "address" : {
+            "id" : "42",
+            "province" : {
+              "id" : "42",
+              "name" : "Hà Tĩnh",
+              "slug" : "ha-tinh",
+              "type" : "tinh",
+              "nameWithType" : "Tỉnh Hà Tĩnh",
+              "code" : "42",
+              "status" : 1
+            },
+            "district" : {
+              "id" : "449",
+              "name" : "Kỳ Anh",
+              "type" : "thi-xa",
+              "slug" : "ky-anh",
+              "nameWithType" : "Thị xã Kỳ Anh",
+              "path" : "Kỳ Anh, Hà Tĩnh",
+              "pathWithType" : "Thị xã Kỳ Anh, Tỉnh Hà Tĩnh",
+              "code" : "449",
+              "parentCode" : "42",
+              "status" : 1
+            },
+            "ward" : {
+              "id" : "18781",
+              "name" : "Kỳ Ninh",
+              "type" : "xa",
+              "slug" : "ky-ninh",
+              "nameWithType" : "Xã Kỳ Ninh",
+              "path" : "Kỳ Ninh, Kỳ Anh, Hà Tĩnh",
+              "pathWithType" : "Xã Kỳ Ninh, Thị xã Kỳ Anh, Tỉnh Hà Tĩnh",
+              "code" : "18781",
+              "parentCode" : "449",
+              "status" : 1
+            }
+          },
+          "images" : [
+            {
+              "name" : "c1.jpg",
+              "uid" : 1560904985030,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_f68ae2b76b0647c6b7fa2733483677485d096e3faecbaa9348e27942.jpg",
+              "size" : 81386,
+              "status" : "success"
+            },
+            {
+              "name" : "c2.jpg",
+              "uid" : 1560904993743,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_6fb9f651e04a4e3a9d3316d1d7ab6e0d5d096e3faecbaa9348e27942.jpg",
+              "size" : 591644,
+              "status" : "success"
+            }
+          ],
+          "additionalInfo" : {
+            "title" : "Pet cún mới ra một bầy",
+            "description" : "Chó con đẹp, không bệnh tật. Nhiều quá nên bán",
+            "adsType" : 1,
+            "maxPrice" : 0,
+            "price" : 300000
+          },
+          "breadcrumbs" : [
+            "5d0976baaecbaa9348e2794a"
+          ],
+          "metadata" : [
+            {
+              "label" : "Màu Sắc",
+              "enLabel" : "Color",
+              "slug" : "mau-sac",
+              "selectionType" : "single",
+              "type" : "color",
+              "value" : "",
+              "valueLabel" : "Xám",
+              "enValueLabel" : "Gray"
+            }
+          ],
+          "createdDate" : "2019-06-19T07:43:58+0700",
+          "modifiedDate" : "2019-06-19T07:43:58+0700",
+          "status" : 1
+        }
+      },
+      {
+        "_index" : "classified_ads",
+        "_type" : "_doc",
+        "_id" : "5d098095aecbaa6d347bd760",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "5d098095aecbaa6d347bd760",
+          "author" : {
+            "id" : "5d0971acaecbaa9348e27947",
+            "userId" : "5d0971acaecbaa9348e27946",
+            "firstName" : "Thanh",
+            "lastName" : "Trần",
+            "gender" : 1,
+            "dob" : "2019-04-08T00:00:00+0700",
+            "avatarUrl" : "http://localhost:8080/api/v1/files/user_avatar_5d0971acaecbaa9348e27946.png",
+            "description" : "User Test 2",
+            "type" : 0,
+            "status" : 1,
+            "createdDate" : "2019-06-19T06:20:12+0700",
+            "modifiedDate" : "2019-06-19T06:20:36+0700",
+            "followedBy" : [ ],
+            "ratingCount" : 3,
+            "ratingValue" : 11,
+            "ratingAverage" : 3.6666666666666665
+          },
+          "locationType" : 2,
+          "address" : {
+            "id" : "5d097bc9aecbaa9348e2794f",
+            "province" : {
+              "id" : "70",
+              "name" : "Bình Phước",
+              "slug" : "binh-phuoc",
+              "type" : "tinh",
+              "nameWithType" : "Tỉnh Bình Phước",
+              "code" : "70",
+              "status" : 1
+            },
+            "district" : {
+              "id" : "693",
+              "name" : "Bù Đốp",
+              "type" : "huyen",
+              "slug" : "bu-dop",
+              "nameWithType" : "Huyện Bù Đốp",
+              "path" : "Bù Đốp, Bình Phước",
+              "pathWithType" : "Huyện Bù Đốp, Tỉnh Bình Phước",
+              "code" : "693",
+              "parentCode" : "70",
+              "status" : 1
+            },
+            "ward" : {
+              "id" : "25309",
+              "name" : "Hưng Phước",
+              "type" : "xa",
+              "slug" : "hung-phuoc",
+              "nameWithType" : "Xã Hưng Phước",
+              "path" : "Hưng Phước, Bù Đốp, Bình Phước",
+              "pathWithType" : "Xã Hưng Phước, Huyện Bù Đốp, Tỉnh Bình Phước",
+              "code" : "25309",
+              "parentCode" : "693",
+              "status" : 1
+            },
+            "detail" : "53 Thôn 3"
+          },
+          "images" : [
+            {
+              "name" : "dt2.jpg",
+              "uid" : 1560903756282,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_f5136c6abb0d46febd8b788c8baa0b015d0971acaecbaa9348e27946.jpg",
+              "size" : 60816,
+              "status" : "success"
+            },
+            {
+              "name" : "dt3.jpg",
+              "uid" : 1560903760122,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_d5e1f902c7f64221aa0d80de35f4d5005d0971acaecbaa9348e27946.jpg",
+              "size" : 77016,
+              "status" : "success"
+            }
+          ],
+          "additionalInfo" : {
+            "title" : "Iphone 8 Plus mới 100%",
+            "description" : """
+Mình cần bán iphone 8 Plus 64gb bản chuẩn quốc tế màu vàng (gold).Máy nguyên zin, đầy đủ chức năng, không lỗi gì, đã hết bảo hành chưa qua sữa chữa, ngoại hình đẹp 99% do xài giữ kỹ. Xem máy tại nhà, bao test, reset các kiểu. Ai cần thì liên hệ e ạ.
+Thanks các mọi người đã xem tin.
+Thanks chợ tốt đã duyệt tin.
+""",
+            "adsType" : 1,
+            "maxPrice" : 0,
+            "price" : 15000000
+          },
+          "breadcrumbs" : [
+            "5d09740daecbaa9348e27948"
+          ],
+          "metadata" : [
+            {
+              "label" : "Tình Trạng",
+              "enLabel" : "State",
+              "slug" : "tinh-trang",
+              "selectionType" : "single",
+              "type" : "text",
+              "value" : "",
+              "valueLabel" : "Cũ",
+              "enValueLabel" : "Brand new"
+            },
+            {
+              "label" : "Màu sắc",
+              "enLabel" : "color",
+              "slug" : "mau-sac",
+              "selectionType" : "single",
+              "type" : "color",
+              "value" : "",
+              "valueLabel" : "Đỏ",
+              "enValueLabel" : "Red"
+            }
+          ],
+          "createdDate" : "2019-06-19T07:23:49+0700",
+          "modifiedDate" : "2019-06-19T07:23:49+0700",
+          "status" : 1
+        }
+      },
+      {
+        "_index" : "classified_ads",
+        "_type" : "_doc",
+        "_id" : "5d098136aecbaa6d347bd761",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "5d098136aecbaa6d347bd761",
+          "author" : {
+            "id" : "5d0971acaecbaa9348e27947",
+            "userId" : "5d0971acaecbaa9348e27946",
+            "firstName" : "Thanh",
+            "lastName" : "Trần",
+            "gender" : 1,
+            "dob" : "2019-04-08T00:00:00+0700",
+            "avatarUrl" : "http://localhost:8080/api/v1/files/user_avatar_5d0971acaecbaa9348e27946.png",
+            "description" : "User Test 2",
+            "type" : 0,
+            "status" : 1,
+            "createdDate" : "2019-06-19T06:20:12+0700",
+            "modifiedDate" : "2019-06-19T06:20:36+0700",
+            "followedBy" : [ ],
+            "ratingCount" : 3,
+            "ratingValue" : 11,
+            "ratingAverage" : 3.6666666666666665
+          },
+          "locationType" : 1,
+          "address" : {
+            "id" : "04",
+            "province" : {
+              "id" : "04",
+              "name" : "Cao Bằng",
+              "slug" : "cao-bang",
+              "type" : "tinh",
+              "nameWithType" : "Tỉnh Cao Bằng",
+              "code" : "04",
+              "status" : 1
+            },
+            "district" : {
+              "id" : "044",
+              "name" : "Thông Nông",
+              "type" : "huyen",
+              "slug" : "thong-nong",
+              "nameWithType" : "Huyện Thông Nông",
+              "path" : "Thông Nông, Cao Bằng",
+              "pathWithType" : "Huyện Thông Nông, Tỉnh Cao Bằng",
+              "code" : "044",
+              "parentCode" : "04",
+              "status" : 1
+            },
+            "ward" : {
+              "id" : "01367",
+              "name" : "Cần Nông",
+              "type" : "xa",
+              "slug" : "can-nong",
+              "nameWithType" : "Xã Cần Nông",
+              "path" : "Cần Nông, Thông Nông, Cao Bằng",
+              "pathWithType" : "Xã Cần Nông, Huyện Thông Nông, Tỉnh Cao Bằng",
+              "code" : "01367",
+              "parentCode" : "044",
+              "status" : 1
+            }
+          },
+          "images" : [
+            {
+              "name" : "ma1.jpg",
+              "uid" : 1560903927602,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_f572bf5b1f014b7eaad427b67b722f0b5d0971acaecbaa9348e27946.jpg",
+              "size" : 101226,
+              "status" : "success"
+            },
+            {
+              "name" : "ma2.jpg",
+              "uid" : 1560903931908,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_d6f3689c345a40cba5364a2e0a1f0c855d0971acaecbaa9348e27946.jpg",
+              "size" : 111863,
+              "status" : "success"
+            },
+            {
+              "name" : "ma3.jpg",
+              "uid" : 1560903935450,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_b66e92358ac747bda7022f47b44b19ec5d0971acaecbaa9348e27946.jpg",
+              "size" : 55634,
+              "status" : "success"
+            }
+          ],
+          "additionalInfo" : {
+            "title" : "Máy ảnh SONY Như mới",
+            "description" : "Kẹt tiền bán máy ảnh Sony như hình, lắp ráp tại Nhật. Đẹp bao zin, phục kiện zin đi kèm gồm : máy, pin, xạc dock , thẻ nhớ 16G , bao da. Thông tin các bạn xem gg giúp nhé.",
+            "adsType" : 1,
+            "maxPrice" : 0,
+            "price" : 5000000
+          },
+          "breadcrumbs" : [
+            "5d09740daecbaa9348e27948"
+          ],
+          "metadata" : [
+            {
+              "label" : "Tình Trạng",
+              "enLabel" : "State",
+              "slug" : "tinh-trang",
+              "selectionType" : "single",
+              "type" : "text",
+              "value" : "",
+              "valueLabel" : "Như mới",
+              "enValueLabel" : ""
+            },
+            {
+              "label" : "Màu sắc",
+              "enLabel" : "color",
+              "slug" : "mau-sac",
+              "selectionType" : "single",
+              "type" : "color",
+              "value" : "#000000",
+              "valueLabel" : "Đen",
+              "enValueLabel" : "Like new"
+            }
+          ],
+          "createdDate" : "2019-06-19T07:26:30+0700",
+          "modifiedDate" : "2019-06-19T07:26:30+0700",
+          "status" : 1
+        }
+      },
+      {
+        "_index" : "classified_ads",
+        "_type" : "_doc",
+        "_id" : "5d15ef90aecbaa0300555637",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "5d15ef90aecbaa0300555637",
+          "author" : {
+            "id" : "5d0971acaecbaa9348e27947",
+            "userId" : "5d0971acaecbaa9348e27946",
+            "firstName" : "Thanh",
+            "lastName" : "Trần",
+            "gender" : 1,
+            "dob" : "2019-04-08T00:00:00+0700",
+            "avatarUrl" : "http://localhost:8080/api/v1/files/user_avatar_5d0971acaecbaa9348e27946.png",
+            "description" : "User Test 2",
+            "type" : 0,
+            "status" : 1,
+            "createdDate" : "2019-06-19T06:20:12+0700",
+            "modifiedDate" : "2019-06-19T06:20:36+0700",
+            "followedBy" : [
+              "5d096e3faecbaa9348e27942"
+            ],
+            "ratingCount" : 3,
+            "ratingValue" : 11,
+            "ratingAverage" : 3.6666666666666665
+          },
+          "locationType" : 2,
+          "address" : {
+            "id" : "5d097bc9aecbaa9348e2794f",
+            "province" : {
+              "id" : "70",
+              "name" : "Bình Phước",
+              "slug" : "binh-phuoc",
+              "type" : "tinh",
+              "nameWithType" : "Tỉnh Bình Phước",
+              "code" : "70",
+              "status" : 1
+            },
+            "district" : {
+              "id" : "693",
+              "name" : "Bù Đốp",
+              "type" : "huyen",
+              "slug" : "bu-dop",
+              "nameWithType" : "Huyện Bù Đốp",
+              "path" : "Bù Đốp, Bình Phước",
+              "pathWithType" : "Huyện Bù Đốp, Tỉnh Bình Phước",
+              "code" : "693",
+              "parentCode" : "70",
+              "status" : 1
+            },
+            "ward" : {
+              "id" : "25309",
+              "name" : "Hưng Phước",
+              "type" : "xa",
+              "slug" : "hung-phuoc",
+              "nameWithType" : "Xã Hưng Phước",
+              "path" : "Hưng Phước, Bù Đốp, Bình Phước",
+              "pathWithType" : "Xã Hưng Phước, Huyện Bù Đốp, Tỉnh Bình Phước",
+              "code" : "25309",
+              "parentCode" : "693",
+              "status" : 1
+            },
+            "detail" : "53 Thôn 3"
+          },
+          "images" : [
+            {
+              "name" : "dt3.jpg",
+              "uid" : 1561718639195,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_ac427327d4c94651ab6a0fef7dc23fdd5d0971acaecbaa9348e27946.jpg",
+              "size" : 77016,
+              "status" : "success"
+            }
+          ],
+          "additionalInfo" : {
+            "title" : "Bán điện thoại iPhone 7 Plus 64GB ",
+            "description" : "Bán điện thoại iPhone 7 Plus 64GB còn vân tay",
+            "adsType" : 1,
+            "maxPrice" : 0,
+            "price" : 1900000
+          },
+          "breadcrumbs" : [
+            "5d09740daecbaa9348e27948"
+          ],
+          "metadata" : [
+            {
+              "label" : "Tình Trạng",
+              "enLabel" : "State",
+              "slug" : "tinh-trang",
+              "selectionType" : "single",
+              "type" : "text",
+              "value" : "",
+              "valueLabel" : "Như mới",
+              "enValueLabel" : ""
+            },
+            {
+              "label" : "Màu sắc",
+              "enLabel" : "color",
+              "slug" : "mau-sac",
+              "selectionType" : "single",
+              "type" : "color",
+              "value" : "",
+              "valueLabel" : "Trắng",
+              "enValueLabel" : "Like new"
+            }
+          ],
+          "saves" : [
+            "5d096e3faecbaa9348e27942"
+          ],
+          "createdDate" : "2019-06-28T17:44:32+0700",
+          "modifiedDate" : "2019-06-28T17:44:32+0700",
+          "tradeStatus" : 0,
+          "status" : 1
+        }
+      },
+      {
+        "_index" : "classified_ads",
+        "_type" : "_doc",
+        "_id" : "5d0983d7aecbaa6d347bd766",
+        "_score" : 1.0,
+        "_source" : {
+          "id" : "5d0983d7aecbaa6d347bd766",
+          "author" : {
+            "id" : "5d096e3faecbaa9348e27943",
+            "userId" : "5d096e3faecbaa9348e27942",
+            "firstName" : "Tươi",
+            "lastName" : "Trần",
+            "gender" : 2,
+            "dob" : "2019-06-01T00:00:00+0700",
+            "avatarUrl" : "http://localhost:8080/api/v1/files/user_avatar_5d096e3faecbaa9348e27942.png",
+            "description" : "User Test 1",
+            "type" : 0,
+            "status" : 1,
+            "createdDate" : "2019-06-19T06:05:35+0700",
+            "modifiedDate" : "2019-06-22T15:14:21+0700",
+            "following" : [ ],
+            "ratingCount" : 0,
+            "ratingValue" : 0,
+            "ratingAverage" : 0.0
+          },
+          "locationType" : 1,
+          "address" : {
+            "id" : "01",
+            "province" : {
+              "id" : "01",
+              "name" : "Hà Nội",
+              "slug" : "ha-noi",
+              "type" : "thanh-pho",
+              "nameWithType" : "Thành phố Hà Nội",
+              "code" : "01",
+              "status" : 1
+            },
+            "district" : {
+              "id" : "280",
+              "name" : "Phú Xuyên",
+              "type" : "huyen",
+              "slug" : "phu-xuyen",
+              "nameWithType" : "Huyện Phú Xuyên",
+              "path" : "Phú Xuyên, Hà Nội",
+              "pathWithType" : "Huyện Phú Xuyên, Thành phố Hà Nội",
+              "code" : "280",
+              "parentCode" : "01",
+              "status" : 1
+            },
+            "ward" : {
+              "id" : "10333",
+              "name" : "Tri Thủy",
+              "type" : "xa",
+              "slug" : "tri-thuy",
+              "nameWithType" : "Xã Tri Thủy",
+              "path" : "Tri Thủy, Phú Xuyên, Hà Nội",
+              "pathWithType" : "Xã Tri Thủy, Huyện Phú Xuyên, Thành phố Hà Nội",
+              "code" : "10333",
+              "parentCode" : "280",
+              "status" : 1
+            }
+          },
+          "images" : [
+            {
+              "name" : "lg1.jpg",
+              "uid" : 1560904626766,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_c3ad3e20b9da4fdc8b6bec9066146ee05d096e3faecbaa9348e27942.jpg",
+              "size" : 68700,
+              "status" : "success"
+            },
+            {
+              "name" : "lg2.jpg",
+              "uid" : 1560904631904,
+              "percentage" : 100,
+              "url" : "http://localhost:8080/api/v1/files/compressed_0d5f48d7c2d64ce89a5d5531a290e47f5d096e3faecbaa9348e27942.jpg",
+              "size" : 61842,
+              "status" : "success"
+            }
+          ],
+          "additionalInfo" : {
+            "title" : "Mô hình lắp ghép nhà",
+            "description" : "Mô hình lắp ghép cho bé thoải mái sáng tạo, chất liệu gỗ an toàn tuyệt đối",
+            "adsType" : 1,
+            "maxPrice" : 0,
+            "price" : 500000
+          },
+          "breadcrumbs" : [
+            "5d097a7caecbaa9348e2794d"
+          ],
+          "metadata" : [
+            {
+              "label" : "Độ tuổi",
+              "enLabel" : "Age",
+              "slug" : "do-tuoi",
+              "selectionType" : "single",
+              "type" : "text",
+              "value" : "",
+              "valueLabel" : "Từ 3 - 5",
+              "enValueLabel" : ""
+            },
+            {
+              "label" : "Loại đồ chơi",
+              "enLabel" : "Type",
+              "slug" : "loai-do-choi",
+              "selectionType" : "single",
+              "type" : "text",
+              "value" : "",
+              "valueLabel" : "Lắp ghép",
+              "enValueLabel" : "Building"
+            }
+          ],
+          "createdDate" : "2019-06-19T07:37:43+0700",
+          "modifiedDate" : "2019-06-19T07:37:43+0700",
+          "status" : 1
+        }
+      }
+    ]
+  }
+}

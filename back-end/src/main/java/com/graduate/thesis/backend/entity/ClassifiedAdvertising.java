@@ -48,11 +48,35 @@ public class ClassifiedAdvertising {
 
     private List<AdsMetadata> metadata;
 
+    private List<String> saves;
+
     private Date createdDate;
 
     private Date modifiedDate;
 
+    private int tradeStatus; // 0: pending, 1: available, 2: sell, 3: hide
+
+    private Date topPostExpiryDate;
+
     private int status;
+
+    public enum TradeStatus {
+        PENDING(0),
+        AVAILABLE(1),
+        SOLD(2),
+        HIDE(3),
+        ;
+
+        private int value;
+
+        TradeStatus(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
 
     public ClassifiedAdvertising(ClassifiedAdvertisingElastic classifiedAdvertisingElastic){
 

@@ -19,11 +19,11 @@
                 <li
                   v-for="(item, index) in images"
                   :key="item.uid"
-                  class="el-upload-list__item"
+                  class="el-upload-list__item side-image"
                   :class="{'is-active': index === imageIndex}"
                   @click="handleChangeCarousel(index)"
                 >
-                  <el-image :src="item.url" class="el-upload-list__item-thumbnail">
+                  <el-image :src="item.url" class="el-upload-list__item-thumbnail side-image">
                     <div slot="error" class="image-slot">
                       <i class="el-icon-picture-outline" />
                     </div>
@@ -42,17 +42,28 @@
           </el-col>
         </el-row>
         <div class="basic-info">
-          <h2>{{ additionalInfo.title }}</h2>
+          <h2>{{ additionalInfo.title }}  <i v-if="author.userId === userId" style="cursor: pointer" class="el-icon-edit" @click="handleEditAds" /> </h2>
           <el-row>
             <div class="price">{{ additionalInfo.price | currency('VNĐ', 0, {symbolOnLeft: false, spaceBetweenAmountAndSymbol: true}) }}</div>
-            <span>-</span>
+            <!--<span>-</span>-->
             <div v-if="additionalInfo.maxPrice" class="price">{{ additionalInfo.maxPrice | currency('VNĐ', 0, {symbolOnLeft: false, spaceBetweenAmountAndSymbol: true}) }}</div>
             <div class="action">
-              <el-badge :value="200" :max="99" class="item">
-                <el-button size="mini" type="success">Save</el-button>
+              <el-button v-if="author.userId === userId" type="warning" icon="el-icon-upload2" @click="handleOpenPushModal">Đẩy tin</el-button>
+              <el-select v-if="author.userId === userId" v-model="tradingStatus" :disabled="tradingStatus === 0" clearable placeholder="Select" @change="handleTradingSelection">
+                <el-option
+                  v-for="item in tradingStatusOption"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                  :disabled="item.value === 0"
+                />
+              </el-select>
+              <el-badge v-if="author.userId !== userId" :value="saves.length" :max="10" class="item">
+                <el-button v-if="saves.includes(userId)" size="mini" type="success" @click="handleRemoveSave">{{ $t('button.remove_save_ads') }}</el-button>
+                <el-button v-else size="mini" type="success" @click="handleSave">{{ $t('button.save_ads') }}</el-button>
               </el-badge>
-              <el-badge :value="100" :max="10" class="item">
-                <el-button size="mini" type="warning">Report</el-button>
+              <el-badge v-if="author.userId !== userId" :value="reportModel.number" :max="10" class="item">
+                <el-button size="mini" type="warning" @click="reportDialogShow = true">{{ $t('button.report') }}</el-button>
               </el-badge>
             </div>
           </el-row>
@@ -74,10 +85,12 @@
               <div class="author-action">
                 <el-row>
                   <el-button type="success" icon="el-icon-phone" circle />
-                  <el-button type="info" icon="el-icon-message" circle />
+                  <el-button type="info" icon="el-icon-message" circle @click="handleOpenChatModal" />
                   <el-button type="primary" icon="el-icon-bell" circle />
                   <el-button type="warning" icon="el-icon-warning" circle />
                 </el-row>
+                <chat-popup :recipient="author" :visible="chatPopupVisible" @closeChatModal="handleCloseChatModal" />
+                <push-ads-popup :ads-id="classifiedAdsId" :visible="pushAdsPopupVisible" @closePushAdsModal="handleClosePushModal" />
               </div>
             </el-col>
           </el-row>
@@ -95,7 +108,7 @@
               <template v-if="item.value || item.valueLabel || item.enValueLabel">
                 <span>{{ item.label }}</span> :
                 <span style="font-weight: 600;">{{ item.valueLabel || item.enValueLabel }} </span>
-                <div v-if="item.value.startsWith('#')" :style="{'background': item.value, 'width': '20px', 'height': '10px', 'display': 'inline-block'}" />
+                <div v-if="item.value && item.value.startsWith('#')" :style="{'background': item.value, 'width': '20px', 'height': '10px', 'display': 'inline-block'}" />
               </template>
             </el-col>
           </el-row>
@@ -107,6 +120,38 @@
         </div>
       </aside>
     </main>
+
+    <el-dialog :visible.sync="reportDialogShow" :title="$t('label.report_modal')">
+      <el-form label-width="130px" label-position="left">
+        <el-form-item :label="$t('label.reason')">
+          <el-select
+            v-model="reportModel.reason"
+            :placeholder="$t('place_holder.select_reason')"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in reasons"
+              :key="item.id"
+              :label="$t(item.key)"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('label.description')">
+          <el-input
+            v-model="reportModel.description"
+            type="textarea"
+            :rows="3"
+            :placeholder="$t('label.description')"
+          />
+        </el-form-item>
+      </el-form>
+      <div style="text-align:right;">
+        <el-button type="danger" @click="reportDialogShow = false">{{ $t('button.cancel') }}</el-button>
+        <el-button type="primary" @click="createReport">{{ $t('button.report') }}</el-button>
+      </div>
+    </el-dialog>
+
     <!--    <footer>footer</footer>-->
   </div>
 </template>
@@ -114,12 +159,18 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import i18n from '@/lang'
-import SearchItem from '../../components/Advertising/SearchItem'
+import SearchItem from '@/components/Advertising/SearchItem'
+import { Status } from '@/utils/constants'
+import ChatPopup from '../chat/ChatPopup'
+import { showSuccess } from '../../utils/message'
+import PushAdsPopup from './PushAdsPopup'
 
 export default {
   name: 'ClassifiedAdsDetail',
   components: {
-    SearchItem
+    SearchItem,
+    ChatPopup,
+    PushAdsPopup
   },
   data() {
     return {
@@ -131,6 +182,8 @@ export default {
       metadata: [],
       i18n: i18n,
       imageIndex: 0,
+      chatPopupVisible: false,
+      pushAdsPopupVisible: false,
       searchQuery: {
         categoryId: '',
         pageNumber: 1,
@@ -139,12 +192,67 @@ export default {
         ascSort: false,
         minPrice: '0',
         maxPrice: '10000000000'
-      }
+      },
+      reportModel: {
+        reason: 0,
+        description: '',
+        number: 0
+      },
+      reasons: [
+        {
+          id: 0,
+          key: 'label.reasons.cheat'
+        },
+        {
+          id: 1,
+          key: 'label.reasons.duplicate'
+        },
+        {
+          id: 2,
+          key: 'label.reasons.sold_out'
+        },
+        {
+          id: 3,
+          key: 'label.reasons.not_contact'
+        },
+        {
+          id: 4,
+          key: 'label.reasons.not_true'
+        },
+        {
+          id: 5,
+          key: 'label.reasons.other'
+        }
+      ],
+      tradingStatusOption: [
+        {
+          value: 0,
+          label: 'Chờ xử lý'
+        },
+        {
+          value: 1,
+          label: 'Đang bán'
+        }, {
+          value: 2,
+          label: 'Đã bán'
+        }, {
+          value: 3,
+          label: 'Ẩn tin'
+        }],
+      tradingStatus: '',
+      saves: [],
+      reportDialogShow: false
     }
   },
+  // metaInfo() {
+  //   return {
+  //     title: 'hello'
+  //   }
+  // },
   computed: {
     ...mapState('advertising', ['classifiedAds']),
-    ...mapGetters('advertising', ['topCategoryPost'])
+    ...mapGetters('advertising', ['topCategoryPost']),
+    ...mapGetters('profile', ['userId'])
   },
   mounted() {
     this.classifiedAdsId = this.$route.params.id
@@ -154,20 +262,89 @@ export default {
       this.additionalInfo = Object.assign({}, this.classifiedAds.detail.additionalInfo)
       this.author = Object.assign({}, this.classifiedAds.author)
       this.address = Object.assign({}, this.classifiedAds.address)
+      this.tradingStatus = this.classifiedAds.detail.tradeStatus
+      this.saves = Object.assign([], this.classifiedAds.detail.saves)
       this.handleGetTopCategoryPost()
+      this.getNumberOfReportAds()
+      document.title = this.additionalInfo.title
     })
   },
   created() {
   },
   methods: {
-    ...mapActions('advertising', ['getClassifiedAdsDetail', 'getTopCategoryPost']),
+    ...mapActions('advertising', ['getClassifiedAdsDetail', 'getTopCategoryPost',
+      'changeTradingStatusAds', 'saveAds', 'removeSaveAds', 'pushAdvertising']),
+    ...mapActions('report', ['createNewReport', 'getNumberOfReport']),
     handleChangeCarousel(index) {
       this.imageIndex = index
       this.$refs.carousel.activeIndex = index
     },
     handleGetTopCategoryPost() {
-      this.searchQuery.categoryId = this.classifiedAds.breadcrumbs[this.classifiedAds.breadcrumbs.length - 2].id
+      this.searchQuery.categoryId = this.classifiedAds.breadcrumbs[0].id
       this.getTopCategoryPost(this.searchQuery).then(() => {
+      })
+    },
+    handleCloseChatModal() {
+      this.chatPopupVisible = false
+    },
+    handleOpenChatModal() {
+      this.chatPopupVisible = true
+    },
+    handleClosePushModal() {
+      this.pushAdsPopupVisible = false
+    },
+    handleOpenPushModal() {
+      this.pushAdsPopupVisible = true
+    },
+    handleTradingSelection() {
+      this.changeTradingStatusAds({ id: this.classifiedAdsId, status: this.tradingStatus })
+        .then(() => {
+          showSuccess('message.change_trading_status_success')
+        })
+    },
+    handleSave() {
+      this.saveAds(this.classifiedAdsId).then((res) => {
+        this.saves = Object.assign([], res.data)
+        showSuccess('message.save_ads_success')
+      })
+    },
+    handleRemoveSave() {
+      this.removeSaveAds(this.classifiedAdsId).then((res) => {
+        this.saves = Object.assign([], res.data)
+        showSuccess('message.remove_save_ads_success')
+      })
+    },
+    handleEditAds() {
+      this.$router.push({ path: '/advertising/edit/' + this.classifiedAdsId })
+    },
+    createReport() {
+      this.createNewReport({
+        classifiedAdsId: this.classifiedAdsId,
+        reason: this.reportModel.reason,
+        description: this.reportModel.description
+      }).then(res => {
+        if (res.status === Status.SUCCESS) {
+          this.$message({
+            message: this.$t('message.report_success'),
+            type: 'success'
+          })
+          this.getNumberOfReportAds()
+        } else {
+          this.$message({
+            message: this.$t('errors.' + res.status),
+            type: 'error'
+          })
+        }
+        this.reportDialogShow = false
+      })
+    },
+    getNumberOfReportAds() {
+      this.getNumberOfReport(this.classifiedAdsId).then(res => {
+        if (res.status === Status.SUCCESS) {
+          this.reportModel.number = res.data
+        } else {
+          this.reportModel.number = 0
+        }
       })
     }
   }
@@ -187,13 +364,18 @@ export default {
     display: flex;
     flex-flow: row;
   }
-
   main > article {
     margin: 4px;
     padding: 5px;
     background: rgba(255, 255, 255, 0.9);
     flex: 3 1 60%;
     order: 2;
+    .side-image{
+      max-width:144px;
+      max-height:144px;
+      width: auto;
+      height: auto;
+    }
     .carousel-left {
       text-align: center;
       height: 400px;
@@ -217,10 +399,15 @@ export default {
         .el-carousel__arrow {
           z-index: 3;
         }
+        .el-carousel__item {
+          text-align: center;
+        }
       }
       img {
-        width: 100%;
-        height: 400px;
+        max-width:800px;
+        max-height:400px;
+        width: auto;
+        height: auto;
       }
     }
 

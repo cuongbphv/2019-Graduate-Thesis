@@ -18,10 +18,25 @@ const topCategoryPost = state => {
   return state.topCategoryPost
 }
 
+const savedAds = state => {
+  return state.savedAds
+}
+
+const classifiedAds = state => {
+  return state.classifiedAds
+}
+
+const pushPost = state => {
+  return state.pushPost
+}
+
 export default {
   topPagingNewClassifiedAds,
   listPagingClassifiedAds,
   searchResult,
   searchState,
-  topCategoryPost
+  topCategoryPost,
+  savedAds,
+  classifiedAds,
+  pushPost
 }

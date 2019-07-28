@@ -4,9 +4,17 @@ const API = {
   OTP: '/auth/otp',
   INIT_DATA: '/user/me',
   CHANGE_PASSWORD: '/user/password',
+  USER: '/user',
+  PASSWORD: '/password',
+  BAN: '/ban',
+  UNLOCK: '/unlock',
   SYS_ADMIN_LIST_USER: '/user/list',
+  ADMIN_LIST_USER: '/user',
   PROFILE: '/profile',
   FOLLOW: '/follow',
+  RATING: '/rating',
+  STATISTIC: '/statistic',
+  STATISTICS: '/statistics',
   UPDATE_PERSONAL_PERMISSION: '/profile/permissions',
   // Location APIs
   LOCATION: '/location',
@@ -20,7 +28,10 @@ const API = {
   LIST_CATEGORY: '/category/list',
   BREADCRUMBS: '/category/breadcrumbs',
   METADATA: '/metadata',
+  METADATAS: '/metadatas',
   FILTER: '/filter',
+  PAYMENT: '/payment',
+  CONVERT: '/convert',
   // ADDRESS APIs
   ADDRESS: '/address',
   // ADVERTISING APIs
@@ -30,13 +41,21 @@ const API = {
   UPLOAD_TEMP_IMAGE: '/advertising/upload_temp_image',
   REMOVE_TEMP_IMAGE: '/advertising/remove_temp_image',
   FULL_TEXT_SEARCH: '/advertising/search',
+  SAVES: '/saves',
+  STATUS: '/status',
   TOP_CATEGORY_POST: '/advertising/top_category_post',
+  PUSH_POST: '/advertising/push_post',
   // ROLE_PERMISSION APIs
   ROLE: '/role',
   PERMISSION: '/permission',
   // CHAT
   CHAT: '/chats',
-  MESSAGE: '/messages'
+  NOTIFICATION: '/notifications',
+  MESSAGE: '/messages',
+  // REPORT
+  REPORT: '/report',
+  REPORT_LIST: '/report/list',
+  NUMBER_OF_REPORT: '/report/number'
 }
 
 const Status = {

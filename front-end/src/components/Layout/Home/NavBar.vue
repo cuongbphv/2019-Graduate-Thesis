@@ -55,7 +55,17 @@
                   {{ $t('navbar.profile') }}
                 </el-dropdown-item>
               </router-link>
+              <router-link v-if="profile.role.name === 'SYS_ADMIN'" to="/sys_admin_role">
+                <el-dropdown-item>
+                  {{ $t('navbar.dashboard') }}
+                </el-dropdown-item>
+              </router-link>
               <router-link v-if="profile.role.name === 'ADMIN'" to="/dashboard">
+                <el-dropdown-item>
+                  {{ $t('navbar.dashboard') }}
+                </el-dropdown-item>
+              </router-link>
+              <router-link v-if="profile.role.name === 'MODERATOR'" to="/manage/advertising">
                 <el-dropdown-item>
                   {{ $t('navbar.dashboard') }}
                 </el-dropdown-item>
@@ -67,20 +77,72 @@
           </el-dropdown>
         </div>
         <div v-if="profile.userId">
-          <el-tooltip :content="$t('label.message')" effect="dark" placement="bottom">
-            <el-badge :value="3" class="item">
-              <el-button class="badge" size="medium" icon="el-icon-message" />
-            </el-badge>
-          </el-tooltip>
-          <el-tooltip :content="$t('label.notify')" effect="dark" placement="bottom">
-            <el-badge :value="1" class="item">
-              <el-button class="badge" size="medium" icon="el-icon-bell" />
-            </el-badge>
-          </el-tooltip>
-          <el-tooltip :content="$t('label.create')" effect="dark" placement="bottom">
+          <el-dropdown trigger="click" @command="gotoChat">
+            <el-tooltip :content="$t('label.message')" effect="dark" placement="bottom">
+              <el-badge :value="messageBadge" class="item">
+                <el-button class="badge" size="medium" icon="el-icon-message" />
+              </el-badge>
+            </el-tooltip>
+            <el-dropdown-menu slot="dropdown" style="max-height: 500px; overflow: auto">
+              <el-dropdown-item v-for="conversation in conversations" :key="conversation.id" style="border-bottom: 1px solid #eee;">
+                <div style="display: inline-block">
+                  <!--<img src="https://pixel.nymag.com/imgs/daily/vulture/2018/11/02/02-avatar-2.w700.h700.jpg" class="img-rounded">-->
+                  <template v-for="mem in conversation.members">
+                    <img
+                      v-if="mem.userId !== userId"
+                      :key="mem.id"
+                      :src="mem.avatarUrl"
+                      class="img-rounded"
+                    >
+                  </template>
+                </div>
+                <div style="display: inline-block; margin-left: 5px; width: 300px">
+                  <template v-for="mem in conversation.members">
+                    <div
+                      v-if="mem.userId !== userId"
+                      :key="mem.id"
+                      class="review-block-name"
+                    >
+                      <a href="#"><b>{{ (mem.lastName || '') + ' ' + mem.firstName }}</b></a>
+                    </div>
+                  </template>
+                  <div v-if="conversation.lastMessage.status !== 'SEEN'" class="msg-content"><b>{{ conversation.lastMessage.content }}</b></div>
+                  <div v-else class="msg-content">{{ conversation.lastMessage.content }}</div>
+                  <div class="review-block-date">{{ conversation.lastMessage.createdDate | parseTime('{d}-{m}-{y} {h}:{i}') }}</div>
+                </div>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <el-dropdown trigger="click" @command="gotoNotification">
+            <el-tooltip :content="$t('label.notify')" effect="dark" placement="bottom">
+              <el-badge :value="notificationBadge" class="item">
+                <el-button class="badge" size="medium" icon="el-icon-bell" />
+              </el-badge>
+            </el-tooltip>
+            <el-dropdown-menu slot="dropdown" style="max-height: 500px; overflow: auto">
+              <el-dropdown-item v-for="noti in notifications" :key="noti.id" :command="noti" :class="{unread : noti.status !== 'SEEN'}" style="border-bottom: 1px solid #eee;">
+                <div style="display: inline-block">
+                  <img :src="noti.sender.avatarUrl" class="img-rounded">
+                </div>
+                <div style="display: inline-block; margin-left: 5px;width: 300px">
+                  <div class="review-block-date"><b>{{ noti.sender.lastName + ' ' + noti.sender.firstName }}</b>
+                    {{ getNotificationMsg(noti) }}</div>
+                  <div class="review-block-date">{{ noti.createdDate | parseTime('{d}-{m}-{y} {h}:{i}') }}</div>
+                </div>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <el-tooltip :content="$t('label.create')" effect="dark" placement="bottom" style="float: left!important;">
             <el-badge class="item">
               <router-link to="/advertising">
                 <el-button class="badge" size="medium" icon="el-icon-edit" />
+              </router-link>
+            </el-badge>
+          </el-tooltip>
+          <el-tooltip content="Bee Coin" effect="dark" placement="bottom" style="float: left!important;">
+            <el-badge :value="account||0" class="item">
+              <router-link to="/payment">
+                <el-button class="badge" size="medium" icon="el-icon-bank-card" />
               </router-link>
             </el-badge>
           </el-tooltip>
@@ -128,16 +190,36 @@ export default {
   },
   computed: {
     ...mapState('profile', ['profile']),
+    ...mapGetters('profile', ['userId']),
     ...mapGetters('layout', ['sidebar', 'device']),
+    ...mapGetters('chat', ['conversations']),
+    ...mapGetters('notification', ['notifications']),
+    ...mapGetters('payment', ['account']),
     variables() {
       return variables
+    },
+    messageBadge: function() {
+      return (this.conversations.filter((item) => {
+        return item.lastMessage.status !== 'SEEN'
+      })).length
+    },
+    notificationBadge: function() {
+      return (this.notifications.filter((item) => {
+        return item.status !== 'SEEN'
+      })).length
     }
   },
-  created() {
+  watch: {
+    userId: function(newVal) {
+      this.getAccount()
+    }
+  },
+  mounted() {
   },
   methods: {
     ...mapActions('layout', ['toggleSideBar']),
     ...mapActions('auth', ['clear']),
+    ...mapActions('payment', ['getAccount']),
     logout() {
       this.clear().then(() => {
         const token = new URL(window.location.href).searchParams.get('token')
@@ -157,6 +239,23 @@ export default {
     closeNav() {
       this.opened = false
       document.getElementById('sideNavigation').style.width = '0px'
+    },
+    gotoChat() {
+      this.$router.push({ path: '/chat' })
+    },
+    gotoNotification(noti) {
+      console.log('noti', noti)
+      this.$router.push('/advertising/' + noti.data.id)
+    },
+    getNotificationMsg(noti) {
+      switch (noti.type) {
+        case 'NEW_POST':
+          return ' đã đăng tin mới: ' + noti.data.additionalInfo.title
+        case 'FOLLOW':
+          return ' đã theo dõi bạn'
+        default:
+          return ' thông báo mới'
+      }
     }
   }
 }
@@ -191,6 +290,30 @@ export default {
     margin: 0 0 0 30px;
   }
 }
+.img-rounded{
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+.review-block-name{
+  font-size:12px;
+  line-height: 20px;
+}
+.review-block-date{
+  font-size:12px;
+  line-height: 20px;
+}
+.unread{
+  background: aliceblue;
+}
+.msg-content{
+  font-size:12px;
+  line-height: 20px;
+  white-space: nowrap;
+  width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .column-center {
   float: left;
   width: 50%;
@@ -200,7 +323,7 @@ export default {
   float: right;
   width: 20%;
   .item {
-    margin-left: -10px;
+    margin-left: 0px;
     padding: 0;
     float: right;
     margin-top: 3px;

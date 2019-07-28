@@ -1,6 +1,7 @@
 package com.graduate.thesis.backend.service;
 
 import com.graduate.thesis.backend.entity.ClassifiedAdvertising;
+import com.graduate.thesis.backend.entity.UserProfile;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -38,4 +39,8 @@ public interface ClassifiedAdvertisingService {
             int pageSize,
             List<Integer> status
     );
+
+    void reIndexProfile(UserProfile userProfile);
+
+    long countAllPost();
 }

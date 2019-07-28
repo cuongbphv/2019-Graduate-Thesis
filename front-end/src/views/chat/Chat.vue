@@ -25,7 +25,7 @@
                 <template v-for="user in conversation.members">
                   <div v-if="user.userId !== userId" :key="user.id" class="chat_img"> <img :src="user.avatarUrl" alt="sunil"> </div>
                   <div v-if="user.userId !== userId" :key="user.userId" :class="{ unread: (conversation.lastMessage.status !== 'SEEN' && conversation.lastMessage.senderId !== userId)}" class="chat_ib">
-                    <h5> {{ user.firstName + ' ' + user.lastName }}
+                    <h5> {{ user.firstName + ' ' + (user.lastName || '') }}
                       <span class="chat_date">{{ formatDate(conversation.lastMessage.createdDate) }}</span>
                     </h5>
                     <p> {{ conversation.lastMessage.content }}</p>
@@ -192,7 +192,7 @@ export default {
       this.stompClient = Stomp.over(ws)
       const that = this
       this.stompClient.connect({}, function() {
-        that.stompClient.subscribe('/user/5cae4c886bf46d0b5453a66f/queue/chat', (message) => {
+        that.stompClient.subscribe(`/user/${that.userId}/queue/chat`, (message) => {
           if (message.body) {
             const body = JSON.parse(message.body)
             switch (body.type) {

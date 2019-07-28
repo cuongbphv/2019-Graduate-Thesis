@@ -33,6 +33,9 @@ export default {
   getMetadata(id) {
     return Api.get(API.CATEGORY + `/${id}` + API.METADATA).then(res => res.data)
   },
+  getMetadatas(id) {
+    return Api.get(API.CATEGORY + `/${id}` + API.METADATAS).then(res => res.data)
+  },
   getFilter(id) {
     return Api.get(API.CATEGORY + `/${id}` + API.FILTER).then(res => res.data)
   }

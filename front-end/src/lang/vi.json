@@ -5,6 +5,7 @@
     "management": "Quản lý",
     "location": "Địa điểm",
     "category": "Danh mục",
+    "report": "Báo cáo",
     "user": "Người dùng",
     "role": "Vai trò",
     "access": "Quyền truy cập",
@@ -73,7 +74,8 @@
     "theme": "Theme",
     "clipboardDemo": "Clipboard",
     "i18n": "I18n",
-    "externalLink": "External Link"
+    "externalLink": "External Link",
+    "profileDetail": "Trang cá nhân"
   },
   "navbar": {
     "logOut": "Đăng xuất",
@@ -132,7 +134,12 @@
     "new_role": "Vai trò mới",
     "load_more": "Tải thêm",
     "submit": "Xác nhận",
-    "send_code": "Gửi mã"
+    "send_code": "Gửi mã",
+    "report": "Báo cáo",
+    "block": "Khóa tin",
+    "deactive": "Vô hiệu hóa báo cáo",
+    "save_ads": "Lưu",
+    "remove_save_ads": "Bỏ lưu"
   },
   "documentation": {
     "documentation": "Documentation",
@@ -188,11 +195,16 @@
       "permission": "Quyền",
       "loginAccount": "Tài khoản đăng nhập",
       "createdDate": "Ngày tạo",
+      "lastReported": "Ngày báo cáo gần nhất",
+      "reportedDate": "Ngày báo cáo",
+      "userReport": "Người báo cáo",
+      "reason": "Lý do",
+      "description": "Mô tả",
       "role": "Vai trò",
       "provider": "Nhà cung cấp",
       "status": "Trạng thái",
       "title": "Tiêu đề",
-      "author": "Tác giả",
+      "author": "Người đăng",
       "category": "Danh mục",
       "location": "Địa điểm"
     }
@@ -260,14 +272,25 @@
     "list_permission": "Danh sách quyền",
     "update_role_permission": "Cập nhật vai trò người dùng và quyền truy cập",
     "role": "Vai trò",
-    "edit_role": "Chỉnh sửa vai trò"
+    "edit_role": "Chỉnh sửa vai trò",
+    "report_modal": "Báo cáo vi phạm",
+    "reason": "Reason",
+    "reasons": {
+      "cheat": "Lừa đảo",
+      "duplicate": "Trùng lặp",
+      "sold_out": "Đã bán hết",
+      "not_contact": "Không thể liên lạc",
+      "not_true": "Thông tin không đúng",
+      "other": "Lý do khác"
+    }
   },
   "place_holder": {
     "category_description": "Mô tả sơ lược về danh mục này",
     "permission_name": "Tên quyền truy cập",
     "role_name": "Tên vai trò",
     "role_description": "Mô tả vai trò",
-    "select_role_user": "Lựa chọn vai trò người dùng"
+    "select_role_user": "Lựa chọn vai trò người dùng",
+    "select_reason": "Lựa chọn lý do báo cáo"
   },
   "errorLog": {
     "tips": "Please click the bug icon in the upper right corner",
@@ -348,7 +371,19 @@
     "update_role_success": "Cập nhật vai trò và quyền vai trò thành công",
     "create_role_success": "Tạo vai trò và quyền vai trò thành công",
     "update_personal_permission_success": "Cập nhật quyền truy cập cá nhân thành công",
-    "send_otp_success": "Gửi mã OTP thành công"
+    "send_otp_success": "Gửi mã OTP thành công",
+    "report_success": "Báo cáo tin rao vặt thành công",
+    "action_report_success": "Thao tác với báo cáo vi phạm thành công",
+    "change_trading_status_success": "Thay đổi trạng thái thành công",
+    "save_ads_success": "Đã lưu bài viết",
+    "remove_save_ads_success": "Đã bỏ lưu bài viết",
+    "delete_user_success": "Đã xóa người dùng thành công",
+    "ban_user_success": "Đã khóa tài khoản",
+    "unlock_user_success": "Đã mở khóa tài khoản",
+    "pay_success": "Thanh toán thành công",
+    "pay_error": "Đã xảy ra lỗi khi thanh toán",
+    "push_success": "Đẩy tin thành công",
+    "push_error": "Đẩy tin thất bại"
   },
   "advertising": {
     "title": "Tiêu đề",
@@ -384,7 +419,7 @@
     "not": "Không nên",
     "internet": "Sử dụng hình ảnh trùng lặp hoặc lấy từ Internet",
     "insert_phone": "Chèn số điện thoại/email/logo vào hình",
-    "created_success": "Bạn đã tạo thành công tin rao vặt",
+    "created_success": "Bạn đã đăng thành công tin rao vặt",
     "watch": "Vào xem",
     "post": "tin rao vặt",
     "now": "vừa đăng ngay bây giờ",
@@ -454,6 +489,9 @@
       "505": "Tỉnh, thành phố đã tồn tại",
       "506": "Quận, huyện đã tồn tại",
       "507": "Xã, phường đã tồn tại"
-    }
+    },
+    "604": "Không tìm thấy tin rao vặt",
+    "605": "Bạn đã báo cáo tin rao vặt trước đó",
+    "606": "Tin rao vặt đã bị khóa hoặc xóa"
   }
 }

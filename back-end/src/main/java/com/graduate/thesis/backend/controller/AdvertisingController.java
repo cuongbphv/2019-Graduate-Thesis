@@ -80,6 +80,14 @@ public class AdvertisingController extends AbstractBasedAPI {
     @Autowired
     ClassifiedAdvertisingElasticService classifiedAdvertisingElasticService;
 
+    @Autowired
+    ReportService reportService;
+
+    @Autowired
+    AccountService accountService;
+
+    @Autowired
+    PaymentService paymentService;
 
     @GetMapping(Constant.FULL_TEXT_SEARCH)
     public ResponseEntity<RestAPIResponse> fullTextSearch(
@@ -161,6 +169,27 @@ public class AdvertisingController extends AbstractBasedAPI {
 
     }
 
+    @GetMapping(Constant.PUSH_POST)
+    public ResponseEntity<RestAPIResponse> getPushPost(
+            @RequestParam(value = "category_id", required = false, defaultValue = "") String categoryId
+    ){
+
+        List<ClassifiedAdvertisingElastic> result = classifiedAdvertisingElasticService.getPushPost(categoryId);
+
+        if(result == null || result.size() == 0){
+            return null;
+        }
+
+        return responseUtil.successResponse(getRandomElement(result));
+
+    }
+
+    public ClassifiedAdvertisingElastic getRandomElement(List<ClassifiedAdvertisingElastic> list)
+    {
+        Random rand = new Random();
+        return list.get(rand.nextInt(list.size()));
+    }
+
     @PostMapping()
     public ResponseEntity<RestAPIResponse> createNewAdvertising (
             @CurrentUser UserPrincipal userPrincipal,
@@ -191,6 +220,7 @@ public class AdvertisingController extends AbstractBasedAPI {
 		classifiedAdvertising.setModifiedDate(new Date());
         // just for new after that will update pending status, after previewer confirm switch to active status
         classifiedAdvertising.setStatus(Constant.Status.PENDING.getValue());
+        classifiedAdvertising.setTradeStatus(ClassifiedAdvertising.TradeStatus.PENDING.getValue());
 
         ClassifiedAdvertising createdAds = classifiedAdvertisingService.save(classifiedAdvertising);
 
@@ -198,6 +228,101 @@ public class AdvertisingController extends AbstractBasedAPI {
     }
 
     @PutMapping(value = Constant.WITHIN_ID)
+    public ResponseEntity<RestAPIResponse> updateAdvertising (
+            @CurrentUser UserPrincipal userPrincipal,
+            @PathVariable("id") String adsId,
+            @RequestBody NewAdvertisingRequest reqModel
+    ) {
+
+        ClassifiedAdvertising classifiedAdvertising =
+                classifiedAdvertisingService.getClassifiedAdsDetailByIdAndAuthor(adsId, userPrincipal.getId());
+
+        if(classifiedAdvertising == null){
+            throw new ApplicationException(APIStatus.ERR_CLASSIFIED_ADVERTISING_NOT_FOUND);
+        }
+
+        classifiedAdvertising.setLocationType(reqModel.getLocationType());
+        if (reqModel.getLocationType() == Constant.LocationType.DATA_ADDRESS.getValue()) {
+            classifiedAdvertising.setProvinceId(reqModel.getProvinceId());
+            classifiedAdvertising.setDistrictId(reqModel.getDistrictId());
+            classifiedAdvertising.setWardId(reqModel.getWardId());
+        } else if (reqModel.getLocationType() == Constant.LocationType.USER_ADDRESS.getValue()) {
+            classifiedAdvertising.setAddressId(reqModel.getAddressId());
+        }
+        classifiedAdvertising.setAuthorId(userPrincipal.getId());
+        classifiedAdvertising.setImages(reqModel.getImages());
+        classifiedAdvertising.setAdditionalInfo(reqModel.getAdditionalInfo());
+        classifiedAdvertising.setBreadcrumbs(reqModel.getBreadcrumbs());
+        classifiedAdvertising.setMetadata(reqModel.getMetadata());
+        classifiedAdvertising.setModifiedDate(new Date());
+        // just for new after that will update pending status, after previewer confirm switch to active status
+        classifiedAdvertising.setStatus(Constant.Status.PENDING.getValue());
+
+        ClassifiedAdvertising updatedAds = classifiedAdvertisingService.save(classifiedAdvertising);
+
+        indexAds(updatedAds);
+
+        return responseUtil.successResponse(updatedAds);
+    }
+
+    @PutMapping(value = Constant.WITHIN_ID + Constant.PUSH)
+    public ResponseEntity<RestAPIResponse> registerTopPost (
+            @CurrentUser UserPrincipal userPrincipal,
+            @PathVariable("id") String adsId,
+            @RequestParam("period") int period
+    ) {
+
+        ClassifiedAdvertising classifiedAdvertising =
+                classifiedAdvertisingService.getClassifiedAdsDetailByIdAndAuthor(adsId, userPrincipal.getId());
+
+        if(classifiedAdvertising == null){
+            throw new ApplicationException(APIStatus.ERR_CLASSIFIED_ADVERTISING_NOT_FOUND);
+        }
+
+        int cost = 0;
+        switch (period){
+            case 1:
+                cost = 5; break;
+            case 3:
+                cost = 10; break;
+            case 5:
+                cost = 15; break;
+        }
+
+        Account account = accountService.findByUserId(userPrincipal.getId());
+
+        if(account == null){
+            throw new ApplicationException(APIStatus.ERR_USER_NOT_FOUND);
+        }
+
+        if(account.getBalance() < cost){
+            throw new ApplicationException(APIStatus.ERR_BALANCE_NOT_ENOUGH);
+        }
+
+        Date date = new Date();
+        date.setDate(date.getDate() + period);
+
+        classifiedAdvertising.setTopPostExpiryDate(date);
+        account.setBalance(account.getBalance() - cost);
+
+        Payment payment = new Payment();
+        payment.setBeeCoin(cost);
+        payment.setUserId(userPrincipal.getId());
+        payment.setContent(classifiedAdvertising.getAdditionalInfo().getTitle());
+        payment.setStatus("success");
+        payment.setType("push");
+        payment.setCreatedDate(new Date());
+
+        paymentService.save(payment);
+        accountService.save(account);
+        ClassifiedAdvertising updatedAds = classifiedAdvertisingService.save(classifiedAdvertising);
+
+        indexAds(updatedAds);
+
+        return responseUtil.successResponse(updatedAds);
+    }
+
+    @PutMapping(value = Constant.WITHIN_ID + Constant.STATUS)
     public ResponseEntity<RestAPIResponse> updateStatusClassifiedAds (
             @CurrentUser UserPrincipal userPrincipal,
             @PathVariable("id") String adsId,
@@ -227,8 +352,19 @@ public class AdvertisingController extends AbstractBasedAPI {
             // update status
             if (classifiedAdvertising.getStatus() != Constant.Status.DELETE.getValue()) {
                 classifiedAdvertising.setStatus(status);
+                if(status == Constant.Status.ACTIVE.getValue()){
+                    classifiedAdvertising.setTradeStatus(ClassifiedAdvertising.TradeStatus.AVAILABLE.getValue());
+                }
             }
             classifiedAdvertisingService.save(classifiedAdvertising);
+
+            Report report = reportService.findByClassifiedAdsIdAndStatus(
+                    classifiedAdvertising.getId(), Constant.Status.ACTIVE.getValue());
+            if (report != null) {
+                report.setStatus(Constant.Status.DELETE.getValue());
+                reportService.saveReport(report);
+            }
+
             if(status == Constant.Status.ACTIVE.getValue()){
 
                 indexAds(classifiedAdvertising);
@@ -237,8 +373,10 @@ public class AdvertisingController extends AbstractBasedAPI {
 
                 Notification notification = new Notification();
                 notification.setCreatedDate(new Date());
-                notification.setSenderId(userProfile.getId());
+                notification.setSenderId(userProfile.getUserId());
+                notification.setReceiverId(userProfile.getFollowedBy());
                 notification.setType(Notification.Type.NEW_POST);
+                notification.setStatus(Notification.Status.SENT);
                 notification.setData(classifiedAdvertising);
 
                 notificationService.save(notification);
@@ -267,7 +405,11 @@ public class AdvertisingController extends AbstractBasedAPI {
 
         ClassifiedAdvertising classifiedAdvertising;
 
-        UserAccount userAccount = userAccountService.findActiveUserById(userPrincipal.getId());
+        UserAccount userAccount = null;
+
+        if (userPrincipal != null) {
+            userAccount = userAccountService.findActiveUserById(userPrincipal.getId());
+        }
         // case guest
         if (userAccount == null) {
             classifiedAdvertising = classifiedAdvertisingService
@@ -478,6 +620,100 @@ public class AdvertisingController extends AbstractBasedAPI {
         return response;
     }
 
+    @PutMapping(Constant.WITHIN_ID + Constant.TRADING_STATUS)
+    public ResponseEntity<RestAPIResponse> updateTradingStatus(
+            @CurrentUser UserPrincipal currentUser,
+            @PathVariable("id") String adsId,
+            @RequestBody int status
+    ){
+
+        ClassifiedAdvertising ads = classifiedAdvertisingService
+                .getClassifiedAdsDetailByIdAndAuthor(adsId, currentUser.getId());
+
+        if(ads == null) {
+            throw new ApplicationException(APIStatus.ERR_CLASSIFIED_ADVERTISING_NOT_FOUND);
+        }
+
+        ads.setTradeStatus(status);
+        classifiedAdvertisingService.save(ads);
+
+        indexAds(ads);
+
+        return responseUtil.successResponse(ads);
+    }
+
+    @GetMapping(Constant.SAVES + Constant.WITHIN_ID)
+    public ResponseEntity<RestAPIResponse> getSavedAds(
+            @PathVariable("id") String userId,
+            @RequestParam("page_number") int pageNumber,
+            @RequestParam("page_size") int pageSize
+    ){
+
+        ClassifiedAdvertisingPagingResponse adsPagingResponse =
+                classifiedAdvertisingElasticService.getSavedByUserId(userId,pageNumber, pageSize);
+
+        return responseUtil.successResponse(adsPagingResponse);
+    }
+
+    @PutMapping(Constant.WITHIN_ID + Constant.SAVES)
+    public ResponseEntity<RestAPIResponse> saveAds(
+            @CurrentUser UserPrincipal currentUser,
+            @PathVariable("id") String adsId
+    ){
+
+        ClassifiedAdvertising ads = classifiedAdvertisingService
+                .getClassifiedAdsDetail(adsId, Arrays.asList(Constant.Status.ACTIVE.getValue()));
+
+        if(ads == null) {
+            throw new ApplicationException(APIStatus.ERR_CLASSIFIED_ADVERTISING_NOT_FOUND);
+        }
+
+        List<String> adsSaves  = ads.getSaves();
+
+        if(adsSaves == null){
+            adsSaves = new ArrayList<>();
+        }
+
+        if(!adsSaves.contains(currentUser.getId())){
+            adsSaves.add(currentUser.getId());
+        }
+
+        ads.setSaves(adsSaves);
+
+        ClassifiedAdvertising updated = classifiedAdvertisingService.save(ads);
+
+        indexAds(ads);
+
+        return responseUtil.successResponse(updated.getSaves());
+    }
+
+    @DeleteMapping(Constant.WITHIN_ID + Constant.SAVES)
+    public ResponseEntity<RestAPIResponse> removeSaveAds(
+            @CurrentUser UserPrincipal currentUser,
+            @PathVariable("id") String adsId
+    ){
+
+        ClassifiedAdvertising ads = classifiedAdvertisingService
+                .getClassifiedAdsDetail(adsId, Arrays.asList(Constant.Status.ACTIVE.getValue()));
+
+        if(ads == null) {
+            throw new ApplicationException(APIStatus.ERR_CLASSIFIED_ADVERTISING_NOT_FOUND);
+        }
+
+        List<String> adsSaves  = ads.getSaves();
+
+        if(adsSaves != null){
+            adsSaves.remove(currentUser.getId());
+        }
+
+        ads.setSaves(adsSaves);
+        ClassifiedAdvertising updated = classifiedAdvertisingService.save(ads);
+
+        indexAds(ads);
+
+        return responseUtil.successResponse(updated.getSaves());
+    }
+
     @PostMapping(value = Constant.UPLOAD_TEMP_IMAGE)
     public ResponseEntity<RestAPIResponse> uploadTempImage(
             @CurrentUser UserPrincipal userPrincipal,
@@ -528,9 +764,9 @@ public class AdvertisingController extends AbstractBasedAPI {
             int width = srcImage.getWidth(null);
             int height = srcImage.getHeight(null);
 
-            if (width < 500 || height < 750) {
-                throw new ApplicationException(APIStatus.ERR_SMALL_IMAGE);
-            }
+//            if (width < 500 || height < 750) {
+//                throw new ApplicationException(APIStatus.ERR_SMALL_IMAGE);
+//            }
 
             // Draw Watermark
             BufferedImage destImage = new BufferedImage(width, height,
@@ -621,9 +857,14 @@ public class AdvertisingController extends AbstractBasedAPI {
         elasticModal.setAdditionalInfo(classifiedAdvertising.getAdditionalInfo());
         elasticModal.setBreadcrumbs(classifiedAdvertising.getBreadcrumbs());
         elasticModal.setMetadata(classifiedAdvertising.getMetadata());
+        elasticModal.setSaves(classifiedAdvertising.getSaves());
         elasticModal.setCreatedDate(classifiedAdvertising.getCreatedDate());
         elasticModal.setModifiedDate(classifiedAdvertising.getModifiedDate());
+        elasticModal.setTradeStatus(classifiedAdvertising.getTradeStatus());
         elasticModal.setStatus(classifiedAdvertising.getStatus());
+        if(classifiedAdvertising.getTopPostExpiryDate() != null) {
+            elasticModal.setTopPostExpiryDate(classifiedAdvertising.getTopPostExpiryDate());
+        }
 
         classifiedAdvertisingElasticService.index(elasticModal);
 

@@ -1,14 +1,18 @@
 package com.graduate.thesis.backend.service;
 
 import com.graduate.thesis.backend.entity.ClassifiedAdvertising;
+import com.graduate.thesis.backend.entity.UserProfile;
+import com.graduate.thesis.backend.entity.elastic.ClassifiedAdvertisingElastic;
 import com.graduate.thesis.backend.model.response.AddressResponse;
 import com.graduate.thesis.backend.repository.ClassifiedAdvertisingRepository;
 import com.graduate.thesis.backend.repository.aggregation.AddressAggregation;
+import com.graduate.thesis.backend.service.elastic.ClassifiedAdvertisingElasticService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,6 +26,9 @@ public class ClassifiedAdvertisingServiceImpl implements ClassifiedAdvertisingSe
 
     @Autowired
     ClassifiedAdvertisingRepository classifiedAdvertisingRepository;
+
+    @Autowired
+    ClassifiedAdvertisingElasticService classifiedAdvertisingElasticService;
 
     @Autowired
     AddressAggregation addressAggregation;
@@ -161,5 +168,27 @@ public class ClassifiedAdvertisingServiceImpl implements ClassifiedAdvertisingSe
             return classifiedAdvertisingRepository.getUserHistoryAdsPagingHasCategory(
                     searchKey, categoryId, status, authorId, pageable);
         }
+    }
+
+    @Override
+    @Async
+    public void reIndexProfile(UserProfile userProfile) {
+
+        List<ClassifiedAdvertisingElastic> advertisingElastics =
+                classifiedAdvertisingElasticService.getByAuthorId(userProfile.getUserId());
+
+        if(advertisingElastics != null){
+
+            for( ClassifiedAdvertisingElastic advertisingElastic: advertisingElastics ){
+                advertisingElastic.setAuthor(userProfile);
+                classifiedAdvertisingElasticService.index(advertisingElastic);
+            }
+
+        }
+    }
+
+    @Override
+    public long countAllPost() {
+        return classifiedAdvertisingRepository.count();
     }
 }

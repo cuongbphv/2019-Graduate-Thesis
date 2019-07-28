@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Huy Pham
@@ -27,6 +28,8 @@ public class Notification {
 
     private String senderId;
 
+    private List<String> receiverId;
+
     private Object data;
 
     private Date createdDate;
@@ -41,8 +44,8 @@ public class Notification {
     }
 
     public enum Status {
-        UNREAD,
-        READED
+        SENT,
+        SEEN
     }
 
 }

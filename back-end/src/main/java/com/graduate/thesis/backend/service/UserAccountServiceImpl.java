@@ -36,4 +36,9 @@ public class UserAccountServiceImpl implements UserAccountService{
         return userAccountRepository.count();
     }
 
+    @Override
+    public long countUser() {
+        return userAccountRepository.countAllByRoleId("abcdebe605f5f129bd02cdee"); // ROLE USER
+    }
+
 }

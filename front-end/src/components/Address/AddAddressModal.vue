@@ -10,11 +10,11 @@
       <el-col :xs="24" :md="{span:18, offset: 6}">
         <el-form :model="address" label-position="left" label-width="120px">
           <el-col :xs="24" :md="16" :lg="16">
-            <el-form-item label="Province" prop="province">
+            <el-form-item label="Tỉnh/Thành phố" prop="province">
               <el-select
                 v-model="address.provinceId"
                 style="width: 100%"
-                placeholder="Select Province"
+                placeholder="Chọn tỉnh/thành phố"
                 @change="provinceChange"
               >
                 <el-option v-for="item in listLocation" :key="item.id" :label="item.name" :value="item.id" />
@@ -22,12 +22,12 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :md="16" :lg="16">
-            <el-form-item label="District" prop="district">
+            <el-form-item label="Quận/Huyện" prop="district">
               <el-select
                 v-model="address.districtId"
                 style="width: 100%"
                 :disabled="address.provinceId === ''"
-                placeholder="Select District"
+                placeholder="Chọn quận/huyện"
                 @change="districtChange"
               >
                 <el-option v-for="item in listDistrictByProvinceId(address.provinceId)" :key="item.id" :label="item.name" :value="item.id" />
@@ -35,14 +35,14 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :md="16" :lg="16">
-            <el-form-item label="Ward" prop="ward">
-              <el-select v-model="address.wardId" style="width: 100%" :disabled="address.districtId === ''" placeholder="Select Ward">
+            <el-form-item label="Xã/Phường" prop="ward">
+              <el-select v-model="address.wardId" style="width: 100%" :disabled="address.districtId === ''" placeholder="Chọn xã/phường">
                 <el-option v-for="item in listWardByDistrictId(address.provinceId, address.districtId)" :key="item.id" :label="item.name" :value="item.id" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :md="16" :lg="16">
-            <el-form-item label="Detail">
+            <el-form-item label="Chi tiết">
               <el-input
                 v-model="address.detail"
                 type="textarea"
@@ -56,12 +56,12 @@
                 v-if="mode === 'add'"
                 type="success"
                 @click="handleCreateAddress"
-              >Create Address</el-button>
+              >Thêm địa chỉ</el-button>
               <el-button
                 v-else
                 type="success"
                 @click="handleUpdateAddress"
-              >Update Address</el-button>
+              >Cập nhật địa chỉ</el-button>
             </el-form-item>
           </el-col>
         </el-form>

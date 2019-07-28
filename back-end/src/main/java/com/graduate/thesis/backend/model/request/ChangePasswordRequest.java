@@ -14,8 +14,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class ChangePasswordRequest {
 
-    @NotNull
-    @NotBlank
     private String currentPassword;
 
     @NotNull

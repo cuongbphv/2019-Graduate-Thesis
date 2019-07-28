@@ -135,6 +135,9 @@ public class CustomOidcUserService extends OidcUserService {
         userProfile.setFirstName(oAuth2UserInfo.getName());
         userProfile.setCreatedDate(new Date());
         userProfile.setModifiedDate(new Date());
+        userProfile.setRatingCount(20);
+        userProfile.setRatingValue(60);
+        userProfile.setRatingAverage(3);
         userProfile.setStatus(1);
         userProfileService.save(userProfile);
 

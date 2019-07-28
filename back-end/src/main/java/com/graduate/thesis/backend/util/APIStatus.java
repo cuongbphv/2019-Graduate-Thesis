@@ -23,6 +23,7 @@ public enum APIStatus {
 
     //USER_ROLE_PERMISSION
     ERR_USER_NOT_FOUND(414, "User not found"),
+    ERR_BALANCE_NOT_ENOUGH(419, "Balance not enough"),
     ERR_USER_PROFILE_NOT_FOUND(415, "User Profile Not Found"),
     ERR_PHONE_IN_USE(416, "Phone already in use"),
     ERR_USER_INCORRECT_PASSWORD(417, "Password or phone is incorrect"),
@@ -61,8 +62,14 @@ public enum APIStatus {
     //ADDRESS
     ERR_ADDRESS_NOT_FOUND(404, "Address not found for this user"),
 
+    //RATING
+    ERR_RATING_EXISTED(209, "You have rate for this user"),
+    ERR_RATING_NOT_FOUND(404, "Rating not found"),
+
     // Classified Advertising
-    ERR_CLASSIFIED_ADVERTISING_NOT_FOUND(604, "Classified Advertising not found")
+    ERR_CLASSIFIED_ADVERTISING_NOT_FOUND(604, "Classified Advertising not found"),
+    ERR_USER_REPORTED(605, "User reported classified advertising before"),
+    ERR_CLASSIFIED_BLOCKED(606, "Classified Advertising blocked or deleted")
     ;
 
 

@@ -33,4 +33,11 @@ public interface ClassifiedAdvertisingElasticService {
             double minPrice,
             double maxPrice
     );
+
+    List<ClassifiedAdvertisingElastic> getByAuthorId(String authorId);
+
+    ClassifiedAdvertisingPagingResponse getSavedByUserId(String userId, int pageNumber, int pageSize);
+
+    List<ClassifiedAdvertisingElastic> getPushPost(String categoryId);
+
 }

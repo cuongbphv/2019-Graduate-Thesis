@@ -4,6 +4,10 @@ const CREATE_NEW_CLASSIFIED_ADVERTISING = (state, payload) => {
   state.classifiedAds = Object.assign({}, payload)
 }
 
+const UPDATE_CLASSIFIED_ADVERTISING = (state, payload) => {
+  state.classifiedAds = Object.assign({}, payload)
+}
+
 const GET_CLASSIFIED_ADVERTISING_DETAIL_BY_ID = (state, payload) => {
   state.classifiedAds = Object.assign({}, payload)
 }
@@ -35,11 +39,22 @@ const SAVE_SEARCH_STATE = (state, payload) => {
   state.searchState = Object.assign({}, payload)
 }
 
+const GET_SAVED_ADS = (state, payload) => {
+  state.savedAds = Object.assign([], payload)
+}
+
+const PUSH_POST = (state, payload) => {
+  state.pushPost = Object.assign({}, payload)
+}
+
 export default {
   CREATE_NEW_CLASSIFIED_ADVERTISING,
+  UPDATE_CLASSIFIED_ADVERTISING,
   GET_CLASSIFIED_ADVERTISING_DETAIL_BY_ID,
   GET_PAGING_NEW_CLASSIFIED_ADVERTISING,
   FULL_TEXT_SEARCH,
   SAVE_SEARCH_STATE,
-  TOP_CATEGORY_POST
+  TOP_CATEGORY_POST,
+  GET_SAVED_ADS,
+  PUSH_POST
 }

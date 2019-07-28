@@ -6,6 +6,7 @@ const state = {
   ids: [],
   entities: {},
   metadata: [],
+  metadatas: [],
   totalElements: 0,
   totalPages: 0
 }

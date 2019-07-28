@@ -8,7 +8,7 @@
             <div class="photo-left">
               <pan-thumb :image="image">
                 <slot>
-                  <a href="javascript:void(0)" @click="imagecropperShow = true">Change Avatar</a>
+                  <a href="javascript:void(0)" @click="imagecropperShow = true">Đổi ảnh đại diện</a>
                 </slot>
               </pan-thumb>
               <!--            <div class="active"></div>-->
@@ -33,8 +33,8 @@
               <!--</el-col>-->
             </el-row>
             <el-row v-if="profile.userId !== userId" class="stats">
-              <el-button v-if="profile.followedBy && profile.followedBy.includes(userId)" type="danger" icon="el-icon-close-notification" round @click="handleUnFollowUser(profileId)">Unfollow</el-button>
-              <el-button v-if="profile.followedBy && !profile.followedBy.includes(userId) && profile.userId !== userId" type="success" round icon="el-icon-bell" @click="handleFollowUser(profileId)">Follow</el-button>
+              <el-button v-if="profile.followedBy && profile.followedBy.includes(userId)" type="danger" icon="el-icon-close-notification" round @click="handleUnFollowUser(profileId)">Bỏ theo dõi</el-button>
+              <el-button v-else type="success" round icon="el-icon-bell" @click="handleFollowUser(profileId)">Theo dõi</el-button>
               <el-button v-if="profile.userId !== userId" type="primary" icon="el-icon-chat-dot-round" round @click="handleOpenChatModal()">Chat</el-button>
             </el-row>
             <p class="desc"> {{ profile.description }} </p>
@@ -46,21 +46,25 @@
           </el-col>
           <el-col class="right" :xs="24" :md="14" :lg="14">
             <el-row>
-              <ul v-if="userId === profileId" class="nav">
+              <ul class="nav">
                 <li :class="{'is-active' : routerName === 'history'}">
                   <a @click="handleClickRouter('history')">Lịch sử</a>
                 </li>
-                <li :class="{'is-active' : routerName === 'info'}">
+                <li v-if="userId === profileId" :class="{'is-active' : routerName === 'info'}">
                   <a @click="handleClickRouter('info')">Thông tin</a>
                 </li>
-                <li :class="{'is-active' : routerName === 'settings'}">
+                <li v-if="userId === profileId" :class="{'is-active' : routerName === 'settings'}">
                   <a @click="handleClickRouter('settings')">Cài đặt</a>
                 </li>
-                <li :class="{'is-active' : routerName === 'address'}">
+                <li v-if="userId === profileId" :class="{'is-active' : routerName === 'address'}">
                   <a @click="handleClickRouter('address')">Địa chỉ</a>
                 </li>
-                <li>Cửa hàng</li>
-                <li>Trợ giúp</li>
+                <li :class="{'is-active' : routerName === 'rating'}">
+                  <a @click="handleClickRouter('rating')">Đánh giá</a>
+                </li>
+                <li :class="{'is-active' : routerName === 'saved'}">
+                  <a @click="handleClickRouter('saved')">Đã lưu</a>
+                </li>
               </ul>
             </el-row>
             <!--<span class="follow">Follow</span>-->
@@ -108,7 +112,7 @@ export default {
     return {
       imagecropperShow: false,
       imagecropperKey: 0,
-      image: 'https://image.noelshack.com/fichiers/2017/38/2/1505775062-1505606859-portrait-1961529-960-720.jpg',
+      image: 'https://png.pngtree.com/svg/20161212/f93e57629c.svg',
       profileId: this.$route.params.id,
       routerName: 'history',
       chatPopupVisible: false

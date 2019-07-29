@@ -28,7 +28,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.8.1",
     "@fortawesome/vue-fontawesome": "^0.1.6",
     "@stomp/stompjs": "^5.1.0",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "camelcase-keys": "^5.0.0",
     "clipboard": "1.7.1",
     "codemirror": "5.39.2",

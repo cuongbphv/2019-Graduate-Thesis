@@ -258,7 +258,7 @@ export default {
     handleDeleteCategory() {
       let allIds = []
       for (const key in this.categoryIds) {
-        if (this.categoryIds.hasOwnProperty(key)) {
+        if (this.categoryIds.prototype.hasOwnProperty.call(key)) {
           allIds = [...allIds, ...this.categoryIds[key]]
         }
       }

@@ -250,7 +250,7 @@ export function createUniqueString() {
 
 export function compareExpression(key, order) {
   return (a, b) => {
-    if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) return 0
+    if (!a.prototype.hasOwnProperty.call(key) || !b.prototype.hasOwnProperty.call(key)) return 0
     const comparison = a[key].localeCompare(b[key])
     return order ? (comparison * -1) : comparison
   }

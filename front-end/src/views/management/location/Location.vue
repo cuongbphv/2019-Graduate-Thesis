@@ -285,7 +285,7 @@ export default {
     handleKeepIdsToDelete(ids) {
       let allIds = []
       for (const key in ids) {
-        if (ids.hasOwnProperty(key)) {
+        if (ids.prototype.hasOwnProperty.call(key)) {
           allIds = [...allIds, ...ids[key]]
         }
       }

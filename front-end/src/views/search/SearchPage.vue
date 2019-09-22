@@ -347,7 +347,7 @@ export default {
         }
 
       for (const key of Object.keys(this.searchQuery)) {
-        if (defaultSearchQuery.hasOwnProperty(key)) {
+        if (defaultSearchQuery.prototype.hasOwnProperty.call(key)) {
           defaultSearchQuery[key] = this.searchQuery[key]
         }
       }

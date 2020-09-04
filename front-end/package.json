@@ -44,7 +44,7 @@
     "nprogress": "^0.2.0",
     "qs": "^6.9.0",
     "screenfull": "^5.0.0",
-    "showdown": "^1.9.0",
+    "showdown": "^1.9.1",
     "snakecase-keys": "^3.1.0",
     "sockjs-client": "^1.4.0",
     "sortablejs": "^1.10.0",

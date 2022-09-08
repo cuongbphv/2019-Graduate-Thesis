@@ -40,7 +40,7 @@
     "fuse.js": "^3.4.5",
     "js-cookie": "^2.2.1",
     "jsonlint": "^1.6.3",
-    "jszip": "^3.2.2",
+    "jszip": "^3.7.0",
     "nprogress": "^0.2.0",
     "qs": "^6.9.0",
     "screenfull": "^5.0.0",

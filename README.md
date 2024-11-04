@@ -13,3 +13,4 @@ Techonology detail:
 - Spring Boot
 - Vue.JS
 - MySQL, MongoDB
+- Paypal Sandbox

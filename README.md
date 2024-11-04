@@ -14,3 +14,4 @@ Techonology detail:
 - Vue.JS
 - MySQL, MongoDB
 - Paypal Sandbox
+- SMS OTP
